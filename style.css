@@ -199,7 +199,7 @@ main .section p {
     display: flex;
     justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 25px 5%; /* Reverted to previous larger padding for desired height */
+    padding: 35px 5%; /* Restored original padding for previous height */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,7 +211,7 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 15px 5%; /* Reverted to previous larger padding on scroll */
+    padding: 20px 5%; /* Restored original padding on scroll */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
@@ -234,7 +234,7 @@ main .section p {
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
-    padding-top: 100px; /* Adjusted to space from the top of the taller navbar */
+    padding-top: 120px; /* Adjusted to space from the top of the taller navbar */
 }
 
 /* Left Column (Sticky) */
@@ -244,9 +244,9 @@ main .section p {
     padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
-    top: 100px; /* Stick below the taller navbar (adjust if navbar height changes) */
+    top: 120px; /* Stick below the navbar (adjusted for taller navbar) */
     align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjusted to fit card */
+    height: calc(100vh - 120px); /* Occupy remaining viewport height, adjusted to fit card */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within sticky area */
@@ -798,11 +798,11 @@ footer h2 {
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
     color: var(--accent-primary-sawad); /* Accent color for icons */
-    /* Removed margin-bottom here to let flexbox center it better without the label */
+    /* No margin-bottom here, will center automatically with flexbox */
 }
 
 .contact-button .button-value {
-    font-size: 1.25em; /* Larger value text */
+    font-size: 1.05em; /* REDUCED FONT SIZE FOR PHONE/EMAIL */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -811,7 +811,7 @@ footer h2 {
     padding: 0 5px;
     max-width: 90%;
     color: var(--text-light); /* White */
-    margin-top: 10px; /* Space between icon and value */
+    margin-top: 5px; /* Reduced space between icon and value */
 }
 
 .contact-button .copied-text {
