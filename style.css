@@ -333,22 +333,12 @@ body {
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
     
-    /* Removed old placeholder centering styles */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* font-size: 2em; */
-    /* color: var(--text-medium); */
-
     padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
     text-align: left; /* Align text to the left as per the design */
 }
 
 /* New: Hero Right Content */
-.hero-right-content {
-    /* Padding for the content inside the section, using section's default padding */
-    /* It already has reveal-item class */
-}
+/* Removed empty .hero-right-content ruleset */
 
 .hero-heading {
     font-family: 'Poppins', sans-serif;
