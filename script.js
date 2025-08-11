@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     contactButtons.forEach(button => {
         button.addEventListener('click', async () => { // Use async for modern clipboard API
-            const contactToCopy = button.dataset.contact; // Get the actual value to copy
+            const contactValue = button.dataset.contact; // Get the actual value to copy
 
             // Check if already in 'copied' state to prevent rapid clicks
             if (button.classList.contains('copied')) {
@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Copy to clipboard
             try {
-                await navigator.clipboard.writeText(contactToCopy);
-                console.log('Text copied to clipboard:', contactToCopy);
+                await navigator.clipboard.writeText(contactValue);
+                console.log('Text copied to clipboard:', contactValue);
                 
                 // Add 'copied' class to trigger animation
                 button.classList.add('copied');
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Fallback for older browsers or if Clipboard API fails
                 // For simplicity, for now we will just alert if modern copy fails,
                 // as manual copying might be required for very old browsers.
-                alert('Could not copy automatically. Please copy manually: ' + contactToCopy);
+                alert('Could not copy automatically. Please copy manually: ' + contactValue);
             }
         });
     });

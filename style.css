@@ -26,10 +26,10 @@ body {
     color: var(--text-light);
     background: var(--main-background-gradient); 
     background-attachment: fixed;
-    background-size: cover;
+    background-size: cover; /* Ensures gradient scales to fill the entire viewport, cropping if needed */
     background-position: center;
     background-repeat: no-repeat;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Hide horizontal overflow unless specific elements force it */
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
@@ -37,7 +37,7 @@ body {
 
 /* Background Glowing Effects (Removed as per Figma background) */
 body::before, body::after {
-    display: none;
+    display: none; /* Hide previous glowing elements */
 }
 
 /* Global Section Styling */
@@ -102,7 +102,6 @@ body::before, body::after {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    /* text-fill-color: transparent; <-- REMOVED THIS LINE */
 }
 
 .hero-section p {
@@ -284,13 +283,14 @@ body::before, body::after {
 
 /* Skills Grid (Flippable Cards) */
 .skills-grid {
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    display: flex; /* Default: horizontal scroll on larger screens */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     gap: 35px;
     perspective: 1000px;
-    padding-bottom: 20px;
+    padding-bottom: 20px; /* Space for scrollbar */
     justify-content: flex-start;
+    scroll-snap-type: x mandatory; /* Enable snapping for horizontal scroll */
 }
 
 /* Hide scrollbar for aesthetics */
@@ -313,8 +313,8 @@ body::before, body::after {
 
 
 .skill-card-container {
-    flex-shrink: 0;
-    width: 300px;
+    flex-shrink: 0; /* Prevent cards from shrinking in flex container */
+    width: 300px; /* Fixed width for cards in horizontal scroll */
     height: 280px;
     position: relative;
     cursor: grab;
@@ -334,11 +334,10 @@ body::before, body::after {
     transition: transform 0.8s ease-in-out;
     box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.25); /* Figma's box-shadow for the card */
     border-radius: 50px; /* Figma's border-radius for the card */
-    border: none; /* Remove previous border, it will be on front/back now */
-    background-color: transparent; /* Card container itself is transparent */
+    border: none;
+    background-color: transparent;
 }
 
-/* Hover effect for the entire card container */
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
     box-shadow: 0 0 25px var(--accent-orange), 0 0 40px rgba(255, 69, 0, 0.4); 
@@ -349,7 +348,7 @@ body::before, body::after {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 50px; /* Match skill-card border-radius */
+    border-radius: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -357,24 +356,22 @@ body::before, body::after {
     padding: 30px;
     box-sizing: border-box;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Add back the border to front/back */
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .skill-front {
     color: var(--text-light);
-    /* Figma's specific orange gradient for the front of the card */
     background: var(--gradient-orange-main); 
 }
 
 .skill-front i {
     font-size: 4em;
     margin-bottom: 25px;
-    color: var(--text-light); /* Make icon white on orange background */
-    background: none; /* Remove text-clip for icon */
+    color: var(--text-light);
+    background: none; 
     -webkit-background-clip: unset;
     -webkit-text-fill-color: unset;
     background-clip: unset;
-    /* text-fill-color: unset; <-- REMOVED THIS LINE */
 }
 
 .skill-front h3 {
@@ -484,49 +481,63 @@ footer h2 {
     font-weight: 700;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stack icon and text vertically */
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    justify-content: center; /* Center content */
+    gap: 8px; /* Space between icon and text */
     transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     position: relative;
     overflow: hidden;
     min-width: 250px;
-    height: 120px;
+    height: 120px; /* Fixed height for buttons to accommodate transition */
 }
 
 .contact-button i {
     font-size: 2.2em;
     color: var(--text-light);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    position: absolute;
-    top: 15px; /* Adjust icon position */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Animate icon with text */
+    position: absolute; /* Allow independent animation */
+    top: 15px; /* Position it */
     left: 50%;
     transform: translateX(-50%);
+    z-index: 2; /* Ensure icon is above button content wrapper */
+}
+
+.contact-button .button-content-wrapper { /* New wrapper for label and value */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Take full height of button */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    position: absolute; /* Position to allow full content animation */
+    width: 100%;
+    top: 0;
+    left: 0;
 }
 
 .contact-button .button-label {
     font-size: 1em;
     opacity: 0.8;
-    position: absolute;
-    bottom: 15px; /* Adjust label position */
+    position: relative; /* Make it relative within its wrapper */
+    top: 40px; /* Initial position below icon */
     transition: transform 0.3s ease, opacity 0.3s ease;
+    color: rgba(255, 255, 255, 0.7); /* Slightly lighter label */
 }
 
 .contact-button .button-value {
     font-size: 1.1em;
     font-weight: bold;
     opacity: 1;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative; /* Make it relative within its wrapper */
+    top: 40px; /* Initial position below label */
     transition: transform 0.3s ease, opacity 0.3s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 0 10px;
     max-width: 90%;
+    color: var(--text-light);
 }
 
 .contact-button .copied-text {
@@ -544,13 +555,14 @@ footer h2 {
     border-radius: 5px;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     min-width: 80%;
+    text-align: center;
+    z-index: 3; /* Ensure copied text is on top */
 }
 
 /* States when button is 'copied' */
-.contact-button.copied i,
-.contact-button.copied .button-label,
-.contact-button.copied .button-value {
-    transform: translateY(-150%);
+.contact-button.copied .button-content-wrapper,
+.contact-button.copied i {
+    transform: translateY(-150%); /* Move content up and out */
     opacity: 0;
 }
 
@@ -567,9 +579,16 @@ footer h2 {
 .social-links {
     margin-top: 30px;
     margin-bottom: 0;
-    /* No social links now, but keeping container for potential future use or if only specific ones exist */
 }
-/* Removed individual social link styling as it's no longer present in HTML */
+.social-links a {
+    color: var(--text-light);
+    margin: 0 20px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.social-links a:hover {
+    color: var(--accent-orange);
+    transform: scale(1.3);
+}
 
 
 /* Responsive Design */
@@ -596,7 +615,7 @@ footer h2 {
         font-size: 1.15em;
     }
     .skill-card-container {
-        width: 280px;
+        width: 280px; /* Adjusted fixed width for cards in horizontal scroll */
         height: 260px;
     }
     .skill-front i {
@@ -660,30 +679,46 @@ footer h2 {
         font-size: 2.5em;
         margin-bottom: 35px;
     }
+    /* Skills Grid for 2x2 on Mobile */
     .skills-grid {
-        gap: 25px;
-        padding-left: 20px;
-        padding-right: 20px;
+        display: grid; /* Change to grid layout */
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Auto-fit to create 2 columns on most phones */
+        gap: 15px; /* Smaller gap in grid */
+        overflow-x: hidden; /* No horizontal scroll in grid view */
+        padding-bottom: 0; /* No scrollbar space needed */
+        justify-items: center; /* Center items within grid cells */
+        padding-left: 0; /* Remove horizontal scroll padding */
+        padding-right: 0;
+        scroll-snap-type: none; /* Disable scroll snapping in grid mode */
     }
     .skill-card-container {
-        width: 260px;
-        height: 220px;
+        width: 100%; /* Take full width of its grid cell */
+        max-width: 180px; /* Keep cards from getting too wide on larger phones */
+        height: 180px; /* Fixed height for consistency in grid */
+        cursor: pointer; /* Remove grab cursor */
+        flex-shrink: unset; /* Allow cards to shrink/grow with grid */
+        scroll-snap-align: none; /* Disable snapping for individual cards */
     }
     .skill-front i {
-        font-size: 3.2em;
-        margin-bottom: 20px;
+        font-size: 2.5em; /* Smaller icon for small cards */
+        margin-bottom: 10px;
     }
     .skill-front h3 {
-        font-size: 1.7em;
+        font-size: 1.3em; /* Smaller heading */
     }
     .skill-back ul {
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        text-align: left;
+        padding: 0 5px; /* Adjust padding for smaller cards */
+        margin-top: 10px; /* Add slight margin from top */
+        font-size: 0.9em; /* Smaller font for list items */
     }
     .skill-back li {
-        font-size: 1.05em;
+        font-size: 0.9em;
+        line-height: 1.4;
+        margin-bottom: 5px;
+        padding-left: 15px;
+    }
+    .skill-back li::before {
+        margin-left: -0.8em;
     }
     #spline-container {
         height: 450px;
@@ -705,10 +740,10 @@ footer h2 {
     }
     .contact-button i {
         font-size: 1.8em;
-        top: 10px; /* Adjust for mobile button */
+        top: 10px;
     }
     .contact-button .button-label {
-        bottom: 10px; /* Adjust for mobile button */
+        bottom: 10px;
     }
     .contact-button .button-value {
         font-size: 0.9em;
@@ -732,17 +767,17 @@ footer h2 {
         font-size: 1.6em;
     }
     .skill-card-container {
-        width: 240px;
-        height: 190px;
+        height: 160px; /* Even smaller height for very small phones */
     }
     .skill-front i {
-        font-size: 2.8em;
+        font-size: 2em;
+        margin-bottom: 8px;
     }
     .skill-front h3 {
-        font-size: 1.5em;
+        font-size: 1.1em;
     }
     .skill-back li {
-        font-size: 0.95em;
+        font-size: 0.8em;
     }
     #spline-container {
         height: 350px;
