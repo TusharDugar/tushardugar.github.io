@@ -76,8 +76,8 @@
                 <!-- Statistics section will be added here in a future step -->
             </section>
 
-            <!-- New: Services Section - MOVED TO CORRECT ORDER -->
-            <section id="services" class="section services-section"> <!-- Removed reveal-item here -->
+            <!-- Services Section - MOVED TO CORRECT ORDER -->
+            <section id="services" class="section services-section"> <!-- Removed reveal-item from here as it has continuous animation -->
                 <h2 class="services-heading">
                     <span class="text-white">MY</span>
                     <span class="text-gray">SERVICES</span>
@@ -85,7 +85,7 @@
 
                 <div class="services-layout">
                     <div class="services-timeline">
-                        <div class="timeline-item active" data-service-index="0">
+                        <div class="timeline-item" data-service-index="0"> <!-- Removed active class from HTML, JS manages it -->
                             <span class="timeline-number">01</span>
                             <h3 class="timeline-title">Web Design</h3>
                         </div>
@@ -120,7 +120,7 @@
                     </div>
 
                     <div class="services-content">
-                        <div class="service-item active-content" id="service-0" data-service-index="0">
+                        <div class="service-item" id="service-0" data-service-index="0"> <!-- Removed active-content class from HTML -->
                             <p>Crafting visually stunning and user-friendly websites tailored to your brand’s identity and goals.</p>
                         </div>
                         <div class="service-item" id="service-1" data-service-index="1">

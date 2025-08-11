@@ -375,6 +375,7 @@ body {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
+    /* Removed reveal-item here as its children will handle animation dynamically */
 }
 
 .services-heading {
@@ -402,7 +403,6 @@ body {
     display: flex;
     flex-direction: column;
     /* This min-height is crucial to ensure the sticky element has enough scrollable parent space */
-    /* It should be at least as tall as the viewport minus the `top` offset */
     min-height: calc(100vh - 200px); /* Example: 100vh minus top offset and some footer space */
     justify-content: space-between; /* Distribute items evenly */
     padding-top: 10px; /* Small padding at the top */
@@ -467,7 +467,7 @@ body {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    width: calc(100% - 300px); /* Adjust width to fit beside timeline */
+    /* width: calc(100% - 300px); This can be removed, flex-grow handles width */
 }
 
 .service-item {
@@ -481,14 +481,14 @@ body {
     box-sizing: border-box;
 
     /* Initial state for parallax/reveal effect */
-    opacity: 0.2; /* Much less visible when not primary */
-    transform: translateY(50px); /* Pushed down */
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth transition */
+    opacity: 0; /* Fully transparent when inactive */
+    transform: translateY(100px); /* Pushed down significantly */
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
     will-change: opacity, transform; /* Performance hint */
 }
 
 .service-item:first-child {
-    margin-top: 0; /* Remove top margin if necessary */
+    margin-top: 0; /* Ensure no extra top margin */
 }
 
 .service-item:last-child {
