@@ -199,7 +199,7 @@ main .section p {
     display: flex;
     justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 25px 5%; /* Reverted to original larger padding for desired height */
+    padding: 25px 5%; /* Adjusted padding for reduced height (was 25px, now 20px) */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,7 +211,7 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 15px 5%; /* Reverted to original larger padding on scroll */
+    padding: 15px 5%; /* Adjusted padding on scroll (was 15px, now 12px) */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
@@ -798,11 +798,10 @@ footer h2 {
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
     color: var(--accent-primary-sawad); /* Accent color for icons */
-    /* No margin-bottom here, will center automatically with flexbox */
 }
 
 .contact-button .button-value {
-    font-size: 1.0em; /* Reduced font size to 1.0em (20px) */
+    font-size: 15px; /* Set to 15px as requested */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -811,7 +810,7 @@ footer h2 {
     padding: 0 5px;
     max-width: 90%;
     color: var(--text-light); /* White */
-    margin-top: 5px; /* Reduced space between icon and value */
+    margin-top: 5px; /* Space between icon and value */
 }
 
 .contact-button .copied-text {
