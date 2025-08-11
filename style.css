@@ -370,7 +370,7 @@ body {
 }
 
 
-/* Services Section Styles - (MOVED) */
+/* NEW: Services Section Styles */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
@@ -425,7 +425,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px; /* Space between number and title */
-    margin-bottom: 30px; /* Space between timeline items */
+    margin-bottom: 50px; /* Increased margin for more scroll space per item */
     transition: color 0.3s ease;
     position: relative;
     z-index: 1; /* Above the dashed line */
@@ -474,25 +474,32 @@ body {
     font-size: 1.15em;
     line-height: 1.8;
     color: var(--text-medium);
-    margin-bottom: 150px; /* Large space between service descriptions to ensure scrolling and distinct observation */
-    min-height: 250px; /* Ensure enough height to be observed */
+    margin-bottom: 250px; /* Very large space between service descriptions to ensure clear active state changes */
+    min-height: 300px; /* Ensure enough height for each item to "fill" view briefly */
     max-width: 650px; /* Limit width for readability */
-    /* Add some padding for better aesthetics within its column */
     padding: 20px; 
     box-sizing: border-box;
-    /* Optional: Fade in/out effect for service item text */
-    opacity: 0.5; /* Slightly faded when inactive */
-    transition: opacity 0.5s ease;
+
+    /* Initial state for parallax/reveal effect */
+    opacity: 0.2; /* Much less visible when not primary */
+    transform: translateY(50px); /* Pushed down */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smooth transition */
+    will-change: opacity, transform; /* Performance hint */
+}
+
+.service-item:first-child {
+    margin-top: 0; /* Remove top margin if necessary */
 }
 
 .service-item:last-child {
     margin-bottom: 0; /* No margin below the last one */
 }
 
-/* Optional: Active service item styling */
-/* .service-item.active {
+/* Active state for service content */
+.service-item.active-content {
     opacity: 1;
-} */
+    transform: translateY(0);
+}
 
 
 /* Premium Tools Section Styles */
