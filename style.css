@@ -370,109 +370,10 @@ body {
 }
 
 
-/* NEW: Tools Section Styles */
-.tools-section {
-    padding-top: 50px; /* Space from previous section (hero-right) */
-    padding-bottom: 80px; /* Space before next section */
-    text-align: left; /* Align title left */
-    /* This section already has reveal-item class from HTML */
-}
-
-.tools-heading {
-    font-family: 'Poppins', sans-serif;
-    font-size: 5em; /* Slightly smaller than hero heading */
-    line-height: 0.9;
-    font-weight: 800;
-    margin-bottom: 50px; /* Space below heading */
-    text-transform: uppercase;
-}
-
-/* Reusing text-white and text-gray for tools-heading */
-.tools-heading .text-white {
-    color: var(--text-light);
-    display: block;
-}
-
-.tools-heading .text-gray {
-    color: var(--text-medium);
-    display: block;
-}
-
-.tools-grid {
-    display: grid;
-    /* Responsive 2-column grid: at least 250px wide, max 1fr */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px; /* Gap between cards */
-}
-
-.tool-card {
-    background-color: var(--bg-tool-card);
-    border-radius: 15px; /* Rounded corners for cards */
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Space between icon and text */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    cursor: pointer;
-}
-
-.tool-card:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    background-color: rgba(26, 26, 26, 0.9); /* Slightly lighter on hover */
-}
-
-.tool-icon-wrapper {
-    width: 50px; /* Size of the icon container */
-    height: 50px;
-    background-color: var(--tool-icon-bg); /* White background */
-    border-radius: 10px; /* Rounded square */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0; /* Prevent shrinking */
-    overflow: hidden; /* Ensure logo doesn't overflow */
-}
-
-.tool-logo {
-    max-width: 70%; /* Adjust logo size within wrapper */
-    max-height: 70%;
-    object-fit: contain;
-    /* Apply a filter to ensure the logo appears dark/black against white background */
-    /* This works well if the original SVG is single-colored or has a dark primary color */
-    filter: brightness(0.1); 
-}
-
-/* If a specific logo is colorful and needs to be grayscale/black on white,
-   you might need a more specific filter like invert(1) or a combination.
-   For Simple Icons, brightness(0.1) usually works fine for colored logos to turn them black.
-*/
-
-.tool-info {
-    flex-grow: 1; /* Allow text to take remaining space */
-    text-align: left;
-}
-
-.tool-name {
-    font-size: 1.1em; /* Tool name font size */
-    font-weight: 600; /* Medium bold */
-    color: var(--tool-name-color);
-    margin: 0 0 5px 0; /* Adjust margins */
-    line-height: 1.2;
-}
-
-.tool-category {
-    font-size: 0.85em; /* Category description font size */
-    color: var(--tool-category-color);
-    margin: 0;
-    line-height: 1.2;
-}
-
-
-/* NEW: Services Section Styles */
+/* Services Section Styles - (MOVED) */
 .services-section {
-    padding-top: 80px; /* Space from tools section */
-    padding-bottom: 100px;
+    padding-top: 80px; /* Space from hero section */
+    padding-bottom: 100px; /* Space before tools section */
     text-align: left;
 }
 
@@ -592,6 +493,105 @@ body {
 /* .service-item.active {
     opacity: 1;
 } */
+
+
+/* Premium Tools Section Styles */
+.tools-section {
+    padding-top: 80px; /* Space from services section */
+    padding-bottom: 80px; /* Space before footer */
+    text-align: left; /* Align title left */
+    /* This section already has reveal-item class from HTML */
+}
+
+.tools-heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5em; /* Slightly smaller than hero heading */
+    line-height: 0.9;
+    font-weight: 800;
+    margin-bottom: 50px; /* Space below heading */
+    text-transform: uppercase;
+}
+
+/* Reusing text-white and text-gray for tools-heading */
+.tools-heading .text-white {
+    color: var(--text-light);
+    display: block;
+}
+
+.tools-heading .text-gray {
+    color: var(--text-medium);
+    display: block;
+}
+
+.tools-grid {
+    display: grid;
+    /* Responsive 2-column grid: at least 250px wide, max 1fr */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px; /* Gap between cards */
+}
+
+.tool-card {
+    background-color: var(--bg-tool-card);
+    border-radius: 15px; /* Rounded corners for cards */
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icon and text */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    background-color: rgba(26, 26, 26, 0.9); /* Slightly lighter on hover */
+}
+
+.tool-icon-wrapper {
+    width: 50px; /* Size of the icon container */
+    height: 50px;
+    background-color: var(--tool-icon-bg); /* White background */
+    border-radius: 10px; /* Rounded square */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
+    overflow: hidden; /* Ensure logo doesn't overflow */
+}
+
+.tool-logo {
+    max-width: 70%; /* Adjust logo size within wrapper */
+    max-height: 70%;
+    object-fit: contain;
+    /* Apply a filter to ensure the logo appears dark/black against white background */
+    /* This works well if the original SVG is single-colored or has a dark primary color */
+    filter: brightness(0.1); 
+}
+
+/* If a specific logo is colorful and needs to be grayscale/black on white,
+   you might need a more specific filter like invert(1) or a combination.
+   For Simple Icons, brightness(0.1) usually works fine for colored logos to turn them black.
+*/
+
+.tool-info {
+    flex-grow: 1; /* Allow text to take remaining space */
+    text-align: left;
+}
+
+.tool-name {
+    font-size: 1.1em; /* Tool name font size */
+    font-weight: 600; /* Medium bold */
+    color: var(--tool-name-color);
+    margin: 0 0 5px 0; /* Adjust margins */
+    line-height: 1.2;
+}
+
+.tool-category {
+    font-size: 0.85em; /* Category description font size */
+    color: var(--tool-category-color);
+    margin: 0;
+    line-height: 1.2;
+}
 
 
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
@@ -824,44 +824,17 @@ footer h2 {
         margin-bottom: 60px;
     }
 
-    /* Adjustments for tools section */
-    .tools-heading {
-        font-size: 4.5em;
-        margin-bottom: 40px;
-    }
-    .tools-grid {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
-        gap: 20px;
-        max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
-        margin: 0 auto; /* Center the grid */
-    }
-    .tool-card {
-        padding: 18px;
-        gap: 12px;
-    }
-    .tool-icon-wrapper {
-        width: 45px;
-        height: 45px;
-        border-radius: 8px;
-    }
-    .tool-name {
-        font-size: 1em;
-    }
-    .tool-category {
-        font-size: 0.8em;
-    }
-
     /* Adjustments for services section */
     .services-section {
-        padding-top: 60px; /* Adjust spacing */
-        padding-bottom: 80px;
+        padding-top: 60px; /* Adjusted spacing now that it's after hero */
+        padding-bottom: 80px; /* Space before tools section */
     }
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 40px;
     }
     .services-layout {
-        flex-direction: column; /* Stack columns */
+        flex-direction: column; /* Stack columns on smaller desktop */
         gap: 30px;
     }
     .services-timeline {
@@ -900,6 +873,37 @@ footer h2 {
         margin-bottom: 80px; /* Reduced space between service descriptions */
         min-height: 180px; /* Adjusted min-height */
         padding: 15px;
+    }
+
+    /* Adjustments for tools section */
+    .tools-section {
+        padding-top: 60px; /* Adjusted space now that it's after services */
+        padding-bottom: 80px;
+    }
+    .tools-heading {
+        font-size: 4.5em;
+        margin-bottom: 40px;
+    }
+    .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
+        gap: 20px;
+        max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
+        margin: 0 auto; /* Center the grid */
+    }
+    .tool-card {
+        padding: 18px;
+        gap: 12px;
+    }
+    .tool-icon-wrapper {
+        width: 45px;
+        height: 45px;
+        border-radius: 8px;
+    }
+    .tool-name {
+        font-size: 1em;
+    }
+    .tool-category {
+        font-size: 0.8em;
     }
 }
 
@@ -1019,36 +1023,6 @@ footer h2 {
         margin-bottom: 40px; /* Reduced space before next section */
     }
 
-    /* Adjustments for tools section */
-    .tools-section {
-        padding-top: 40px;
-        padding-bottom: 60px;
-    }
-    .tools-heading {
-        font-size: 3.5em;
-        margin-bottom: 30px;
-    }
-    .tools-grid {
-        grid-template-columns: 1fr; /* Single column on mobile */
-        gap: 15px;
-        max-width: 100%; /* Allow to take full width */
-    }
-    .tool-card {
-        padding: 15px;
-        gap: 10px;
-    }
-    .tool-icon-wrapper {
-        width: 40px;
-        height: 40px;
-        border-radius: 7px;
-    }
-    .tool-name {
-        font-size: 0.95em;
-    }
-    .tool-category {
-        font-size: 0.75em;
-    }
-
     /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 40px;
@@ -1097,6 +1071,36 @@ footer h2 {
         margin-bottom: 60px; /* Further reduced margin */
         min-height: 150px; /* Smaller min-height for mobile */
         padding: 10px;
+    }
+
+    /* Adjustments for tools section */
+    .tools-section {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
+    .tools-heading {
+        font-size: 3.5em;
+        margin-bottom: 30px;
+    }
+    .tools-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 15px;
+        max-width: 100%; /* Allow to take full width */
+    }
+    .tool-card {
+        padding: 15px;
+        gap: 10px;
+    }
+    .tool-icon-wrapper {
+        width: 40px;
+        height: 40px;
+        border-radius: 7px;
+    }
+    .tool-name {
+        font-size: 0.95em;
+    }
+    .tool-category {
+        font-size: 0.75em;
     }
 }
 
@@ -1175,31 +1179,6 @@ footer h2 {
         margin-bottom: 30px; /* Further reduced space */
     }
 
-    /* Adjustments for tools section */
-    .tools-section {
-        padding-top: 30px;
-        padding-bottom: 50px;
-    }
-    .tools-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
-    }
-    .tool-card {
-        padding: 12px;
-        gap: 8px;
-    }
-    .tool-icon-wrapper {
-        width: 35px;
-        height: 35px;
-        border-radius: 6px;
-    }
-    .tool-name {
-        font-size: 0.9em;
-    }
-    .tool-category {
-        font-size: 0.7em;
-    }
-
     /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 30px;
@@ -1223,5 +1202,30 @@ footer h2 {
         margin-bottom: 40px; /* Even less space */
         min-height: 120px; /* Adjusted min-height */
         padding: 8px;
+    }
+
+    /* Adjustments for tools section */
+    .tools-section {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    .tools-heading {
+        font-size: 2.8em;
+        margin-bottom: 25px;
+    }
+    .tool-card {
+        padding: 12px;
+        gap: 8px;
+    }
+    .tool-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        border-radius: 6px;
+    }
+    .tool-name {
+        font-size: 0.9em;
+    }
+    .tool-category {
+        font-size: 0.7em;
     }
 }
