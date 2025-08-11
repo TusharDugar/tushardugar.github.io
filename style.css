@@ -199,7 +199,7 @@ main .section p {
     display: flex;
     justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 25px 5%; /* Reduced padding for smaller height */
+    padding: 20px 5%; /* Adjusted padding for reduced height */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,7 +211,7 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 15px 5%; /* Reduced padding on scroll */
+    padding: 12px 5%; /* Reduced padding on scroll */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
@@ -230,14 +230,14 @@ main .section p {
 }
 
 .nav-links li {
-    margin-left: 50px; /* Smaller spacing for links */
+    margin-left: 45px; /* Smaller spacing for links */
 }
 
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
     font-weight: 500; /* Medium weight */
-    font-size: 1.2em; /* Smaller links */
+    font-size: 1.15em; /* Smaller links */
     position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
@@ -283,7 +283,7 @@ main .section p {
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
-    padding-top: 100px; /* Space from the top (navbar area) */
+    padding-top: 80px; /* Space from the top (navbar area) - adjusted to match smaller navbar */
 }
 
 /* Left Column (Sticky) */
@@ -293,9 +293,9 @@ main .section p {
     padding-right: 60px; /* Space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
-    top: 100px; /* Stick below the navbar (adjust if navbar height changes) */
+    top: 80px; /* Stick below the navbar (adjust if navbar height changes) */
     align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjusted to fit card */
+    height: calc(100vh - 80px); /* Occupy remaining viewport height, adjusted to fit card */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within sticky area */
@@ -322,7 +322,7 @@ main .section p {
     transform: translateY(0);
 }
 
-/* No longer need .profile-card-wrapper as an extra rule */
+/* Removed empty .profile-card-wrapper rule */
 
 .image-area-with-dash {
     position: relative;
@@ -927,7 +927,7 @@ footer h2 {
     .right-column-scroll {
         padding-left: 40px;
     }
-    /* No empty rule for .navbar .logo here */
+    /* Removed empty .navbar .logo rule as it's no longer in HTML */
     .nav-links li {
         margin-left: 40px;
     }
@@ -997,7 +997,7 @@ footer h2 {
         font-size: 3.2em; /* Adjusted for mobile */
     }
 
-    /* Removed empty rule for .navbar .logo here */
+    /* Removed empty .navbar .logo rule for this media query */
     .nav-links li {
         margin-left: 35px;
     }
@@ -1088,7 +1088,6 @@ footer h2 {
         margin: 10px 18px;
     }
     /* Removed empty .navbar .logo rule for this media query */
-    /* Hero section is completely removed from HTML. No CSS needed to hide it. */ 
     .section h2 { /* Global heading for sections */
         font-size: 3.2em;
         margin-bottom: 40px;
