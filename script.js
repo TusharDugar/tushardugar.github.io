@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const contactValue = button.dataset.contact;
 
             if (button.classList.contains('copied')) {
+                console.log('Button already showing "Copied!". Returning.');
                 return; 
             }
 
@@ -15,9 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Text copied to clipboard:', contactValue);
                 
                 button.classList.add('copied');
+                console.log('Class "copied" added to button.');
 
                 setTimeout(() => {
                     button.classList.remove('copied');
+                    console.log('Class "copied" removed from button after 1.5 seconds.');
                 }, 1500);
             } catch (err) {
                 console.error('Failed to copy text: ', err);
@@ -45,12 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     entry.target.classList.add('revealed');
                 }
                 // Reveal the tools section on the right
-                else if (entry.target.id === 'tools') { // <--- ADDED THIS CONDITION
+                else if (entry.target.id === 'tools') { 
                     entry.target.classList.add('revealed');
                 }
                 // Reveal footer/contact section
                 else if (entry.target.id === 'contact') {
                     entry.target.classList.add('revealed');
+                    // These inner elements might need their own 'revealed' classes if they don't inherit opacity
                     const contactTagline = entry.target.querySelector('.contact-tagline');
                     const contactButtons = entry.target.querySelector('.contact-buttons');
                     if (contactTagline) setTimeout(() => contactTagline.classList.add('revealed'), 100);
@@ -65,5 +69,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.about-left-content').forEach(el => observer.observe(el));
     document.querySelectorAll('#contact').forEach(el => observer.observe(el));
     document.querySelectorAll('#hero-right').forEach(el => observer.observe(el));
-    document.querySelectorAll('#tools').forEach(el => observer.observe(el)); // <--- ADDED THIS LINE
+    document.querySelectorAll('#tools').forEach(el => observer.observe(el)); 
 });
