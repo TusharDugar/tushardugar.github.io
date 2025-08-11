@@ -1,102 +1,171 @@
 /* Basic Reset & Font */
+:root {
+    --bg-dark: #070707;
+    --text-light: #f0f0f0;
+    --section-bg: rgba(20, 20, 20, 0.9);
+    --accent-blue: #007bff; /* Primary vibrant blue */
+    --accent-purple: #8a2be2; /* Secondary accent purple */
+    --accent-green: #28a745; /* Tertiary accent green */
+    --primary-heading-color: #f0f0f0;
+    --secondary-heading-color: #3498db; /* A slightly lighter blue for subheadings */
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif; /* Inter for body text */
+    font-family: 'Inter', sans-serif;
     line-height: 1.6;
-    color: #1a1a1a; /* MUCH DARKER GRAY for body text for better visibility */
-    background: linear-gradient(135deg, #e6f7ff, #ffe6f7); /* Light blue to light pink gradient */
+    color: var(--text-light); /* Light text on dark background */
+    background-color: var(--bg-dark); /* Very dark background */
+    overflow-x: hidden; /* Prevent horizontal scroll from background effects */
+    position: relative; /* For pseudo-elements */
     scroll-behavior: smooth;
+    min-height: 100vh; /* Ensure body takes full height for background */
 }
+
+/* Background Glowing Effects (CSS Approximation of Figma) */
+body::before, body::after {
+    content: '';
+    position: fixed; /* Stays fixed as content scrolls */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    filter: blur(120px); /* Heavy blur for soft glow */
+    opacity: 0.6;
+    z-index: -1; /* Behind all content */
+}
+
+body::before {
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+    animation: glow1 15s infinite alternate ease-in-out;
+}
+
+body::after {
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(45deg, var(--accent-green) 0%, var(--accent-blue) 100%);
+    animation: glow2 20s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes glow1 {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-55%, -45%) scale(1.1); opacity: 0.7; }
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.6; }
+}
+
+@keyframes glow2 {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-45%, -55%) scale(1.05); opacity: 0.7; }
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.6; }
+}
+
 
 /* Global Section Styling */
 .section {
     padding: 60px 5%;
     margin-bottom: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white for sections */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* More pronounced shadow */
-    border-radius: 12px; /* Slightly more rounded corners */
+    background-color: var(--section-bg); /* Darker transparent background for sections */
+    box-shadow: 0 4px 15px var(--shadow-color); /* Subtle shadow on dark bg */
+    border-radius: 12px;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    backdrop-filter: blur(5px); /* Subtle blur for modern feel */
-    -webkit-backdrop-filter: blur(5px); /* For Safari */
+    backdrop-filter: blur(8px); /* More blur for glassy effect */
+    -webkit-backdrop-filter: blur(8px); /* For Safari */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle light border */
 }
 
 .section h2 {
-    font-family: 'Rubik', sans-serif; /* Rubik for section headings */
+    font-family: 'Montserrat', sans-serif; /* Montserrat for section headings */
     text-align: center;
     margin-bottom: 40px;
-    font-size: 2.8em; /* Slightly larger headings */
-    color: #2c3e50; /* Dark blue-gray for main headings */
+    font-size: 2.8em;
+    color: var(--primary-heading-color); /* Light color for main headings */
     font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Shadow for light text on dark bg */
+}
+
+.section h2 i {
+    color: var(--accent-blue); /* Icon color */
+    margin-right: 15px;
 }
 
 /* Header (Hero Section) */
 .hero-section {
-    background: transparent; /* Initially transparent background for hero */
-    color: white;
+    background: transparent; /* Always transparent for hero section */
+    color: var(--text-light);
     text-align: center;
-    padding: 180px 5% 80px; /* More padding to make space for header */
+    padding: 180px 5% 80px;
     position: relative;
     overflow: hidden;
-    min-height: 500px; /* Minimum height for hero */
+    min-height: 600px; /* Adjust height for impact */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Subtle separator */
 }
 
 .hero-section h1 {
-    font-family: 'Rubik', sans-serif;
-    font-size: 4em; /* Larger hero heading */
+    font-family: 'Montserrat', sans-serif; /* Montserrat for hero heading */
+    font-size: 4.5em; /* Larger, bolder hero heading */
     margin-bottom: 15px;
     line-height: 1.2;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Subtle text shadow */
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.5); /* Stronger text shadow */
+    font-weight: 700;
+    letter-spacing: 2px; /* Slight letter spacing */
 }
 
 .hero-section p {
-    font-size: 1.8em; /* Larger tagline */
-    opacity: 0.95;
+    font-size: 1.8em;
+    opacity: 0.8; /* Slightly less opaque tagline */
     font-weight: 300;
 }
 
 /* Navbar (Dynamic Sticky Header) */
 .navbar {
-    position: fixed; /* Make it stick to the top */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 5%;
-    background-color: rgba(0, 0, 0, 0); /* Initially fully transparent */
+    padding: 25px 5%; /* Larger initial padding */
+    background-color: rgba(0, 0, 0, 0.1); /* Slightly dark transparent initial background */
     box-sizing: border-box;
-    transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
-    z-index: 1000; /* Ensure it stays on top */
+    transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* Always apply some blur for initial glassy look */
+    -webkit-backdrop-filter: blur(5px);
 }
 
 /* Navbar when scrolled */
 .navbar.scrolled {
-    background-color: rgba(255, 255, 255, 0.95); /* Opaque white on scroll */
-    padding: 15px 5%; /* Smaller padding on scroll */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Shadow on scroll */
-    backdrop-filter: blur(8px); /* Blur effect on scroll */
-    -webkit-backdrop-filter: blur(8px); /* For Safari */
+    background-color: var(--bg-dark); /* Solid dark on scroll */
+    padding: 15px 5%;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    backdrop-filter: blur(10px); /* More blur when scrolled */
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border on scroll */
 }
 
 /* Logo in Navbar */
 .navbar .logo {
-    font-family: 'Rubik', sans-serif;
-    font-size: 2em; /* Slightly larger logo */
+    font-family: 'Montserrat', sans-serif; /* Montserrat for logo */
+    font-size: 2.2em;
     font-weight: 700;
-    color: white; /* White initially */
-    transition: color 0.3s ease; /* Smooth color transition */
+    color: var(--text-light); /* Light text initially */
+    transition: color 0.3s ease;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 /* Logo in Navbar when scrolled */
 .navbar.scrolled .logo {
-    color: #2c3e50; /* Dark blue-gray when scrolled */
+    color: var(--accent-blue); /* Accent color when scrolled */
 }
 
 /* Navigation Links */
@@ -108,21 +177,21 @@ body {
 }
 
 .nav-links li {
-    margin-left: 30px; /* More spacing for links */
+    margin-left: 35px; /* Increased spacing */
 }
 
 .nav-links a {
-    color: white; /* White initially */
+    color: var(--text-light); /* Light text initially */
     text-decoration: none;
-    font-weight: 400; /* Inter regular weight */
-    font-size: 1.1em;
-    position: relative; /* For underline effect */
+    font-weight: 400;
+    font-size: 1.15em; /* Slightly larger links */
+    position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
 /* Navigation Links when scrolled */
 .navbar.scrolled .nav-links a {
-    color: #333; /* Dark text when scrolled */
+    color: var(--text-light); /* Keep light text on dark scrolled header */
 }
 
 .nav-links a::after {
@@ -132,7 +201,7 @@ body {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: #3498db; /* Accent color for underline */
+    background-color: var(--accent-blue); /* Accent blue for underline */
     transition: width 0.3s ease;
 }
 
@@ -141,37 +210,38 @@ body {
 }
 
 .nav-links a:hover {
-    color: #3498db; /* Accent color on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
+    color: var(--accent-blue); /* Accent blue on hover */
+    transform: translateY(-2px);
 }
 
 /* Spline Container */
 #spline-container {
     width: 100%;
-    height: 500px; /* Larger height for 3D animation */
+    height: 500px;
     margin-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
-    overflow: hidden; /* Ensure spline content doesn't break layout */
+    overflow: hidden;
     position: relative;
-    z-index: 1; /* Below navbar */
+    z-index: 1;
 }
 
 /* Project Cards (Experience) */
 .project-card {
-    background-color: #f9f9f9;
+    background-color: var(--section-bg);
     padding: 30px;
     margin-bottom: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
 }
 
 .project-card h3 {
-    font-family: 'Rubik', sans-serif;
-    color: #3498db; /* Vibrant blue for sub-headings */
+    font-family: 'Montserrat', sans-serif;
+    color: var(--accent-blue); /* Vibrant blue for sub-headings */
     margin-top: 0;
     font-weight: 700;
     font-size: 1.8em;
@@ -179,7 +249,7 @@ body {
 
 .project-card .date {
     font-style: italic;
-    color: #666;
+    color: #bbb; /* Lighter color for date */
     margin-bottom: 15px;
     font-size: 0.95em;
 }
@@ -192,26 +262,27 @@ body {
 
 .project-card li {
     margin-bottom: 8px;
-    color: #222; /* Darker list item text for readability */
+    color: var(--text-light); /* Light text for list items */
 }
 
 .video-placeholder {
     width: 100%;
-    height: 250px; /* Placeholder for video height */
-    background-color: #e0e0e0; /* Gray placeholder */
+    height: 250px;
+    background-color: rgba(0, 0, 0, 0.3); /* Darker placeholder */
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #666;
+    color: rgba(255, 255, 255, 0.6);
     margin-top: 20px;
     border-radius: 5px;
-    overflow: hidden; /* Ensure embedded video fits */
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .video-placeholder video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ensures video covers the area without distortion */
+    object-fit: cover;
     border-radius: 5px;
 }
 
@@ -219,60 +290,67 @@ body {
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px; /* Slightly more gap */
+    gap: 25px;
 }
 
 .skill-category {
-    background-color: #ecf0f1; /* Lighter gray for skill categories */
-    padding: 25px; /* More padding */
-    border-left: 5px solid #3498db; /* Accent border */
+    background-color: rgba(30, 30, 30, 0.9); /* Slightly lighter dark for skill categories */
+    padding: 25px;
+    border-left: 5px solid var(--accent-green); /* Accent green for skills */
     border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 8px var(--shadow-color);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .skill-category h3 {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin-top: 0;
-    color: #2c3e50; /* Dark blue-gray for skill category titles */
+    color: var(--primary-heading-color); /* Light text for skill category titles */
     font-weight: 700;
     font-size: 1.5em;
+}
+.skill-category p {
+    color: var(--text-light);
 }
 
 /* Education & Leadership Items */
 .education-item, .leadership-item {
-    background-color: #f9f9f9;
-    padding: 25px; /* More padding */
+    background-color: var(--section-bg);
+    padding: 25px;
     margin-bottom: 25px;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    box-shadow: 0 1px 8px var(--shadow-color);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .education-item h3, .leadership-item h3 {
-    font-family: 'Rubik', sans-serif;
-    color: #3498db; /* Vibrant blue for section sub-headings */
+    font-family: 'Montserrat', sans-serif;
+    color: var(--accent-purple); /* Accent purple for these sections */
     margin-top: 0;
     font-weight: 700;
     font-size: 1.6em;
 }
 
 .achievements-list ul {
-    list-style: decimal; /* Numbered list for achievements */
+    list-style: decimal;
     margin-left: 20px;
     padding: 0;
+    color: var(--text-light);
 }
 
 /* Footer */
 footer {
-    background-color: #2c3e50; /* Darker footer to match new palette */
-    color: white;
+    background-color: var(--bg-dark); /* Dark footer */
+    color: var(--text-light);
     text-align: center;
     padding: 40px 5%;
     margin-top: 50px;
-    border-radius: 12px 12px 0 0; /* Rounded top corners for footer */
+    border-radius: 12px 12px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 footer a {
-    color: #3498db; /* Vibrant blue for footer links */
+    color: var(--accent-blue); /* Accent blue for footer links */
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -280,6 +358,36 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+
+.contact-info p {
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: var(--text-light);
+}
+.contact-info i {
+    color: var(--accent-blue);
+    margin-right: 8px;
+}
+
+.social-links {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.social-links a {
+    color: var(--text-light);
+    margin: 0 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.social-links a:hover {
+    color: var(--accent-green); /* Green hover for social icons */
+    transform: scale(1.1);
+}
+.copyright {
+    font-size: 0.9em;
+    opacity: 0.7;
+    margin-top: 30px;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -297,10 +405,10 @@ footer a:hover {
         margin: 5px 10px;
     }
     .hero-section h1 {
-        font-size: 2.8em; /* Adjusted for mobile */
+        font-size: 2.8em;
     }
     .hero-section p {
-        font-size: 1.4em; /* Adjusted for mobile */
+        font-size: 1.4em;
     }
     .section {
         padding: 40px 3%;
@@ -309,9 +417,32 @@ footer a:hover {
         font-size: 2.2em;
     }
     .skills-grid {
-        grid-template-columns: 1fr; /* Stack skills vertically on small screens */
+        grid-template-columns: 1fr;
     }
     #spline-container {
-        height: 350px; /* Adjust height for smaller screens */
+        height: 350px;
+    }
+    body::before, body::after {
+        width: 300px; /* Smaller blurs for mobile */
+        height: 300px;
+        filter: blur(80px);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section h1 {
+        font-size: 2em;
+    }
+    .hero-section p {
+        font-size: 1.1em;
+    }
+    .section h2 {
+        font-size: 1.8em;
+    }
+    .navbar .logo {
+        font-size: 1.8em;
+    }
+    .nav-links a {
+        font-size: 1em;
     }
 }
