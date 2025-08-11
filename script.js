@@ -67,4 +67,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('#hero-right').forEach(el => observer.observe(el));
     document.querySelectorAll('#tools').forEach(el => observer.observe(el)); // <--- ADDED THIS LINE
 });
-76.7s
