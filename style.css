@@ -234,7 +234,7 @@ main .section p {
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
-    padding-top: 60px; /* Adjusted to space from the top of the new, smaller navbar */
+    padding-top: 80px; /* Space from the top (navbar area) - adjusted to match smaller navbar */
 }
 
 /* Left Column (Sticky) */
@@ -244,9 +244,9 @@ main .section p {
     padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
-    top: 60px; /* Stick below the navbar (adjusted for smaller navbar) */
+    top: 80px; /* Stick below the navbar (adjust if navbar height changes) */
     align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 60px); /* Occupy remaining viewport height, adjusted for smaller navbar */
+    height: calc(100vh - 80px); /* Occupy remaining viewport height, adjusted to fit card */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within sticky area */
@@ -259,7 +259,7 @@ main .section p {
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 30px; /* Large rounded corners */
-    padding: 30px 25px; /* Padding for more compact card */
+    padding: 30px 25px; /* Reduced padding for more compact card */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
     max-width: 380px; /* Set a max-width to match Sawad's card size */
@@ -275,9 +275,9 @@ main .section p {
 
 .image-area-with-dash {
     position: relative;
-    width: 160px; /* Reduced size for the image circle container */
-    height: 160px;
-    margin: 0 auto 25px; /* Reduced margin */
+    width: 180px; /* Fixed size for the image circle container */
+    height: 180px;
+    margin: 0 auto 30px; /* Center and space below image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -287,13 +287,13 @@ main .section p {
 .image-area-with-dash::before {
     content: '';
     position: absolute;
-    width: calc(100% + 15px); /* Dashed circle slightly larger than image bg */
-    height: calc(100% + 15px);
+    width: calc(100% + 20px); /* Dashed circle slightly larger than image bg */
+    height: calc(100% + 20px);
     border: 3px dashed var(--accent-primary-sawad); /* Orange dashed border */
     border-radius: 50%;
     animation: rotateDashed 20s linear infinite; /* Smooth rotation */
-    top: -7.5px;
-    left: -7.5px;
+    top: -10px;
+    left: -10px;
     box-sizing: border-box;
 }
 
@@ -303,8 +303,8 @@ main .section p {
 }
 
 .image-bg-orange {
-    width: 120px; /* Reduced orange circle behind image */
-    height: 120px;
+    width: 150px; /* Orange circle behind image */
+    height: 150px;
     background-color: var(--accent-primary-sawad); /* Sawad's orange */
     border-radius: 50%;
     display: flex;
@@ -329,45 +329,45 @@ main .section p {
     background-color: var(--accent-primary-sawad);
     border-radius: 50%;
     padding: 8px;
-    font-size: 1.1em; /* Reduced size */
+    font-size: 1.2em;
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     z-index: 5;
-    transform: translate(25%, 25%); /* Position outside corner */
+    transform: translate(30%, 30%); /* Position outside corner */
 }
 
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.5em; /* Reduced name font size */
+    font-size: 2.8em; /* Larger name */
     font-weight: 600;
     color: var(--text-dark-card); /* Black text on white card */
     margin-bottom: 5px;
 }
 .about-tagline {
-    font-size: 1.1em; /* Reduced tagline font size */
+    font-size: 1.2em;
     color: var(--text-medium-card); /* Dark gray text */
-    margin-bottom: 20px; /* Reduced margin */
+    margin-bottom: 25px;
 }
 .about-short-desc {
-    font-size: 0.9em; /* Reduced short desc font size */
-    line-height: 1.5; /* Reduced line height */
+    font-size: 1em;
+    line-height: 1.6;
     color: var(--text-medium-card);
-    margin-bottom: 25px; /* Reduced margin before social icons */
+    margin-bottom: 30px; /* Space before social icons */
 }
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 20px; /* Reduced gap */
-    margin-top: 15px; /* Reduced margin */
+    gap: 25px;
+    margin-top: 20px;
 }
 .about-social-icons a {
     color: var(--text-medium-card); /* Dark gray icons */
-    font-size: 1.6em; /* Reduced icon size */
+    font-size: 1.8em;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
     color: var(--accent-primary-sawad); /* Orange on hover */
-    transform: translateY(-4px) scale(1.1); /* Reduced lift */
+    transform: translateY(-5px) scale(1.1);
 }
 
 
@@ -375,7 +375,7 @@ main .section p {
 .right-column-scroll {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
-    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
+    padding-left: 60px; /* Space between columns */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
 }
@@ -798,12 +798,10 @@ footer h2 {
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
     color: var(--accent-primary-sawad); /* Accent color for icons */
-    margin-bottom: 10px;
+    /* Removed margin-bottom here, will center automatically */
 }
 
-.contact-button .button-label {
-    /* Removed .button-label as it's no longer in HTML */
-}
+/* Removed .contact-button .button-label as it's no longer in HTML */
 
 .contact-button .button-value {
     font-size: 1.25em; /* Larger value text */
@@ -815,6 +813,7 @@ footer h2 {
     padding: 0 5px;
     max-width: 90%;
     color: var(--text-light);
+    margin-top: 10px; /* Space between icon and value */
 }
 
 .contact-button .copied-text {
