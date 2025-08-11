@@ -593,13 +593,13 @@ footer h2 {
 
 /* States when button is 'copied' */
 .contact-button.copied .button-content-main {
-    transform: translateY(-100%) !important; /* Added !important for robustness */
-    opacity: 0 !important; /* Added !important for robustness */
+    transform: translateY(-100%) !important;
+    opacity: 0 !important;
 }
 
 .contact-button.copied .copied-text {
-    transform: translateY(0) !important; /* Added !important for robustness */
-    opacity: 1 !important; /* Added !important for robustness */
+    transform: translateY(0) !important;
+    opacity: 1 !important;
 }
 
 .social-links {
@@ -628,7 +628,7 @@ footer h2 {
         margin: 0 auto; /* Center it */
     }
     .right-column-scroll { 
-        /* REMOVED: display: none; */ /* THIS WAS CAUSING THE RIGHT SIDE TO DISAPPEAR */
+        /* The `display: none;` that was here causing issues is REMOVED from this breakpoint */
         flex-grow: 1; /* Allow it to take up space */
         width: 100%; /* Take full width of main container when stacked */
         padding-left: 0; /* Adjust padding for full width layout */
@@ -791,6 +791,8 @@ footer h2 {
     .contact-buttons {
         flex-direction: column;
         gap: 20px;
+        max-width: 350px; /* Set max-width for the flex container */
+        margin: 0 auto; /* Center the flex container itself */
     }
     .contact-button {
         width: 90%;
@@ -824,6 +826,7 @@ footer h2 {
         width: 100%; /* Full width on mobile */
         padding: 40px 20px; /* More generous padding for content */
         min-height: auto; /* Allow height to shrink on mobile */
+        padding-top: 50px; /* Reduced space from above section */
     }
     .hero-heading {
         font-size: 4.5em; /* Scale down heading for tablets/larger phones */
@@ -833,12 +836,12 @@ footer h2 {
         font-size: 1em;
         line-height: 1.6;
         max-width: 100%; /* Allow to take full width */
-        margin-bottom: 50px;
+        margin-bottom: 40px; /* Reduced space before next section */
     }
 
     /* Adjustments for tools section */
     .tools-section {
-        padding-top: 40px;
+        padding-top: 40px; /* Reduced space from above section */
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -877,8 +880,12 @@ footer h2 {
         font-size: 1em;
         margin-bottom: 25px;
     }
+    .contact-buttons {
+        width: 95%; /* Adjust width for very small screens */
+        max-width: 300px; /* Tighter max-width */
+    }
     .contact-button {
-        width: 95%;
+        width: 100%; /* Ensure button takes full width of its container */
         height: 85px;
     }
     /* Specific adjustments for profile card on 480px screens - NO CHANGES */
@@ -935,7 +942,7 @@ footer h2 {
     .hero-description {
         font-size: 0.9em;
         line-height: 1.5;
-        margin-bottom: 40px;
+        margin-bottom: 30px; /* Further reduced space */
     }
 
     /* Adjustments for tools section */
