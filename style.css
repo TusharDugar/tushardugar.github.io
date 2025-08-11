@@ -164,7 +164,7 @@ body {
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
     max-width: 420px; /* Increased max-width for wider card */
-    height: 480px; /* Reduced height for the white card */
+    height: 500px; /* Increased height from 480px to fit all content */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
@@ -177,9 +177,9 @@ body {
 
 .image-area-with-dash {
     position: relative;
-    width: 160px; /* Reduced size for the image circle container */
-    height: 160px;
-    margin: 0 auto 25px; /* Reduced margin */
+    width: 160px; /* Reverted to original size */
+    height: 160px; /* Reverted to original size */
+    margin: 0 auto 25px; /* Reverted to original margin */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -205,24 +205,43 @@ body {
 }
 
 .image-bg-orange {
-    width: 120px; /* Reduced orange circle behind image */
-    height: 120px;
+    width: 120px; /* Reverted to original orange circle */
+    height: 120px; /* Reverted to original orange circle */
     background-color: var(--accent-primary-sawad); /* Sawad's orange */
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; /* Added flexbox for text alignment */
+    flex-direction: column; /* Stack text vertically */
+    justify-content: center; /* Center text vertically */
+    align-items: center; /* Center text horizontally */
     overflow: hidden; /* Hide parts of image outside circle */
+    color: var(--text-light); /* White text */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    line-height: 1.2;
 }
 
-.profile-photo {
-    width: 100%; /* Make image fill its orange background */
-    height: 100%;
-    object-fit: cover; /* Crop image to fit circle */
-    object-position: center top; /* Focus on top part of image */
-    border-radius: 50%; /* Make image circular */
-    filter: grayscale(1) brightness(0.5); /* Desaturate and darken to make it a silhouette */
+/* New styles for profile text */
+.profile-text-top {
+    font-size: 1.2em; /* Adjust as needed */
+    font-weight: 600; /* Slightly bolder */
+    line-height: 1; /* Tighter line height */
 }
+
+.profile-text-bottom {
+    font-size: 0.9em; /* Adjust as needed */
+    margin-top: 0px; /* Pull closer to the top text */
+    line-height: 1; /* Tighter line height */
+}
+
+/* Removed .profile-photo styles as it's no longer an image */
+/* .profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 50%;
+    filter: grayscale(1) brightness(0.5);
+} */
 
 .fire-icon {
     position: absolute;
@@ -231,7 +250,7 @@ body {
     background-color: var(--accent-primary-sawad);
     border-radius: 50%;
     padding: 8px;
-    font-size: 1.1em; /* Reduced size */
+    font-size: 1.1em; /* Reverted to original size */
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     z-index: 5;
@@ -240,31 +259,34 @@ body {
 
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.5em; /* Reduced name font size */
+    font-size: 2.5em; /* Reverted to original font size */
     font-weight: 600;
     color: var(--text-dark-card); /* Black text on white card */
-    margin-bottom: 5px;
+    margin-bottom: 5px; /* Reverted to original */
+    line-height: 1.1; /* Added for tighter two-line spacing */
 }
 .about-tagline {
-    font-size: 1.1em; /* Reduced tagline font size */
+    font-size: 1.1em; /* Reverted to original tagline font size */
     color: var(--text-medium-card); /* Dark gray text */
-    margin-bottom: 20px; /* Reduced margin */
+    margin-bottom: 20px; /* Reverted to original margin */
+    line-height: 1.4; /* Added for tighter two-line spacing */
 }
 .about-short-desc {
-    font-size: 0.85em; /* Reduced short desc font size */
-    line-height: 1.5; /* Reduced line height */
+    font-size: 0.85em; /* Reverted to original short desc font size */
+    line-height: 1.5; /* Reverted to original line height */
     color: var(--text-medium-card);
-    margin-bottom: 25px; /* Reduced margin before social icons */
+    margin-bottom: 25px; /* Reverted to original margin before social icons */
+    padding: 0 5px; /* Added slight horizontal padding to prevent awkward word wraps */
 }
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 20px; /* Reduced gap */
-    margin-top: 15px; /* Reduced margin */
+    gap: 20px; /* Reverted to original gap */
+    margin-top: 15px; /* Reverted to original margin */
 }
 .about-social-icons a {
     color: var(--text-medium-card); /* Dark gray icons */
-    font-size: 1.5em; /* Reduced icon size */
+    font-size: 1.5em; /* Reverted to original icon size */
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
@@ -471,36 +493,7 @@ footer h2 {
     .about-left-content {
         padding: 30px;
     }
-    .image-area-with-dash {
-        width: 180px;
-        height: 180px;
-        margin-bottom: 30px;
-    }
-    .image-area-with-dash::before {
-        width: calc(100% + 20px);
-        height: calc(100% + 20px);
-        top: -10px;
-        left: -10px;
-    }
-    .image-bg-orange {
-        width: 150px;
-        height: 150px;
-    }
-    .fire-icon {
-        font-size: 1.2em;
-    }
-    .about-left-content h3 {
-        font-size: 2.5em;
-    }
-    .about-tagline {
-        font-size: 1.1em;
-    }
-    .about-short-desc {
-        font-size: 0.9em;
-    }
-    .about-social-icons a {
-        font-size: 1.6em;
-    }
+    /* No specific overrides for image/text sizes here unless truly needed, relying on global */
 }
 
 @media (max-width: 768px) {
@@ -523,9 +516,10 @@ footer h2 {
         padding-top: 0;
     }
     .about-left-content {
-        padding: 30px;
+        height: auto; /* Allow height to adjust to content on mobile */
+        padding: 25px 20px; /* Slightly reduced padding to gain space */
         margin: 0 auto;
-        max-width: 300px; /* Constrain card width */
+        max-width: 320px; /* Constrain card width for better readability */
     }
     .about-left-content.revealed {
         transform: none; /* No vertical animation on stacked mobile */
@@ -557,6 +551,14 @@ footer h2 {
     .contact-button .copied-text {
         font-size: 1.1em;
     }
+
+    /* Adjust specific elements for smaller mobile width */
+    .profile-text-top {
+        font-size: 1.1em; /* Slight reduction for mobile */
+    }
+    .profile-text-bottom {
+        font-size: 0.8em; /* Slight reduction for mobile */
+    }
 }
 
 @media (max-width: 480px) {
@@ -572,5 +574,28 @@ footer h2 {
     .contact-button {
         width: 95%;
         height: 85px;
+    }
+    .about-left-content {
+        max-width: 290px; /* Adjust for very small screens */
+        padding: 20px 15px; /* Further reduced padding */
+    }
+    .profile-text-top {
+        font-size: 1em; /* Even smaller for very small screens */
+    }
+    .profile-text-bottom {
+        font-size: 0.75em; /* Even smaller for very small screens */
+    }
+    .about-left-content h3 {
+        font-size: 2.2em; /* Smaller name for very small screens */
+    }
+    .about-tagline {
+        font-size: 0.9em; /* Smaller tagline for very small screens */
+    }
+    .about-short-desc {
+        font-size: 0.75em; /* Smaller description for very small screens */
+        line-height: 1.4;
+    }
+    .about-social-icons a {
+        font-size: 1.3em; /* Smaller icons for very small screens */
     }
 }
