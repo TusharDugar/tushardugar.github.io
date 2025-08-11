@@ -1,3 +1,4 @@
+
 /* Basic Reset & Font */
 :root {
     /* Sawad-inspired Color Palette */
@@ -117,12 +118,9 @@ body {
 /* Titles for right column sections (like Sawad's style) */
 .section-title-right {
     font-family: 'Poppins', sans-serif;
-    font-size: 3.8em;
     font-weight: 700;
     letter-spacing: 2px;
-    color: var(--text-light);
-    text-shadow: 2px 2px 10px var(--shadow-color-dark);
-    margin-bottom: 70px; /* Space below heading */
+    margin-bottom: 30px; /* Reduced margin below heading */
     padding-left: 5%; /* Align with right column content */
     text-align: left; /* Align title to the left */
     opacity: 0; /* Initial state for reveal */
@@ -133,7 +131,16 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
-.section-title-right span {
+/* Style for two-line heading "DIGITAL MARKETER" / "EXPERIENCE" */
+.section-title-right:first-line { /* "DIGITAL MARKETER" */
+    font-size: 3.8em;
+    color: var(--text-light);
+    text-shadow: 2px 2px 10px var(--shadow-color-dark);
+    display: block; /* Ensure it takes its own line */
+    margin-bottom: 5px; /* Space between lines */
+}
+.section-title-right span { /* "EXPERIENCE" */
+    font-size: 3.8em; /* Same size as first line for consistency */
     color: var(--text-medium); /* Subtler color for the main part of the title */
     display: inline-block;
     position: relative;
@@ -149,9 +156,19 @@ body {
     bottom: -15px;
     left: 0;
 }
+/* Intro paragraph right below title */
+.section-intro-paragraph {
+    font-size: 1.1em;
+    line-height: 1.7;
+    opacity: 0.8;
+    color: var(--text-medium);
+    margin-bottom: 70px; /* Space before content starts */
+    padding: 0 5%; /* Match left padding of title */
+    text-align: left; /* Align with title */
+}
 
 
-/* Common Paragraph Styling for Sections */
+/* Common Paragraph Styling for Sections (general content) */
 main .section p {
     font-size: 1.1em; /* Adjusted for overall text */
     line-height: 1.7;
@@ -341,14 +358,14 @@ main .section p {
     position: sticky; /* Make it sticky */
     top: 100px; /* Stick below the navbar (adjust if navbar height changes) */
     align-self: flex-start; /* Align to the top of its flex container */
-    min-height: 500px; /* Minimum height to define sticky behavior */
-    padding-top: 50px; /* Adjust internal padding */
-    height: calc(100vh - 150px); /* Fill available viewport height (viewport - top_offset - bottom_margin) */
-    display: flex; /* Flex container for internal alignment */
+    min-height: calc(100vh - 150px); /* Adjust to hold content */
+    display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically within sticky area */
+    justify-content: flex-start; /* Align content to the top within sticky area */
     align-items: center;
     text-align: center;
+    padding-top: 50px; /* Space inside the sticky area */
+    padding-bottom: 50px; /* Ensure content doesn't get cut off at bottom of sticky area */
 }
 
 .about-left-content {
@@ -370,10 +387,10 @@ main .section p {
 }
 
 .profile-card-wrapper {
-    /* This is the inner container within about-left-content if needed */
+    /* This is the inner container within about-left-content */
 }
 
-.image-wrapper-with-dash {
+.image-area-with-dash {
     position: relative;
     width: 180px; /* Fixed size for the image circle container */
     height: 180px;
@@ -382,9 +399,10 @@ main .section p {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
+    /* No overflow hidden here, let the dashed circle show outside */
 }
 
-.image-wrapper-with-dash::before {
+.image-area-with-dash::before {
     content: '';
     position: absolute;
     width: calc(100% + 20px); /* Dashed circle slightly larger than image bg */
@@ -410,15 +428,16 @@ main .section p {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: hidden; /* Hide parts of image outside circle */
 }
 
 .profile-photo {
     width: 100%; /* Make image fill its orange background */
     height: 100%;
     object-fit: cover; /* Crop image to fit circle */
+    object-position: center top; /* Focus on top part of image */
     border-radius: 50%; /* Make image circular */
-    filter: grayscale(0.2) brightness(0.8); /* Slight desaturation and darkening for contrast */
+    filter: grayscale(1) brightness(0.5); /* Desaturate and darken to make it a silhouette */
 }
 
 .fire-icon {
@@ -484,12 +503,51 @@ main .section p {
     margin-bottom: 0; /* Sections blend, rely on internal padding */
 }
 
+/* Stats Grid (New section in Right Column) */
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-top: 30px; /* Space from section title */
+    padding: 0 5%; /* Align with other content within right column */
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.stats-grid.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.stat-item {
+    text-align: center;
+    color: var(--text-light);
+}
+.stat-item span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.8em;
+    font-weight: 700;
+    background: var(--gradient-hero-text); /* Light gradient for stats */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: -5px;
+}
+.stat-item p {
+    font-size: 0.8em;
+    font-weight: 400;
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.2;
+}
+
 
 /* Experience List (Right Column) */
 .experience-list {
     display: flex;
     flex-direction: column;
     gap: 40px;
+    padding: 0 5%; /* Align with right column content */
 }
 .experience-item {
     background-color: var(--bg-section-card); /* Subtle background for experience items */
@@ -532,10 +590,11 @@ main .section p {
     gap: 40px;
     max-width: 1100px;
     margin: 0 auto;
+    padding: 0 5%; /* Align with right column content */
 }
 
 .service-card {
-    background-color: var(--bg-section-card);
+    background-color: var(--bg-section-card); /* Subtle transparent background for service cards */
     padding: 40px;
     border-radius: 18px;
     text-align: center;
@@ -583,6 +642,7 @@ main .section p {
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    padding: 0 5%; /* Align with right column content */
 }
 .skills-grid.revealed {
     opacity: 1;
@@ -701,6 +761,7 @@ main .section p {
     gap: 40px;
     max-width: 900px;
     margin: 0 auto;
+    padding: 0 5%; /* Align with right column content */
 }
 
 .website-card {
@@ -953,11 +1014,18 @@ footer h2 {
     .about-image-card {
         width: 220px;
         height: 320px;
+        padding: 15px; /* Adjust padding for slightly smaller card */
     }
-    .image-wrapper-with-dash {
+    .image-area-with-dash {
         width: 160px;
         height: 160px;
         margin-bottom: 25px;
+    }
+    .image-area-with-dash::before {
+        width: calc(100% + 15px); /* Reduce dashed circle size slightly */
+        height: calc(100% + 15px);
+        top: -7.5px;
+        left: -7.5px;
     }
     .image-bg-orange {
         width: 130px;
@@ -975,8 +1043,12 @@ footer h2 {
     .about-short-desc {
         font-size: 0.9em;
     }
-    .about-social-icons a {
-        font-size: 1.6em;
+    /* Stats */
+    .stat-item span {
+        font-size: 2.2em;
+    }
+    .stat-item p {
+        font-size: 0.7em;
     }
 }
 
@@ -1000,6 +1072,14 @@ footer h2 {
         font-size: 3.2em;
         margin-bottom: 50px;
     }
+    /* Right column section title adjustments */
+    .section-title-right:first-line {
+        font-size: 3.2em; /* Adjusted for mobile */
+    }
+    .section-title-right span {
+        font-size: 3.2em; /* Adjusted for mobile */
+    }
+
     .navbar .logo {
         font-size: 2.5em;
     }
@@ -1018,26 +1098,6 @@ footer h2 {
     }
     .about-short-desc {
         font-size: 0.85em;
-    }
-    .about-image-card {
-        width: 180px;
-        height: 280px;
-        padding: 15px;
-    }
-    .image-wrapper-with-dash {
-        width: 130px;
-        height: 130px;
-        margin-bottom: 20px;
-    }
-    .image-bg-orange {
-        width: 100px;
-        height: 100px;
-    }
-    .fire-icon {
-        font-size: 1em;
-    }
-    .about-social-icons a {
-        font-size: 1.4em;
     }
     /* Cards and Grids */
     .service-card h3, .website-card h3, .experience-item h3 {
@@ -1071,6 +1131,9 @@ footer h2 {
         padding: 30px; /* Re-add some padding for mobile card */
         margin: 0 auto; /* Center the card */
         max-width: 300px; /* Constrain card width */
+    }
+    .about-left-content.revealed {
+        transform: none; /* No vertical animation on stacked mobile */
     }
     .right-column-scroll {
         padding-left: 0; /* Remove padding */
@@ -1116,13 +1179,13 @@ footer h2 {
         min-height: 70vh;
     }
     .hero-section h1 {
-        font-size: 4.5em;
+        font-size: 4.5em; /* Adjusted for mobile */
         letter-spacing: 2px;
     }
     .hero-section p {
-        font-size: 2em;
+        font-size: 2em; /* Adjusted for mobile */
     }
-    .section h2 { /* Global heading for sections (like About Me, but now for general sections) */
+    .section h2 { /* Global heading for sections */
         font-size: 3.2em;
         margin-bottom: 40px;
     }
@@ -1241,9 +1304,16 @@ footer h2 {
         width: 200px;
         height: 300px;
     }
-    .image-wrapper-with-dash {
+    .image-area-with-dash {
         width: 140px;
         height: 140px;
+        margin-bottom: 20px;
+    }
+    .image-area-with-dash::before {
+        width: calc(100% + 10px);
+        height: calc(100% + 10px);
+        top: -5px;
+        left: -5px;
     }
     .image-bg-orange {
         width: 110px;

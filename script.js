@@ -69,8 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     entry.target.classList.add('revealed');
                 } 
                 // Handle staggered reveals for grids and lists within sections
+                else if (entry.target.classList.contains('stats-grid')) { // New: for the stats grid
+                    entry.target.classList.add('revealed');
+                    entry.target.querySelectorAll('.stat-item').forEach((item, index) => {
+                        setTimeout(() => item.classList.add('revealed'), index * 100 + 100); // Staggered reveal for stat items
+                    });
+                }
                 else if (entry.target.classList.contains('experience-list')) {
-                    entry.target.classList.add('revealed'); // Reveal container itself
+                    entry.target.classList.add('revealed');
                     entry.target.querySelectorAll('.experience-item').forEach((item, index) => {
                         setTimeout(() => item.classList.add('revealed'), index * 120 + 200);
                     });
@@ -104,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Observe specific elements for reveal triggers
     document.querySelectorAll('.about-left-content').forEach(el => observer.observe(el));
     document.querySelectorAll('.section-title-right').forEach(el => observer.observe(el));
+    document.querySelectorAll('.stats-grid').forEach(el => observer.observe(el)); // New: Observe stats grid
     document.querySelectorAll('.experience-list').forEach(el => observer.observe(el));
     document.querySelectorAll('.services-grid').forEach(el => observer.observe(el));
     document.querySelectorAll('.skills-grid').forEach(el => observer.observe(el));
