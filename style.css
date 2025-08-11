@@ -1,19 +1,20 @@
 /* Basic Reset & Font */
 :root {
     /* Sawad-inspired Color Palette */
-    --bg-main: #1A1A1E; /* Primary very dark background from Sawad */
+    --bg-main: #000000; /* Solid black background from Sawad */
+    --bg-section-card: #141414; /* Background for cards/sections that have a subtle box */
     --text-light: #F0F0F0; /* Light text for readability */
-    --text-medium: #BBBBBB; /* Slightly darker light for secondary text */
+    --text-medium: #A0A0A0; /* Slightly darker light for secondary text */
     
-    /* Accent Colors (similar to Sawad's subtle glows and gradients) */
-    --accent-primary: #5E8CFF; /* Soft blue for primary accents/hovers */
-    --accent-secondary: #FF7B00; /* Soft orange for secondary accents/hovers */
-    --gradient-hero-text: linear-gradient(90deg, #F0F0F0 0%, #A0A0A0 100%); /* Light gradient for hero text */
+    /* Accent Colors */
+    --accent-primary-sawad: #FF6B00; /* Main orange from Sawad */
+    --accent-secondary-sawad: #00FFC2; /* Green accent from Sawad */
     --gradient-skills-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Your specified orange gradient for skill cards */
+    --gradient-hero-text: linear-gradient(90deg, #F0F0F0 0%, #A0A0A0 100%); /* Light gradient for hero text */
 
     --primary-heading-color: var(--text-light);
-    --shadow-color-dark: rgba(0, 0, 0, 0.7); /* Darker shadow for depth */
-    --shadow-color-subtle: rgba(0, 0, 0, 0.3); /* Subtle shadow for blending */
+    --shadow-color-dark: rgba(0, 0, 0, 0.8); /* Darker shadow for depth */
+    --shadow-color-subtle: rgba(0, 0, 0, 0.4); /* Subtle shadow for blending */
 }
 
 body {
@@ -21,86 +22,106 @@ body {
     font-family: 'Poppins', sans-serif; /* Poppins for all text */
     line-height: 1.6;
     color: var(--text-light);
-    background-color: var(--bg-main); /* Solid dark background */
+    background-color: var(--bg-main); /* Solid black background */
     overflow-x: hidden; /* Hide horizontal overflow */
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
 }
 
-/* Background Video */
-.background-video-container {
-    position: fixed; /* Fixed position to cover entire viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: -2; /* Behind all content, including glows */
+/* Background Glowing Elements (Mimicking Sawad's subtle ambient light) */
+.background-glows::before, .background-glows::after {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    filter: blur(200px); /* Very soft blur for large, subtle glows */
+    opacity: 0.15; /* Very subtle */
+    z-index: -1; /* Behind all content */
+    pointer-events: none; /* Ensure no interaction with glows */
 }
 
-.background-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Cover the entire container */
-    filter: brightness(0.4) grayscale(0.5); /* Darken and desaturate video slightly */
+.background-glows::before {
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle at center, var(--accent-primary-sawad) 0%, transparent 60%);
+    animation: glow1 25s infinite alternate ease-in-out;
 }
 
-.video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%); /* Dark radial vignette */
-    z-index: -1; /* Above video, below content */
+.background-glows::after {
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle at center, var(--accent-secondary-sawad) 0%, transparent 60%);
+    animation: glow2 30s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes glow1 {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.2; }
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.15; }
+}
+
+@keyframes glow2 {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.2; }
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.15; }
 }
 
 
-/* Global Section Styling (no "black boxes") */
+/* Global Section Styling (no "black boxes" for main sections, just for cards) */
 .section {
-    padding: 100px 5%; /* Increased padding top/bottom for spacing */
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative; /* For internal positioning / animations */
-    z-index: 1; /* Ensure sections are above video overlay */
+    padding: 100px 0; /* Vertical padding only, horizontal padding handled by content */
+    max-width: 1200px; /* Overall content width */
+    margin: 0 auto; /* Center sections horizontally */
+    position: relative;
+    z-index: 1; /* Ensure sections are above background glows */
 }
 
-.section h2 {
+/* Titles for right column sections (like Sawad's style) */
+.section-title-right {
     font-family: 'Poppins', sans-serif;
-    text-align: center;
-    margin-bottom: 70px; /* More space below heading */
-    font-size: 3.8em; /* Larger headings for impact */
-    color: var(--primary-heading-color);
+    font-size: 3.8em;
     font-weight: 700;
-    text-shadow: 2px 2px 10px var(--shadow-color-dark); /* Stronger text shadow */
     letter-spacing: 2px;
-    opacity: 0; /* Initial state for reveal animation */
+    color: var(--text-light);
+    text-shadow: 2px 2px 10px var(--shadow-color-dark);
+    margin-bottom: 70px; /* Space below heading */
+    padding-left: 5%; /* Align with right column content */
+    text-align: left; /* Align title to the left */
+    opacity: 0; /* Initial state for reveal */
     transform: translateY(20px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
-
-.section h2.revealed { /* Class added by JS for reveal animation */
+.section-title-right.revealed { /* Class added by JS for reveal animation */
     opacity: 1;
     transform: translateY(0);
 }
-
-.section h2 i {
-    color: var(--accent-primary); /* Accent color for icon */
-    margin-right: 25px; /* More space for icon */
-    font-size: 0.9em;
+.section-title-right span {
+    color: var(--text-medium); /* Subtler color for the main part of the title */
+    display: inline-block;
+    position: relative;
+    padding-right: 15px;
+}
+.section-title-right span::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 4px;
+    background-color: var(--accent-primary-sawad); /* Underline accent */
+    position: absolute;
+    bottom: -15px;
+    left: 0;
 }
 
-/* Common Paragraph Styling for Sections (e.g., About Me) */
+
+/* Common Paragraph Styling for Sections */
 main .section p {
-    font-size: 1.15em;
-    line-height: 1.8;
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
+    font-size: 1.1em; /* Adjusted for overall text */
+    line-height: 1.7;
     opacity: 0.8;
-    color: var(--text-medium); /* Slightly desaturated for secondary text */
+    color: var(--text-medium);
 }
 
 /* Reveal Animation Base */
@@ -128,7 +149,7 @@ main .section p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1; /* Ensure hero content is above video overlay */
+    z-index: 1; /* Ensure hero content is above background */
 }
 
 .hero-section h1 {
@@ -187,14 +208,14 @@ main .section p {
     font-family: 'Poppins', sans-serif;
     font-size: 3.2em; /* Larger logo */
     font-weight: 700;
-    color: var(--accent-primary); /* Accent blue for logo */
+    color: var(--accent-primary-sawad); /* Orange accent for logo */
     transition: color 0.4s ease;
     text-shadow: 1px 1px 5px var(--shadow-color-dark);
 }
 
 /* Logo in Navbar when scrolled */
 .navbar.scrolled .logo {
-    color: var(--accent-primary);
+    color: var(--accent-primary-sawad);
 }
 
 /* Navigation Links */
@@ -230,7 +251,7 @@ main .section p {
     height: 3px;
     bottom: -10px;
     left: 0;
-    background-color: var(--accent-primary); /* Blue accent for underline */
+    background-color: var(--accent-secondary-sawad); /* Green accent for underline */
     transition: width 0.3s ease;
 }
 
@@ -239,7 +260,7 @@ main .section p {
 }
 
 .nav-links a:hover {
-    color: var(--accent-primary);
+    color: var(--accent-secondary-sawad);
     transform: translateY(-5px); /* More prominent lift */
 }
 
@@ -264,52 +285,183 @@ main .section p {
 }
 
 
-/* About Section Specifics (Image on one side, Text on other) */
-.about-content {
+/* Main Layout Container (for sticky columns) */
+.main-layout-container {
     display: flex;
-    flex-direction: row; /* Default horizontal layout */
-    align-items: center;
-    gap: 80px; /* Space between text and image */
-    max-width: 1100px;
-    margin: 0 auto;
-    padding-top: 50px; /* Padding below heading */
-}
-.about-text {
-    flex: 1;
-    text-align: left;
-    opacity: 0; /* Initial state for reveal */
-    transform: translateX(-40px);
-    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
-}
-.about-text.revealed {
-    transform: translateX(0);
-    opacity: 1;
-}
-.about-text p {
-    text-align: left; /* Align text left within its column */
-    margin: 0; /* Remove auto margins */
-    max-width: none; /* Remove max-width from global .section p */
-}
-.about-image {
-    flex: 1;
+    justify-content: center; /* Center the columns if content is narrower */
+    max-width: 1400px; /* Overall max width for the two-column layout */
+    margin: 0 auto; /* Center the container */
+    padding: 0 20px; /* Add some horizontal padding */
+    min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
-    overflow: hidden;
-    border-radius: 20px; /* Rounded corners for image */
-    box-shadow: 0 10px 30px var(--shadow-color-dark);
-    opacity: 0; /* Initial state for reveal */
-    transform: translateX(40px);
-    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+    z-index: 1; /* Above background glows */
 }
-.about-image.revealed {
-    transform: translateX(0);
+
+/* Left Column (Sticky) */
+.left-column-sticky {
+    flex-shrink: 0; /* Prevent from shrinking */
+    width: 35%; /* Adjust width as needed */
+    padding-right: 60px; /* Space between columns */
+    box-sizing: border-box;
+    position: sticky; /* Make it sticky */
+    top: 100px; /* Stick below the navbar (adjust if navbar height changes) */
+    align-self: flex-start; /* Align to the top of its flex container */
+    min-height: 500px; /* Minimum height to define sticky behavior */
+    padding-top: 50px; /* Adjust internal padding */
+}
+
+.about-left-content {
+    /* No background or shadow for this section, it blends */
+    padding: 0; /* Remove default section padding */
+    margin-bottom: 0; /* Remove default section margin */
+    text-align: center;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.about-left-content.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-image-card {
+    background-color: var(--bg-section-card); /* Card background */
+    border-radius: 30px; /* Rounded corners */
+    padding: 20px; /* Internal padding */
+    box-shadow: 0 8px 25px var(--shadow-color-dark);
+    position: relative;
+    margin: 0 auto 30px; /* Center and space below */
+    width: 250px; /* Fixed width */
+    height: 350px; /* Fixed height for consistent image crop */
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crop image to fit */
+    border-radius: 20px; /* Rounded corners for image within card */
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+.about-image-card:hover .profile-photo {
     opacity: 1;
 }
-.about-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 20px; /* Match container */
-    object-fit: cover;
+
+.fire-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: var(--accent-primary-sawad); /* Orange background for icon */
+    border-radius: 50%;
+    padding: 8px;
+    font-size: 1.2em;
+    color: var(--text-light);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    z-index: 5;
+}
+
+.about-left-content h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5em;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 5px var(--shadow-color-subtle);
+}
+.about-tagline {
+    font-size: 1.2em;
+    color: var(--text-medium);
+    margin-bottom: 20px;
+}
+.about-short-desc {
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: var(--text-medium);
+    margin-bottom: 40px;
+}
+
+.about-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-top: 30px;
+}
+.stat-item {
+    text-align: center;
+    color: var(--text-light);
+}
+.stat-item span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.8em;
+    font-weight: 700;
+    background: var(--gradient-hero-text); /* Light gradient for stats */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block; /* Ensure span takes full line */
+    margin-bottom: -5px; /* Adjust line spacing */
+}
+.stat-item p {
+    font-size: 0.8em;
+    font-weight: 400;
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.2;
+}
+
+
+/* Right Column (Scrolling) */
+.right-column-scroll {
+    flex-grow: 1; /* Take up remaining space */
+    padding-left: 60px; /* Space between columns */
+    padding-bottom: 100px; /* Ensure content can scroll past sticky element */
+    box-sizing: border-box;
+}
+.right-column-section {
+    padding-left: 5%; /* Align content properly */
+    padding-right: 5%;
+    margin-bottom: 80px; /* Space between sections */
+}
+
+/* Experience List */
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.experience-item {
+    background-color: var(--bg-section-card);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px var(--shadow-color-subtle);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+}
+.experience-item.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.experience-item:hover {
+    transform: translateY(-8px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 25px var(--shadow-color-dark);
+}
+.experience-item h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: var(--accent-primary-sawad); /* Orange accent */
+    margin-bottom: 10px;
+}
+.experience-item .description {
+    font-size: 1em;
+    line-height: 1.6;
+    color: var(--text-medium);
+    margin-bottom: 0; /* Remove extra margin */
 }
 
 
@@ -317,18 +469,18 @@ main .section p {
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px; /* More space between service cards */
+    gap: 40px;
     max-width: 1100px;
     margin: 0 auto;
 }
 
 .service-card {
-    background-color: rgba(255, 255, 255, 0.05); /* Subtle transparent background for service cards */
-    padding: 40px; /* More padding */
-    border-radius: 18px; /* More rounded corners */
+    background-color: var(--bg-section-card);
+    padding: 40px;
+    border-radius: 18px;
     text-align: center;
     box-shadow: 0 4px 20px var(--shadow-color-subtle);
-    border: 1px solid rgba(255, 255, 255, 0.03); /* Very subtle border */
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(30px);
@@ -339,17 +491,17 @@ main .section p {
 }
 .service-card:hover {
     transform: translateY(-10px);
-    background-color: rgba(255, 255, 255, 0.08); /* Slightly lighter on hover */
+    background-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 12px 30px var(--shadow-color-dark);
 }
 .service-card i {
-    font-size: 4em; /* Larger icons */
-    color: var(--accent-primary);
+    font-size: 4em;
+    color: var(--accent-primary-sawad); /* Orange icon */
     margin-bottom: 25px;
 }
 .service-card h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2em; /* Larger headings */
+    font-size: 2em;
     color: var(--text-light);
     margin-bottom: 15px;
 }
@@ -357,8 +509,7 @@ main .section p {
     font-size: 1.1em;
     line-height: 1.7;
     color: var(--text-medium);
-    margin: 0; /* Remove auto margins */
-    max-width: none;
+    margin: 0;
 }
 
 
@@ -400,7 +551,7 @@ main .section p {
 
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
-    box-shadow: 0 0 25px var(--accent-secondary), 0 0 40px rgba(255, 69, 0, 0.3); /* Softer orange glow on hover */
+    box-shadow: 0 0 25px var(--accent-secondary-sawad), 0 0 40px rgba(0, 255, 194, 0.3); /* Green glow on hover */
 }
 
 .skill-front, .skill-back {
@@ -413,7 +564,7 @@ main .section p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 25px; /* Reduced padding for smaller cards */
+    padding: 25px;
     box-sizing: border-box;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
@@ -421,12 +572,12 @@ main .section p {
 
 .skill-front {
     color: var(--text-light);
-    background: var(--gradient-skills-front); /* Orange gradient for front */
+    background: var(--gradient-skills-front); /* Your specified orange gradient for front */
 }
 
 .skill-front i {
-    font-size: 3.5em; /* Adjusted icon size */
-    margin-bottom: 20px; /* Adjusted margin */
+    font-size: 3.5em;
+    margin-bottom: 20px;
     color: var(--text-light); /* Icon color on orange background */
     background: none; 
     -webkit-background-clip: unset;
@@ -436,14 +587,14 @@ main .section p {
 
 .skill-front h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.6em; /* Adjusted heading size */
+    font-size: 1.6em;
     color: var(--text-light);
     margin: 0;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .skill-back {
-    background-color: rgba(30, 30, 30, 0.9); /* Dark background for back side */
+    background-color: var(--bg-section-card); /* Dark background for back side */
     color: var(--text-light);
     transform: rotateY(180deg);
     display: flex;
@@ -472,7 +623,7 @@ main .section p {
 
 .skill-back li::before {
     content: '\2022';
-    color: var(--accent-secondary); /* Orange bullet point */
+    color: var(--accent-secondary-sawad); /* Green bullet point */
     font-weight: bold;
     display: inline-block;
     width: 1em;
@@ -493,13 +644,13 @@ main .section p {
 }
 
 .website-card {
-    background-color: rgba(255, 255, 255, 0.05); /* Subtle transparent background */
+    background-color: var(--bg-section-card); /* Subtle transparent background */
     padding: 35px;
     border-radius: 18px;
     text-align: center;
     text-decoration: none;
     color: var(--text-light);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 15px var(--shadow-color-subtle);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
@@ -514,9 +665,9 @@ main .section p {
 .website-card:hover {
     transform: translateY(-10px);
     background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 12px 30px var(--shadow-color-dark), 0 0 15px var(--accent-primary); /* Blue glow on hover */
+    box-shadow: 0 12px 30px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad); /* Green glow on hover */
 }
-.website-card img.website-thumbnail { /* Styling for placeholder images */
+.website-card img.website-thumbnail {
     width: 100%;
     height: 180px; /* Fixed height for thumbnails */
     object-fit: cover;
@@ -532,7 +683,7 @@ main .section p {
 .website-card h3 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.8em;
-    color: var(--accent-primary); /* Accent for website titles */
+    color: var(--accent-primary-sawad); /* Orange for website titles */
     margin-bottom: 10px;
 }
 .website-card p {
@@ -552,19 +703,19 @@ main .section p {
 }
 
 
-/* Footer (Contact Section) */
+/* Footer (Contact Section - Full Width) */
 footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light);
     text-align: center;
     padding: 80px 5%; /* Increased padding */
-    margin-top: 0; /* Blend directly with last section */
+    margin-top: 0; /* Blend directly with last section from right column */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
 
 footer a {
-    color: var(--accent-primary);
+    color: var(--accent-secondary-sawad); /* Green for footer links */
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -623,7 +774,7 @@ footer h2 {
 .contact-button:hover {
     transform: translateY(-8px);
     background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-primary); /* Blue glow on hover */
+    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad); /* Green glow on hover */
 }
 
 .contact-button .button-content-main {
@@ -643,7 +794,7 @@ footer h2 {
 
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
-    color: var(--accent-primary); /* Accent color for icons */
+    color: var(--accent-primary-sawad); /* Orange accent for icons */
     margin-bottom: 10px;
 }
 
@@ -707,22 +858,27 @@ footer h2 {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .social-links a:hover {
-    color: var(--accent-secondary);
+    color: var(--accent-secondary-sawad);
     transform: scale(1.3);
 }
 
 
 /* Responsive Design */
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
+    /* Adjust for slightly smaller desktops/large tablets */
+    .left-column-sticky {
+        width: 30%; /* Make left column slightly narrower */
+        padding-right: 40px;
+    }
+    .right-column-scroll {
+        padding-left: 40px;
+    }
     .hero-section h1 {
-        font-size: 5em;
+        font-size: 5.5em;
+        letter-spacing: 4px;
     }
     .hero-section p {
         font-size: 2.2em;
-    }
-    .section h2 {
-        font-size: 3.2em;
-        margin-bottom: 50px;
     }
     .navbar .logo {
         font-size: 2.8em;
@@ -731,25 +887,112 @@ footer h2 {
         margin-left: 40px;
     }
     .nav-links a {
+        font-size: 1.3em;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Tablet Portrait / Smaller Laptops */
+    .left-column-sticky {
+        width: 35%; /* Defaulting back slightly wider for smaller screens */
+        padding-right: 30px;
+    }
+    .right-column-scroll {
+        padding-left: 30px;
+    }
+    .hero-section h1 {
+        font-size: 4.5em;
+        letter-spacing: 3px;
+    }
+    .hero-section p {
+        font-size: 1.8em;
+    }
+    .section h2 {
+        font-size: 3.2em;
+        margin-bottom: 50px;
+    }
+    .section-title-right {
+        font-size: 3.2em;
+        margin-bottom: 50px;
+    }
+    .navbar .logo {
+        font-size: 2.5em;
+    }
+    .nav-links li {
+        margin-left: 35px;
+    }
+    .nav-links a {
         font-size: 1.2em;
     }
-    .about-content {
-        flex-direction: column; /* Stack on smaller screens */
-        gap: 40px;
+    /* About Me on left column */
+    .about-left-content h3 {
+        font-size: 2.2em;
     }
-    .about-text, .about-image {
-        transform: none; /* Disable horizontal animation on smaller screens */
-        opacity: 1; /* Always visible */
+    .about-tagline {
+        font-size: 1.1em;
     }
-    .service-card h3 {
+    .about-short-desc {
+        font-size: 0.9em;
+    }
+    .stat-item span {
+        font-size: 2.2em;
+    }
+    .stat-item p {
+        font-size: 0.7em;
+    }
+    /* Cards and Grids */
+    .service-card h3, .website-card h3, .experience-item h3 {
         font-size: 1.6em;
     }
-    .websites-grid {
-        gap: 30px;
+    .skill-front h3 {
+        font-size: 1.5em;
     }
 }
 
 @media (max-width: 768px) {
+    /* Mobile Landscape / Smaller Tablets */
+    .main-layout-container {
+        flex-direction: column; /* Stack columns vertically */
+        padding: 0 10px; /* Adjust padding for mobile */
+    }
+    .left-column-sticky {
+        width: 100%; /* Full width */
+        position: relative; /* No longer sticky */
+        top: 0;
+        padding-right: 0; /* Remove padding */
+        min-height: unset; /* Remove min-height */
+        padding-bottom: 50px; /* Space before next section */
+        display: flex; /* Use flex to center content */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .about-left-content {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        width: 100%; /* Take full width of parent */
+        max-width: 320px; /* Constrain image card width */
+    }
+    .right-column-scroll {
+        padding-left: 0; /* Remove padding */
+        padding-top: 50px; /* Space between about and first right column section */
+    }
+    .right-column-section {
+        padding-left: 3%; /* Adjust section padding for mobile */
+        padding-right: 3%;
+        margin-bottom: 60px; /* Adjust space between sections */
+    }
+    .section-title-right {
+        padding-left: 0; /* Align with mobile section padding */
+        text-align: center; /* Center title */
+    }
+    .section-title-right span::after {
+        left: 50%; /* Center underline on mobile */
+        transform: translateX(-50%);
+    }
+
+    /* Navbar on mobile */
     .navbar {
         flex-direction: column;
         padding-top: 15px;
@@ -775,43 +1018,43 @@ footer h2 {
         min-height: 70vh;
     }
     .hero-section h1 {
-        font-size: 4em;
+        font-size: 4.5em;
         letter-spacing: 2px;
     }
     .hero-section p {
-        font-size: 1.8em;
+        font-size: 2em;
     }
-    .section {
-        padding: 60px 3%; /* Reduced padding for mobile sections */
-    }
-    .section h2 {
-        font-size: 2.8em;
+    .section h2 { /* Global heading for sections (like About Me) */
+        font-size: 3.2em;
         margin-bottom: 40px;
+    }
+    main .section p { /* Global paragraphs for sections */
+        font-size: 1.05em;
     }
 
     /* Skills Grid for 2x2 on Mobile */
     .skills-grid {
         grid-template-columns: repeat(2, 1fr); /* Exactly 2 columns */
-        gap: 15px; /* Smaller gap in grid */
+        gap: 15px;
         transform: none; /* Disable reveal animation on grid for mobile */
         opacity: 1;
     }
     .skill-card-container {
         width: 100%;
         max-width: 180px; /* Keep cards from getting too wide */
-        height: 180px; /* Fixed height for consistency */
+        height: 180px;
     }
     .skill-front i {
-        font-size: 2.8em; /* Smaller icon */
+        font-size: 2.8em;
         margin-bottom: 10px;
     }
     .skill-front h3 {
-        font-size: 1.3em; /* Smaller heading */
+        font-size: 1.3em;
     }
     .skill-back ul {
         padding: 0 5px;
         margin-top: 10px;
-        font-size: 0.85em; /* Smaller font for list items */
+        font-size: 0.85em;
     }
     .skill-back li {
         font-size: 0.85em;
@@ -826,14 +1069,14 @@ footer h2 {
     }
     .service-card {
         padding: 30px;
-        transform: none; /* Disable reveal animation */
+        transform: none;
         opacity: 1;
     }
     .service-card i {
-        font-size: 3em;
+        font-size: 3.5em;
     }
     .service-card h3 {
-        font-size: 1.4em;
+        font-size: 1.5em;
     }
     .service-card p {
         font-size: 0.9em;
@@ -845,14 +1088,14 @@ footer h2 {
     }
     .website-card {
         padding: 30px;
-        transform: none; /* Disable reveal animation */
+        transform: none;
         opacity: 1;
     }
     .website-card h3 {
-        font-size: 1.5em;
+        font-size: 1.6em;
     }
     .website-card p {
-        font-size: 0.85em;
+        font-size: 0.9em;
     }
 
     #spline-container {
@@ -884,23 +1127,44 @@ footer h2 {
 }
 
 @media (max-width: 480px) {
+    /* Smaller Phones */
     .hero-section h1 {
-        font-size: 3.2em;
+        font-size: 3.5em;
         letter-spacing: 1px;
     }
     .hero-section p {
-        font-size: 1.5em;
+        font-size: 1.8em;
     }
-    .section h2 {
-        font-size: 2.2em;
+    .section h2, .section-title-right {
+        font-size: 2.5em;
         margin-bottom: 30px;
     }
+    .about-image-card {
+        width: 200px;
+        height: 300px;
+    }
+    .about-left-content h3 {
+        font-size: 2em;
+    }
+    .about-tagline {
+        font-size: 1em;
+    }
+    .about-short-desc {
+        font-size: 0.85em;
+    }
+    .stat-item span {
+        font-size: 2.2em;
+    }
+    .stat-item p {
+        font-size: 0.6em;
+    }
+
     .service-card i {
-        font-size: 2.5em;
+        font-size: 2.8em;
         margin-bottom: 15px;
     }
     .service-card h3 {
-        font-size: 1.2em;
+        font-size: 1.3em;
     }
     .service-card p {
         font-size: 0.8em;
@@ -909,35 +1173,32 @@ footer h2 {
         height: 150px;
     }
     .skill-front i {
-        font-size: 2.2em;
-        margin-bottom: 8px;
+        font-size: 2.5em;
+        margin-bottom: 10px;
     }
     .skill-front h3 {
-        font-size: 1.1em;
+        font-size: 1.2em;
     }
     .skill-back li {
-        font-size: 0.75em;
+        font-size: 0.7em;
     }
     .website-card h3 {
-        font-size: 1.3em;
+        font-size: 1.4em;
     }
     .website-card p {
-        font-size: 0.75em;
+        font-size: 0.8em;
     }
     #spline-container {
         height: 350px;
     }
     .navbar .logo {
-        font-size: 2.2em;
+        font-size: 2em;
     }
     .nav-links a {
-        font-size: 1.05em;
+        font-size: 1.1em;
     }
     .contact-button {
         width: 95%;
         height: 85px;
-    }
-    .contact-button i {
-        font-size: 1.6em;
     }
 }

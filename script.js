@@ -64,35 +64,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Handle section titles separately
-                if (entry.target.tagName === 'H2' && entry.target.closest('.section')) {
+                // Handle section titles separately for the right column (which might be revealed with its parent section)
+                if (entry.target.classList.contains('section-title-right')) {
                     entry.target.classList.add('revealed');
-                } else if (entry.target.classList.contains('reveal-item')) {
-                    // For sections themselves, add class immediately
+                } 
+                // Handle main sections or content items
+                else if (entry.target.classList.contains('reveal-item')) {
+                    // For sections themselves or direct reveal items
                     entry.target.classList.add('revealed');
-                    
-                    // Staggered reveal for children elements like cards
-                    let delay = 0;
+
+                    // Staggered reveal for children elements like cards within sections
                     if (entry.target.id === 'about') {
-                        // For about section, reveal text and image
-                        const aboutText = entry.target.querySelector('.about-text');
-                        const aboutImage = entry.target.querySelector('.about-image');
-                        if (aboutText) setTimeout(() => aboutText.classList.add('revealed'), 100);
-                        if (aboutImage) setTimeout(() => aboutImage.classList.add('revealed'), 300);
-                    } else if (entry.target.id === 'services') {
+                        // For about section, reveal image card and stats
+                        const aboutImageCard = entry.target.querySelector('.about-image-card');
+                        const aboutStats = entry.target.querySelector('.about-stats');
+                        if (aboutImageCard) setTimeout(() => aboutImageCard.classList.add('revealed'), 100);
+                        if (aboutStats) setTimeout(() => aboutStats.classList.add('revealed'), 300);
+                    } 
+                    // No need for specific .about-text.revealed as it's part of about-left-content's overall reveal now
+                    else if (entry.target.classList.contains('experience-list')) { // For experience items
+                        entry.target.querySelectorAll('.experience-item').forEach((item, index) => {
+                            setTimeout(() => item.classList.add('revealed'), index * 120 + 200);
+                        });
+                    }
+                    else if (entry.target.classList.contains('services-grid')) { // For service cards
                         entry.target.querySelectorAll('.service-card').forEach((card, index) => {
-                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200); // Staggered
+                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200);
                         });
-                    } else if (entry.target.id === 'skills') {
+                    } else if (entry.target.classList.contains('skills-grid')) { // For skills cards
                         entry.target.querySelectorAll('.skill-card-container').forEach((card, index) => {
-                            setTimeout(() => card.classList.add('revealed'), index * 120 + 200); // Staggered
+                            setTimeout(() => card.classList.add('revealed'), index * 120 + 200);
                         });
-                    } else if (entry.target.id === 'websites') {
+                    } else if (entry.target.classList.contains('websites-grid')) { // For website cards
                         entry.target.querySelectorAll('.website-card').forEach((card, index) => {
-                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200); // Staggered
+                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200);
                         });
-                    } else if (entry.target.id === 'contact') {
-                        // For contact section, reveal tagline and then buttons
+                    } else if (entry.target.id === 'contact') { // For footer/contact section
                         const contactTagline = entry.target.querySelector('.contact-tagline');
                         const contactButtons = entry.target.querySelector('.contact-buttons');
                         if (contactTagline) setTimeout(() => contactTagline.classList.add('revealed'), 100);
@@ -104,12 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // Observe all relevant elements
-    document.querySelectorAll('.section').forEach(section => {
-        observer.observe(section); // Observe the section for overall reveal
-        observer.observe(section.querySelector('h2')); // Observe the heading for its own reveal
-    });
-
-    // Observe specific sub-elements for their staggered reveals (handled within the main observer)
-    // No need to explicitly observe individual cards here if handled by parent section reveal
+    // Observe all main sections for overall reveal and then trigger children animations
+    document.querySelectorAll('.section.reveal-item').forEach(section => observer.observe(section));
+    
+    // Observe specific elements that might need separate reveal triggers
+    document.querySelectorAll('.section-title-right').forEach(title => observer.observe(title));
+    document.querySelectorAll('.experience-list').forEach(list => observer.observe(list));
+    document.querySelectorAll('.services-grid').forEach(grid => observer.observe(grid));
+    document.querySelectorAll('.skills-grid').forEach(grid => observer.observe(grid));
+    document.querySelectorAll('.websites-grid').forEach(grid => observer.observe(grid));
 });
