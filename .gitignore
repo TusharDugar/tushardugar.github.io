@@ -1,0 +1,22 @@
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+
+# Editor specific files (e.g., VS Code)
+.vscode/
+
+# Node.js modules (if you ever use JavaScript frameworks/tools)
+node_modules/
+
+# Build outputs (if you ever compile or bundle assets)
+/dist/
+/build/
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*~
