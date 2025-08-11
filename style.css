@@ -3,18 +3,24 @@
     /* Sawad-inspired Color Palette */
     --bg-main: #000000; /* Solid black background from Sawad */
     --bg-section-card: #141414; /* Background for cards/sections that have a subtle box */
+    --bg-profile-card: #FFFFFF; /* White background for the About Me card */
     --text-light: #F0F0F0; /* Light text for readability */
     --text-medium: #A0A0A0; /* Slightly darker light for secondary text */
+    --text-dark-card: #000000; /* Black text for white card background */
+    --text-medium-card: #4B4B4B; /* Dark gray for secondary text on white card */
     
-    /* Accent Colors */
+    /* Accent Colors from Sawad */
     --accent-primary-sawad: #FF6B00; /* Main orange from Sawad */
     --accent-secondary-sawad: #00FFC2; /* Green accent from Sawad */
-    --gradient-skills-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Your specified orange gradient for skill cards */
+    
+    /* Gradients */
     --gradient-hero-text: linear-gradient(90deg, #F0F0F0 0%, #A0A0A0 100%); /* Light gradient for hero text */
+    --gradient-skills-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Your specified orange gradient for skill cards */
 
     --primary-heading-color: var(--text-light);
     --shadow-color-dark: rgba(0, 0, 0, 0.8); /* Darker shadow for depth */
     --shadow-color-subtle: rgba(0, 0, 0, 0.4); /* Subtle shadow for blending */
+    --shadow-color-card-white: rgba(0, 0, 0, 0.25); /* Specific shadow for white card */
 }
 
 body {
@@ -29,7 +35,36 @@ body {
     min-height: 100vh;
 }
 
-/* Background Glowing Elements (Mimicking Sawad's subtle ambient light) */
+/* Background Video */
+.background-video-container {
+    position: fixed; /* Fixed position to cover entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2; /* Behind all content, including glows */
+}
+
+.background-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire container */
+    filter: brightness(0.2) grayscale(0.8); /* Darken and desaturate video even more for Sawad look */
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.9) 100%); /* Dark radial vignette */
+    z-index: -1; /* Above video, below content */
+}
+
+
+/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) */
 .background-glows::before, .background-glows::after {
     content: '';
     position: fixed;
@@ -76,7 +111,7 @@ body {
     max-width: 1200px; /* Overall content width */
     margin: 0 auto; /* Center sections horizontally */
     position: relative;
-    z-index: 1; /* Ensure sections are above background glows */
+    z-index: 1; /* Ensure sections are above background elements */
 }
 
 /* Titles for right column sections (like Sawad's style) */
@@ -291,7 +326,7 @@ main .section p {
     justify-content: center; /* Center the columns if content is narrower */
     max-width: 1400px; /* Overall max width for the two-column layout */
     margin: 0 auto; /* Center the container */
-    padding: 0 20px; /* Add some horizontal padding */
+    padding: 0 40px; /* Add horizontal padding matching Sawad */
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
@@ -308,13 +343,23 @@ main .section p {
     align-self: flex-start; /* Align to the top of its flex container */
     min-height: 500px; /* Minimum height to define sticky behavior */
     padding-top: 50px; /* Adjust internal padding */
+    height: calc(100vh - 150px); /* Fill available viewport height (viewport - top_offset - bottom_margin) */
+    display: flex; /* Flex container for internal alignment */
+    flex-direction: column;
+    justify-content: center; /* Center content vertically within sticky area */
+    align-items: center;
+    text-align: center;
 }
 
 .about-left-content {
-    /* No background or shadow for this section, it blends */
-    padding: 0; /* Remove default section padding */
-    margin-bottom: 0; /* Remove default section margin */
-    text-align: center;
+    /* This section is now specifically styled as the white profile card */
+    background-color: var(--bg-profile-card); /* White card background */
+    color: var(--text-dark-card); /* Dark text for white card */
+    border-radius: 30px; /* Large rounded corners */
+    padding: 40px 30px; /* Internal padding */
+    box-shadow: 0 10px 30px var(--shadow-color-card-white);
+    width: 100%; /* Take full width of sticky column */
+    box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -324,115 +369,130 @@ main .section p {
     transform: translateY(0);
 }
 
-.about-image-card {
-    background-color: var(--bg-section-card); /* Card background */
-    border-radius: 30px; /* Rounded corners */
-    padding: 20px; /* Internal padding */
-    box-shadow: 0 8px 25px var(--shadow-color-dark);
+.profile-card-wrapper {
+    /* This is the inner container within about-left-content if needed */
+}
+
+.image-wrapper-with-dash {
     position: relative;
-    margin: 0 auto 30px; /* Center and space below */
-    width: 250px; /* Fixed width */
-    height: 350px; /* Fixed height for consistent image crop */
+    width: 180px; /* Fixed size for the image circle container */
+    height: 180px;
+    margin: 0 auto 30px; /* Center and space below image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.image-wrapper-with-dash::before {
+    content: '';
+    position: absolute;
+    width: calc(100% + 20px); /* Dashed circle slightly larger than image bg */
+    height: calc(100% + 20px);
+    border: 3px dashed var(--accent-primary-sawad); /* Orange dashed border */
+    border-radius: 50%;
+    animation: rotateDashed 20s linear infinite; /* Smooth rotation */
+    top: -10px;
+    left: -10px;
+    box-sizing: border-box;
+}
+
+@keyframes rotateDashed {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.image-bg-orange {
+    width: 150px; /* Orange circle behind image */
+    height: 150px;
+    background-color: var(--accent-primary-sawad); /* Sawad's orange */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .profile-photo {
-    width: 100%;
+    width: 100%; /* Make image fill its orange background */
     height: 100%;
-    object-fit: cover; /* Crop image to fit */
-    border-radius: 20px; /* Rounded corners for image within card */
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
-.about-image-card:hover .profile-photo {
-    opacity: 1;
+    object-fit: cover; /* Crop image to fit circle */
+    border-radius: 50%; /* Make image circular */
+    filter: grayscale(0.2) brightness(0.8); /* Slight desaturation and darkening for contrast */
 }
 
 .fire-icon {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: var(--accent-primary-sawad); /* Orange background for icon */
+    bottom: 0;
+    right: 0;
+    background-color: var(--accent-primary-sawad);
     border-radius: 50%;
     padding: 8px;
     font-size: 1.2em;
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     z-index: 5;
+    transform: translate(30%, 30%); /* Position outside corner */
 }
 
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.5em;
+    font-size: 2.8em; /* Larger name */
     font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 5px var(--shadow-color-subtle);
+    color: var(--text-dark-card); /* Black text on white card */
+    margin-bottom: 5px;
 }
 .about-tagline {
     font-size: 1.2em;
-    color: var(--text-medium);
-    margin-bottom: 20px;
+    color: var(--text-medium-card); /* Dark gray text */
+    margin-bottom: 25px;
 }
 .about-short-desc {
-    font-size: 0.95em;
+    font-size: 1em;
     line-height: 1.6;
-    color: var(--text-medium);
-    margin-bottom: 40px;
+    color: var(--text-medium-card);
+    margin-bottom: 30px; /* Space before social icons */
 }
-
-.about-stats {
+.about-social-icons {
     display: flex;
-    justify-content: space-around;
-    gap: 15px;
-    margin-top: 30px;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 20px;
 }
-.stat-item {
-    text-align: center;
-    color: var(--text-light);
+.about-social-icons a {
+    color: var(--text-medium-card); /* Dark gray icons */
+    font-size: 1.8em;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
-.stat-item span {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2.8em;
-    font-weight: 700;
-    background: var(--gradient-hero-text); /* Light gradient for stats */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    display: block; /* Ensure span takes full line */
-    margin-bottom: -5px; /* Adjust line spacing */
-}
-.stat-item p {
-    font-size: 0.8em;
-    font-weight: 400;
-    color: var(--text-medium);
-    margin: 0;
-    line-height: 1.2;
+.about-social-icons a:hover {
+    color: var(--accent-primary-sawad); /* Orange on hover */
+    transform: translateY(-5px) scale(1.1);
 }
 
 
 /* Right Column (Scrolling) */
 .right-column-scroll {
     flex-grow: 1; /* Take up remaining space */
+    width: 65%; /* Adjust width as needed */
     padding-left: 60px; /* Space between columns */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
 }
 .right-column-section {
-    padding-left: 5%; /* Align content properly */
-    padding-right: 5%;
-    margin-bottom: 80px; /* Space between sections */
+    padding-top: 50px; /* Space between sections */
+    padding-bottom: 50px; /* Space between sections */
+    margin-bottom: 0; /* Sections blend, rely on internal padding */
 }
 
-/* Experience List */
+
+/* Experience List (Right Column) */
 .experience-list {
     display: flex;
     flex-direction: column;
     gap: 40px;
 }
 .experience-item {
-    background-color: var(--bg-section-card);
+    background-color: var(--bg-section-card); /* Subtle background for experience items */
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 15px var(--shadow-color-subtle);
@@ -461,7 +521,7 @@ main .section p {
     font-size: 1em;
     line-height: 1.6;
     color: var(--text-medium);
-    margin-bottom: 0; /* Remove extra margin */
+    margin-bottom: 0;
 }
 
 
@@ -496,7 +556,7 @@ main .section p {
 }
 .service-card i {
     font-size: 4em;
-    color: var(--accent-primary-sawad); /* Orange icon */
+    color: var(--accent-primary-sawad);
     margin-bottom: 25px;
 }
 .service-card h3 {
@@ -794,7 +854,7 @@ footer h2 {
 
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
-    color: var(--accent-primary-sawad); /* Orange accent for icons */
+    color: var(--accent-primary-sawad); /* Accent color for icons */
     margin-bottom: 10px;
 }
 
@@ -867,7 +927,7 @@ footer h2 {
 @media (max-width: 1200px) {
     /* Adjust for slightly smaller desktops/large tablets */
     .left-column-sticky {
-        width: 30%; /* Make left column slightly narrower */
+        width: 35%; /* Default for now, adjust as needed */
         padding-right: 40px;
     }
     .right-column-scroll {
@@ -889,12 +949,41 @@ footer h2 {
     .nav-links a {
         font-size: 1.3em;
     }
+    /* Profile card adjustments */
+    .about-image-card {
+        width: 220px;
+        height: 320px;
+    }
+    .image-wrapper-with-dash {
+        width: 160px;
+        height: 160px;
+        margin-bottom: 25px;
+    }
+    .image-bg-orange {
+        width: 130px;
+        height: 130px;
+    }
+    .fire-icon {
+        font-size: 1.1em;
+    }
+    .about-left-content h3 {
+        font-size: 2.2em;
+    }
+    .about-tagline {
+        font-size: 1.1em;
+    }
+    .about-short-desc {
+        font-size: 0.9em;
+    }
+    .about-social-icons a {
+        font-size: 1.6em;
+    }
 }
 
 @media (max-width: 992px) {
     /* Tablet Portrait / Smaller Laptops */
     .left-column-sticky {
-        width: 35%; /* Defaulting back slightly wider for smaller screens */
+        width: 40%; /* Make left column slightly wider for smaller screens */
         padding-right: 30px;
     }
     .right-column-scroll {
@@ -907,11 +996,7 @@ footer h2 {
     .hero-section p {
         font-size: 1.8em;
     }
-    .section h2 {
-        font-size: 3.2em;
-        margin-bottom: 50px;
-    }
-    .section-title-right {
+    .section h2, .section-title-right {
         font-size: 3.2em;
         margin-bottom: 50px;
     }
@@ -926,19 +1011,33 @@ footer h2 {
     }
     /* About Me on left column */
     .about-left-content h3 {
-        font-size: 2.2em;
+        font-size: 2em;
     }
     .about-tagline {
-        font-size: 1.1em;
+        font-size: 1em;
     }
     .about-short-desc {
-        font-size: 0.9em;
+        font-size: 0.85em;
     }
-    .stat-item span {
-        font-size: 2.2em;
+    .about-image-card {
+        width: 180px;
+        height: 280px;
+        padding: 15px;
     }
-    .stat-item p {
-        font-size: 0.7em;
+    .image-wrapper-with-dash {
+        width: 130px;
+        height: 130px;
+        margin-bottom: 20px;
+    }
+    .image-bg-orange {
+        width: 100px;
+        height: 100px;
+    }
+    .fire-icon {
+        font-size: 1em;
+    }
+    .about-social-icons a {
+        font-size: 1.4em;
     }
     /* Cards and Grids */
     .service-card h3, .website-card h3, .experience-item h3 {
@@ -966,13 +1065,12 @@ footer h2 {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        padding-top: 0; /* Remove top padding for mobile */
     }
     .about-left-content {
-        padding: 0;
-        margin: 0;
-        text-align: center;
-        width: 100%; /* Take full width of parent */
-        max-width: 320px; /* Constrain image card width */
+        padding: 30px; /* Re-add some padding for mobile card */
+        margin: 0 auto; /* Center the card */
+        max-width: 300px; /* Constrain card width */
     }
     .right-column-scroll {
         padding-left: 0; /* Remove padding */
@@ -1024,7 +1122,7 @@ footer h2 {
     .hero-section p {
         font-size: 2em;
     }
-    .section h2 { /* Global heading for sections (like About Me) */
+    .section h2 { /* Global heading for sections (like About Me, but now for general sections) */
         font-size: 3.2em;
         margin-bottom: 40px;
     }
@@ -1042,7 +1140,7 @@ footer h2 {
     .skill-card-container {
         width: 100%;
         max-width: 180px; /* Keep cards from getting too wide */
-        height: 180px;
+        height: 180px; /* Fixed height for consistency */
     }
     .skill-front i {
         font-size: 2.8em;
@@ -1129,7 +1227,7 @@ footer h2 {
 @media (max-width: 480px) {
     /* Smaller Phones */
     .hero-section h1 {
-        font-size: 3.5em;
+        font-size: 3.8em;
         letter-spacing: 1px;
     }
     .hero-section p {
@@ -1143,22 +1241,26 @@ footer h2 {
         width: 200px;
         height: 300px;
     }
+    .image-wrapper-with-dash {
+        width: 140px;
+        height: 140px;
+    }
+    .image-bg-orange {
+        width: 110px;
+        height: 110px;
+    }
+    .fire-icon {
+        font-size: 0.9em;
+    }
     .about-left-content h3 {
-        font-size: 2em;
-    }
-    .about-tagline {
-        font-size: 1em;
-    }
-    .about-short-desc {
-        font-size: 0.85em;
-    }
-    .stat-item span {
         font-size: 2.2em;
     }
-    .stat-item p {
-        font-size: 0.6em;
+    .about-tagline {
+        font-size: 1.1em;
     }
-
+    .about-short-desc {
+        font-size: 0.9em;
+    }
     .service-card i {
         font-size: 2.8em;
         margin-bottom: 15px;
@@ -1167,7 +1269,7 @@ footer h2 {
         font-size: 1.3em;
     }
     .service-card p {
-        font-size: 0.8em;
+        font-size: 0.85em;
     }
     .skill-card-container {
         height: 150px;
@@ -1180,22 +1282,22 @@ footer h2 {
         font-size: 1.2em;
     }
     .skill-back li {
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
     .website-card h3 {
         font-size: 1.4em;
     }
     .website-card p {
-        font-size: 0.8em;
+        font-size: 0.85em;
     }
     #spline-container {
         height: 350px;
     }
     .navbar .logo {
-        font-size: 2em;
+        font-size: 2.2em;
     }
     .nav-links a {
-        font-size: 1.1em;
+        font-size: 1.15em;
     }
     .contact-button {
         width: 95%;

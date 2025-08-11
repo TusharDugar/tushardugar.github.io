@@ -14,7 +14,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Subtle Background Glows (replace background video) -->
+    <div class="background-video-container">
+        <video autoplay muted loop playsinline class="background-video">
+            <!-- Placeholder video: Replace with a high-quality, relevant video URL -->
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-flow-of-lines-moving-over-a-surface-4467-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <!-- Subtle Background Glows -->
     <div class="background-glows"></div>
 
     <header class="hero-section">
@@ -22,7 +31,7 @@
             <div class="logo">Tushar Dugar</div>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
-                <li><a href="#experience">Experience</a></li> <!-- Reintroducing Experience -->
+                <li><a href="#experience">Experience</a></li>
                 <li><a href="#services">Services</a></li> 
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#websites">Websites</a></li>
@@ -42,28 +51,24 @@
     <div class="main-layout-container"> <!-- New container for sticky columns -->
         <div class="left-column-sticky">
             <section id="about" class="section about-left-content reveal-item">
-                <div class="about-image-card">
-                    <!-- Placeholder Image for Aabid Ahmed style -->
-                    <img src="https://picsum.photos/id/64/600/400" alt="Tushar Dugar Profile" class="profile-photo">
-                    <span class="fire-icon"><i class="fas fa-fire"></i></span> <!-- Little fire icon -->
-                </div>
-                <h3>Tushar Dugar</h3>
-                <p class="about-tagline">Dynamic Marketing Analyst & Designer</p>
-                <p class="about-short-desc">A Digital Marketing professional who transforms data into dynamic strategies and creates engaging visual content.</p>
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <span>+3</span>
-                        <p>YEARS OF EXPERIENCE</p>
+                <div class="profile-card-wrapper"> <!-- This will be the white card -->
+                    <div class="image-wrapper-with-dash"> <!-- For dashed border animation -->
+                        <div class="image-bg-orange"> <!-- For orange background behind image -->
+                            <img src="https://picsum.photos/id/64/600/400" alt="Tushar Dugar Profile" class="profile-photo">
+                        </div>
+                        <span class="fire-icon"><i class="fas fa-fire"></i></span> <!-- Little fire icon -->
                     </div>
-                    <div class="stat-item">
-                        <span>+15</span>
-                        <p>PROJECTS COMPLETED</p>
-                    </div>
-                    <div class="stat-item">
-                        <span>+5</span>
-                        <p>HAPPY CLIENTS</p>
+                    <h3>Tushar Dugar</h3>
+                    <p class="about-tagline">Digital Marketing & Brand Strategist</p>
+                    <p class="about-short-desc">A Digital Marketing professional who transforms data into dynamic strategies and creates engaging visual content.</p>
+                    <div class="about-social-icons">
+                        <a href="https://dribbble.com/" target="_blank"><i class="fab fa-dribbble"></i></a>
+                        <a href="https://twitter.com/" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="mailto:imtushar4621@gmail.com"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
+                <!-- Removed about-stats as per new reference -->
             </section>
         </div>
 
