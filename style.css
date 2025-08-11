@@ -139,7 +139,7 @@ body {
     padding-top: 50px; /* Small space from the very top now that navbar is gone */
 }
 
-/* Left Column (Sticky) */
+/* Left Column (Sticky) - NO CHANGES TO THIS SECTION */
 .left-column-sticky {
     flex-shrink: 0; /* Prevent from shrinking */
     width: 30%; /* Slightly narrower left column */
@@ -323,25 +323,59 @@ body {
 }
 
 
-/* Right Column (Scrolling) */
+/* Right Column (Scrolling) - UPDATED */
 .right-column-scroll {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
     padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
+    padding-right: 80px; /* Add right padding to prevent content from touching edge */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
     
-    /* Add placeholder content styling for visibility during development */
-    display: flex; /* Flexbox to center placeholder content if there's no real content yet */
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 2em;
-    color: var(--text-medium);
+    /* Removed old placeholder centering styles */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* font-size: 2em; */
+    /* color: var(--text-medium); */
+
+    padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
+    text-align: left; /* Align text to the left as per the design */
 }
 
-/* All right column sections are removed from HTML. No CSS needed to hide them. */
+/* New: Hero Right Content */
+.hero-right-content {
+    /* Padding for the content inside the section, using section's default padding */
+    /* It already has reveal-item class */
+}
+
+.hero-heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 7em; /* Very large font size for headings */
+    line-height: 0.9; /* Tight line height */
+    font-weight: 800; /* Extra bold */
+    margin-bottom: 30px; /* Space below heading */
+    text-transform: uppercase; /* Ensure all text is uppercase */
+}
+
+.hero-heading .text-white {
+    color: var(--text-light); /* White color for the first part */
+    display: block; /* Force this span onto its own line */
+}
+
+.hero-heading .text-gray {
+    color: var(--text-medium); /* Gray color for the second part */
+    display: block; /* Force this span onto its own line */
+}
+
+.hero-description {
+    font-size: 1.2em; /* Font size for the descriptive paragraph */
+    line-height: 1.8; /* Good line height for readability */
+    color: var(--text-medium); /* Medium gray text color */
+    max-width: 600px; /* Limit width for readability, similar to reference image */
+    margin-bottom: 80px; /* Ample space before the next section (statistics) */
+}
 
 
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
@@ -510,12 +544,13 @@ footer h2 {
     .right-column-scroll { /* Now that right column is empty, it needs very minimal presence */
         display: none; /* Hide it completely on smaller screens to allow left column to center */
         padding-left: 0; /* Remove padding */
+        padding-right: 0; /* Also remove right padding */
     }
     .section h2 { /* Global heading for sections (like footer) */
         font-size: 3.2em;
         margin-bottom: 40px;
     }
-    /* Specific adjustments for profile card on 1200px screens */
+    /* Specific adjustments for profile card on 1200px screens - NO CHANGES */
     .about-left-content {
         max-width: 300px; /* Adjust for slightly smaller desktop */
         padding: 25px 20px;
@@ -559,6 +594,16 @@ footer h2 {
         bottom: -40px;
         right: -40px;
     }
+
+    /* Adjustments for new hero content */
+    .hero-heading {
+        font-size: 6em; /* Scale down heading */
+        margin-bottom: 25px;
+    }
+    .hero-description {
+        font-size: 1.1em;
+        margin-bottom: 60px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -580,7 +625,7 @@ footer h2 {
         flex-direction: column;
         padding-top: 0;
     }
-    /* Specific adjustments for profile card on 768px screens */
+    /* Specific adjustments for profile card on 768px screens - NO CHANGES */
     .about-left-content {
         max-width: 280px; /* Narrower for actual mobile */
         padding: 20px 15px;
@@ -656,6 +701,23 @@ footer h2 {
         bottom: -30px;
         right: -30px;
     }
+
+    /* Adjustments for new hero content */
+    .right-column-scroll {
+        width: 100%; /* Full width on mobile */
+        padding: 40px 20px; /* More generous padding for content */
+        min-height: auto; /* Allow height to shrink on mobile */
+    }
+    .hero-heading {
+        font-size: 4.5em; /* Scale down heading for tablets/larger phones */
+        margin-bottom: 20px;
+    }
+    .hero-description {
+        font-size: 1em;
+        line-height: 1.6;
+        max-width: 100%; /* Allow to take full width */
+        margin-bottom: 50px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -672,7 +734,7 @@ footer h2 {
         width: 95%;
         height: 85px;
     }
-    /* Specific adjustments for profile card on 480px screens */
+    /* Specific adjustments for profile card on 480px screens - NO CHANGES */
     .about-left-content {
         max-width: 260px;
         padding: 15px 10px;
@@ -716,5 +778,16 @@ footer h2 {
         left: -25px;
         bottom: -25px;
         right: -25px;
+    }
+
+    /* Adjustments for new hero content */
+    .hero-heading {
+        font-size: 3.5em; /* Further scale down for small phones */
+        margin-bottom: 15px;
+    }
+    .hero-description {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin-bottom: 40px;
     }
 }
