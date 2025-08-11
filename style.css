@@ -1,141 +1,156 @@
 /* Basic Reset & Font */
 :root {
-    /* Designcube-inspired Color Palette */
-    --bg-dark-main: #1A1A1E; /* Primary very dark background */
-    --bg-dark-sections: #222226; /* Slightly lighter dark for section backgrounds (subtle box) */
+    /* Sawad-inspired Color Palette */
+    --bg-main: #1A1A1E; /* Very dark background from Sawad */
     --text-light: #F0F0F0; /* Light text for readability */
+    --text-medium: #BBBBBB; /* Slightly darker light for secondary text */
     
-    /* Gradients from Figma (used for specific elements like skills front, text highlight) */
-    --gradient-blue-text: linear-gradient(to right, #0F2027, #203A43, #2C5364); 
-    --gradient-orange-skill-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%);
-
-    /* Individual accent colors (from Designcube for overall feel) */
-    --accent-primary: #3498DB; /* Blue for primary accents */
-    --accent-secondary: #FF4500; /* Orange for secondary accents */
-    --text-on-accent-dark: #333333; /* Dark text on bright accents */
+    /* Accent Colors (similar to Sawad's subtle glows and gradients) */
+    --accent-blue-soft: #5E8CFF; /* Softer blue for subtle effects/hovers */
+    --accent-orange-soft: #FF7B00; /* Softer orange for subtle effects/hovers */
+    --gradient-hero-text: linear-gradient(90deg, #F0F0F0 0%, #A0A0A0 100%); /* Light gradient for hero text */
+    --gradient-skills-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Your specified orange gradient */
 
     --primary-heading-color: var(--text-light);
-    --shadow-color: rgba(0, 0, 0, 0.6); /* Stronger shadow for depth on dark background */
+    --shadow-color-dark: rgba(0, 0, 0, 0.7); /* Darker shadow for depth */
+    --shadow-color-subtle: rgba(0, 0, 0, 0.3); /* Subtle shadow for blending */
 }
 
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif; /* Poppins for all text */
     line-height: 1.6;
     color: var(--text-light);
-    background-color: var(--bg-dark-main); /* Solid dark background */
-    overflow-x: hidden;
+    background-color: var(--bg-main); /* Solid dark background */
+    overflow-x: hidden; /* Hide horizontal overflow */
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
 }
 
-/* Subtle background glowing elements (mimicking Designcube's subtle movement) */
-body::before, body::after {
-    content: '';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    filter: blur(180px); /* More blur for softer, larger glow */
-    opacity: 0.2; /* Very subtle */
-    z-index: -1; /* Behind all content */
+/* Background Video */
+.background-video-container {
+    position: fixed; /* Fixed position to cover entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2; /* Behind all content, including glows */
 }
 
-body::before {
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle at center, var(--accent-primary) 0%, transparent 60%);
-    animation: glow1 20s infinite alternate ease-in-out;
+.background-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire container */
+    filter: brightness(0.4) grayscale(0.5); /* Darken and desaturate video slightly */
 }
 
-body::after {
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle at center, var(--accent-secondary) 0%, transparent 60%);
-    animation: glow2 25s infinite alternate-reverse ease-in-out;
-}
-
-@keyframes glow1 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
-    50% { transform: translate(-60%, -40%) scale(1.1); opacity: 0.25; }
-    100% { transform: translate(-40%, -60%) scale(1); opacity: 0.2; }
-}
-
-@keyframes glow2 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; }
-    50% { transform: translate(-40%, -60%) scale(1.05); opacity: 0.25; }
-    100% { transform: translate(-60%, -40%) scale(1); opacity: 0.2; }
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%); /* Dark radial vignette */
+    z-index: -1; /* Above video, below content */
 }
 
 
-/* Global Section Styling (No "black boxes") */
+/* Global Section Styling (no "black boxes") */
 .section {
-    padding: 80px 5%; /* Increased padding top/bottom for spacing */
-    margin-bottom: 0; /* Sections blend, rely on hero/footer for margin */
-    /* Removed: background-color, box-shadow, border-radius, backdrop-filter, border */
+    padding: 100px 5%; /* Increased padding for spacing */
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    position: relative; /* For any internal positioning */
+    position: relative; /* For internal positioning / animations */
+    z-index: 1; /* Ensure sections are above video overlay */
 }
 
 .section h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    margin-bottom: 60px; /* More space below heading */
-    font-size: 3.5em; /* Larger headings for impact */
+    margin-bottom: 70px; /* More space below heading */
+    font-size: 3.8em; /* Larger headings for impact */
     color: var(--primary-heading-color);
     font-weight: 700;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.8); /* Stronger text shadow */
+    text-shadow: 2px 2px 10px var(--shadow-color-dark); /* Stronger text shadow */
     letter-spacing: 2px;
+    opacity: 0; /* Initial state for reveal animation */
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section h2.revealed { /* Class added by JS for reveal animation */
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .section h2 i {
-    color: var(--accent-primary); /* Icon color */
-    margin-right: 20px;
+    color: var(--accent-blue-soft); /* Accent color for icon */
+    margin-right: 25px; /* More space for icon */
     font-size: 0.9em;
 }
 
-/* Hero Section */
+/* Common Paragraph Styling for Sections (e.g., About Me) */
+main .section p {
+    font-size: 1.15em;
+    line-height: 1.8;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0.8;
+    color: var(--text-medium); /* Slightly desaturated for secondary text */
+}
+
+/* Reveal Animation Base */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal-item.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Header (Hero Section) */
 .hero-section {
     background: transparent; /* Blends with body background */
     color: var(--text-light);
     text-align: center;
-    padding: 220px 5% 120px;
+    padding: 250px 5% 150px; /* More padding */
     position: relative;
     overflow: hidden;
-    min-height: 800px; /* Taller hero section */
+    min-height: 90vh; /* Make hero section cover most of viewport */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+    z-index: 1; /* Ensure hero content is above video overlay */
 }
 
 .hero-section h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 6em; /* Even larger for main name */
-    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 6.5em; /* Even larger for main name */
+    margin-bottom: 25px;
     line-height: 1.1;
-    text-shadow: 4px 4px 12px rgba(0,0,0,0.9);
     font-weight: 700;
-    letter-spacing: 5px;
-    position: relative;
-    z-index: 2;
-    background: var(--gradient-blue-text); /* Blue gradient for text */
+    letter-spacing: 6px;
+    background: var(--gradient-hero-text); /* Light gradient for text */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 4px 4px 15px var(--shadow-color-dark); /* Stronger shadow for depth */
 }
 
 .hero-section p {
-    font-size: 2.5em; /* Larger tagline */
-    opacity: 0.95;
-    font-weight: 300;
-    position: relative;
-    z-index: 2;
+    font-size: 2.8em; /* Larger tagline */
+    opacity: 0.9;
+    font-weight: 400; /* Regular weight for tagline */
+    color: var(--text-light);
+    text-shadow: 2px 2px 8px var(--shadow-color-dark);
 }
 
 /* Navbar (Dynamic Sticky Header) */
@@ -147,39 +162,39 @@ body::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 5%;
-    background-color: rgba(0, 0, 0, 0.4); /* More transparent initial background */
+    padding: 35px 5%; /* Larger initial padding */
+    background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
     z-index: 1000;
-    backdrop-filter: blur(12px); /* Stronger initial blur */
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(15px); /* Stronger initial blur */
+    -webkit-backdrop-filter: blur(15px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle border */
 }
 
 /* Navbar when scrolled */
 .navbar.scrolled {
-    background-color: var(--bg-dark-main); /* Solid dark on scroll */
+    background-color: var(--bg-main); /* Solid dark on scroll */
     padding: 20px 5%;
-    box-shadow: 0 8px 30px var(--shadow-color);
-    backdrop-filter: blur(20px); /* Even more blur when scrolled */
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More visible border on scroll */
+    box-shadow: 0 8px 30px var(--shadow-color-dark);
+    backdrop-filter: blur(25px); /* Even more blur when scrolled */
+    -webkit-backdrop-filter: blur(25px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* More visible border on scroll */
 }
 
 /* Logo in Navbar */
 .navbar .logo {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3em; /* Larger logo */
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.2em; /* Larger logo */
     font-weight: 700;
-    color: var(--accent-primary); /* Accent blue initially */
+    color: var(--accent-blue-soft); /* Accent blue for logo */
     transition: color 0.4s ease;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 5px var(--shadow-color-dark);
 }
 
 /* Logo in Navbar when scrolled */
 .navbar.scrolled .logo {
-    color: var(--accent-primary); /* Keeps accent blue when scrolled */
+    color: var(--accent-blue-soft);
 }
 
 /* Navigation Links */
@@ -191,14 +206,14 @@ body::after {
 }
 
 .nav-links li {
-    margin-left: 50px; /* More spacing for links */
+    margin-left: 55px; /* More spacing for links */
 }
 
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
-    font-weight: 400;
-    font-size: 1.3em; /* Larger links */
+    font-weight: 500; /* Medium weight */
+    font-size: 1.4em; /* Larger links */
     position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
@@ -213,9 +228,9 @@ body::after {
     position: absolute;
     width: 0;
     height: 3px;
-    bottom: -10px; /* More space below text */
+    bottom: -10px;
     left: 0;
-    background: var(--gradient-blue-text); /* Blue gradient for underline */
+    background-color: var(--accent-blue-soft); /* Blue accent for underline */
     transition: width 0.3s ease;
 }
 
@@ -224,141 +239,148 @@ body::after {
 }
 
 .nav-links a:hover {
-    color: var(--accent-primary);
-    transform: translateY(-4px); /* Slightly more lift */
+    color: var(--accent-blue-soft);
+    transform: translateY(-5px); /* More prominent lift */
 }
 
 /* Spline Container */
 #spline-container {
     width: 100%;
-    height: 650px; /* Adjusted height to fit hero section */
-    margin-top: 50px;
+    height: 700px; /* Adjusted height to fit hero section */
+    position: absolute; /* Position spline absolutely within hero */
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgba(255, 255, 255, 0.7);
-    font-style: italic;
     overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
     z-index: 0; /* Behind text and logo */
 }
-#spline-container p {
-    display: none;
+#spline-container p { /* Placeholder text for spline */
+    display: flex; /* Make it visible if spline doesn't load */
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    font-size: 1.2em;
 }
 
-/* Main Content Area Paragraphs (like About Me) */
-main .section p {
-    font-size: 1.15em;
-    line-height: 1.8;
-    max-width: 900px; /* Max width for paragraphs in sections */
-    margin: 0 auto; /* Center paragraph text */
-    text-align: center; /* Center paragraph text */
-    opacity: 0.9;
+
+/* About Section Specifics (Image on one side, Text on other) */
+.about-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 80px; /* Space between text and image */
+    max-width: 1100px; /* Limit width */
+    margin: 0 auto;
+    padding-top: 50px;
+}
+.about-text {
+    flex: 1;
+    text-align: left;
+    transform: translateX(-40px); /* Initial state for reveal */
+    opacity: 0;
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+.about-text.revealed {
+    transform: translateX(0);
+    opacity: 1;
+}
+.about-text p {
+    text-align: left; /* Align text left within its column */
+    margin: 0; /* Remove auto margins */
+    max-width: none; /* Remove max-width from global .section p */
+}
+.about-image {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px; /* Rounded corners for image */
+    box-shadow: 0 10px 30px var(--shadow-color-dark);
+    transform: translateX(40px); /* Initial state for reveal */
+    opacity: 0;
+    transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+.about-image.revealed {
+    transform: translateX(0);
+    opacity: 1;
+}
+.about-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px; /* Match container */
+    object-fit: cover;
 }
 
-/* Services Section */
+/* Services Section Grid */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px; /* More space between service cards */
+    gap: 40px; /* Space between service cards */
     max-width: 1100px;
     margin: 0 auto;
 }
 
 .service-card {
-    background-color: var(--bg-dark-sections); /* Subtle background for service cards */
-    padding: 35px;
-    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle transparent background for service cards */
+    padding: 40px; /* More padding */
+    border-radius: 18px; /* More rounded corners */
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px var(--shadow-color-subtle);
+    border: 1px solid rgba(255, 255, 255, 0.03); /* Very subtle border */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+}
+.service-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px var(--accent-primary); /* Glow on hover */
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.08); /* Slightly lighter on hover */
+    box-shadow: 0 12px 30px var(--shadow-color-dark);
 }
 .service-card i {
-    font-size: 3.5em;
-    color: var(--accent-primary);
-    margin-bottom: 20px;
+    font-size: 4em; /* Larger icons */
+    color: var(--accent-blue-soft);
+    margin-bottom: 25px;
 }
 .service-card h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.8em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2em; /* Larger headings */
     color: var(--text-light);
     margin-bottom: 15px;
 }
 .service-card p {
-    font-size: 1em;
-    line-height: 1.6;
-    color: var(--text-light);
-    opacity: 0.8;
-}
-
-
-/* Project Cards (Experience) */
-.project-card {
-    background-color: var(--bg-dark-sections); /* Subtle background for project cards */
-    padding: 35px;
-    margin-bottom: 35px;
-    border-radius: 15px;
-    box-shadow: 0 4px 18px var(--shadow-color);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.project-card h3 {
-    font-family: 'Montserrat', sans-serif;
-    color: var(--accent-primary);
-    margin-top: 0;
-    font-weight: 700;
-    font-size: 2em;
-    margin-bottom: 15px;
-}
-
-.project-card .description {
     font-size: 1.1em;
-    line-height: 1.8;
-    color: var(--text-light);
-    margin-bottom: 20px;
+    line-height: 1.7;
+    color: var(--text-medium);
+    margin: 0; /* Remove auto margins */
+    max-width: none;
 }
 
-.video-placeholder {
-    width: 100%;
-    height: 300px;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 30px;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.video-placeholder video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 10px;
-}
 
 /* Skills Grid (Flippable Cards) */
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Smaller minmax to fit 4 cards */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller minmax to fit 4 cards */
     gap: 30px;
     perspective: 1000px;
-    justify-items: center;
+    justify-items: center; /* Center cards in their grid cells */
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.skills-grid.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .skill-card-container {
     width: 100%;
     max-width: 250px; /* Max width for consistency */
-    height: 220px; /* Reduced height for desktop cards */
+    height: 220px; /* Fixed height for cards */
     position: relative;
     cursor: pointer;
 }
@@ -369,15 +391,15 @@ main .section p {
     position: absolute;
     transform-style: preserve-3d;
     transition: transform 0.8s ease-in-out;
-    box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.25); /* Figma's box-shadow for the card */
-    border-radius: 50px; /* Figma's border-radius for the card */
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4); /* Softer shadow */
+    border-radius: 50px;
     border: none;
-    background-color: transparent; /* Card container itself is transparent */
+    background-color: transparent;
 }
 
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
-    box-shadow: 0 0 25px var(--accent-secondary), 0 0 40px rgba(255, 69, 0, 0.4); /* Orange glow on hover */
+    box-shadow: 0 0 25px var(--accent-orange-soft), 0 0 40px rgba(255, 69, 0, 0.3); /* Softer orange glow on hover */
 }
 
 .skill-front, .skill-back {
@@ -390,21 +412,21 @@ main .section p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 25px; /* Reduced padding for smaller cards */
+    padding: 25px;
     box-sizing: border-box;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
 }
 
 .skill-front {
     color: var(--text-light);
-    background: var(--gradient-orange-skill-front); 
+    background: var(--gradient-skills-front); /* Orange gradient for front */
 }
 
 .skill-front i {
-    font-size: 3.5em; /* Reduced icon size */
-    margin-bottom: 15px; /* Reduced margin */
-    color: var(--text-light); /* Make icon white on orange background */
+    font-size: 3.5em; /* Adjusted icon size */
+    margin-bottom: 20px;
+    color: var(--text-light); /* Icon color on orange background */
     background: none; 
     -webkit-background-clip: unset;
     -webkit-text-fill-color: unset;
@@ -412,8 +434,8 @@ main .section p {
 }
 
 .skill-front h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.6em; /* Reduced heading size */
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6em; /* Adjusted heading size */
     color: var(--text-light);
     margin: 0;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
@@ -427,7 +449,7 @@ main .section p {
     justify-content: flex-start;
     align-items: flex-start;
     text-align: left;
-    padding: 25px; /* Reduced padding for back */
+    padding: 25px;
 }
 
 .skill-back ul {
@@ -438,18 +460,18 @@ main .section p {
 }
 
 .skill-back li {
-    font-size: 1em; /* Reduced font size */
+    font-size: 0.95em; /* Slightly smaller for detail text */
     font-weight: 400;
     line-height: 1.5;
     color: var(--text-light);
     margin-bottom: 6px;
     position: relative;
-    padding-left: 25px; /* Increased padding-left for "3 spaces" effect */
+    padding-left: 25px; /* Space for bullet + text indent */
 }
 
 .skill-back li::before {
     content: '\2022';
-    color: var(--accent-secondary); /* Orange bullet point */
+    color: var(--accent-orange-soft); /* Orange bullet point */
     font-weight: bold;
     display: inline-block;
     width: 1em;
@@ -458,6 +480,7 @@ main .section p {
     left: 0;
     top: 0;
 }
+
 
 /* Websites Section */
 .websites-grid {
@@ -469,35 +492,43 @@ main .section p {
 }
 
 .website-card {
-    background-color: var(--bg-dark-sections);
-    padding: 30px;
-    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle transparent background */
+    padding: 35px;
+    border-radius: 18px;
     text-align: center;
     text-decoration: none;
     color: var(--text-light);
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+}
+.website-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 .website-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px var(--accent-primary);
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px var(--accent-blue-soft); /* Blue glow on hover */
 }
 .website-card h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 1.8em;
-    color: var(--accent-primary);
+    color: var(--accent-blue-soft); /* Accent for website titles */
     margin-bottom: 10px;
 }
 .website-card p {
     font-size: 0.95em;
     line-height: 1.5;
     opacity: 0.8;
+    color: var(--text-medium);
     margin-bottom: 20px;
 }
-.website-card i.fas.fa-external-link-alt {
+.website-card i.fas.fa-external-link-alt, .website-card i.fas.fa-code-branch {
     font-size: 1.2em;
     color: var(--text-light);
     opacity: 0.7;
@@ -509,18 +540,17 @@ main .section p {
 
 /* Footer (Contact Section) */
 footer {
-    background-color: var(--bg-dark-main); /* Match body background for seamless blend */
+    background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light);
     text-align: center;
-    padding: 60px 5%;
-    margin-top: 60px;
-    /* Removed border-radius, border-top, box-shadow to blend completely */
+    padding: 80px 5%; /* Increased padding */
+    margin-top: 0; /* Blend directly with last section */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
 
 footer a {
-    color: var(--accent-primary);
+    color: var(--accent-blue-soft);
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -530,24 +560,25 @@ footer a:hover {
 }
 
 footer h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 35px; /* Adjusted spacing */
     font-size: 3.2em;
     color: var(--primary-heading-color);
     font-weight: 700;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+    text-shadow: 2px 2px 6px var(--shadow-color-dark);
     letter-spacing: 1.5px;
 }
 
 .contact-tagline {
     font-size: 1.25em;
-    margin-bottom: 40px;
+    margin-bottom: 50px; /* More space below tagline */
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     opacity: 0.95;
     line-height: 1.8;
+    color: var(--text-medium);
 }
 
 .contact-buttons {
@@ -559,23 +590,29 @@ footer h2 {
 }
 
 .contact-button {
-    background: var(--gradient-blue-text); /* Blue gradient button */
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle background for buttons */
     color: var(--text-light);
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    padding: 0; /* No padding on the button itself */
+    padding: 0;
     font-size: 1.2em;
-    font-weight: 700;
+    font-weight: 600; /* Medium bold */
     cursor: pointer;
     position: relative;
-    overflow: hidden; /* Crucial for transitions */
-    width: 250px; /* Fixed width */
-    height: 120px; /* Fixed height for buttons */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center; /* Center text visually */
+    overflow: hidden;
+    width: 280px; /* Slightly wider buttons */
+    height: 130px; /* Slightly taller buttons */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    text-align: center;
 }
 
-.contact-button .button-content-main { /* This wrapper contains icon, label, and value */
+.contact-button:hover {
+    transform: translateY(-8px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-blue-soft); /* Blue glow on hover */
+}
+
+.contact-button .button-content-main {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -586,51 +623,51 @@ footer h2 {
     top: 0;
     left: 0;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    padding: 15px; /* Internal padding for content */
+    padding: 15px;
     box-sizing: border-box;
 }
 
 .contact-button i {
-    font-size: 2.2em;
-    color: var(--text-light);
-    margin-bottom: 8px; /* Space between icon and label */
+    font-size: 2.8em; /* Larger icons in buttons */
+    color: var(--accent-blue-soft); /* Accent color for icons */
+    margin-bottom: 10px;
 }
 
 .contact-button .button-label {
-    font-size: 1em;
+    font-size: 1.1em;
     opacity: 0.8;
-    margin-bottom: 4px; /* Space between label and value */
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-medium);
+    margin-bottom: 5px;
 }
 
 .contact-button .button-value {
-    font-size: 1.1em;
+    font-size: 1.25em; /* Larger value text */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 0 5px;
-    max-width: 90%; /* Ensure text fits within button */
+    max-width: 90%;
     color: var(--text-light);
 }
 
 .contact-button .copied-text {
     position: absolute;
-    top: 0; /* Start at top of button */
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--gradient-orange-skill-front); /* Orange background for copied state */
+    background: var(--gradient-skills-front); /* Orange gradient for copied state */
     color: var(--text-light);
-    font-size: 1.3em;
+    font-size: 1.5em; /* Larger "Copied!" text */
     font-weight: bold;
     border-radius: 12px;
     opacity: 0;
-    transform: translateY(100%); /* Start off-screen below */
+    transform: translateY(100%);
     transition: transform 0.3s ease, opacity 0.3s ease;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     z-index: 3;
@@ -638,23 +675,17 @@ footer h2 {
 
 /* States when button is 'copied' */
 .contact-button.copied .button-content-main {
-    transform: translateY(-100%); /* Move main content up and out */
+    transform: translateY(-100%);
     opacity: 0;
 }
 
 .contact-button.copied .copied-text {
-    transform: translateY(0); /* Move copied text into view */
+    transform: translateY(0);
     opacity: 1;
-}
-
-.contact-button:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.5);
 }
 
 .social-links {
     margin-top: 30px;
-    margin-bottom: 0;
 }
 .social-links a {
     color: var(--text-light);
@@ -662,7 +693,7 @@ footer h2 {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .social-links a:hover {
-    color: var(--accent-secondary); /* Orange hover for social icons */
+    color: var(--accent-secondary);
     transform: scale(1.3);
 }
 
@@ -670,27 +701,38 @@ footer h2 {
 /* Responsive Design */
 @media (max-width: 992px) {
     .hero-section h1 {
-        font-size: 4.5em;
+        font-size: 5em;
     }
     .hero-section p {
-        font-size: 1.8em;
+        font-size: 2.2em;
     }
     .section h2 {
-        font-size: 2.8em;
-    }
-    .project-card h3 {
-        font-size: 1.8em;
+        font-size: 3.2em;
+        margin-bottom: 50px;
     }
     .navbar .logo {
-        font-size: 2.5em;
+        font-size: 2.8em;
     }
     .nav-links li {
-        margin-left: 35px;
+        margin-left: 40px;
     }
     .nav-links a {
-        font-size: 1.15em;
+        font-size: 1.2em;
     }
-    /* No change to skill cards yet, will apply mobile grid at 768px */
+    .about-content {
+        flex-direction: column;
+        gap: 40px;
+    }
+    .about-text, .about-image {
+        transform: none; /* Disable horizontal animation on smaller screens */
+        opacity: 1; /* Always visible */
+    }
+    .service-card h3 {
+        font-size: 1.6em;
+    }
+    .websites-grid {
+        gap: 30px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -698,10 +740,10 @@ footer h2 {
         flex-direction: column;
         padding-top: 15px;
         padding-bottom: 15px;
-        background-color: var(--bg-dark-main); /* Always solid dark on mobile */
-        box-shadow: 0 4px 15px var(--shadow-color);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        background-color: var(--bg-main); /* Always solid dark on mobile */
+        box-shadow: 0 4px 15px var(--shadow-color-dark);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
     }
     .nav-links {
         margin-top: 15px;
@@ -712,89 +754,72 @@ footer h2 {
         margin: 10px 18px;
     }
     .navbar .logo {
-        font-size: 2.2em;
+        font-size: 2.5em;
     }
-    .navbar.scrolled .logo {
-        color: var(--accent-primary);
-    }
-    .nav-links a {
-        color: var(--text-light);
-    }
-    .nav-links a::after {
-        bottom: -3px;
-    }
-
     .hero-section {
         padding: 180px 5% 100px;
-        min-height: 600px;
+        min-height: 70vh;
     }
     .hero-section h1 {
-        font-size: 3.8em;
-        letter-spacing: 1px;
+        font-size: 4em;
+        letter-spacing: 2px;
     }
     .hero-section p {
-        font-size: 1.6em;
+        font-size: 1.8em;
     }
     .section {
-        padding: 40px 3%; /* Reduced padding for mobile sections */
-        margin-bottom: 20px;
+        padding: 60px 3%; /* Reduced padding for mobile sections */
     }
     .section h2 {
-        font-size: 2.5em;
-        margin-bottom: 35px;
+        font-size: 2.8em;
+        margin-bottom: 40px;
     }
 
     /* Skills Grid for 2x2 on Mobile */
     .skills-grid {
         grid-template-columns: repeat(2, 1fr); /* Exactly 2 columns */
         gap: 15px; /* Smaller gap in grid */
-        overflow-x: hidden;
-        padding-bottom: 0;
-        justify-items: center;
-        padding-left: 0;
-        padding-right: 0;
-        scroll-snap-type: none;
+        transform: none; /* Disable reveal animation on grid for mobile */
+        opacity: 1;
     }
     .skill-card-container {
-        width: 100%; /* Take full width of its grid cell */
-        max-width: 180px; /* Keep cards from getting too wide on larger phones */
-        height: 180px; /* Fixed height for consistency in grid */
+        width: 100%;
+        max-width: 180px; /* Keep cards from getting too wide */
+        height: 180px; /* Fixed height for consistency */
     }
     .skill-front i {
-        font-size: 2.5em; /* Smaller icon for small cards */
+        font-size: 2.8em; /* Smaller icon */
         margin-bottom: 10px;
     }
     .skill-front h3 {
         font-size: 1.3em; /* Smaller heading */
     }
     .skill-back ul {
-        padding: 0 5px; /* Adjust padding for smaller cards */
+        padding: 0 5px;
         margin-top: 10px;
-        font-size: 0.9em; /* Smaller font for list items */
+        font-size: 0.85em; /* Smaller font for list items */
     }
     .skill-back li {
-        font-size: 0.9em;
-        line-height: 1.4;
-        margin-bottom: 5px;
-        padding-left: 20px; /* Adjusted padding-left for 2x2 grid */
-        text-indent: 5px; /* Smaller indent for smaller cards */
-    }
-    .skill-back li::before {
-        margin-left: -0.8em;
+        font-size: 0.85em;
+        line-height: 1.3;
+        margin-bottom: 4px;
+        padding-left: 20px;
     }
 
     /* Service Cards for Mobile */
     .services-grid {
-        gap: 25px;
+        gap: 30px;
     }
     .service-card {
-        padding: 25px;
+        padding: 30px;
+        transform: none; /* Disable reveal animation */
+        opacity: 1;
     }
     .service-card i {
         font-size: 3em;
     }
     .service-card h3 {
-        font-size: 1.6em;
+        font-size: 1.4em;
     }
     .service-card p {
         font-size: 0.9em;
@@ -802,21 +827,22 @@ footer h2 {
 
     /* Website Cards for Mobile */
     .websites-grid {
-        gap: 25px;
+        gap: 30px;
     }
     .website-card {
-        padding: 25px;
+        padding: 30px;
+        transform: none; /* Disable reveal animation */
+        opacity: 1;
     }
     .website-card h3 {
-        font-size: 1.6em;
+        font-size: 1.5em;
     }
     .website-card p {
-        font-size: 0.9em;
+        font-size: 0.85em;
     }
 
-
     #spline-container {
-        height: 450px;
+        height: 500px;
     }
     .contact-tagline {
         font-size: 1.1em;
@@ -830,19 +856,13 @@ footer h2 {
         width: 90%;
         max-width: 320px;
         font-size: 1.1em;
-        padding: 15px 20px; /* Adjust padding for mobile button */
         height: 100px;
     }
     .contact-button i {
-        font-size: 1.8em;
-        top: 10px;
+        font-size: 2em;
     }
-    .contact-button .button-label {
+    .contact-button .button-label, .contact-button .button-value {
         font-size: 0.9em;
-        bottom: 10px;
-    }
-    .contact-button .button-value {
-        font-size: 0.8em;
     }
     .contact-button .copied-text {
         font-size: 1.1em;
@@ -851,41 +871,59 @@ footer h2 {
 
 @media (max-width: 480px) {
     .hero-section h1 {
-        font-size: 3em;
+        font-size: 3.2em;
+        letter-spacing: 1px;
     }
     .hero-section p {
-        font-size: 1.4em;
+        font-size: 1.5em;
     }
     .section h2 {
         font-size: 2.2em;
+        margin-bottom: 30px;
     }
-    .project-card h3 {
-        font-size: 1.6em;
+    .service-card i {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+    .service-card h3 {
+        font-size: 1.2em;
+    }
+    .service-card p {
+        font-size: 0.8em;
     }
     .skill-card-container {
-        height: 160px;
+        height: 150px; /* Even smaller for very small phones */
     }
     .skill-front i {
-        font-size: 2.2em;
-        margin-bottom: 5px;
+        font-size: 2em;
+        margin-bottom: 8px;
     }
     .skill-front h3 {
         font-size: 1.1em;
     }
     .skill-back li {
-        font-size: 0.8em;
+        font-size: 0.75em;
+    }
+    .website-card h3 {
+        font-size: 1.3em;
+    }
+    .website-card p {
+        font-size: 0.75em;
     }
     #spline-container {
         height: 350px;
     }
     .navbar .logo {
-        font-size: 2em;
+        font-size: 2.2em;
     }
     .nav-links a {
         font-size: 1.05em;
     }
     .contact-button {
         width: 95%;
-        height: 90px;
+        height: 85px;
+    }
+    .contact-button i {
+        font-size: 1.6em;
     }
 }

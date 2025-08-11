@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tushar Dugar - Digital Portfolio</title>
-    <!-- Google Fonts Import (Montserrat for headings, Inter for body) -->
+    <!-- Google Fonts Import (Poppins for all text) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Montserrat:wght@400;700;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="background-video-container">
+        <video autoplay muted loop playsinline class="background-video">
+            <!-- Placeholder video: Replace with a high-quality, relevant video URL -->
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-flow-of-lines-moving-over-a-surface-4467-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
     <header class="hero-section">
         <nav class="navbar">
             <div class="logo">Tushar Dugar</div>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li> <!-- New Services link -->
+                <li><a href="#services">Services</a></li> 
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#websites">Websites</a></li> <!-- New Websites link -->
+                <li><a href="#websites">Websites</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -30,19 +39,27 @@
             <p>Digital Marketing & Brand Strategist | Crafting Engaging Experiences</p>
             <!-- SPLINE 3D ANIMATION WILL GO HERE -->
             <div id="spline-container">
-                <p>Loading interactive 3D element... (You will replace this with your Spline embed code later)</p>
+                <p>Loading interactive 3D element...</p>
             </div>
         </div>
     </header>
 
     <main>
-        <section id="about" class="section">
+        <section id="about" class="section reveal-item">
             <h2><i class="fas fa-user-circle"></i> About Me</h2>
-            <p>Dynamic Marketing Analyst and Designer with a passion for driving growth through data-driven strategies and compelling visual content. Experienced in enhancing online visibility, boosting sales, and crafting impactful brand narratives. I thrive on transforming insights into actionable campaigns that resonate and deliver measurable results.</p>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Dynamic Marketing Analyst and Designer with a passion for driving growth through data-driven strategies and compelling visual content. Experienced in enhancing online visibility, boosting sales, and crafting impactful brand narratives. I thrive on transforming insights into actionable campaigns that resonate and deliver measurable results.</p>
+                </div>
+                <div class="about-image">
+                    <!-- Placeholder Image: Replace with a relevant image of Tushar working or an abstract digital marketing graphic -->
+                    <img src="https://picsum.photos/id/1018/600/400" alt="About Tushar Dugar">
+                </div>
+            </div>
         </section>
 
         <!-- New Services Section -->
-        <section id="services" class="section">
+        <section id="services" class="section reveal-item">
             <h2><i class="fas fa-handshake"></i> Our Services</h2>
             <div class="services-grid">
                 <div class="service-card">
@@ -68,7 +85,7 @@
             </div>
         </section>
 
-        <section id="skills" class="section">
+        <section id="skills" class="section reveal-item">
             <h2><i class="fas fa-cogs"></i> My Best Skills</h2>
             <div class="skills-grid">
                 <div class="skill-card-container">
@@ -142,24 +159,30 @@
         </section>
 
         <!-- New Websites Section -->
-        <section id="websites" class="section">
+        <section id="websites" class="section reveal-item">
             <h2><i class="fas fa-globe"></i> Websites I Have Worked On</h2>
             <div class="websites-grid">
                 <a href="https://techmars.in/" target="_blank" class="website-card">
                     <h3>Techmars.in</h3>
-                    <p>E-commerce platform for tech gadgets. My role involved [Brief description, e.g., optimizing product listings and SEO].</p>
+                    <p>E-commerce platform for tech gadgets. Focused on optimizing product listings and SEO for increased visibility.</p>
                     <i class="fas fa-external-link-alt"></i>
                 </a>
                 <a href="https://sipologie.in/" target="_blank" class="website-card">
                     <h3>Sipologie.in</h3>
-                    <p>Specialty tea e-commerce site. My contribution included [Brief description, e.g., enhancing user experience and conversion rates].</p>
+                    <p>Specialty tea e-commerce site. Instrumental in enhancing user experience and conversion rates through strategic design.</p>
                     <i class="fas fa-external-link-alt"></i>
+                </a>
+                <!-- Placeholder Image for website card, if you have more websites -->
+                <a href="#" target="_blank" class="website-card">
+                    <h3>Your Next Project?</h3>
+                    <p>Ready to transform your digital presence? Let's create something impactful together.</p>
+                    <i class="fas fa-code-branch"></i>
                 </a>
             </div>
         </section>
     </main>
 
-    <footer id="contact" class="section">
+    <footer id="contact" class="section reveal-item">
         <h2>Let’s Talk with Me!</h2>
         <p class="contact-tagline">
             I am always open to discuss your project, improve your online presence or help with your website.
@@ -183,7 +206,7 @@
             </button>
         </div>
         <div class="social-links">
-            <!-- LinkedIn link removed as per request -->
+            <!-- No social links other than contact buttons as per request -->
         </div>
     </footer>
 
