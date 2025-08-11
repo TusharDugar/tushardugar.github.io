@@ -105,7 +105,7 @@ body {
 }
 
 
-/* Global Section Styling (only for footer now) */
+/* Global Section Styling (no "black boxes" for main sections, just for cards) */
 .section {
     padding: 100px 0; /* Vertical padding only, horizontal padding handled by content */
     max-width: 1200px; /* Overall content width */
@@ -114,28 +114,68 @@ body {
     z-index: 1; /* Ensure sections are above background elements */
 }
 
-/* Titles for sections - will only apply to footer h2 now */
-.section h2 {
+/* Titles for right column sections (like Sawad's style) */
+.section-title-right {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     letter-spacing: 2px;
-    text-align: center;
-    margin-bottom: 35px; /* Adjust spacing for footer */
-    font-size: 3.2em;
-    color: var(--text-light);
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-    /* No reveal animation here as it's directly on the footer section */
+    margin-bottom: 30px; /* Reduced margin below heading */
+    padding-left: 5%; /* Align with right column content */
+    text-align: left; /* Align title to the left */
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
-
-/* Common Paragraph Styling - will only apply to footer p now */
-main .section p { /* Removed `main` selector as main is gone. Now just `.section p` */
+.section-title-right.revealed { /* Class added by JS for reveal animation */
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Style for two-line heading "DIGITAL MARKETER" / "EXPERIENCE" */
+.section-title-right:first-line { /* "DIGITAL MARKETER" */
+    font-size: 3.8em;
+    color: var(--text-light); /* White */
+    text-shadow: 2px 2px 10px var(--shadow-color-dark);
+    display: block; /* Ensure it takes its own line */
+    margin-bottom: 5px; /* Space between lines */
+}
+.section-title-right span { /* "EXPERIENCE" */
+    font-size: 3.8em; /* Same size as first line for consistency */
+    color: var(--text-medium); /* Subtler color for the main part of the title */
+    display: inline-block;
+    position: relative;
+    padding-right: 15px;
+}
+.section-title-right span::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 4px;
+    background-color: var(--accent-primary-sawad); /* Underline accent */
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+}
+/* Intro paragraph right below title */
+.section-intro-paragraph {
     font-size: 1.1em;
     line-height: 1.7;
     opacity: 0.8;
-    color: var(--text-light);
+    color: var(--text-light); /* Changed to white */
+    margin-bottom: 70px; /* Space before content starts */
+    padding: 0 5%; /* Match left padding of title */
+    text-align: left; /* Align with title */
 }
 
-/* Reveal Animation Base for the footer */
+
+/* Common Paragraph Styling for Sections (general content) */
+main .section p {
+    font-size: 1.1em; /* Adjusted for overall text */
+    line-height: 1.7;
+    opacity: 0.8;
+    color: var(--text-light); /* Changed to white */
+}
+
+/* Reveal Animation Base */
 .reveal-item {
     opacity: 0;
     transform: translateY(40px);
@@ -147,13 +187,505 @@ main .section p { /* Removed `main` selector as main is gone. Now just `.section
 }
 
 
-/* Footer (Contact Section) */
+/* Header (Navbar Only) - completely removed from HTML. No CSS needed for it anymore. */
+
+
+/* Spline Container (removed from hero section, keeping its ID for future use if needed elsewhere) */
+#spline-container {
+    display: none; /* Hide if not used in a visible section */
+}
+
+
+/* Main Layout Container (for sticky columns) */
+.main-layout-container {
+    display: flex;
+    justify-content: center; /* Center the columns if content is narrower */
+    max-width: 1920px; /* Increased max-width for wider desktop view */
+    margin: 0 auto; /* Center the container */
+    padding: 0 80px; /* Increased horizontal padding for wider layout */
+    min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
+    position: relative;
+    z-index: 1; /* Above background glows */
+    padding-top: 20px; /* Small space from the very top now that navbar is gone */
+}
+
+/* Left Column (Sticky) */
+.left-column-sticky {
+    flex-shrink: 0; /* Prevent from shrinking */
+    width: 30%; /* Slightly narrower left column */
+    padding-right: 80px; /* Increased space between columns */
+    box-sizing: border-box;
+    position: sticky; /* Make it sticky */
+    top: 20px; /* Stick from the very top (adjust if this padding-top changes) */
+    align-self: flex-start; /* Align to the top of its flex container */
+    height: calc(100vh - 40px); /* Occupy remaining viewport height (20px top + 20px bottom implied for scrolling if content is taller) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically within sticky area */
+    align-items: center;
+    text-align: center;
+}
+
+.about-left-content {
+    /* This section is now specifically styled as the white profile card */
+    background-color: var(--bg-profile-card); /* White card background */
+    color: var(--text-dark-card); /* Dark text for white card */
+    border-radius: 30px; /* Large rounded corners */
+    padding: 30px 25px; /* Reduced padding for more compact card */
+    box-shadow: 0 10px 30px var(--shadow-color-card-white);
+    width: 100%; /* Take full width of sticky column */
+    max-width: 420px; /* Increased max-width for wider card */
+    height: 480px; /* Reduced height for the white card */
+    box-sizing: border-box;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.about-left-content.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.image-area-with-dash {
+    position: relative;
+    width: 160px; /* Reduced size for the image circle container */
+    height: 160px;
+    margin: 0 auto 25px; /* Reduced margin */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.image-area-with-dash::before {
+    content: '';
+    position: absolute;
+    width: calc(100% + 20px); /* Dashed circle slightly larger than image bg */
+    height: calc(100% + 20px);
+    border: 3px dashed var(--accent-primary-sawad); /* Orange dashed border */
+    border-radius: 50%;
+    animation: rotateDashed 20s linear infinite; /* Smooth rotation */
+    top: -10px;
+    left: -10px;
+    box-sizing: border-box;
+}
+
+@keyframes rotateDashed {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.image-bg-orange {
+    width: 120px; /* Reduced orange circle behind image */
+    height: 120px;
+    background-color: var(--accent-primary-sawad); /* Sawad's orange */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Hide parts of image outside circle */
+}
+
+.profile-photo {
+    width: 100%; /* Make image fill its orange background */
+    height: 100%;
+    object-fit: cover; /* Crop image to fit circle */
+    object-position: center top; /* Focus on top part of image */
+    border-radius: 50%; /* Make image circular */
+    filter: grayscale(1) brightness(0.5); /* Desaturate and darken to make it a silhouette */
+}
+
+.fire-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--accent-primary-sawad);
+    border-radius: 50%;
+    padding: 8px;
+    font-size: 1.1em; /* Reduced size */
+    color: var(--text-light);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    z-index: 5;
+    transform: translate(25%, 25%); /* Position outside corner */
+}
+
+.about-left-content h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5em; /* Reduced name font size */
+    font-weight: 600;
+    color: var(--text-dark-card); /* Black text on white card */
+    margin-bottom: 5px;
+}
+.about-tagline {
+    font-size: 1.1em; /* Reduced tagline font size */
+    color: var(--text-medium-card); /* Dark gray text */
+    margin-bottom: 20px; /* Reduced margin */
+}
+.about-short-desc {
+    font-size: 0.85em; /* Reduced short desc font size */
+    line-height: 1.5; /* Reduced line height */
+    color: var(--text-medium-card);
+    margin-bottom: 25px; /* Reduced margin before social icons */
+}
+.about-social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Reduced gap */
+    margin-top: 15px; /* Reduced margin */
+}
+.about-social-icons a {
+    color: var(--text-medium-card); /* Dark gray icons */
+    font-size: 1.5em; /* Reduced icon size */
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.about-social-icons a:hover {
+    color: var(--accent-primary-sawad); /* Orange on hover */
+    transform: translateY(-4px) scale(1.1); /* Reduced lift */
+}
+
+
+/* Right Column (Scrolling) */
+.right-column-scroll {
+    flex-grow: 1; /* Take up remaining space */
+    width: 65%; /* Adjust width as needed */
+    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
+    padding-bottom: 100px; /* Ensure content can scroll past sticky element */
+    box-sizing: border-box;
+}
+.right-column-section {
+    padding-top: 50px; /* Space between sections */
+    padding-bottom: 50px; /* Space between sections */
+    margin-bottom: 0; /* Sections blend, rely on internal padding */
+}
+
+/* Stats Grid (New section in Right Column) */
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-top: 30px; /* Space from section title */
+    padding: 0 5%; /* Align with other content within right column */
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.stats-grid.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.stat-item {
+    text-align: center;
+    color: var(--text-light); /* White */
+}
+.stat-item span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.8em;
+    font-weight: 700;
+    background: var(--gradient-hero-text); /* Light gradient for stats */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: -5px;
+}
+.stat-item p {
+    font-size: 0.8em;
+    font-weight: 400;
+    color: var(--text-light); /* White */
+    margin: 0;
+    line-height: 1.2;
+}
+
+
+/* Experience List (Right Column) */
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 0 5%; /* Align with right column content */
+}
+.experience-item {
+    background-color: var(--bg-section-card); /* Subtle background for experience items */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px var(--shadow-color-subtle);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+}
+.experience-item.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.experience-item:hover {
+    transform: translateY(-8px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 25px var(--shadow-color-dark);
+}
+.experience-item h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: var(--accent-primary-sawad); /* Orange accent */
+    margin-bottom: 10px;
+}
+.experience-item .description {
+    font-size: 1em;
+    line-height: 1.6;
+    color: var(--text-light); /* White */
+    margin-bottom: 0;
+}
+
+
+/* Services Section Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 5%; /* Align with right column content */
+}
+
+.service-card {
+    background-color: var(--bg-section-card); /* Subtle transparent background for service cards */
+    padding: 40px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 4px 20px var(--shadow-color-subtle);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+}
+.service-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.service-card:hover {
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 30px var(--shadow-color-dark);
+}
+.service-card i {
+    font-size: 4em;
+    color: var(--accent-primary-sawad);
+    margin-bottom: 25px;
+}
+.service-card h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2em;
+    color: var(--text-light); /* White */
+    margin-bottom: 15px;
+}
+.service-card p {
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: var(--text-light); /* White */
+    margin: 0;
+}
+
+
+/* Skills Grid (Flippable Cards) */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller minmax to fit 4 cards */
+    gap: 30px;
+    perspective: 1000px;
+    justify-items: center;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    padding: 0 5%; /* Align with right column content */
+}
+.skills-grid.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.skill-card-container {
+    width: 100%;
+    max-width: 250px; /* Max width for consistency */
+    height: 220px; /* Fixed height for cards */
+    position: relative;
+    cursor: pointer;
+}
+
+.skill-card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease-in-out;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.4); /* Softer shadow */
+    border-radius: 50px;
+    border: none;
+    background-color: transparent;
+}
+
+.skill-card-container:hover .skill-card {
+    transform: rotateY(180deg);
+    box-shadow: 0 0 25px var(--accent-secondary-sawad), 0 0 40px rgba(0, 255, 194, 0.3); /* Green glow on hover */
+}
+
+.skill-front, .skill-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
+}
+
+.skill-front {
+    color: var(--text-light); /* White */
+    background: var(--gradient-skills-front); /* Your specified orange gradient for front */
+}
+
+.skill-front i {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    color: var(--text-light); /* Icon color on orange background */
+    background: none; 
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+}
+
+.skill-front h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6em;
+    color: var(--text-light); /* White */
+    margin: 0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.skill-back {
+    background-color: var(--bg-section-card); /* Dark background for back side */
+    color: var(--text-light); /* White */
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
+    padding: 25px;
+}
+
+.skill-back ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.skill-back li {
+    font-size: 0.95em; /* Slightly smaller for detail text */
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-light); /* White */
+    margin-bottom: 6px;
+    position: relative;
+    padding-left: 25px; /* Space for bullet + text indent */
+}
+
+.skill-back li::before {
+    content: '\2022';
+    color: var(--accent-secondary-sawad); /* Green bullet point */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+
+/* Websites Section */
+.websites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 5%; /* Align with right column content */
+}
+
+.website-card {
+    background-color: var(--bg-section-card); /* Subtle transparent background */
+    padding: 35px;
+    border-radius: 18px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-light); /* White */
+    box-shadow: 0 4px 15px var(--shadow-color-subtle);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateY(30px);
+}
+.website-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.website-card:hover {
+    transform: translateY(-10px);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 30px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad); /* Green glow on hover */
+}
+.website-card img.website-thumbnail {
+    width: 100%;
+    height: 180px; /* Fixed height for thumbnails */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+.website-card:hover img.website-thumbnail {
+    opacity: 1;
+}
+
+.website-card h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    color: var(--accent-primary-sawad); /* Orange for website titles */
+    margin-bottom: 10px;
+}
+.website-card p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    opacity: 0.8;
+    color: var(--text-light); /* White */
+    margin-bottom: 20px;
+}
+.website-card i.fas.fa-external-link-alt, .website-card i.fas.fa-code-branch {
+    font-size: 1.2em;
+    color: var(--text-light); /* White */
+    opacity: 0.7;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+
+/* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light); /* White */
     text-align: center;
     padding: 60px 5%; /* Reduced padding for more compact footer */
-    margin-top: 0; /* Blend directly with main background */
+    margin-top: 0; /* Blend directly with last section from right column */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
@@ -166,6 +698,17 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+footer h2 {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 3.2em;
+    color: var(--primary-heading-color); /* White */
+    font-weight: 700;
+    text-shadow: 2px 2px 6px var(--shadow-color-dark);
+    letter-spacing: 1.5px;
 }
 
 .contact-tagline {
@@ -231,7 +774,7 @@ footer a:hover {
 }
 
 .contact-button .button-value {
-    font-size: 15px; /* Set to 15px */
+    font-size: 15px; /* Set to 15px as requested */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -289,16 +832,233 @@ footer a:hover {
 }
 
 
-/* Responsive Design - Heavily simplified as most content is gone */
+/* Responsive Design */
 @media (max-width: 1200px) {
-    .section {
-        padding: 80px 0; /* Adjust vertical padding */
+    /* Adjust for slightly smaller desktops/large tablets */
+    .left-column-sticky {
+        width: 35%; /* Default for now, adjust as needed */
+        padding-right: 40px;
+    }
+    .right-column-scroll {
+        padding-left: 40px;
+    }
+    .nav-links li {
+        margin-left: 40px;
+    }
+    .nav-links a {
+        font-size: 1.3em;
+    }
+    /* Profile card adjustments */
+    .about-image-card {
+        width: 220px;
+        height: 320px;
+        padding: 15px; /* Adjust padding for slightly smaller card */
+    }
+    .image-area-with-dash {
+        width: 160px;
+        height: 160px;
+        margin-bottom: 25px;
+    }
+    .image-area-with-dash::before {
+        width: calc(100% + 15px); /* Reduce dashed circle size slightly */
+        height: calc(100% + 15px);
+        top: -7.5px;
+        left: -7.5px;
+    }
+    .image-bg-orange {
+        width: 130px;
+        height: 130px;
+    }
+    .fire-icon {
+        font-size: 1.1em;
+    }
+    .about-left-content h3 {
+        font-size: 2.2em;
+    }
+    .about-tagline {
+        font-size: 1.1em;
+    }
+    .about-short-desc {
+        font-size: 0.9em;
+    }
+    /* Stats */
+    .stat-item span {
+        font-size: 2.2em;
+    }
+    .stat-item p {
+        font-size: 0.7em;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Tablet Portrait / Smaller Laptops */
+    .left-column-sticky {
+        width: 40%; /* Make left column slightly wider for smaller screens */
+        padding-right: 30px;
+    }
+    .right-column-scroll {
+        padding-left: 30px;
+    }
+    .section-title-right {
+        font-size: 3.2em;
+        margin-bottom: 50px;
+    }
+    /* Right column section title adjustments */
+    .section-title-right:first-line {
+        font-size: 3.2em; /* Adjusted for mobile */
+    }
+    .section-title-right span {
+        font-size: 3.2em; /* Adjusted for mobile */
+    }
+
+    .nav-links li {
+        margin-left: 35px;
+    }
+    .nav-links a {
+        font-size: 1.2em;
+    }
+    /* About Me on left column */
+    .about-left-content h3 {
+        font-size: 2em;
+    }
+    .about-tagline {
+        font-size: 1em;
+    }
+    .about-short-desc {
+        font-size: 0.85em;
+    }
+    /* Cards and Grids */
+    .service-card h3, .website-card h3, .experience-item h3 {
+        font-size: 1.6em;
+    }
+    .skill-front h3 {
+        font-size: 1.5em;
     }
 }
 
 @media (max-width: 768px) {
-    .section {
-        padding: 60px 0; /* Adjust vertical padding for mobile */
+    /* Mobile Landscape / Smaller Tablets */
+    .main-layout-container {
+        flex-direction: column; /* Stack columns vertically */
+        padding: 0 10px; /* Adjust padding for mobile */
+        padding-top: 20px; /* Space from navbar on mobile */
+    }
+    .left-column-sticky {
+        width: 100%; /* Full width */
+        position: relative; /* No longer sticky */
+        top: 0;
+        padding-right: 0; /* Remove padding */
+        min-height: unset; /* Remove min-height */
+        padding-bottom: 50px; /* Space before next section */
+        display: flex; /* Use flex to center content */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding-top: 0; /* Remove top padding for mobile */
+    }
+    .about-left-content {
+        padding: 30px; /* Re-add some padding for mobile card */
+        margin: 0 auto; /* Center the card */
+        max-width: 300px; /* Constrain card width */
+    }
+    .about-left-content.revealed {
+        transform: none; /* No vertical animation on stacked mobile */
+    }
+    .right-column-scroll {
+        padding-left: 0; /* Remove padding */
+        padding-top: 50px; /* Space between about and first right column section */
+    }
+    .right-column-section {
+        padding-left: 3%; /* Adjust section padding for mobile */
+        padding-right: 3%;
+        margin-bottom: 60px; /* Adjust space between sections */
+    }
+    .section-title-right {
+        padding-left: 0; /* Align with mobile section padding */
+        text-align: center; /* Center title */
+    }
+    .section-title-right span::after {
+        left: 50%; /* Center underline on mobile */
+        transform: translateX(-50%);
+    }
+
+    /* Navbar is completely removed from HTML. No CSS needed to hide it here. */ 
+    .section h2 { /* Global heading for sections */
+        font-size: 3.2em;
+        margin-bottom: 40px;
+    }
+    main .section p { /* Global paragraphs for sections */
+        font-size: 1.05em;
+    }
+
+    /* Skills Grid for 2x2 on Mobile */
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr); /* Exactly 2 columns */
+        gap: 15px;
+        transform: none; /* Disable reveal animation on grid for mobile */
+        opacity: 1;
+    }
+    .skill-card-container {
+        width: 100%;
+        max-width: 180px; /* Keep cards from getting too wide */
+        height: 180px; /* Fixed height for consistency */
+    }
+    .skill-front i {
+        font-size: 2.8em;
+        margin-bottom: 10px;
+    }
+    .skill-front h3 {
+        font-size: 1.3em;
+    }
+    .skill-back ul {
+        padding: 0 5px;
+        margin-top: 10px;
+        font-size: 0.85em;
+    }
+    .skill-back li {
+        font-size: 0.85em;
+        line-height: 1.3;
+        margin-bottom: 4px;
+        padding-left: 20px;
+    }
+
+    /* Service Cards for Mobile */
+    .services-grid {
+        gap: 30px;
+    }
+    .service-card {
+        padding: 30px;
+        transform: none;
+        opacity: 1;
+    }
+    .service-card i {
+        font-size: 3.5em;
+    }
+    .service-card h3 {
+        font-size: 1.5em;
+    }
+    .service-card p {
+        font-size: 0.9em;
+    }
+
+    /* Website Cards for Mobile */
+    .websites-grid {
+        gap: 30px;
+    }
+    .website-card {
+        padding: 30px;
+        transform: none;
+        opacity: 1;
+    }
+    .website-card h3 {
+        font-size: 1.6em;
+    }
+    .website-card p {
+        font-size: 0.9em;
+    }
+
+    #spline-container {
+        display: none; /* Hidden on mobile too */
     }
     .contact-tagline {
         font-size: 1.1em;
@@ -317,8 +1077,8 @@ footer a:hover {
     .contact-button i {
         font-size: 2em;
     }
-    .contact-button .button-value {
-        font-size: 0.9em; /* Smaller value on mobile */
+    .contact-button .button-label, .contact-button .button-value {
+        font-size: 0.9em;
     }
     .contact-button .copied-text {
         font-size: 1.1em;
@@ -326,13 +1086,82 @@ footer a:hover {
 }
 
 @media (max-width: 480px) {
-    .section h2 {
-        font-size: 2.5em;
-        margin-bottom: 30px;
+    /* Smaller Phones */
+    .section-title-right {
+        font-size: 2.8em; /* Adjusted for very small screens */
+        letter-spacing: 0.5px;
     }
-    .contact-tagline {
+    .section-title-right:first-line {
+        font-size: 2.8em;
+    }
+    .section-title-right span {
+        font-size: 2.8em;
+    }
+    .section-intro-paragraph {
         font-size: 1em;
-        margin-bottom: 25px;
+        margin-bottom: 50px;
+    }
+
+    .about-image-card {
+        width: 200px;
+        height: 300px;
+    }
+    .image-area-with-dash::before {
+        width: calc(100% + 10px);
+        height: calc(100% + 10px);
+        top: -5px;
+        left: -5px;
+    }
+    .image-bg-orange {
+        width: 110px;
+        height: 110px;
+    }
+    .fire-icon {
+        font-size: 0.9em;
+    }
+    .about-left-content h3 {
+        font-size: 2.2em;
+    }
+    .about-tagline {
+        font-size: 1.1em;
+    }
+    .about-short-desc {
+        font-size: 0.9em;
+    }
+    .service-card i {
+        font-size: 2.8em;
+        margin-bottom: 15px;
+    }
+    .service-card h3 {
+        font-size: 1.3em;
+    }
+    .service-card p {
+        font-size: 0.85em;
+    }
+    .skill-card-container {
+        height: 150px;
+    }
+    .skill-front i {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    .skill-front h3 {
+        font-size: 1.2em;
+    }
+    .skill-back li {
+        font-size: 0.8em;
+    }
+    .website-card h3 {
+        font-size: 1.4em;
+    }
+    .website-card p {
+        font-size: 0.85em;
+    }
+    #spline-container {
+        display: none;
+    }
+    .nav-links a {
+        font-size: 1.15em;
     }
     .contact-button {
         width: 95%;
