@@ -55,8 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Scroll Reveal Animation (Intersection Observer)
-    const revealElements = document.querySelectorAll('.reveal-item, .section h2');
-
     const observerOptions = {
         root: null, // viewport as the root
         rootMargin: '0px',
@@ -66,60 +64,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('revealed');
-                // Optionally stop observing once revealed
-                // observer.unobserve(entry.target); 
-            } else {
-                // Optional: remove 'revealed' class if it goes out of view
-                // entry.target.classList.remove('revealed');
+                // Handle section titles separately
+                if (entry.target.tagName === 'H2' && entry.target.closest('.section')) {
+                    entry.target.classList.add('revealed');
+                } else if (entry.target.classList.contains('reveal-item')) {
+                    // For sections themselves, add class immediately
+                    entry.target.classList.add('revealed');
+                    
+                    // Staggered reveal for children elements like cards
+                    let delay = 0;
+                    if (entry.target.id === 'about') {
+                        // For about section, reveal text and image
+                        const aboutText = entry.target.querySelector('.about-text');
+                        const aboutImage = entry.target.querySelector('.about-image');
+                        if (aboutText) setTimeout(() => aboutText.classList.add('revealed'), 100);
+                        if (aboutImage) setTimeout(() => aboutImage.classList.add('revealed'), 300);
+                    } else if (entry.target.id === 'services') {
+                        entry.target.querySelectorAll('.service-card').forEach((card, index) => {
+                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200); // Staggered
+                        });
+                    } else if (entry.target.id === 'skills') {
+                        entry.target.querySelectorAll('.skill-card-container').forEach((card, index) => {
+                            setTimeout(() => card.classList.add('revealed'), index * 120 + 200); // Staggered
+                        });
+                    } else if (entry.target.id === 'websites') {
+                        entry.target.querySelectorAll('.website-card').forEach((card, index) => {
+                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200); // Staggered
+                        });
+                    } else if (entry.target.id === 'contact') {
+                        // For contact section, reveal tagline and then buttons
+                        const contactTagline = entry.target.querySelector('.contact-tagline');
+                        const contactButtons = entry.target.querySelector('.contact-buttons');
+                        if (contactTagline) setTimeout(() => contactTagline.classList.add('revealed'), 100);
+                        if (contactButtons) setTimeout(() => contactButtons.classList.add('revealed'), 300);
+                    }
+                }
+                observer.unobserve(entry.target); // Stop observing once revealed
             }
         });
     }, observerOptions);
 
-    revealElements.forEach(el => {
-        observer.observe(el);
+    // Observe all relevant elements
+    document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section); // Observe the section for overall reveal
+        observer.observe(section.querySelector('h2')); // Observe the heading for its own reveal
     });
 
-    // Special handling for service cards (delay their reveal slightly)
-    const serviceCards = document.querySelectorAll('.service-card');
-    const skillsGrid = document.querySelector('.skills-grid');
-    const websiteCards = document.querySelectorAll('.website-card');
-
-    const cardObserverOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15 // Slightly higher threshold for cards
-    };
-
-    const cardObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Add revealed class with a delay for each card
-                if (entry.target.classList.contains('service-card')) {
-                    const index = Array.from(serviceCards).indexOf(entry.target);
-                    setTimeout(() => {
-                        entry.target.classList.add('revealed');
-                    }, index * 100); // 100ms delay per card
-                } else if (entry.target.classList.contains('website-card')) {
-                    const index = Array.from(websiteCards).indexOf(entry.target);
-                    setTimeout(() => {
-                        entry.target.classList.add('revealed');
-                    }, index * 100); // 100ms delay per card
-                } else if (entry.target.classList.contains('skills-grid')) {
-                    // For skills grid, reveal all cards inside it
-                    entry.target.classList.add('revealed');
-                    entry.target.querySelectorAll('.skill-card-container').forEach((card, index) => {
-                        setTimeout(() => {
-                            card.classList.add('revealed');
-                        }, index * 80); // Slight delay for each skill card
-                    });
-                }
-                observer.unobserve(entry.target); // Stop observing once cards are revealed
-            }
-        });
-    }, cardObserverOptions);
-
-    serviceCards.forEach(card => cardObserver.observe(card));
-    if (skillsGrid) cardObserver.observe(skillsGrid); // Observe the skills grid container
-    websiteCards.forEach(card => cardObserver.observe(card));
+    // Observe specific sub-elements for their staggered reveals (handled within the main observer)
+    // No need to explicitly observe individual cards here if handled by parent section reveal
 });

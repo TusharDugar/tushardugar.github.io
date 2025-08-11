@@ -1,15 +1,15 @@
 /* Basic Reset & Font */
 :root {
     /* Sawad-inspired Color Palette */
-    --bg-main: #1A1A1E; /* Very dark background from Sawad */
+    --bg-main: #1A1A1E; /* Primary very dark background from Sawad */
     --text-light: #F0F0F0; /* Light text for readability */
     --text-medium: #BBBBBB; /* Slightly darker light for secondary text */
     
     /* Accent Colors (similar to Sawad's subtle glows and gradients) */
-    --accent-blue-soft: #5E8CFF; /* Softer blue for subtle effects/hovers */
-    --accent-orange-soft: #FF7B00; /* Softer orange for subtle effects/hovers */
+    --accent-primary: #5E8CFF; /* Soft blue for primary accents/hovers */
+    --accent-secondary: #FF7B00; /* Soft orange for secondary accents/hovers */
     --gradient-hero-text: linear-gradient(90deg, #F0F0F0 0%, #A0A0A0 100%); /* Light gradient for hero text */
-    --gradient-skills-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Your specified orange gradient */
+    --gradient-skills-front: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Your specified orange gradient for skill cards */
 
     --primary-heading-color: var(--text-light);
     --shadow-color-dark: rgba(0, 0, 0, 0.7); /* Darker shadow for depth */
@@ -59,7 +59,7 @@ body {
 
 /* Global Section Styling (no "black boxes") */
 .section {
-    padding: 100px 5%; /* Increased padding for spacing */
+    padding: 100px 5%; /* Increased padding top/bottom for spacing */
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
@@ -87,7 +87,7 @@ body {
 }
 
 .section h2 i {
-    color: var(--accent-blue-soft); /* Accent color for icon */
+    color: var(--accent-primary); /* Accent color for icon */
     margin-right: 25px; /* More space for icon */
     font-size: 0.9em;
 }
@@ -137,7 +137,7 @@ main .section p {
     margin-bottom: 25px;
     line-height: 1.1;
     font-weight: 700;
-    letter-spacing: 6px;
+    letter-spacing: 5px;
     background: var(--gradient-hero-text); /* Light gradient for text */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -179,7 +179,7 @@ main .section p {
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* More visible border on scroll */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More visible border on scroll */
 }
 
 /* Logo in Navbar */
@@ -187,14 +187,14 @@ main .section p {
     font-family: 'Poppins', sans-serif;
     font-size: 3.2em; /* Larger logo */
     font-weight: 700;
-    color: var(--accent-blue-soft); /* Accent blue for logo */
+    color: var(--accent-primary); /* Accent blue for logo */
     transition: color 0.4s ease;
     text-shadow: 1px 1px 5px var(--shadow-color-dark);
 }
 
 /* Logo in Navbar when scrolled */
 .navbar.scrolled .logo {
-    color: var(--accent-blue-soft);
+    color: var(--accent-primary);
 }
 
 /* Navigation Links */
@@ -230,7 +230,7 @@ main .section p {
     height: 3px;
     bottom: -10px;
     left: 0;
-    background-color: var(--accent-blue-soft); /* Blue accent for underline */
+    background-color: var(--accent-primary); /* Blue accent for underline */
     transition: width 0.3s ease;
 }
 
@@ -239,7 +239,7 @@ main .section p {
 }
 
 .nav-links a:hover {
-    color: var(--accent-blue-soft);
+    color: var(--accent-primary);
     transform: translateY(-5px); /* More prominent lift */
 }
 
@@ -267,18 +267,18 @@ main .section p {
 /* About Section Specifics (Image on one side, Text on other) */
 .about-content {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Default horizontal layout */
     align-items: center;
     gap: 80px; /* Space between text and image */
-    max-width: 1100px; /* Limit width */
+    max-width: 1100px;
     margin: 0 auto;
-    padding-top: 50px;
+    padding-top: 50px; /* Padding below heading */
 }
 .about-text {
     flex: 1;
     text-align: left;
-    transform: translateX(-40px); /* Initial state for reveal */
-    opacity: 0;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateX(-40px);
     transition: transform 0.8s ease-out, opacity 0.8s ease-out;
 }
 .about-text.revealed {
@@ -296,8 +296,8 @@ main .section p {
     overflow: hidden;
     border-radius: 20px; /* Rounded corners for image */
     box-shadow: 0 10px 30px var(--shadow-color-dark);
-    transform: translateX(40px); /* Initial state for reveal */
-    opacity: 0;
+    opacity: 0; /* Initial state for reveal */
+    transform: translateX(40px);
     transition: transform 0.8s ease-out, opacity 0.8s ease-out;
 }
 .about-image.revealed {
@@ -312,11 +312,12 @@ main .section p {
     object-fit: cover;
 }
 
+
 /* Services Section Grid */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px; /* Space between service cards */
+    gap: 40px; /* More space between service cards */
     max-width: 1100px;
     margin: 0 auto;
 }
@@ -343,7 +344,7 @@ main .section p {
 }
 .service-card i {
     font-size: 4em; /* Larger icons */
-    color: var(--accent-blue-soft);
+    color: var(--accent-primary);
     margin-bottom: 25px;
 }
 .service-card h3 {
@@ -367,7 +368,7 @@ main .section p {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Smaller minmax to fit 4 cards */
     gap: 30px;
     perspective: 1000px;
-    justify-items: center; /* Center cards in their grid cells */
+    justify-items: center;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -399,7 +400,7 @@ main .section p {
 
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
-    box-shadow: 0 0 25px var(--accent-orange-soft), 0 0 40px rgba(255, 69, 0, 0.3); /* Softer orange glow on hover */
+    box-shadow: 0 0 25px var(--accent-secondary), 0 0 40px rgba(255, 69, 0, 0.3); /* Softer orange glow on hover */
 }
 
 .skill-front, .skill-back {
@@ -412,7 +413,7 @@ main .section p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 25px;
+    padding: 25px; /* Reduced padding for smaller cards */
     box-sizing: border-box;
     text-align: center;
     border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
@@ -425,7 +426,7 @@ main .section p {
 
 .skill-front i {
     font-size: 3.5em; /* Adjusted icon size */
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Adjusted margin */
     color: var(--text-light); /* Icon color on orange background */
     background: none; 
     -webkit-background-clip: unset;
@@ -442,7 +443,7 @@ main .section p {
 }
 
 .skill-back {
-    background-color: var(--bg-dark-sections); /* Dark background for back side */
+    background-color: rgba(30, 30, 30, 0.9); /* Dark background for back side */
     color: var(--text-light);
     transform: rotateY(180deg);
     display: flex;
@@ -471,7 +472,7 @@ main .section p {
 
 .skill-back li::before {
     content: '\2022';
-    color: var(--accent-orange-soft); /* Orange bullet point */
+    color: var(--accent-secondary); /* Orange bullet point */
     font-weight: bold;
     display: inline-block;
     width: 1em;
@@ -513,12 +514,25 @@ main .section p {
 .website-card:hover {
     transform: translateY(-10px);
     background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px var(--accent-blue-soft); /* Blue glow on hover */
+    box-shadow: 0 12px 30px var(--shadow-color-dark), 0 0 15px var(--accent-primary); /* Blue glow on hover */
 }
+.website-card img.website-thumbnail { /* Styling for placeholder images */
+    width: 100%;
+    height: 180px; /* Fixed height for thumbnails */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+.website-card:hover img.website-thumbnail {
+    opacity: 1;
+}
+
 .website-card h3 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.8em;
-    color: var(--accent-blue-soft); /* Accent for website titles */
+    color: var(--accent-primary); /* Accent for website titles */
     margin-bottom: 10px;
 }
 .website-card p {
@@ -550,7 +564,7 @@ footer {
 }
 
 footer a {
-    color: var(--accent-blue-soft);
+    color: var(--accent-primary);
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -609,7 +623,7 @@ footer h2 {
 .contact-button:hover {
     transform: translateY(-8px);
     background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-blue-soft); /* Blue glow on hover */
+    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-primary); /* Blue glow on hover */
 }
 
 .contact-button .button-content-main {
@@ -629,7 +643,7 @@ footer h2 {
 
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
-    color: var(--accent-blue-soft); /* Accent color for icons */
+    color: var(--accent-primary); /* Accent color for icons */
     margin-bottom: 10px;
 }
 
@@ -720,7 +734,7 @@ footer h2 {
         font-size: 1.2em;
     }
     .about-content {
-        flex-direction: column;
+        flex-direction: column; /* Stack on smaller screens */
         gap: 40px;
     }
     .about-text, .about-image {
@@ -892,10 +906,10 @@ footer h2 {
         font-size: 0.8em;
     }
     .skill-card-container {
-        height: 150px; /* Even smaller for very small phones */
+        height: 150px;
     }
     .skill-front i {
-        font-size: 2em;
+        font-size: 2.2em;
         margin-bottom: 8px;
     }
     .skill-front h3 {
