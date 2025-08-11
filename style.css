@@ -199,7 +199,7 @@ main .section p {
     display: flex;
     justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 20px 5%; /* Adjusted padding for reduced height */
+    padding: 15px 5%; /* Further reduced padding for smaller height */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,7 +211,7 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 12px 5%; /* Reduced padding on scroll */
+    padding: 10px 5%; /* Even more reduced padding on scroll */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
@@ -230,14 +230,14 @@ main .section p {
 }
 
 .nav-links li {
-    margin-left: 45px; /* Smaller spacing for links */
+    margin-left: 40px; /* Further reduced spacing for links */
 }
 
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
     font-weight: 500; /* Medium weight */
-    font-size: 1.15em; /* Smaller links */
+    font-size: 1.1em; /* Further reduced links font size */
     position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
@@ -252,7 +252,7 @@ main .section p {
     position: absolute;
     width: 0;
     height: 2px; /* Thinner underline */
-    bottom: -8px; /* Closer to text */
+    bottom: -6px; /* Closer to text */
     left: 0;
     background-color: var(--accent-secondary-sawad); /* Green accent for underline */
     transition: width 0.3s ease;
@@ -264,7 +264,7 @@ main .section p {
 
 .nav-links a:hover {
     color: var(--accent-secondary-sawad);
-    transform: translateY(-5px); /* More prominent lift */
+    transform: translateY(-4px); /* Slightly less prominent lift */
 }
 
 /* Spline Container (removed from hero section, keeping its ID for future use if needed elsewhere) */
@@ -308,7 +308,7 @@ main .section p {
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 30px; /* Large rounded corners */
-    padding: 40px 30px; /* Internal padding */
+    padding: 30px 25px; /* Reduced padding for more compact card */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
     max-width: 380px; /* Set a max-width to match Sawad's card size */
@@ -322,13 +322,12 @@ main .section p {
     transform: translateY(0);
 }
 
-/* Removed empty .profile-card-wrapper rule */
 
 .image-area-with-dash {
     position: relative;
-    width: 180px; /* Fixed size for the image circle container */
-    height: 180px;
-    margin: 0 auto 30px; /* Center and space below image */
+    width: 160px; /* Reduced size for the image circle container */
+    height: 160px;
+    margin: 0 auto 25px; /* Reduced margin */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -338,13 +337,13 @@ main .section p {
 .image-area-with-dash::before {
     content: '';
     position: absolute;
-    width: calc(100% + 20px); /* Dashed circle slightly larger than image bg */
-    height: calc(100% + 20px);
+    width: calc(100% + 15px); /* Dashed circle slightly larger than image bg */
+    height: calc(100% + 15px);
     border: 3px dashed var(--accent-primary-sawad); /* Orange dashed border */
     border-radius: 50%;
     animation: rotateDashed 20s linear infinite; /* Smooth rotation */
-    top: -10px;
-    left: -10px;
+    top: -7.5px;
+    left: -7.5px;
     box-sizing: border-box;
 }
 
@@ -354,8 +353,8 @@ main .section p {
 }
 
 .image-bg-orange {
-    width: 150px; /* Orange circle behind image */
-    height: 150px;
+    width: 120px; /* Reduced orange circle behind image */
+    height: 120px;
     background-color: var(--accent-primary-sawad); /* Sawad's orange */
     border-radius: 50%;
     display: flex;
@@ -380,45 +379,45 @@ main .section p {
     background-color: var(--accent-primary-sawad);
     border-radius: 50%;
     padding: 8px;
-    font-size: 1.2em;
+    font-size: 1.1em; /* Reduced size */
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     z-index: 5;
-    transform: translate(30%, 30%); /* Position outside corner */
+    transform: translate(25%, 25%); /* Position outside corner */
 }
 
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.8em; /* Larger name */
+    font-size: 2.5em; /* Reduced name font size */
     font-weight: 600;
     color: var(--text-dark-card); /* Black text on white card */
     margin-bottom: 5px;
 }
 .about-tagline {
-    font-size: 1.2em;
+    font-size: 1.1em; /* Reduced tagline font size */
     color: var(--text-medium-card); /* Dark gray text */
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* Reduced margin */
 }
 .about-short-desc {
-    font-size: 1em;
-    line-height: 1.6;
+    font-size: 0.9em; /* Reduced short desc font size */
+    line-height: 1.5; /* Reduced line height */
     color: var(--text-medium-card);
-    margin-bottom: 30px; /* Space before social icons */
+    margin-bottom: 25px; /* Reduced margin before social icons */
 }
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 25px;
-    margin-top: 20px;
+    gap: 20px; /* Reduced gap */
+    margin-top: 15px; /* Reduced margin */
 }
 .about-social-icons a {
     color: var(--text-medium-card); /* Dark gray icons */
-    font-size: 1.8em;
+    font-size: 1.6em; /* Reduced icon size */
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
     color: var(--accent-primary-sawad); /* Orange on hover */
-    transform: translateY(-5px) scale(1.1);
+    transform: translateY(-4px) scale(1.1); /* Reduced lift */
 }
 
 
@@ -927,7 +926,7 @@ footer h2 {
     .right-column-scroll {
         padding-left: 40px;
     }
-    /* Removed empty .navbar .logo rule as it's no longer in HTML */
+    /* Removed empty .navbar .logo rule */
     .nav-links li {
         margin-left: 40px;
     }
