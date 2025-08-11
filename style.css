@@ -798,11 +798,10 @@ footer h2 {
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
     color: var(--accent-primary-sawad); /* Accent color for icons */
-    /* No margin-bottom here, will center automatically with flexbox */
 }
 
 .contact-button .button-value {
-    font-size: 1.0em; /* Reduced font size to 1.0em (20px) */
+    font-size: 15px; /* Explicitly 15px */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -1150,11 +1149,6 @@ footer h2 {
     .about-image-card {
         width: 200px;
         height: 300px;
-    }
-    .image-area-with-dash {
-        width: 140px;
-        height: 140px;
-        margin-bottom: 20px;
     }
     .image-area-with-dash::before {
         width: calc(100% + 10px);
