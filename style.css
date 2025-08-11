@@ -9,11 +9,11 @@
     /* Gradients from Figma */
     --main-background-gradient: linear-gradient(113.49deg, #984D38 -30.3%, #181E41 58.12%); /* New main background */
     --gradient-blue-main: linear-gradient(to right, #0F2027, #203A43, #2C5364); /* Used for text/underline accents */
-    --gradient-orange-main: linear-gradient(to right, #FF7B00, #FF4500); /* Fiery orange-red for skill icons/accents */
+    --gradient-orange-main: linear-gradient(214.02deg, #EA5F5F 6.04%, #EEAA55 92.95%); /* Exact new orange gradient for skill cards */
 
     /* Individual color accents */
     --accent-blue: #3498DB; /* Primary vibrant blue */
-    --accent-orange: #FF4500; /* Primary vibrant orange-red */
+    --accent-orange: #FF4500; /* Primary vibrant orange-red (for hover, etc) */
 
     --primary-heading-color: var(--text-light);
     --shadow-color: rgba(0, 0, 0, 0.5); /* Stronger shadow on dark bg */
@@ -24,12 +24,11 @@ body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: var(--text-light);
-    /* NEW BACKGROUND FROM FIGMA REFERENCE */
     background: var(--main-background-gradient); 
-    background-attachment: fixed; /* Ensures background stays fixed while content scrolls */
-    background-size: 100% 100%; /* Ensures gradient scales to fill the entire viewport */
-    background-repeat: no-repeat; /* Prevents repeating if content is smaller than viewport */
-    /* End NEW BACKGROUND */
+    background-attachment: fixed;
+    background-size: cover; /* Ensures gradient scales to fill the entire viewport, cropping if needed */
+    background-position: center;
+    background-repeat: no-repeat;
     overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
@@ -38,7 +37,7 @@ body {
 
 /* Background Glowing Effects (Removed as per Figma background) */
 body::before, body::after {
-    display: none; /* Hide previous glowing elements */
+    display: none;
 }
 
 /* Global Section Styling */
@@ -285,18 +284,47 @@ body::before, body::after {
 
 /* Skills Grid (Flippable Cards) */
 .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     gap: 35px;
     perspective: 1000px;
+    padding-bottom: 20px; /* Space for scrollbar */
+    justify-content: flex-start;
 }
 
+/* Hide scrollbar for aesthetics */
+.skills-grid::-webkit-scrollbar {
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.skills-grid::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+.skills-grid::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.skills-grid {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+
 .skill-card-container {
-    width: 100%;
+    flex-shrink: 0;
+    width: 300px; /* Fixed width for cards in horizontal scroll */
     height: 280px;
     position: relative;
-    cursor: pointer;
+    cursor: grab;
+    scroll-snap-align: start;
 }
+
+.skill-card-container:active {
+    cursor: grabbing;
+}
+
 
 .skill-card {
     width: 100%;
@@ -304,16 +332,18 @@ body::before, body::after {
     position: absolute;
     transform-style: preserve-3d;
     transition: transform 0.8s ease-in-out;
-    box-shadow: 0 6px 20px var(--shadow-color);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: var(--section-bg-alpha);
+    /* Apply Figma box-shadow and border-radius here to affect the whole card container */
+    box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.25); /* Figma's box-shadow for the card */
+    border-radius: 50px; /* Figma's border-radius for the card */
+    border: none; /* Remove previous border, it will be on front/back now */
+    background-color: transparent; /* Card container itself is transparent */
 }
 
+/* Hover effect for the entire card container */
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
-    box-shadow: 0 0 25px var(--accent-orange), 0 0 40px rgba(255, 69, 0, 0.4);
-    border-color: var(--accent-orange);
+    /* Retain glowing effect from previous design or adjust */
+    box-shadow: 0 0 25px var(--accent-orange), 0 0 40px rgba(255, 69, 0, 0.4); 
 }
 
 .skill-front, .skill-back {
@@ -321,7 +351,7 @@ body::before, body::after {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 15px;
+    border-radius: 50px; /* Match skill-card border-radius */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -329,33 +359,36 @@ body::before, body::after {
     padding: 30px;
     box-sizing: border-box;
     text-align: center;
-    background-color: var(--section-bg-alpha);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Add back the border to front/back */
 }
 
 .skill-front {
     color: var(--text-light);
+    /* Figma's specific orange gradient for the front of the card */
+    background: var(--gradient-orange-main); 
 }
 
 .skill-front i {
     font-size: 4em;
     margin-bottom: 25px;
-    background: var(--gradient-orange-main);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
+    color: var(--text-light); /* Make icon white on orange background */
+    background: none; /* Remove text-clip for icon */
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    text-fill-color: unset;
 }
 
 .skill-front h3 {
     font-family: 'Montserrat', sans-serif;
     font-size: 2em;
-    color: var(--text-light);
+    color: var(--text-light); /* Keep text light on orange background */
     margin: 0;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .skill-back {
-    background-color: rgba(30, 30, 30, 0.9);
+    background-color: rgba(30, 30, 30, 0.9); /* Dark background for back side */
     color: var(--text-light);
     transform: rotateY(180deg);
     display: flex;
@@ -394,10 +427,10 @@ body::before, body::after {
 
 /* Footer (Contact Section) */
 footer {
-    background-color: var(--bg-dark); /* Solid dark background for footer */
+    background-color: var(--bg-dark);
     color: var(--text-light);
     text-align: center;
-    padding: 60px 5%; /* Increased padding */
+    padding: 60px 5%;
     margin-top: 60px;
     border-radius: 20px 20px 0 0;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -414,10 +447,10 @@ footer a:hover {
     text-decoration: underline;
 }
 
-footer h2 { /* Apply same h2 styling for footer heading as other sections */
+footer h2 {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
-    margin-bottom: 25px; /* Adjust spacing */
+    margin-bottom: 25px;
     font-size: 3.2em;
     color: var(--primary-heading-color);
     font-weight: 700;
@@ -425,71 +458,99 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
     letter-spacing: 1.5px;
 }
 
-.contact-tagline { /* New style for the descriptive paragraph */
-    font-size: 1.25em; /* Slightly larger tagline */
-    margin-bottom: 40px; /* More space below tagline */
-    max-width: 700px; /* Wider text area */
+.contact-tagline {
+    font-size: 1.25em;
+    margin-bottom: 40px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
-    opacity: 0.95; /* More prominent */
+    opacity: 0.95;
     line-height: 1.8;
 }
 
 .contact-buttons {
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 30px; /* Space between buttons */
-    margin-bottom: 40px; /* More space below buttons */
+    gap: 30px;
+    margin-bottom: 40px;
 }
 
 .contact-button {
-    background: var(--gradient-blue-main); /* Blue gradient button */
+    background: var(--gradient-blue-main);
     color: var(--text-light);
     border: none;
-    border-radius: 12px; /* More rounded buttons */
-    padding: 18px 35px; /* Larger padding for buttons */
-    font-size: 1.2em; /* Larger text in buttons */
+    border-radius: 12px;
+    padding: 18px 35px;
+    font-size: 1.2em;
     font-weight: 700;
     cursor: pointer;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px; /* Space between icon and text */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     position: relative;
     overflow: hidden;
-    min-width: 220px; /* Ensure buttons have minimum width */
-    justify-content: center;
+    min-width: 250px;
+    height: 120px;
 }
 
 .contact-button i {
-    font-size: 1.6em; /* Larger icons in buttons */
+    font-size: 2.2em;
     color: var(--text-light);
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Animate icon with text */
+    position: absolute; /* Allow independent animation */
+    top: 20px; /* Position it */
 }
 
-.contact-button:hover {
-    transform: translateY(-8px); /* More prominent lift */
-    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.5); /* Stronger blue glow on hover */
-}
-
-.contact-button .button-text {
+.contact-button .button-label {
+    font-size: 1em;
+    opacity: 0.8;
+    position: absolute; /* Allow independent animation */
+    bottom: 20px; /* Position it below value */
     transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.contact-button .button-value {
+    font-size: 1.1em;
+    font-weight: bold;
+    opacity: 1;
+    position: absolute; /* Allow independent animation */
+    top: 50%; /* Center it vertically */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px; /* Some padding for text ellipsis */
+    max-width: 90%; /* Prevent overflow */
 }
 
 .contact-button .copied-text {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) translateY(100%); /* Start off-screen below */
+    transform: translate(-50%, -50%) translateY(100%);
     opacity: 0;
-    font-size: 1em; /* Adjusted size */
+    font-size: 1.1em;
     color: var(--text-light);
     transition: transform 0.3s ease, opacity 0.3s ease;
-    font-weight: bold; /* Make copied text bold */
+    font-weight: bold;
+    background: var(--gradient-orange-main); /* Orange background for copied state */
+    padding: 5px 15px;
+    border-radius: 5px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    min-width: 80%; /* Ensure copied text is centered and readable */
 }
 
-.contact-button.copied .button-text {
-    transform: translateY(-100%);
+/* States when button is 'copied' */
+.contact-button.copied i,
+.contact-button.copied .button-label,
+.contact-button.copied .button-value {
+    transform: translateY(-150%); /* Move content up and out */
     opacity: 0;
 }
 
@@ -498,9 +559,14 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
     opacity: 1;
 }
 
+.contact-button:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.5);
+}
+
 .social-links {
     margin-top: 30px;
-    margin-bottom: 0; /* No margin at bottom as copyright is removed */
+    margin-bottom: 0;
 }
 .social-links a {
     color: var(--text-light);
@@ -511,7 +577,6 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
     color: var(--accent-orange);
     transform: scale(1.3);
 }
-/* Removed .copyright as it's no longer in HTML */
 
 
 /* Responsive Design */
@@ -538,6 +603,7 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
         font-size: 1.15em;
     }
     .skill-card-container {
+        width: 280px; /* Adjusted fixed width for cards */
         height: 260px;
     }
     .skill-front i {
@@ -602,10 +668,12 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
         margin-bottom: 35px;
     }
     .skills-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 25px; /* Adjust gap for smaller screens */
+        padding-left: 20px; /* Add padding to prevent first card from touching edge */
+        padding-right: 20px; /* Add padding to prevent last card from touching edge */
     }
     .skill-card-container {
+        width: 260px; /* Adjust width for mobile */
         height: 220px;
     }
     .skill-front i {
@@ -632,14 +700,21 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
         margin-bottom: 30px;
     }
     .contact-buttons {
-        flex-direction: column; /* Stack buttons on very small screens */
-        gap: 15px;
+        flex-direction: column;
+        gap: 20px;
     }
     .contact-button {
-        min-width: unset; /* Remove min-width to allow shrinking */
-        width: 80%; /* Take up more width */
+        width: 90%;
+        max-width: 320px;
         font-size: 1.1em;
         padding: 15px 20px;
+        height: 100px;
+    }
+    .contact-button i {
+        font-size: 1.8em;
+    }
+    .contact-button .button-label, .contact-button .button-value {
+        font-size: 0.9em;
     }
     .social-links a {
         margin: 0 15px;
@@ -660,7 +735,8 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
         font-size: 1.6em;
     }
     .skill-card-container {
-        height: 200px;
+        width: 240px;
+        height: 190px;
     }
     .skill-front i {
         font-size: 2.8em;
@@ -681,6 +757,7 @@ footer h2 { /* Apply same h2 styling for footer heading as other sections */
         font-size: 1.05em;
     }
     .contact-button {
-        width: 90%;
+        width: 95%;
+        height: 90px;
     }
 }
