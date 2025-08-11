@@ -1,4 +1,3 @@
-
 /* Basic Reset & Font */
 :root {
     /* Sawad-inspired Color Palette */
@@ -188,50 +187,15 @@ main .section p {
 }
 
 
-/* Header (Hero Section) */
-.hero-section {
-    background: transparent; /* Blends with body background */
-    color: var(--text-light);
-    text-align: center;
-    padding: 250px 5% 150px; /* More padding */
-    position: relative;
-    overflow: hidden;
-    min-height: 90vh; /* Make hero section cover most of viewport */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1; /* Ensure hero content is above background */
-}
-
-.hero-section h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 6.5em; /* Even larger for main name */
-    margin-bottom: 25px;
-    line-height: 1.1;
-    font-weight: 700;
-    letter-spacing: 5px;
-    background: var(--gradient-hero-text); /* Light gradient for text */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 4px 4px 15px var(--shadow-color-dark); /* Stronger shadow for depth */
-}
-
-.hero-section p {
-    font-size: 2.8em; /* Larger tagline */
-    opacity: 0.9;
-    font-weight: 400; /* Regular weight for tagline */
-    color: var(--text-light);
-    text-shadow: 2px 2px 8px var(--shadow-color-dark);
-}
-
-/* Navbar (Dynamic Sticky Header) */
-.navbar {
+/* Header (Navbar Only) */
+.navbar-only-header { /* New wrapper for only the navbar */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1000;
+}
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -239,13 +203,12 @@ main .section p {
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
-    z-index: 1000;
     backdrop-filter: blur(15px); /* Stronger initial blur */
     -webkit-backdrop-filter: blur(15px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle border */
 }
 
-/* Navbar when scrolled */
+/* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
     padding: 20px 5%;
@@ -255,20 +218,17 @@ main .section p {
     border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More visible border on scroll */
 }
 
-/* Logo in Navbar */
+/* Logo in Navbar (removed text, just a placeholder div) */
 .navbar .logo {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3.2em; /* Larger logo */
-    font-weight: 700;
-    color: var(--accent-primary-sawad); /* Orange accent for logo */
-    transition: color 0.4s ease;
-    text-shadow: 1px 1px 5px var(--shadow-color-dark);
+    width: 50px; /* Give it a size so it takes up space */
+    height: 50px;
+    /* Optional: add a background image here later if there's a logo image */
+    /* background-image: url('path/to/your/logo.png'); */
+    /* background-size: contain; */
+    /* background-repeat: no-repeat; */
+    /* background-position: center; */
 }
 
-/* Logo in Navbar when scrolled */
-.navbar.scrolled .logo {
-    color: var(--accent-primary-sawad);
-}
 
 /* Navigation Links */
 .nav-links {
@@ -316,24 +276,15 @@ main .section p {
     transform: translateY(-5px); /* More prominent lift */
 }
 
-/* Spline Container */
+/* Spline Container (removed from hero section, keeping its ID for future use if needed elsewhere) */
 #spline-container {
-    width: 100%;
-    height: 700px; /* Adjusted height to fit hero section */
-    position: absolute; /* Position spline absolutely within hero */
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    z-index: 0; /* Behind text and logo */
+    display: none; /* Hide if not used in a visible section */
+    /* If you want to add a 3D element elsewhere, uncomment and reposition */
+    /* For example, if it's a floating background element: */
+    /* position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; */
 }
-#spline-container p { /* Placeholder text for spline */
-    display: flex; /* Make it visible if spline doesn't load */
-    color: rgba(255, 255, 255, 0.7);
-    font-style: italic;
-    font-size: 1.2em;
+#spline-container p {
+    display: none; /* Hide placeholder text as container is hidden */
 }
 
 
@@ -347,6 +298,7 @@ main .section p {
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
+    padding-top: 100px; /* Space from the top (navbar area) */
 }
 
 /* Left Column (Sticky) */
@@ -358,14 +310,12 @@ main .section p {
     position: sticky; /* Make it sticky */
     top: 100px; /* Stick below the navbar (adjust if navbar height changes) */
     align-self: flex-start; /* Align to the top of its flex container */
-    min-height: calc(100vh - 150px); /* Adjust to hold content */
+    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjust as needed */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Align content to the top within sticky area */
+    justify-content: center; /* Center content vertically within sticky area */
     align-items: center;
     text-align: center;
-    padding-top: 50px; /* Space inside the sticky area */
-    padding-bottom: 50px; /* Ensure content doesn't get cut off at bottom of sticky area */
 }
 
 .about-left-content {
@@ -399,7 +349,6 @@ main .section p {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    /* No overflow hidden here, let the dashed circle show outside */
 }
 
 .image-area-with-dash::before {
@@ -824,12 +773,12 @@ main .section p {
 }
 
 
-/* Footer (Contact Section - Full Width) */
+/* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light);
     text-align: center;
-    padding: 80px 5%; /* Increased padding */
+    padding: 60px 5%; /* Reduced padding for more compact footer */
     margin-top: 0; /* Blend directly with last section from right column */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
@@ -848,7 +797,7 @@ footer a:hover {
 footer h2 {
     font-family: 'Poppins', sans-serif;
     text-align: center;
-    margin-bottom: 35px; /* Adjusted spacing */
+    margin-bottom: 25px;
     font-size: 3.2em;
     color: var(--primary-heading-color);
     font-weight: 700;
@@ -858,7 +807,7 @@ footer h2 {
 
 .contact-tagline {
     font-size: 1.25em;
-    margin-bottom: 50px; /* More space below tagline */
+    margin-bottom: 40px; /* Reduced margin below tagline */
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
@@ -1002,7 +951,7 @@ footer h2 {
         font-size: 2.2em;
     }
     .navbar .logo {
-        font-size: 2.8em;
+        /* No change needed as it's empty */
     }
     .nav-links li {
         margin-left: 40px;
@@ -1061,13 +1010,7 @@ footer h2 {
     .right-column-scroll {
         padding-left: 30px;
     }
-    .hero-section h1 {
-        font-size: 4.5em;
-        letter-spacing: 3px;
-    }
-    .hero-section p {
-        font-size: 1.8em;
-    }
+    /* Hero section is now removed for this template */
     .section h2, .section-title-right {
         font-size: 3.2em;
         margin-bottom: 50px;
@@ -1081,7 +1024,7 @@ footer h2 {
     }
 
     .navbar .logo {
-        font-size: 2.5em;
+        /* No change needed as it's empty */
     }
     .nav-links li {
         margin-left: 35px;
@@ -1113,6 +1056,7 @@ footer h2 {
     .main-layout-container {
         flex-direction: column; /* Stack columns vertically */
         padding: 0 10px; /* Adjust padding for mobile */
+        padding-top: 20px; /* Space from navbar on mobile */
     }
     .left-column-sticky {
         width: 100%; /* Full width */
@@ -1172,18 +1116,10 @@ footer h2 {
         margin: 10px 18px;
     }
     .navbar .logo {
-        font-size: 2.5em;
+        /* No change needed as it's empty */
     }
-    .hero-section {
-        padding: 180px 5% 100px;
-        min-height: 70vh;
-    }
-    .hero-section h1 {
-        font-size: 4.5em; /* Adjusted for mobile */
-        letter-spacing: 2px;
-    }
-    .hero-section p {
-        font-size: 2em; /* Adjusted for mobile */
+    .hero-section { /* This is now unused, but keeping structure for reference */
+        display: none;
     }
     .section h2 { /* Global heading for sections */
         font-size: 3.2em;
@@ -1260,7 +1196,7 @@ footer h2 {
     }
 
     #spline-container {
-        height: 500px;
+        display: none; /* Hidden on mobile too */
     }
     .contact-tagline {
         font-size: 1.1em;
@@ -1361,10 +1297,10 @@ footer h2 {
         font-size: 0.85em;
     }
     #spline-container {
-        height: 350px;
+        display: none;
     }
     .navbar .logo {
-        font-size: 2.2em;
+        /* No change needed as it's empty */
     }
     .nav-links a {
         font-size: 1.15em;

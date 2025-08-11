@@ -64,33 +64,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Reveal the section's h2 or the left-column-sticky content
+                // Reveal section titles or overall left-column-sticky content
                 if (entry.target.classList.contains('section-title-right') || entry.target.classList.contains('about-left-content')) {
                     entry.target.classList.add('revealed');
                 } 
                 // Handle staggered reveals for grids and lists within sections
-                else if (entry.target.classList.contains('stats-grid')) { // New: for the stats grid
+                else if (entry.target.classList.contains('stats-grid')) { // Stats grid
                     entry.target.classList.add('revealed');
                     entry.target.querySelectorAll('.stat-item').forEach((item, index) => {
-                        setTimeout(() => item.classList.add('revealed'), index * 100 + 100); // Staggered reveal for stat items
+                        setTimeout(() => item.classList.add('revealed'), index * 100 + 100);
                     });
                 }
-                else if (entry.target.classList.contains('experience-list')) {
+                else if (entry.target.classList.contains('experience-list')) { // Experience list
                     entry.target.classList.add('revealed');
                     entry.target.querySelectorAll('.experience-item').forEach((item, index) => {
                         setTimeout(() => item.classList.add('revealed'), index * 120 + 200);
                     });
-                } else if (entry.target.classList.contains('services-grid')) {
+                } else if (entry.target.classList.contains('services-grid')) { // Service cards
                     entry.target.classList.add('revealed');
                     entry.target.querySelectorAll('.service-card').forEach((card, index) => {
                         setTimeout(() => card.classList.add('revealed'), index * 150 + 200);
                     });
-                } else if (entry.target.classList.contains('skills-grid')) {
+                } else if (entry.target.classList.contains('skills-grid')) { // Skills cards
                     entry.target.classList.add('revealed');
                     entry.target.querySelectorAll('.skill-card-container').forEach((card, index) => {
                         setTimeout(() => card.classList.add('revealed'), index * 120 + 200);
                     });
-                } else if (entry.target.classList.contains('websites-grid')) {
+                } else if (entry.target.classList.contains('websites-grid')) { // Website cards
                     entry.target.classList.add('revealed');
                     entry.target.querySelectorAll('.website-card').forEach((card, index) => {
                         setTimeout(() => card.classList.add('revealed'), index * 150 + 200);
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Observe specific elements for reveal triggers
     document.querySelectorAll('.about-left-content').forEach(el => observer.observe(el));
     document.querySelectorAll('.section-title-right').forEach(el => observer.observe(el));
-    document.querySelectorAll('.stats-grid').forEach(el => observer.observe(el)); // New: Observe stats grid
+    document.querySelectorAll('.stats-grid').forEach(el => observer.observe(el));
     document.querySelectorAll('.experience-list').forEach(el => observer.observe(el));
     document.querySelectorAll('.services-grid').forEach(el => observer.observe(el));
     document.querySelectorAll('.skills-grid').forEach(el => observer.observe(el));
