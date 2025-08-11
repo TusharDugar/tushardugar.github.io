@@ -2,18 +2,18 @@
 :root {
     /* Figma-inspired Color Palette */
     --bg-dark: #070707; /* Very dark background */
-    --bg-dark-light: #1A1A1A; /* Slightly lighter dark for body gradient */
+    --bg-dark-light: #1A1A1A; /* Slightly lighter dark for subtle gradients if needed */
     --text-light: #F0F0F0; /* Light text for readability */
     --section-bg-alpha: rgba(20, 20, 20, 0.85); /* Section background with transparency */
     
     /* Gradients from Figma */
-    --gradient-blue-main: linear-gradient(to right, #0F2027, #203A43, #2C5364); /* Deep to lighter blue */
-    --gradient-orange-main: linear-gradient(to right, #FF7B00, #FF4500); /* Fiery orange-red */
+    --main-background-gradient: linear-gradient(113.49deg, #984D38 -30.3%, #181E41 58.12%); /* New main background */
+    --gradient-blue-main: linear-gradient(to right, #0F2027, #203A43, #2C5364); /* Used for text/underline accents */
+    --gradient-orange-main: linear-gradient(to right, #FF7B00, #FF4500); /* Fiery orange-red for skill icons/accents */
 
     /* Individual color accents */
     --accent-blue: #3498DB; /* Primary vibrant blue */
     --accent-orange: #FF4500; /* Primary vibrant orange-red */
-    --text-on-orange-dark: #333333; /* Dark text for orange backgrounds (if needed, currently not used) */
 
     --primary-heading-color: var(--text-light);
     --shadow-color: rgba(0, 0, 0, 0.5); /* Stronger shadow on dark bg */
@@ -24,83 +24,53 @@ body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: var(--text-light);
-    background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-light)); /* Subtle dark background gradient */
+    /* NEW BACKGROUND FROM FIGMA REFERENCE */
+    background: var(--main-background-gradient); 
+    background-attachment: fixed; /* Ensures background stays fixed while content scrolls */
+    background-size: 100% 100%; /* Ensures gradient scales to fill the entire viewport */
+    background-repeat: no-repeat; /* Prevents repeating if content is smaller than viewport */
+    /* End NEW BACKGROUND */
     overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
 }
 
-/* Background Glowing Effects (CSS Approximation of Figma) */
+/* Background Glowing Effects (Removed as per Figma background) */
 body::before, body::after {
-    content: '';
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    filter: blur(150px);
-    opacity: 0.5; /* Adjusted opacity */
-    z-index: -1;
+    display: none; /* Hide previous glowing elements */
 }
-
-body::before {
-    width: 750px; /* Larger glow */
-    height: 750px;
-    background: radial-gradient(circle at center, rgba(52, 152, 219, 0.7) 0%, transparent 70%); /* Blue glow */
-    animation: glow1 18s infinite alternate ease-in-out;
-}
-
-body::after {
-    width: 650px; /* Slightly smaller glow */
-    height: 650px;
-    background: radial-gradient(circle at center, rgba(255, 69, 0, 0.7) 0%, transparent 70%); /* Orange-red glow */
-    animation: glow2 22s infinite alternate-reverse ease-in-out;
-}
-
-@keyframes glow1 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-    50% { transform: translate(-55%, -45%) scale(1.1); opacity: 0.6; }
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.5; }
-}
-
-@keyframes glow2 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-    50% { transform: translate(-45%, -55%) scale(1.05); opacity: 0.6; }
-    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.5; }
-}
-
 
 /* Global Section Styling */
 .section {
     padding: 60px 5%;
-    margin-bottom: 30px; /* More margin between sections */
-    background-color: var(--section-bg-alpha); /* Darker transparent background for sections */
-    box-shadow: 0 8px 30px var(--shadow-color); /* Stronger shadow for depth */
-    border-radius: 18px; /* More rounded corners */
+    margin-bottom: 30px;
+    background-color: var(--section-bg-alpha);
+    box-shadow: 0 8px 30px var(--shadow-color);
+    border-radius: 18px;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    backdrop-filter: blur(10px); /* More blur for glassy effect */
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle light border */
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .section h2 {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
-    margin-bottom: 45px; /* More space below heading */
-    font-size: 3.2em; /* Larger headings for impact */
+    margin-bottom: 45px;
+    font-size: 3.2em;
     color: var(--primary-heading-color);
     font-weight: 700;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.7); /* More prominent text shadow */
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
     letter-spacing: 1.5px;
 }
 
 .section h2 i {
-    color: var(--accent-blue); /* Icon color */
+    color: var(--accent-blue);
     margin-right: 20px;
-    font-size: 0.9em; /* Adjust icon size relative to text */
+    font-size: 0.9em;
 }
 
 /* Hero Section */
@@ -108,28 +78,28 @@ body::after {
     background: transparent;
     color: var(--text-light);
     text-align: center;
-    padding: 220px 5% 120px; /* More padding */
+    padding: 220px 5% 120px;
     position: relative;
     overflow: hidden;
-    min-height: 750px; /* Tall hero section */
+    min-height: 750px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More prominent separator */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .hero-section h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 5.5em; /* Even larger for main name */
+    font-size: 5.5em;
     margin-bottom: 18px;
     line-height: 1.1;
     text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
     font-weight: 700;
     letter-spacing: 4px;
     position: relative;
-    z-index: 2; /* Ensure text is above 3D */
-    background: var(--gradient-blue-main); /* Apply blue gradient to text */
+    z-index: 2;
+    background: var(--gradient-blue-main);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -137,7 +107,7 @@ body::after {
 }
 
 .hero-section p {
-    font-size: 2.2em; /* Larger tagline */
+    font-size: 2.2em;
     opacity: 0.9;
     font-weight: 300;
     position: relative;
@@ -153,39 +123,39 @@ body::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 5%; /* Larger initial padding */
-    background-color: rgba(0, 0, 0, 0.3); /* More transparent initial background */
+    padding: 30px 5%;
+    background-color: rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
     z-index: 1000;
-    backdrop-filter: blur(10px); /* Stronger initial blur */
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Navbar when scrolled */
 .navbar.scrolled {
-    background-color: var(--bg-dark); /* Solid dark on scroll */
-    padding: 20px 5%; /* Slightly smaller padding on scroll */
-    box-shadow: 0 8px 25px var(--shadow-color); /* More prominent shadow on scroll */
-    backdrop-filter: blur(18px); /* Even more blur when scrolled */
+    background-color: var(--bg-dark);
+    padding: 20px 5%;
+    box-shadow: 0 8px 25px var(--shadow-color);
+    backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* More visible border on scroll */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Logo in Navbar */
 .navbar .logo {
     font-family: 'Montserrat', sans-serif;
-    font-size: 2.8em; /* Larger logo */
+    font-size: 2.8em;
     font-weight: 700;
-    color: var(--accent-blue); /* Accent blue initially */
+    color: var(--accent-blue);
     transition: color 0.4s ease;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
 
 /* Logo in Navbar when scrolled */
 .navbar.scrolled .logo {
-    color: var(--accent-blue); /* Keeps accent blue when scrolled */
+    color: var(--accent-blue);
 }
 
 /* Navigation Links */
@@ -197,21 +167,21 @@ body::after {
 }
 
 .nav-links li {
-    margin-left: 45px; /* More spacing for links */
+    margin-left: 45px;
 }
 
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
     font-weight: 400;
-    font-size: 1.25em; /* Larger links */
+    font-size: 1.25em;
     position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
 /* Navigation Links when scrolled */
 .navbar.scrolled .nav-links a {
-    color: var(--text-light); /* Keep light text on dark scrolled header */
+    color: var(--text-light);
 }
 
 .nav-links a::after {
@@ -221,7 +191,7 @@ body::after {
     height: 3px;
     bottom: -8px;
     left: 0;
-    background: var(--gradient-blue-main); /* Blue gradient for underline */
+    background: var(--gradient-blue-main);
     transition: width 0.3s ease;
 }
 
@@ -230,14 +200,14 @@ body::after {
 }
 
 .nav-links a:hover {
-    color: var(--accent-blue); /* Blue accent on hover */
+    color: var(--accent-blue);
     transform: translateY(-3px);
 }
 
 /* Spline Container */
 #spline-container {
     width: 100%;
-    height: 600px; /* Adjusted height to fit hero section */
+    height: 600px;
     margin-top: 50px;
     display: flex;
     justify-content: center;
@@ -245,12 +215,12 @@ body::after {
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
     overflow: hidden;
-    position: absolute; /* Position spline absolutely within hero */
+    position: absolute;
     top: 0;
     left: 0;
-    z-index: 0; /* Behind text and logo */
+    z-index: 0;
 }
-#spline-container p { /* Hide placeholder text for spline */
+#spline-container p {
     display: none;
 }
 
@@ -267,39 +237,40 @@ body::after {
 
 .project-card h3 {
     font-family: 'Montserrat', sans-serif;
-    color: var(--accent-blue); /* Primary accent blue for sub-headings */
+    color: var(--accent-blue);
     margin-top: 0;
     font-weight: 700;
-    font-size: 2em; /* Slightly larger project titles */
+    font-size: 2em;
+    margin-bottom: 15px;
 }
 
-.project-card .date {
-    font-style: italic;
-    color: #bbb;
+.project-card .description {
+    font-size: 1.1em;
+    line-height: 1.8;
+    color: var(--text-light);
     margin-bottom: 20px;
-    font-size: 1.05em;
 }
 
 .project-card ul {
     list-style: disc;
-    margin-left: 30px; /* More left margin for lists */
+    margin-left: 30px;
     padding: 0;
 }
 
 .project-card li {
-    margin-bottom: 12px; /* More space between list items */
+    margin-bottom: 12px;
     color: var(--text-light);
 }
 
 .video-placeholder {
     width: 100%;
-    height: 300px; /* Taller placeholder */
-    background-color: rgba(0, 0, 0, 0.5); /* Darker, more transparent placeholder */
+    height: 300px;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     color: rgba(255, 255, 255, 0.7);
-    margin-top: 30px; /* More space above video */
+    margin-top: 30px;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -316,13 +287,13 @@ body::after {
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 35px; /* Increased gap for cards */
-    perspective: 1000px; /* For 3D transform */
+    gap: 35px;
+    perspective: 1000px;
 }
 
 .skill-card-container {
     width: 100%;
-    height: 280px; /* Increased fixed height for skill cards */
+    height: 280px;
     position: relative;
     cursor: pointer;
 }
@@ -332,34 +303,33 @@ body::after {
     height: 100%;
     position: absolute;
     transform-style: preserve-3d;
-    transition: transform 0.8s ease-in-out; /* Flip animation speed */
+    transition: transform 0.8s ease-in-out;
     box-shadow: 0 6px 20px var(--shadow-color);
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background-color: var(--section-bg-alpha);
 }
 
-/* Hover effect for the entire card container */
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
-    box-shadow: 0 0 25px var(--accent-orange), 0 0 40px rgba(255, 69, 0, 0.4); /* Stronger orange glow on hover */
-    border-color: var(--accent-orange); /* Orange border on hover */
+    box-shadow: 0 0 25px var(--accent-orange), 0 0 40px rgba(255, 69, 0, 0.4);
+    border-color: var(--accent-orange);
 }
 
 .skill-front, .skill-back {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden; /* Hide back side when flipped away */
+    backface-visibility: hidden;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 30px; /* More padding */
+    padding: 30px;
     box-sizing: border-box;
     text-align: center;
-    background-color: var(--section-bg-alpha); /* Consistent dark background for both sides */
+    background-color: var(--section-bg-alpha);
 }
 
 .skill-front {
@@ -367,9 +337,9 @@ body::after {
 }
 
 .skill-front i {
-    font-size: 4em; /* Large icon for impact */
+    font-size: 4em;
     margin-bottom: 25px;
-    background: var(--gradient-orange-main); /* Apply orange gradient to icon */
+    background: var(--gradient-orange-main);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -378,60 +348,60 @@ body::after {
 
 .skill-front h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 2em; /* Larger heading */
-    color: var(--text-light); /* Keep text light */
+    font-size: 2em;
+    color: var(--text-light);
     margin: 0;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .skill-back {
-    background-color: rgba(30, 30, 30, 0.9); /* Slightly lighter dark for back side */
-    color: var(--text-light); /* Light text on dark background */
-    transform: rotateY(180deg); /* Initial rotation for back side */
+    background-color: rgba(30, 30, 30, 0.9);
+    color: var(--text-light);
+    transform: rotateY(180deg);
     display: flex;
-    justify-content: flex-start; /* Start content from top */
-    align-items: flex-start; /* Align content to left */
-    text-align: left; /* Align text to left */
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: left;
     padding: 30px;
 }
 
 .skill-back ul {
-    list-style: none; /* Remove default bullet points */
+    list-style: none;
     padding: 0;
     margin: 0;
-    width: 100%; /* Ensure ul takes full width */
+    width: 100%;
 }
 
 .skill-back li {
-    font-size: 1.15em; /* Larger text for readability */
+    font-size: 1.15em;
     font-weight: 400;
     line-height: 1.6;
     color: var(--text-light);
-    margin-bottom: 8px; /* Space between list items */
+    margin-bottom: 8px;
     position: relative;
-    padding-left: 20px; /* Space for custom bullet */
+    padding-left: 20px;
 }
 
 .skill-back li::before {
-    content: '\2022'; /* Unicode character for a circle bullet */
-    color: var(--accent-orange); /* Orange bullet point */
+    content: '\2022';
+    color: var(--accent-orange);
     font-weight: bold;
     display: inline-block;
-    width: 1em; /* Space for bullet */
-    margin-left: -1em; /* Pull bullet left */
+    width: 1em;
+    margin-left: -1em;
 }
 
 
-/* Footer */
+/* Footer (Contact Section) */
 footer {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-dark); /* Solid dark background for footer */
     color: var(--text-light);
     text-align: center;
-    padding: 50px 5%;
-    margin-top: 60px; /* More margin */
-    border-radius: 20px 20px 0 0; /* More rounded top corners */
-    border-top: 1px solid rgba(255, 255, 255, 0.2); /* More prominent border */
-    box-shadow: 0 -4px 20px var(--shadow-color); /* Shadow on top */
+    padding: 60px 5%; /* Increased padding */
+    margin-top: 60px;
+    border-radius: 20px 20px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -4px 20px var(--shadow-color);
 }
 
 footer a {
@@ -444,20 +414,93 @@ footer a:hover {
     text-decoration: underline;
 }
 
-.contact-info p {
-    margin-bottom: 15px;
-    font-size: 1.2em;
+footer h2 { /* Apply same h2 styling for footer heading as other sections */
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    margin-bottom: 25px; /* Adjust spacing */
+    font-size: 3.2em;
+    color: var(--primary-heading-color);
+    font-weight: 700;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+    letter-spacing: 1.5px;
+}
+
+.contact-tagline { /* New style for the descriptive paragraph */
+    font-size: 1.25em; /* Slightly larger tagline */
+    margin-bottom: 40px; /* More space below tagline */
+    max-width: 700px; /* Wider text area */
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.95; /* More prominent */
+    line-height: 1.8;
+}
+
+.contact-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    justify-content: center;
+    gap: 30px; /* Space between buttons */
+    margin-bottom: 40px; /* More space below buttons */
+}
+
+.contact-button {
+    background: var(--gradient-blue-main); /* Blue gradient button */
+    color: var(--text-light);
+    border: none;
+    border-radius: 12px; /* More rounded buttons */
+    padding: 18px 35px; /* Larger padding for buttons */
+    font-size: 1.2em; /* Larger text in buttons */
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between icon and text */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-width: 220px; /* Ensure buttons have minimum width */
+    justify-content: center;
+}
+
+.contact-button i {
+    font-size: 1.6em; /* Larger icons in buttons */
     color: var(--text-light);
 }
-.contact-info i {
-    color: var(--accent-blue);
-    margin-right: 12px;
-    font-size: 1.3em;
+
+.contact-button:hover {
+    transform: translateY(-8px); /* More prominent lift */
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.5); /* Stronger blue glow on hover */
+}
+
+.contact-button .button-text {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.contact-button .copied-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(100%); /* Start off-screen below */
+    opacity: 0;
+    font-size: 1em; /* Adjusted size */
+    color: var(--text-light);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    font-weight: bold; /* Make copied text bold */
+}
+
+.contact-button.copied .button-text {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.contact-button.copied .copied-text {
+    transform: translate(-50%, -50%) translateY(0);
+    opacity: 1;
 }
 
 .social-links {
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 0; /* No margin at bottom as copyright is removed */
 }
 .social-links a {
     color: var(--text-light);
@@ -465,14 +508,10 @@ footer a:hover {
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .social-links a:hover {
-    color: var(--accent-orange); /* Orange hover for social icons */
-    transform: scale(1.3); /* More prominent hover effect */
+    color: var(--accent-orange);
+    transform: scale(1.3);
 }
-.copyright {
-    font-size: 1em;
-    opacity: 0.8;
-    margin-top: 40px;
-}
+/* Removed .copyright as it's no longer in HTML */
 
 
 /* Responsive Design */
@@ -517,7 +556,7 @@ footer a:hover {
         flex-direction: column;
         padding-top: 15px;
         padding-bottom: 15px;
-        background-color: var(--bg-dark); /* Always solid dark on mobile for better readability */
+        background-color: var(--bg-dark);
         box-shadow: 0 4px 15px var(--shadow-color);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
@@ -563,11 +602,11 @@ footer a:hover {
         margin-bottom: 35px;
     }
     .skills-grid {
-        grid-template-columns: 1fr; /* Stack skills vertically on small screens */
+        grid-template-columns: 1fr;
         gap: 30px;
     }
     .skill-card-container {
-        height: 220px; /* Adjust height for mobile */
+        height: 220px;
     }
     .skill-front i {
         font-size: 3.2em;
@@ -576,9 +615,6 @@ footer a:hover {
     .skill-front h3 {
         font-size: 1.7em;
     }
-    .skill-back p { /* Remove specific p styling if no longer needed */
-        display: none; /* Hide if ul is used instead */
-    }
     .skill-back ul {
         padding: 0;
         margin: 0;
@@ -586,15 +622,27 @@ footer a:hover {
         text-align: left;
     }
     .skill-back li {
-        font-size: 1.05em; /* Adjusted for mobile readability */
+        font-size: 1.05em;
     }
     #spline-container {
-        height: 450px; /* Adjust height for smaller screens */
-    }
-    body::before, body::after {
-        width: 450px;
         height: 450px;
-        filter: blur(100px);
+    }
+    .contact-tagline {
+        font-size: 1.1em;
+        margin-bottom: 30px;
+    }
+    .contact-buttons {
+        flex-direction: column; /* Stack buttons on very small screens */
+        gap: 15px;
+    }
+    .contact-button {
+        min-width: unset; /* Remove min-width to allow shrinking */
+        width: 80%; /* Take up more width */
+        font-size: 1.1em;
+        padding: 15px 20px;
+    }
+    .social-links a {
+        margin: 0 15px;
     }
 }
 
@@ -612,7 +660,7 @@ footer a:hover {
         font-size: 1.6em;
     }
     .skill-card-container {
-        height: 200px; /* Further adjust for very small screens */
+        height: 200px;
     }
     .skill-front i {
         font-size: 2.8em;
@@ -632,9 +680,7 @@ footer a:hover {
     .nav-links a {
         font-size: 1.05em;
     }
-    body::before, body::after {
-        width: 300px;
-        height: 300px;
-        filter: blur(80px);
+    .contact-button {
+        width: 90%;
     }
 }
