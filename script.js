@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Scroll Reveal Animation (Intersection Observer) - only for about card, hero section and footer
+    // Scroll Reveal Animation (Intersection Observer) - only for about card, hero section, tools section, and footer
     const observerOptions = {
         root: null, // viewport as the root
         rootMargin: '0px',
@@ -41,7 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     entry.target.classList.add('revealed');
                 } 
                 // Reveal hero/introduction section on the right
-                else if (entry.target.id === 'hero-right') { // <--- ADDED THIS CONDITION
+                else if (entry.target.id === 'hero-right') {
+                    entry.target.classList.add('revealed');
+                }
+                // Reveal the tools section on the right
+                else if (entry.target.id === 'tools') { // <--- ADDED THIS CONDITION
                     entry.target.classList.add('revealed');
                 }
                 // Reveal footer/contact section
@@ -60,5 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Observe specific elements for reveal triggers
     document.querySelectorAll('.about-left-content').forEach(el => observer.observe(el));
     document.querySelectorAll('#contact').forEach(el => observer.observe(el));
-    document.querySelectorAll('#hero-right').forEach(el => observer.observe(el)); // <--- ADDED THIS LINE
+    document.querySelectorAll('#hero-right').forEach(el => observer.observe(el));
+    document.querySelectorAll('#tools').forEach(el => observer.observe(el)); // <--- ADDED THIS LINE
 });
+76.7s
