@@ -91,13 +91,6 @@ body {
     animation: glow1 25s infinite alternate ease-in-out;
 }
 
-.background-glows::after {
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle at center, var(--accent-secondary-sawad) 0%, transparent 60%);
-    animation: glow2 30s infinite alternate-reverse ease-in-out;
-}
-
 @keyframes glow1 {
     0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
     50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.2; }
@@ -600,13 +593,13 @@ footer h2 {
 
 /* States when button is 'copied' */
 .contact-button.copied .button-content-main {
-    transform: translateY(-100%);
-    opacity: 0;
+    transform: translateY(-100%) !important; /* Added !important for robustness */
+    opacity: 0 !important; /* Added !important for robustness */
 }
 
 .contact-button.copied .copied-text {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translateY(0) !important; /* Added !important for robustness */
+    opacity: 1 !important; /* Added !important for robustness */
 }
 
 .social-links {
@@ -634,10 +627,14 @@ footer h2 {
         max-width: 400px; /* Keep max width to center content */
         margin: 0 auto; /* Center it */
     }
-    .right-column-scroll { /* Now that right column is empty, it needs very minimal presence */
-        display: none; /* Hide it completely on smaller screens to allow left column to center */
-        padding-left: 0; /* Remove padding */
-        padding-right: 0; /* Also remove right padding */
+    .right-column-scroll { 
+        /* REMOVED: display: none; */ /* THIS WAS CAUSING THE RIGHT SIDE TO DISAPPEAR */
+        flex-grow: 1; /* Allow it to take up space */
+        width: 100%; /* Take full width of main container when stacked */
+        padding-left: 0; /* Adjust padding for full width layout */
+        padding-right: 0; /* Adjust padding for full width layout */
+        margin-top: 50px; /* Add some space above when stacked below left column */
+        text-align: center; /* Center content horizontally within the now full-width right column */
     }
     .section h2 { /* Global heading for sections (like footer) */
         font-size: 3.2em;
@@ -706,6 +703,8 @@ footer h2 {
     .tools-grid {
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
         gap: 20px;
+        max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
+        margin: 0 auto; /* Center the grid */
     }
     .tool-card {
         padding: 18px;
@@ -849,6 +848,7 @@ footer h2 {
     .tools-grid {
         grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
+        max-width: 100%; /* Allow to take full width */
     }
     .tool-card {
         padding: 15px;
