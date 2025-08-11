@@ -31,32 +31,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactButtons = document.querySelectorAll('.contact-button');
 
     contactButtons.forEach(button => {
-        button.addEventListener('click', async () => { // Use async for modern clipboard API
-            const contactValue = button.dataset.contact; // Get the actual value to copy
+        const buttonContentWrapper = button.querySelector('.button-icon-label-wrapper'); // New wrapper to animate
+        const copiedTextElement = button.querySelector('.copied-text'); // The "Copied!" text
 
-            // Check if already in 'copied' state to prevent rapid clicks
+        button.addEventListener('click', async () => {
+            const contactToCopy = button.dataset.contact;
+
             if (button.classList.contains('copied')) {
                 return; 
             }
 
-            // Copy to clipboard
             try {
-                await navigator.clipboard.writeText(contactValue);
-                console.log('Text copied to clipboard:', contactValue);
+                await navigator.clipboard.writeText(contactToCopy);
+                console.log('Text copied to clipboard:', contactToCopy);
                 
                 // Add 'copied' class to trigger animation
                 button.classList.add('copied');
 
-                // Revert to original state after a delay
                 setTimeout(() => {
                     button.classList.remove('copied');
                 }, 1500); // 1.5 seconds
             } catch (err) {
                 console.error('Failed to copy text: ', err);
-                // Fallback for older browsers or if Clipboard API fails
-                // For simplicity, for now we will just alert if modern copy fails,
-                // as manual copying might be required for very old browsers.
-                alert('Could not copy automatically. Please copy manually: ' + contactValue);
+                alert('Could not copy automatically. Please copy manually: ' + contactToCopy);
             }
         });
     });
