@@ -781,3 +781,26 @@ footer h2 {
         margin-bottom: 40px;
     }
 }
+
+
+/* --- TEMPORARY DEBUGGING STYLES --- */
+/* Ensure elements are visible and clearly outlined */
+.right-column-scroll {
+    background-color: rgba(255, 0, 0, 0.3) !important; /* Red overlay to see the div */
+    border: 2px dashed red !important;
+    overflow: visible !important; /* Ensure nothing is clipped within this container */
+}
+
+#hero-right {
+    background-color: rgba(0, 255, 0, 0.3) !important; /* Green overlay to see the section */
+    border: 2px dashed green !important;
+    color: yellow !important; /* Force a contrasting text color */
+    opacity: 1 !important; /* Force full opacity regardless of reveal-item */
+    transform: none !important; /* Disable any transforms that might hide it */
+    visibility: visible !important; /* Ensure visibility */
+}
+
+#hero-right h1, #hero-right p {
+    color: yellow !important; /* Ensure text inside is also visible */
+}
+/* --- END TEMPORARY DEBUGGING STYLES --- */
