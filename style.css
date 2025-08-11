@@ -3,7 +3,7 @@ body {
     margin: 0;
     font-family: 'Inter', sans-serif; /* Inter for body text */
     line-height: 1.6;
-    color: #333; /* Dark gray for body text */
+    color: #1a1a1a; /* MUCH DARKER GRAY for body text for better visibility */
     background: linear-gradient(135deg, #e6f7ff, #ffe6f7); /* Light blue to light pink gradient */
     scroll-behavior: smooth;
 }
@@ -192,7 +192,7 @@ body {
 
 .project-card li {
     margin-bottom: 8px;
-    color: #444;
+    color: #222; /* Darker list item text for readability */
 }
 
 .video-placeholder {
