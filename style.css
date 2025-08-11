@@ -2,7 +2,7 @@
 :root {
     /* Sawad-inspired Color Palette */
     --bg-main: #000000; /* Solid black background from Sawad */
-    --bg-section-card: #141414; /* Background for cards/sections that have a subtle box (retained for skill cards if added later) */
+    --bg-section-card: #141414; /* Background for cards/sections (if added back) */
     --bg-profile-card: #FFFFFF; /* White background for the About Me card */
     --text-light: #F0F0F0; /* Light text for readability */
     --text-medium: #A0A0A0; /* Slightly darker light for secondary text */
@@ -126,37 +126,34 @@ body {
 }
 
 
-/* Main Layout Container (removed right column, now holds only sticky left content) */
+/* Main Layout Container (now with left sticky and empty right scrollable area) */
 .main-layout-container {
-    display: flex; /* Kept flex for centering left column */
-    justify-content: center; /* Center the left column */
-    max-width: 100%; /* Allow it to span full width if needed */
+    display: flex;
+    justify-content: center; /* Center the columns if content is narrower */
+    max-width: 1920px; /* Increased max-width for wider desktop view */
     margin: 0 auto; /* Center the container */
-    padding: 0; /* No horizontal padding here anymore, handled by left-column-sticky */
-    min-height: calc(100vh - 120px); /* Adjust to ensure footer is at bottom and has content above */
+    padding: 0 80px; /* Add horizontal padding for the layout */
+    min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
-    padding-top: 50px; /* Space from the very top of the viewport */
-    align-items: flex-start; /* Align item to the top (in case it doesn't take full height) */
+    padding-top: 50px; /* Small space from the very top now that navbar is gone */
 }
 
-/* Left Column (Sticky) - now the primary content container */
+/* Left Column (Sticky) */
 .left-column-sticky {
-    flex-shrink: 0;
-    width: 100%; /* Take full width of parent container */
-    max-width: 500px; /* Constrain max width to center content */
-    padding: 0; /* Removed padding right, card has its own padding */
+    flex-shrink: 0; /* Prevent from shrinking */
+    width: 30%; /* Slightly narrower left column */
+    padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
-    position: relative; /* No longer sticky, as there's no scrolling right column */
-    top: 0; /* Not sticky */
-    align-self: auto; /* Not needed */
-    height: auto; /* Height will be determined by content */
+    position: sticky; /* Make it sticky */
+    top: 50px; /* Stick from the very top (matching main-layout-container padding) */
+    align-self: flex-start; /* Align to the top of its flex container */
+    height: calc(100vh - 50px); /* Occupy remaining viewport height (50px top + minimal bottom implies scrolling if content is taller) */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically within its own height */
+    justify-content: center; /* Center content vertically within sticky area */
     align-items: center;
     text-align: center;
-    padding-bottom: 50px; /* Space between card and footer if footer is direct sibling */
 }
 
 .about-left-content {
@@ -165,10 +162,9 @@ body {
     border-radius: 30px; /* Large rounded corners */
     padding: 30px 25px; /* Padding for more compact card */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
-    width: 100%; /* Take full width of parent column */
-    max-width: 400px; /* Increased max-width for wider card */
-    /* Remove fixed height, allow content to dictate height */
-    height: auto; 
+    width: 100%; /* Take full width of sticky column */
+    max-width: 420px; /* Increased max-width for wider card */
+    height: 480px; /* Reduced height for the white card */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
@@ -181,9 +177,9 @@ body {
 
 .image-area-with-dash {
     position: relative;
-    width: 180px; /* Fixed size for the image circle container */
-    height: 180px;
-    margin: 0 auto 30px; /* Center and space below image */
+    width: 160px; /* Reduced size for the image circle container */
+    height: 160px;
+    margin: 0 auto 25px; /* Reduced margin */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -209,8 +205,8 @@ body {
 }
 
 .image-bg-orange {
-    width: 150px; /* Orange circle behind image */
-    height: 150px;
+    width: 120px; /* Reduced orange circle behind image */
+    height: 120px;
     background-color: var(--accent-primary-sawad); /* Sawad's orange */
     border-radius: 50%;
     display: flex;
@@ -235,49 +231,69 @@ body {
     background-color: var(--accent-primary-sawad);
     border-radius: 50%;
     padding: 8px;
-    font-size: 1.2em;
+    font-size: 1.1em; /* Reduced size */
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     z-index: 5;
-    transform: translate(30%, 30%); /* Position outside corner */
+    transform: translate(25%, 25%); /* Position outside corner */
 }
 
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.8em; /* Larger name */
+    font-size: 2.5em; /* Reduced name font size */
     font-weight: 600;
     color: var(--text-dark-card); /* Black text on white card */
     margin-bottom: 5px;
 }
 .about-tagline {
-    font-size: 1.2em;
+    font-size: 1.1em; /* Reduced tagline font size */
     color: var(--text-medium-card); /* Dark gray text */
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* Reduced margin */
 }
 .about-short-desc {
-    font-size: 1em;
-    line-height: 1.6;
+    font-size: 0.85em; /* Reduced short desc font size */
+    line-height: 1.5; /* Reduced line height */
     color: var(--text-medium-card);
-    margin-bottom: 30px; /* Space before social icons */
+    margin-bottom: 25px; /* Reduced margin before social icons */
 }
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 25px;
-    margin-top: 20px;
+    gap: 20px; /* Reduced gap */
+    margin-top: 15px; /* Reduced margin */
 }
 .about-social-icons a {
     color: var(--text-medium-card); /* Dark gray icons */
-    font-size: 1.8em;
+    font-size: 1.5em; /* Reduced icon size */
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
     color: var(--accent-primary-sawad); /* Orange on hover */
-    transform: translateY(-5px) scale(1.1);
+    transform: translateY(-4px) scale(1.1); /* Reduced lift */
 }
 
 
-/* All right column styling removed as right-column-scroll is gone */
+/* Right Column (Scrolling) */
+.right-column-scroll {
+    flex-grow: 1; /* Take up remaining space */
+    width: 65%; /* Adjust width as needed */
+    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
+    padding-bottom: 100px; /* Ensure content can scroll past sticky element */
+    box-sizing: border-box;
+    /* Add a min-height to the right column so it's taller than the left sticky column */
+    /* This ensures there's scrollable area for the left column to 'stick' against */
+    min-height: 150vh; /* Example: make it 1.5 times the viewport height */
+    
+    /* Add placeholder content styling for visibility during development */
+    display: flex; /* Flexbox to center placeholder content if there's no real content yet */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 2em;
+    color: var(--text-medium);
+}
+
+/* All right column sections are removed from HTML. No CSS needed to hide them. */
 
 
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
@@ -286,7 +302,7 @@ footer {
     color: var(--text-light); /* White */
     text-align: center;
     padding: 60px 5%; /* Reduced padding for more compact footer */
-    /* Remove margin-top as it blends with body, not a specific section */
+    /* Remove margin-top as it blends directly with the end of main-layout-container now */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
@@ -435,51 +451,46 @@ footer h2 {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-    /* Main Layout Container adjusts */
     .main-layout-container {
         padding: 0 40px;
     }
     .left-column-sticky {
-        width: 100%; /* On smaller desktops, expand to full width if right column is removed */
-        padding-right: 0; /* Remove padding */
+        width: 100%; /* On smaller desktops, expand to full width of container */
+        padding-right: 0; /* Remove right padding */
         max-width: 400px; /* Keep max width to center content */
         margin: 0 auto; /* Center it */
     }
-    .right-column-scroll { /* This is now removed, but keeping media query for reference for other removed elements */
-        display: none;
+    .right-column-scroll { /* Now that right column is empty, it needs very minimal presence */
+        display: none; /* Hide it completely on smaller screens to allow left column to center */
+        padding-left: 0; /* Remove padding */
     }
-    .nav-links li {
-        margin-left: 40px;
+    .section h2 { /* Global heading for sections (like footer) */
+        font-size: 3.2em;
+        margin-bottom: 40px;
     }
-    .nav-links a {
-        font-size: 1.3em;
-    }
-    /* Profile card adjustments */
-    .about-image-card {
-        width: 220px;
-        height: 320px;
-        padding: 15px;
+    .about-left-content {
+        padding: 30px;
     }
     .image-area-with-dash {
-        width: 160px;
-        height: 160px;
-        margin-bottom: 25px;
+        width: 180px;
+        height: 180px;
+        margin-bottom: 30px;
     }
     .image-area-with-dash::before {
-        width: calc(100% + 15px);
-        height: calc(100% + 15px);
-        top: -7.5px;
-        left: -7.5px;
+        width: calc(100% + 20px);
+        height: calc(100% + 20px);
+        top: -10px;
+        left: -10px;
     }
     .image-bg-orange {
-        width: 130px;
-        height: 130px;
+        width: 150px;
+        height: 150px;
     }
     .fire-icon {
-        font-size: 1.1em;
+        font-size: 1.2em;
     }
     .about-left-content h3 {
-        font-size: 2.2em;
+        font-size: 2.5em;
     }
     .about-tagline {
         font-size: 1.1em;
@@ -487,28 +498,8 @@ footer h2 {
     .about-short-desc {
         font-size: 0.9em;
     }
-}
-
-@media (max-width: 992px) {
-    /* Tablet Portrait / Smaller Laptops */
-    .section h2 { /* Global heading for sections */
-        font-size: 3.2em;
-        margin-bottom: 40px;
-    }
-    .about-left-content h3 {
-        font-size: 2em;
-    }
-    .about-tagline {
-        font-size: 1em;
-    }
-    .about-short-desc {
-        font-size: 0.85em;
-    }
-    .nav-links li {
-        margin-left: 35px;
-    }
-    .nav-links a {
-        font-size: 1.2em;
+    .about-social-icons a {
+        font-size: 1.6em;
     }
 }
 
@@ -534,7 +525,7 @@ footer h2 {
     .about-left-content {
         padding: 30px;
         margin: 0 auto;
-        max-width: 300px;
+        max-width: 300px; /* Constrain card width */
     }
     .about-left-content.revealed {
         transform: none; /* No vertical animation on stacked mobile */
@@ -583,72 +574,3 @@ footer h2 {
         height: 85px;
     }
 }
-Step 3: Update script.js (Complete File Replacement)
-This JavaScript file is now simplified to only handle the contact button functionality and the footer's reveal animation. All other scroll-reveal logic for previously removed sections has been purged.
-Go to your tushardugar.github.io repository on GitHub.
-Click on the script.js file.
-Click the "Edit this file" pencil icon".
-VERY IMPORTANT: Select ALL existing content in the large text area (Ctrl+A on Windows/Linux, Cmd+A on Mac).
-DELETE ALL of the selected content. The text area must be completely empty.
-PASTE THE ENTIRE CODE BELOW into that now empty text area.
-code
-JavaScript
-document.addEventListener('DOMContentLoaded', () => {
-    // Contact Button Copy to Clipboard Functionality
-    const contactButtons = document.querySelectorAll('.contact-button');
-
-    contactButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const contactValue = button.dataset.contact;
-
-            if (button.classList.contains('copied')) {
-                return; 
-            }
-
-            try {
-                await navigator.clipboard.writeText(contactValue);
-                console.log('Text copied to clipboard:', contactValue);
-                
-                button.classList.add('copied');
-
-                setTimeout(() => {
-                    button.classList.remove('copied');
-                }, 1500);
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-                alert('Could not copy automatically. Please copy manually: ' + contactValue);
-            }
-        });
-    });
-
-    // Scroll Reveal Animation (Intersection Observer) - only for footer and about card now
-    const observerOptions = {
-        root: null, // viewport as the root
-        rootMargin: '0px',
-        threshold: 0.1 // 10% of the item must be visible to trigger
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Reveal the about-left-content card
-                if (entry.target.classList.contains('about-left-content')) {
-                    entry.target.classList.add('revealed');
-                } 
-                // Reveal footer/contact section
-                else if (entry.target.id === 'contact') {
-                    entry.target.classList.add('revealed');
-                    const contactTagline = entry.target.querySelector('.contact-tagline');
-                    const contactButtons = entry.target.querySelector('.contact-buttons');
-                    if (contactTagline) setTimeout(() => contactTagline.classList.add('revealed'), 100);
-                    if (contactButtons) setTimeout(() => contactButtons.classList.add('revealed'), 300);
-                }
-                observer.unobserve(entry.target); // Stop observing once revealed
-            }
-        });
-    }, observerOptions);
-
-    // Observe specific elements for reveal triggers
-    document.querySelectorAll('.about-left-content').forEach(el => observer.observe(el));
-    document.querySelectorAll('#contact').forEach(el => observer.observe(el));
-});

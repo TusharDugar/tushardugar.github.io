@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Scroll Reveal Animation (Intersection Observer) - simplified as most elements are removed
+    // Scroll Reveal Animation (Intersection Observer) - only for about card and footer
     const observerOptions = {
         root: null, // viewport as the root
         rootMargin: '0px',
@@ -36,54 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Directly reveal the element if it's a main reveal-item or has a specific class
-                if (entry.target.classList.contains('reveal-item')) { // Catches sections and the about card
+                // Reveal the about-left-content card
+                if (entry.target.classList.contains('about-left-content')) {
                     entry.target.classList.add('revealed');
-                    
-                    // Staggered reveals for internal elements that are part of a grid/list
-                    if (entry.target.classList.contains('stats-grid')) {
-                        entry.target.querySelectorAll('.stat-item').forEach((item, index) => {
-                            setTimeout(() => item.classList.add('revealed'), index * 100 + 100);
-                        });
-                    } else if (entry.target.classList.contains('experience-list')) {
-                        entry.target.querySelectorAll('.experience-item').forEach((item, index) => {
-                            setTimeout(() => item.classList.add('revealed'), index * 120 + 200);
-                        });
-                    } else if (entry.target.classList.contains('services-grid')) {
-                        entry.target.querySelectorAll('.service-card').forEach((card, index) => {
-                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200);
-                        });
-                    } else if (entry.target.classList.contains('skills-grid')) {
-                        entry.target.querySelectorAll('.skill-card-container').forEach((card, index) => {
-                            setTimeout(() => card.classList.add('revealed'), index * 120 + 200);
-                        });
-                    } else if (entry.target.classList.contains('websites-grid')) {
-                        entry.target.querySelectorAll('.website-card').forEach((card, index) => {
-                            setTimeout(() => card.classList.add('revealed'), index * 150 + 200);
-                        });
-                    } else if (entry.target.id === 'contact') { // Footer/contact section
-                        const contactTagline = entry.target.querySelector('.contact-tagline');
-                        const contactButtons = entry.target.querySelector('.contact-buttons');
-                        if (contactTagline) setTimeout(() => contactTagline.classList.add('revealed'), 100);
-                        if (contactButtons) setTimeout(() => contactButtons.classList.add('revealed'), 300);
-                    }
-                }
-                // Handle section titles separately if they are not the section itself
-                else if (entry.target.classList.contains('section-title-right')) {
+                } 
+                // Reveal footer/contact section
+                else if (entry.target.id === 'contact') {
                     entry.target.classList.add('revealed');
+                    const contactTagline = entry.target.querySelector('.contact-tagline');
+                    const contactButtons = entry.target.querySelector('.contact-buttons');
+                    if (contactTagline) setTimeout(() => contactTagline.classList.add('revealed'), 100);
+                    if (contactButtons) setTimeout(() => contactButtons.classList.add('revealed'), 300);
                 }
-
                 observer.unobserve(entry.target); // Stop observing once revealed
             }
         });
     }, observerOptions);
 
-    // Observe all main sections and specific grids/lists for reveal triggers
-    document.querySelectorAll('.section.reveal-item').forEach(el => observer.observe(el));
-    document.querySelectorAll('.section-title-right').forEach(el => observer.observe(el)); // Observe titles
-    document.querySelectorAll('.stats-grid').forEach(el => observer.observe(el));
-    document.querySelectorAll('.experience-list').forEach(el => observer.observe(el));
-    document.querySelectorAll('.services-grid').forEach(el => observer.observe(el));
-    document.querySelectorAll('.skills-grid').forEach(el => observer.observe(el));
-    document.querySelectorAll('.websites-grid').forEach(el => observer.observe(el));
+    // Observe specific elements for reveal triggers
+    document.querySelectorAll('.about-left-content').forEach(el => observer.observe(el));
+    document.querySelectorAll('#contact').forEach(el => observer.observe(el));
 });

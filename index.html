@@ -26,9 +26,9 @@
     <!-- Subtle Background Glows -->
     <div class="background-glows"></div>
 
-    <!-- The entire header/navbar section is now completely removed -->
+    <!-- The entire header/navbar section is now completely removed as per request -->
     
-    <div class="main-layout-container"> <!-- New container for sticky columns -->
+    <div class="main-layout-container"> <!-- Main container for the two columns -->
         <div class="left-column-sticky">
             <section id="about" class="section about-left-content reveal-item">
                 <div class="profile-card-wrapper"> <!-- This will be the white card -->
@@ -53,7 +53,13 @@
             </section>
         </div>
 
-        <!-- The entire right-column-scroll with all its sections is now removed as per request -->
+        <div class="right-column-scroll">
+            <!-- This column is intentionally empty, ready for future content sections -->
+            <!-- Placeholder to ensure some scrollable content so sticky works -->
+            <div style="height: 150vh; color: var(--text-medium); display: flex; justify-content: center; align-items: center; font-size: 2em; text-align: center; padding: 0 5%;">
+                Right side content will go here.
+            </div>
+        </div>
     </div> <!-- End main-layout-container -->
 
     <footer id="contact" class="section reveal-item">
