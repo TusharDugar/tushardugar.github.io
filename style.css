@@ -197,9 +197,9 @@ main .section p {
 }
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 35px 5%; /* Larger initial padding */
+    padding: 25px 5%; /* Reduced padding for smaller height */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,19 +211,14 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 20px 5%;
+    padding: 15px 5%; /* Reduced padding on scroll */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More visible border on scroll */
 }
 
-/* Logo in Navbar (removed text, just a placeholder div) */
-.navbar .logo {
-    width: 50px; /* Give it a size so it takes up space */
-    height: 50px;
-    /* No empty ruleset after removing Tushar Dugar text */
-}
+/* Removed .navbar .logo rule entirely as it's no longer in HTML */
 
 
 /* Navigation Links */
@@ -235,14 +230,14 @@ main .section p {
 }
 
 .nav-links li {
-    margin-left: 55px; /* More spacing for links */
+    margin-left: 50px; /* Smaller spacing for links */
 }
 
 .nav-links a {
     color: var(--text-light);
     text-decoration: none;
     font-weight: 500; /* Medium weight */
-    font-size: 1.4em; /* Larger links */
+    font-size: 1.2em; /* Smaller links */
     position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
@@ -256,8 +251,8 @@ main .section p {
     content: '';
     position: absolute;
     width: 0;
-    height: 3px;
-    bottom: -10px;
+    height: 2px; /* Thinner underline */
+    bottom: -8px; /* Closer to text */
     left: 0;
     background-color: var(--accent-secondary-sawad); /* Green accent for underline */
     transition: width 0.3s ease;
@@ -275,7 +270,6 @@ main .section p {
 /* Spline Container (removed from hero section, keeping its ID for future use if needed elsewhere) */
 #spline-container {
     display: none; /* Hide if not used in a visible section */
-    /* No empty ruleset after this */
 }
 
 
@@ -317,6 +311,7 @@ main .section p {
     padding: 40px 30px; /* Internal padding */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
+    max-width: 380px; /* Set a max-width to match Sawad's card size */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
@@ -327,9 +322,7 @@ main .section p {
     transform: translateY(0);
 }
 
-.profile-card-wrapper {
-    /* This is the inner container within about-left-content */
-}
+/* No longer need .profile-card-wrapper as an extra rule */
 
 .image-area-with-dash {
     position: relative;
@@ -934,9 +927,7 @@ footer h2 {
     .right-column-scroll {
         padding-left: 40px;
     }
-    .navbar .logo {
-        /* No change needed as it's empty */
-    }
+    /* No empty rule for .navbar .logo here */
     .nav-links li {
         margin-left: 40px;
     }
@@ -1006,9 +997,7 @@ footer h2 {
         font-size: 3.2em; /* Adjusted for mobile */
     }
 
-    .navbar .logo {
-        /* No change needed as it's empty */
-    }
+    /* Removed empty rule for .navbar .logo here */
     .nav-links li {
         margin-left: 35px;
     }
@@ -1098,9 +1087,7 @@ footer h2 {
     .nav-links li {
         margin: 10px 18px;
     }
-    .navbar .logo {
-        /* No change needed as it's empty */
-    }
+    /* Removed empty .navbar .logo rule for this media query */
     /* Hero section is completely removed from HTML. No CSS needed to hide it. */ 
     .section h2 { /* Global heading for sections */
         font-size: 3.2em;
@@ -1280,9 +1267,6 @@ footer h2 {
     }
     #spline-container {
         display: none;
-    }
-    .navbar .logo {
-        /* No change needed as it's empty */
     }
     .nav-links a {
         font-size: 1.15em;
