@@ -199,7 +199,7 @@ main .section p {
     display: flex;
     justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 25px 5%; /* Adjusted padding for reduced height (was 25px, now 20px) */
+    padding: 20px 5%; /* Reverted to 20px for initial padding */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,7 +211,7 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 15px 5%; /* Adjusted padding on scroll (was 15px, now 12px) */
+    padding: 15px 5%; /* Reverted to 15px for scrolled padding */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
@@ -234,7 +234,7 @@ main .section p {
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
-    padding-top: 100px; /* Adjusted to space from the top of the taller navbar */
+    padding-top: 90px; /* Adjusted to space from the top of the taller navbar (25px padding + 65px base height) */
 }
 
 /* Left Column (Sticky) */
@@ -244,9 +244,9 @@ main .section p {
     padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
-    top: 100px; /* Stick below the taller navbar (adjust if navbar height changes) */
+    top: 90px; /* Stick below the taller navbar (adjusted from 100px) */
     align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjusted to fit card */
+    height: calc(100vh - 90px); /* Occupy remaining viewport height, adjusted for navbar height */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within sticky area */
@@ -259,7 +259,7 @@ main .section p {
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 30px; /* Large rounded corners */
-    padding: 40px 30px; /* Reverted to original padding for card */
+    padding: 30px 25px; /* Reduced padding for more compact card */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
     max-width: 400px; /* Increased max-width to make it a little wider */
@@ -375,7 +375,7 @@ main .section p {
 .right-column-scroll {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
-    padding-left: 60px; /* Space between columns */
+    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
 }
