@@ -156,142 +156,170 @@ body {
     text-align: center;
 }
 
+/* Updated: About Left Content (White Card) - Based on Aabid Ahmed design */
 .about-left-content {
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
-    border-radius: 30px; /* Large rounded corners */
-    padding: 30px 25px; /* Padding for more compact card */
+    border-radius: 20px; /* More rectangular corners as in Aabid Ahmed */
+    padding: 30px 25px; /* Adjust padding to match the target image better */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
-    max-width: 420px; /* Increased max-width for wider card */
-    height: 500px; /* Increased height from 480px to fit all content */
+    max-width: 320px; /* Max-width to match Aabid Ahmed's card size */
+    height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    display: flex; /* Use flexbox for main card content alignment */
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text */
+    position: relative; /* For absolute positioning of decorative lines */
+    overflow: hidden; /* Important to clip parts of dashed lines outside the card */
 }
 .about-left-content.revealed {
     opacity: 1;
     transform: translateY(0);
 }
 
-.image-area-with-dash {
-    position: relative;
-    width: 160px; /* Reverted to original size */
-    height: 160px; /* Reverted to original size */
-    margin: 0 auto 25px; /* Reverted to original margin */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
+/* New: Profile Image Container */
+.profile-image-container {
+    width: calc(100% + 50px); /* Slightly wider than the card to mimic the image in the Aabid Ahmed example */
+    max-width: 350px; /* Limit its max width */
+    height: 180px; /* Fixed height for the image area */
+    background-color: var(--accent-primary-sawad); /* Orange background */
+    border-radius: 15px; /* Rounded corners for the image container */
+    overflow: hidden; /* Ensure image doesn't overflow */
+    margin-bottom: 25px; /* Space below image */
+    position: relative; /* For the silhouette filter */
+    transform: translateX(0); /* Ensure it's centered initially */
 }
 
-.image-area-with-dash::before {
-    content: '';
-    position: absolute;
-    width: calc(100% + 20px); /* Dashed circle slightly larger than image bg */
-    height: calc(100% + 20px);
-    border: 3px dashed var(--accent-primary-sawad); /* Orange dashed border */
-    border-radius: 50%;
-    animation: rotateDashed 20s linear infinite; /* Smooth rotation */
-    top: -10px;
-    left: -10px;
-    box-sizing: border-box;
-}
-
-@keyframes rotateDashed {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.image-bg-orange {
-    width: 120px; /* Reverted to original orange circle */
-    height: 120px; /* Reverted to original orange circle */
-    background-color: var(--accent-primary-sawad); /* Sawad's orange */
-    border-radius: 50%;
-    display: flex; /* Added flexbox for text alignment */
-    flex-direction: column; /* Stack text vertically */
-    justify-content: center; /* Center text vertically */
-    align-items: center; /* Center text horizontally */
-    overflow: hidden; /* Hide parts of image outside circle */
-    color: var(--text-light); /* White text */
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-/* New styles for profile text */
-.profile-text-top {
-    font-size: 1.2em; /* Adjust as needed */
-    font-weight: 600; /* Slightly bolder */
-    line-height: 1; /* Tighter line height */
-}
-
-.profile-text-bottom {
-    font-size: 0.9em; /* Adjust as needed */
-    margin-top: 0px; /* Pull closer to the top text */
-    line-height: 1; /* Tighter line height */
-}
-
-/* Removed .profile-photo styles as it's no longer an image */
-/* .profile-photo {
+.profile-photo {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
-    border-radius: 50%;
-    filter: grayscale(1) brightness(0.5);
-} */
-
-.fire-icon {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: var(--accent-primary-sawad);
-    border-radius: 50%;
-    padding: 8px;
-    font-size: 1.1em; /* Reverted to original size */
-    color: var(--text-light);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    z-index: 5;
-    transform: translate(25%, 25%); /* Position outside corner */
+    object-position: center top; /* Keep focus on head/shoulders */
+    /* This filter assumes a color image and turns it into a black silhouette */
+    filter: brightness(0.01); /* Makes colors very dark/black while preserving shape */
 }
 
+/* Updated: Main Name */
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.5em; /* Reverted to original font size */
-    font-weight: 600;
+    font-size: 2.8em; /* Larger font size for name as in Aabid Ahmed */
+    font-weight: 700; /* Bolder */
     color: var(--text-dark-card); /* Black text on white card */
-    margin-bottom: 5px; /* Reverted to original */
-    line-height: 1.1; /* Added for tighter two-line spacing */
+    margin-bottom: 20px; /* Space below name before fire icon */
+    line-height: 1.1; /* Tighter line height for single-line name */
 }
+
+/* Hidden: About Tagline (not present in Aabid Ahmed card visually) */
 .about-tagline {
-    font-size: 1.1em; /* Reverted to original tagline font size */
-    color: var(--text-medium-card); /* Dark gray text */
-    margin-bottom: 20px; /* Reverted to original margin */
-    line-height: 1.4; /* Added for tighter two-line spacing */
+    display: none;
 }
+
+/* New: Fire Icon with connecting dashed lines */
+.fire-icon-with-line {
+    position: relative;
+    width: 100%;
+    height: 40px; /* Height for the fire icon and its line context */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px; /* Space before short description */
+}
+
+.fire-icon {
+    background-color: var(--accent-primary-sawad);
+    border-radius: 50%;
+    padding: 8px; /* Smaller padding as in Aabid Ahmed */
+    font-size: 1.1em; /* Smaller icon size */
+    color: var(--text-light);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    z-index: 2; /* Ensure it's on top of pseudo-elements */
+    position: relative; /* To ensure z-index works */
+}
+
+/* Dashed lines connected to the fire icon - approximate */
+.fire-icon-with-line::before,
+.fire-icon-with-line::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 2px; /* Thin line */
+    border-top: 2px dashed var(--accent-primary-sawad);
+    z-index: 1;
+}
+
+.fire-icon-with-line::before { /* Left line */
+    left: 0;
+    width: calc(50% - 25px); /* Half width minus icon size */
+}
+
+.fire-icon-with-line::after { /* Right line */
+    right: 0;
+    width: calc(50% - 25px); /* Half width minus icon size */
+}
+
+/* New: Decorative background dashed lines (from original Aabid Ahmed card) */
+.dashed-decoration {
+    position: absolute;
+    border: 2px dashed var(--accent-primary-sawad);
+    border-radius: 50%; /* Used for creating circular segments */
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 0; /* Behind all content */
+}
+
+.top-left-curve {
+    width: 150px;
+    height: 150px;
+    top: -50px; /* Adjusted position to start from top-left of the card */
+    left: -50px;
+    border-right-color: transparent; /* Hide parts of the circle border to make it an arc */
+    border-bottom-color: transparent;
+    transform: rotate(-10deg); /* Slight rotation for the angle */
+}
+
+.bottom-right-curve {
+    width: 150px;
+    height: 150px;
+    bottom: -50px; /* Adjusted position to start from bottom-right of the card */
+    right: -50px;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    transform: rotate(10deg); /* Slight rotation for the angle */
+}
+
+
+/* Updated: Short Description */
 .about-short-desc {
-    font-size: 0.85em; /* Reverted to original short desc font size */
-    line-height: 1.5; /* Reverted to original line height */
+    font-size: 0.9em; /* Adjusted font size for readability */
+    line-height: 1.6;
     color: var(--text-medium-card);
-    margin-bottom: 25px; /* Reverted to original margin before social icons */
-    padding: 0 5px; /* Added slight horizontal padding to prevent awkward word wraps */
+    margin-bottom: 25px; /* Space before social icons */
+    padding: 0 5px; /* Added small horizontal padding to prevent awkward word wraps */
+    max-width: 90%; /* Keep text within reasonable bounds */
 }
+
+/* Updated: Social Icons */
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 20px; /* Reverted to original gap */
-    margin-top: 15px; /* Reverted to original margin */
+    gap: 15px; /* Smaller gap between icons as in Aabid Ahmed */
+    margin-top: auto; /* Pushes social icons to the bottom if card has auto height */
+    padding-top: 10px; /* Small padding */
 }
 .about-social-icons a {
-    color: var(--text-medium-card); /* Dark gray icons */
-    font-size: 1.5em; /* Reverted to original icon size */
+    color: var(--accent-primary-sawad); /* Orange icons as in Aabid Ahmed */
+    font-size: 1.5em; /* Icon size */
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
-    color: var(--accent-primary-sawad); /* Orange on hover */
-    transform: translateY(-4px) scale(1.1); /* Reduced lift */
+    color: var(--accent-primary-sawad); /* Keep orange on hover */
+    transform: translateY(-2px) scale(1.05); /* Subtle lift */
 }
 
 
@@ -302,8 +330,6 @@ body {
     padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
-    /* Add a min-height to the right column so it's taller than the left sticky column */
-    /* This ensures there's scrollable area for the left column to 'stick' against */
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
     
     /* Add placeholder content styling for visibility during development */
@@ -324,7 +350,6 @@ footer {
     color: var(--text-light); /* White */
     text-align: center;
     padding: 60px 5%; /* Reduced padding for more compact footer */
-    /* Remove margin-top as it blends directly with the end of main-layout-container now */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
@@ -490,10 +515,50 @@ footer h2 {
         font-size: 3.2em;
         margin-bottom: 40px;
     }
+    /* Specific adjustments for profile card on 1200px screens */
     .about-left-content {
-        padding: 30px;
+        max-width: 300px; /* Adjust for slightly smaller desktop */
+        padding: 25px 20px;
     }
-    /* No specific overrides for image/text sizes here unless truly needed, relying on global */
+    .profile-image-container {
+        width: calc(100% + 40px); /* Keep proportion */
+        max-width: 340px;
+        height: 160px;
+        margin-bottom: 20px;
+    }
+    .about-left-content h3 {
+        font-size: 2.5em;
+    }
+    .fire-icon-with-line {
+        margin-bottom: 20px;
+    }
+    .fire-icon {
+        padding: 7px;
+        font-size: 1em;
+    }
+    .fire-icon-with-line::before,
+    .fire-icon-with-line::after {
+        width: calc(50% - 22px);
+    }
+    .about-short-desc {
+        font-size: 0.85em;
+        margin-bottom: 20px;
+    }
+    .about-social-icons a {
+        font-size: 1.4em;
+    }
+
+    .dashed-decoration {
+        border-width: 1.5px; /* Thinner for smaller screens */
+    }
+    .top-left-curve, .bottom-right-curve {
+        width: 120px;
+        height: 120px;
+        top: -40px;
+        left: -40px;
+        bottom: -40px;
+        right: -40px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -515,14 +580,43 @@ footer h2 {
         flex-direction: column;
         padding-top: 0;
     }
+    /* Specific adjustments for profile card on 768px screens */
     .about-left-content {
-        height: auto; /* Allow height to adjust to content on mobile */
-        padding: 25px 20px; /* Slightly reduced padding to gain space */
-        margin: 0 auto;
-        max-width: 320px; /* Constrain card width for better readability */
+        max-width: 280px; /* Narrower for actual mobile */
+        padding: 20px 15px;
+        border-radius: 15px;
     }
-    .about-left-content.revealed {
-        transform: none; /* No vertical animation on stacked mobile */
+    .profile-image-container {
+        width: calc(100% + 40px); /* Adjust width for smaller screens */
+        max-width: 320px;
+        height: 150px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+    }
+    .about-left-content h3 {
+        font-size: 2.2em;
+        margin-bottom: 15px;
+    }
+    .fire-icon-with-line {
+        height: 35px;
+        margin-bottom: 20px;
+    }
+    .fire-icon {
+        padding: 6px;
+        font-size: 0.9em;
+    }
+    .fire-icon-with-line::before,
+    .fire-icon-with-line::after {
+        width: calc(50% - 20px);
+    }
+    .about-short-desc {
+        font-size: 0.8em;
+        margin-bottom: 15px;
+        padding: 0 2px;
+    }
+    .about-social-icons a {
+        font-size: 1.3em;
+        gap: 12px;
     }
     .section h2 {
         font-size: 3.2em;
@@ -551,13 +645,16 @@ footer h2 {
     .contact-button .copied-text {
         font-size: 1.1em;
     }
-
-    /* Adjust specific elements for smaller mobile width */
-    .profile-text-top {
-        font-size: 1.1em; /* Slight reduction for mobile */
+    .dashed-decoration {
+        border-width: 1px; /* Even thinner */
     }
-    .profile-text-bottom {
-        font-size: 0.8em; /* Slight reduction for mobile */
+    .top-left-curve, .bottom-right-curve {
+        width: 100px;
+        height: 100px;
+        top: -30px;
+        left: -30px;
+        bottom: -30px;
+        right: -30px;
     }
 }
 
@@ -575,27 +672,49 @@ footer h2 {
         width: 95%;
         height: 85px;
     }
+    /* Specific adjustments for profile card on 480px screens */
     .about-left-content {
-        max-width: 290px; /* Adjust for very small screens */
-        padding: 20px 15px; /* Further reduced padding */
+        max-width: 260px;
+        padding: 15px 10px;
     }
-    .profile-text-top {
-        font-size: 1em; /* Even smaller for very small screens */
-    }
-    .profile-text-bottom {
-        font-size: 0.75em; /* Even smaller for very small screens */
+    .profile-image-container {
+        width: calc(100% + 30px);
+        max-width: 290px;
+        height: 130px;
+        margin-bottom: 15px;
+        border-radius: 10px;
     }
     .about-left-content h3 {
-        font-size: 2.2em; /* Smaller name for very small screens */
+        font-size: 2em;
+        margin-bottom: 10px;
     }
-    .about-tagline {
-        font-size: 0.9em; /* Smaller tagline for very small screens */
+    .fire-icon-with-line {
+        height: 30px;
+        margin-bottom: 15px;
+    }
+    .fire-icon {
+        padding: 5px;
+        font-size: 0.8em;
+    }
+    .fire-icon-with-line::before,
+    .fire-icon-with-line::after {
+        width: calc(50% - 18px);
     }
     .about-short-desc {
-        font-size: 0.75em; /* Smaller description for very small screens */
-        line-height: 1.4;
+        font-size: 0.75em;
+        margin-bottom: 10px;
+        padding: 0;
     }
     .about-social-icons a {
-        font-size: 1.3em; /* Smaller icons for very small screens */
+        font-size: 1.1em;
+        gap: 10px;
+    }
+    .top-left-curve, .bottom-right-curve {
+        width: 80px;
+        height: 80px;
+        top: -25px;
+        left: -25px;
+        bottom: -25px;
+        right: -25px;
     }
 }
