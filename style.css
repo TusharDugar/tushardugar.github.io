@@ -222,11 +222,7 @@ main .section p {
 .navbar .logo {
     width: 50px; /* Give it a size so it takes up space */
     height: 50px;
-    /* Optional: add a background image here later if there's a logo image */
-    /* background-image: url('path/to/your/logo.png'); */
-    /* background-size: contain; */
-    /* background-repeat: no-repeat; */
-    /* background-position: center; */
+    /* No empty ruleset after removing Tushar Dugar text */
 }
 
 
@@ -279,9 +275,7 @@ main .section p {
 /* Spline Container (removed from hero section, keeping its ID for future use if needed elsewhere) */
 #spline-container {
     display: none; /* Hide if not used in a visible section */
-    /* If you want to add a 3D element elsewhere, uncomment and reposition */
-    /* For example, if it's a floating background element: */
-    /* position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; */
+    /* No empty ruleset after this */
 }
 
 
@@ -307,7 +301,7 @@ main .section p {
     position: sticky; /* Make it sticky */
     top: 100px; /* Stick below the navbar (adjust if navbar height changes) */
     align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjust as needed */
+    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjusted to fit card */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within sticky area */
@@ -1107,9 +1101,7 @@ footer h2 {
     .navbar .logo {
         /* No change needed as it's empty */
     }
-    .hero-section { /* This is now unused, but keeping structure for reference */
-        display: none;
-    }
+    /* Hero section is completely removed from HTML. No CSS needed to hide it. */ 
     .section h2 { /* Global heading for sections */
         font-size: 3.2em;
         margin-bottom: 40px;
@@ -1214,17 +1206,18 @@ footer h2 {
 
 @media (max-width: 480px) {
     /* Smaller Phones */
-    .hero-section h1 {
-        font-size: 3.8em;
-        letter-spacing: 1px;
+    .section-title-right {
+        font-size: 2.8em; /* Adjusted for very small screens */
+        letter-spacing: 0.5px;
     }
-    .hero-section p {
-        font-size: 1.8em;
+    .section-title-right:first-line, .section-title-right span {
+        font-size: 2.8em;
     }
-    .section h2, .section-title-right {
-        font-size: 2.5em;
-        margin-bottom: 30px;
+    .section-intro-paragraph {
+        font-size: 1em;
+        margin-bottom: 50px;
     }
+
     .about-image-card {
         width: 200px;
         height: 300px;
