@@ -133,7 +133,7 @@ body {
 /* Style for two-line heading "DIGITAL MARKETER" / "EXPERIENCE" */
 .section-title-right:first-line { /* "DIGITAL MARKETER" */
     font-size: 3.8em;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     text-shadow: 2px 2px 10px var(--shadow-color-dark);
     display: block; /* Ensure it takes its own line */
     margin-bottom: 5px; /* Space between lines */
@@ -160,7 +160,7 @@ body {
     font-size: 1.1em;
     line-height: 1.7;
     opacity: 0.8;
-    color: var(--text-medium);
+    color: var(--text-light); /* Changed to white */
     margin-bottom: 70px; /* Space before content starts */
     padding: 0 5%; /* Match left padding of title */
     text-align: left; /* Align with title */
@@ -172,7 +172,7 @@ main .section p {
     font-size: 1.1em; /* Adjusted for overall text */
     line-height: 1.7;
     opacity: 0.8;
-    color: var(--text-medium);
+    color: var(--text-light); /* Changed to white */
 }
 
 /* Reveal Animation Base */
@@ -197,9 +197,9 @@ main .section p {
 }
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Align nav links to the right since logo is gone */
     align-items: center;
-    padding: 35px 5%; /* Larger initial padding */
+    padding: 25px 5%; /* Reverted to original larger padding for desired height */
     background-color: rgba(0, 0, 0, 0.4); /* Transparent dark initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
@@ -211,80 +211,16 @@ main .section p {
 /* Navbar when scrolled (no change, already handles transition) */
 .navbar.scrolled {
     background-color: var(--bg-main); /* Solid dark on scroll */
-    padding: 20px 5%;
+    padding: 15px 5%; /* Reverted to original larger padding on scroll */
     box-shadow: 0 8px 30px var(--shadow-color-dark);
     backdrop-filter: blur(25px); /* Even more blur when scrolled */
     -webkit-backdrop-filter: blur(25px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More visible border on scroll */
 }
 
-/* Logo in Navbar (removed text, just a placeholder div) */
-.navbar .logo {
-    width: 50px; /* Give it a size so it takes up space */
-    height: 50px;
-    /* Optional: add a background image here later if there's a logo image */
-    /* background-image: url('path/to/your/logo.png'); */
-    /* background-size: contain; */
-    /* background-repeat: no-repeat; */
-    /* background-position: center; */
-}
-
-
-/* Navigation Links */
-.nav-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.nav-links li {
-    margin-left: 55px; /* More spacing for links */
-}
-
-.nav-links a {
-    color: var(--text-light);
-    text-decoration: none;
-    font-weight: 500; /* Medium weight */
-    font-size: 1.4em; /* Larger links */
-    position: relative;
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-/* Navigation Links when scrolled */
-.navbar.scrolled .nav-links a {
-    color: var(--text-light);
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 3px;
-    bottom: -10px;
-    left: 0;
-    background-color: var(--accent-secondary-sawad); /* Green accent for underline */
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-.nav-links a:hover {
-    color: var(--accent-secondary-sawad);
-    transform: translateY(-5px); /* More prominent lift */
-}
-
 /* Spline Container (removed from hero section, keeping its ID for future use if needed elsewhere) */
 #spline-container {
     display: none; /* Hide if not used in a visible section */
-    /* If you want to add a 3D element elsewhere, uncomment and reposition */
-    /* For example, if it's a floating background element: */
-    /* position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; */
-}
-#spline-container p {
-    display: none; /* Hide placeholder text as container is hidden */
 }
 
 
@@ -292,25 +228,25 @@ main .section p {
 .main-layout-container {
     display: flex;
     justify-content: center; /* Center the columns if content is narrower */
-    max-width: 1400px; /* Overall max width for the two-column layout */
+    max-width: 1920px; /* Increased max-width for wider desktop view */
     margin: 0 auto; /* Center the container */
-    padding: 0 40px; /* Add horizontal padding matching Sawad */
+    padding: 0 80px; /* Increased horizontal padding for wider layout */
     min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
     position: relative;
     z-index: 1; /* Above background glows */
-    padding-top: 100px; /* Space from the top (navbar area) */
+    padding-top: 100px; /* Adjusted to space from the top of the taller navbar */
 }
 
 /* Left Column (Sticky) */
 .left-column-sticky {
     flex-shrink: 0; /* Prevent from shrinking */
-    width: 35%; /* Adjust width as needed */
-    padding-right: 60px; /* Space between columns */
+    width: 30%; /* Slightly narrower left column */
+    padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
-    top: 100px; /* Stick below the navbar (adjust if navbar height changes) */
+    top: 100px; /* Stick below the taller navbar (adjust if navbar height changes) */
     align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjust as needed */
+    height: calc(100vh - 100px); /* Occupy remaining viewport height, adjusted to fit card */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within sticky area */
@@ -323,9 +259,10 @@ main .section p {
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 30px; /* Large rounded corners */
-    padding: 40px 30px; /* Internal padding */
+    padding: 40px 30px; /* Reverted to original padding for card */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
+    max-width: 400px; /* Increased max-width to make it a little wider */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
@@ -334,10 +271,6 @@ main .section p {
 .about-left-content.revealed {
     opacity: 1;
     transform: translateY(0);
-}
-
-.profile-card-wrapper {
-    /* This is the inner container within about-left-content */
 }
 
 .image-area-with-dash {
@@ -469,7 +402,7 @@ main .section p {
 }
 .stat-item {
     text-align: center;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
 }
 .stat-item span {
     font-family: 'Poppins', sans-serif;
@@ -485,7 +418,7 @@ main .section p {
 .stat-item p {
     font-size: 0.8em;
     font-weight: 400;
-    color: var(--text-medium);
+    color: var(--text-light); /* White */
     margin: 0;
     line-height: 1.2;
 }
@@ -527,7 +460,7 @@ main .section p {
 .experience-item .description {
     font-size: 1em;
     line-height: 1.6;
-    color: var(--text-medium);
+    color: var(--text-light); /* White */
     margin-bottom: 0;
 }
 
@@ -570,13 +503,13 @@ main .section p {
 .service-card h3 {
     font-family: 'Poppins', sans-serif;
     font-size: 2em;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     margin-bottom: 15px;
 }
 .service-card p {
     font-size: 1.1em;
     line-height: 1.7;
-    color: var(--text-medium);
+    color: var(--text-light); /* White */
     margin: 0;
 }
 
@@ -640,7 +573,7 @@ main .section p {
 }
 
 .skill-front {
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     background: var(--gradient-skills-front); /* Your specified orange gradient for front */
 }
 
@@ -657,14 +590,14 @@ main .section p {
 .skill-front h3 {
     font-family: 'Poppins', sans-serif;
     font-size: 1.6em;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     margin: 0;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .skill-back {
     background-color: var(--bg-section-card); /* Dark background for back side */
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     transform: rotateY(180deg);
     display: flex;
     justify-content: flex-start;
@@ -684,7 +617,7 @@ main .section p {
     font-size: 0.95em; /* Slightly smaller for detail text */
     font-weight: 400;
     line-height: 1.5;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     margin-bottom: 6px;
     position: relative;
     padding-left: 25px; /* Space for bullet + text indent */
@@ -719,7 +652,7 @@ main .section p {
     border-radius: 18px;
     text-align: center;
     text-decoration: none;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     box-shadow: 0 4px 15px var(--shadow-color-subtle);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
@@ -760,12 +693,12 @@ main .section p {
     font-size: 0.95em;
     line-height: 1.5;
     opacity: 0.8;
-    color: var(--text-medium);
+    color: var(--text-light); /* White */
     margin-bottom: 20px;
 }
 .website-card i.fas.fa-external-link-alt, .website-card i.fas.fa-code-branch {
     font-size: 1.2em;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     opacity: 0.7;
     position: absolute;
     bottom: 20px;
@@ -776,7 +709,7 @@ main .section p {
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     text-align: center;
     padding: 60px 5%; /* Reduced padding for more compact footer */
     margin-top: 0; /* Blend directly with last section from right column */
@@ -799,7 +732,7 @@ footer h2 {
     text-align: center;
     margin-bottom: 25px;
     font-size: 3.2em;
-    color: var(--primary-heading-color);
+    color: var(--primary-heading-color); /* White */
     font-weight: 700;
     text-shadow: 2px 2px 6px var(--shadow-color-dark);
     letter-spacing: 1.5px;
@@ -813,7 +746,7 @@ footer h2 {
     margin-right: auto;
     opacity: 0.95;
     line-height: 1.8;
-    color: var(--text-medium);
+    color: var(--text-light); /* White */
 }
 
 .contact-buttons {
@@ -826,7 +759,7 @@ footer h2 {
 
 .contact-button {
     background-color: rgba(255, 255, 255, 0.05); /* Subtle background for buttons */
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 0;
@@ -865,18 +798,11 @@ footer h2 {
 .contact-button i {
     font-size: 2.8em; /* Larger icons in buttons */
     color: var(--accent-primary-sawad); /* Accent color for icons */
-    margin-bottom: 10px;
-}
-
-.contact-button .button-label {
-    font-size: 1.1em;
-    opacity: 0.8;
-    color: var(--text-medium);
-    margin-bottom: 5px;
+    /* No margin-bottom here, will center automatically with flexbox */
 }
 
 .contact-button .button-value {
-    font-size: 1.25em; /* Larger value text */
+    font-size: 1.0em; /* Reduced font size to 1.0em (20px) */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -884,7 +810,8 @@ footer h2 {
     text-overflow: ellipsis;
     padding: 0 5px;
     max-width: 90%;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
+    margin-top: 5px; /* Reduced space between icon and value */
 }
 
 .contact-button .copied-text {
@@ -923,7 +850,7 @@ footer h2 {
     margin-top: 30px;
 }
 .social-links a {
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     margin: 0 20px;
     transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -942,16 +869,6 @@ footer h2 {
     }
     .right-column-scroll {
         padding-left: 40px;
-    }
-    .hero-section h1 {
-        font-size: 5.5em;
-        letter-spacing: 4px;
-    }
-    .hero-section p {
-        font-size: 2.2em;
-    }
-    .navbar .logo {
-        /* No change needed as it's empty */
     }
     .nav-links li {
         margin-left: 40px;
@@ -1010,8 +927,7 @@ footer h2 {
     .right-column-scroll {
         padding-left: 30px;
     }
-    /* Hero section is now removed for this template */
-    .section h2, .section-title-right {
+    .section-title-right {
         font-size: 3.2em;
         margin-bottom: 50px;
     }
@@ -1023,9 +939,6 @@ footer h2 {
         font-size: 3.2em; /* Adjusted for mobile */
     }
 
-    .navbar .logo {
-        /* No change needed as it's empty */
-    }
     .nav-links li {
         margin-left: 35px;
     }
@@ -1114,12 +1027,6 @@ footer h2 {
     }
     .nav-links li {
         margin: 10px 18px;
-    }
-    .navbar .logo {
-        /* No change needed as it's empty */
-    }
-    .hero-section { /* This is now unused, but keeping structure for reference */
-        display: none;
     }
     .section h2 { /* Global heading for sections */
         font-size: 3.2em;
@@ -1225,17 +1132,21 @@ footer h2 {
 
 @media (max-width: 480px) {
     /* Smaller Phones */
-    .hero-section h1 {
-        font-size: 3.8em;
-        letter-spacing: 1px;
+    .section-title-right {
+        font-size: 2.8em; /* Adjusted for very small screens */
+        letter-spacing: 0.5px;
     }
-    .hero-section p {
-        font-size: 1.8em;
+    .section-title-right:first-line {
+        font-size: 2.8em;
     }
-    .section h2, .section-title-right {
-        font-size: 2.5em;
-        margin-bottom: 30px;
+    .section-title-right span {
+        font-size: 2.8em;
     }
+    .section-intro-paragraph {
+        font-size: 1em;
+        margin-bottom: 50px;
+    }
+
     .about-image-card {
         width: 200px;
         height: 300px;
@@ -1298,9 +1209,6 @@ footer h2 {
     }
     #spline-container {
         display: none;
-    }
-    .navbar .logo {
-        /* No change needed as it's empty */
     }
     .nav-links a {
         font-size: 1.15em;
