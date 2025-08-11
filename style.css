@@ -27,6 +27,11 @@
     --tool-icon-bg: #FFFFFF; /* White background for tool icons */
     --tool-name-color: var(--text-light); /* White for tool names */
     --tool-category-color: var(--text-medium); /* Gray for categories */
+
+    /* New colors for Services Section */
+    --services-number-color: #555555; /* Dark gray for inactive numbers */
+    --services-title-color: #555555; /* Dark gray for inactive titles */
+    --services-active-color: var(--text-light); /* White for active elements */
 }
 
 body {
@@ -464,6 +469,131 @@ body {
 }
 
 
+/* NEW: Services Section Styles */
+.services-section {
+    padding-top: 80px; /* Space from tools section */
+    padding-bottom: 100px;
+    text-align: left;
+}
+
+.services-heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5em; /* Match tools heading size */
+    line-height: 0.9;
+    font-weight: 800;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+
+/* Reusing text-white and text-gray for services-heading */
+
+.services-layout {
+    display: flex;
+    gap: 50px; /* Space between timeline and content */
+    align-items: flex-start; /* Align columns to the top */
+}
+
+.services-timeline {
+    position: sticky;
+    top: 150px; /* Adjust this value as needed so it's vertically centered in its sticky container */
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 250px; /* Fixed width for the timeline column */
+    display: flex;
+    flex-direction: column;
+    /* This min-height is crucial to ensure the sticky element has enough scrollable parent space */
+    /* It should be at least as tall as the viewport minus the `top` offset */
+    min-height: calc(100vh - 200px); /* Example: 100vh minus top offset and some footer space */
+    justify-content: space-between; /* Distribute items evenly */
+    padding-top: 10px; /* Small padding at the top */
+    padding-bottom: 10px; /* Small padding at the bottom */
+    position: relative; /* For pseudo-element line */
+}
+
+.services-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 45px; /* Adjust to align with the number's center */
+    width: 2px;
+    height: 100%;
+    border-left: 2px dashed var(--services-number-color); /* Dashed line */
+    z-index: 0; /* Behind timeline items */
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between number and title */
+    margin-bottom: 30px; /* Space between timeline items */
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 1; /* Above the dashed line */
+    padding-left: 5px; /* Small offset */
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0; /* No margin on last item */
+}
+
+.timeline-number {
+    font-size: 2.2em; /* Large number */
+    font-weight: 700;
+    color: var(--services-number-color); /* Default gray */
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.timeline-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--services-title-color); /* Default gray */
+    transition: color 0.3s ease;
+    line-height: 1.2;
+    padding-bottom: 3px; /* Align with bottom of number */
+}
+
+/* Active state for timeline items */
+.timeline-item.active .timeline-number,
+.timeline-item.active .timeline-title {
+    color: var(--services-active-color); /* White when active */
+}
+
+.timeline-item.active .timeline-number {
+    text-shadow: 0 0 10px rgba(255,255,255,0.2); /* Subtle glow */
+}
+
+.services-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 300px); /* Adjust width to fit beside timeline */
+}
+
+.service-item {
+    font-size: 1.15em;
+    line-height: 1.8;
+    color: var(--text-medium);
+    margin-bottom: 150px; /* Large space between service descriptions to ensure scrolling and distinct observation */
+    min-height: 250px; /* Ensure enough height to be observed */
+    max-width: 650px; /* Limit width for readability */
+    /* Add some padding for better aesthetics within its column */
+    padding: 20px; 
+    box-sizing: border-box;
+    /* Optional: Fade in/out effect for service item text */
+    opacity: 0.5; /* Slightly faded when inactive */
+    transition: opacity 0.5s ease;
+}
+
+.service-item:last-child {
+    margin-bottom: 0; /* No margin below the last one */
+}
+
+/* Optional: Active service item styling */
+/* .service-item.active {
+    opacity: 1;
+} */
+
+
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
@@ -628,7 +758,6 @@ footer h2 {
         margin: 0 auto; /* Center it */
     }
     .right-column-scroll { 
-        /* The `display: none;` that was here causing issues is REMOVED from this breakpoint */
         flex-grow: 1; /* Allow it to take up space */
         width: 100%; /* Take full width of main container when stacked */
         padding-left: 0; /* Adjust padding for full width layout */
@@ -720,6 +849,57 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.8em;
+    }
+
+    /* Adjustments for services section */
+    .services-section {
+        padding-top: 60px; /* Adjust spacing */
+        padding-bottom: 80px;
+    }
+    .services-heading {
+        font-size: 4.5em;
+        margin-bottom: 40px;
+    }
+    .services-layout {
+        flex-direction: column; /* Stack columns */
+        gap: 30px;
+    }
+    .services-timeline {
+        position: relative; /* Not sticky on smaller screens */
+        top: auto;
+        width: 100%; /* Full width */
+        flex-direction: row; /* Layout numbers horizontally */
+        flex-wrap: wrap; /* Allow wrapping */
+        justify-content: center; /* Center horizontally */
+        min-height: unset; /* Remove min-height */
+        padding: 0;
+    }
+    .services-timeline::before {
+        display: none; /* Hide vertical line */
+    }
+    .timeline-item {
+        flex-direction: column; /* Stack number and title */
+        margin: 0 10px 20px; /* Adjust spacing */
+        align-items: center; /* Center items */
+        padding-left: 0;
+    }
+    .timeline-number {
+        font-size: 1.8em;
+    }
+    .timeline-title {
+        font-size: 0.9em;
+        padding-bottom: 0;
+    }
+    .services-content {
+        width: 100%; /* Full width */
+        max-width: 600px; /* Keep max-width for readability */
+        margin: 0 auto; /* Center the content */
+    }
+    .service-item {
+        font-size: 1em;
+        margin-bottom: 80px; /* Reduced space between service descriptions */
+        min-height: 180px; /* Adjusted min-height */
+        padding: 15px;
     }
 }
 
@@ -841,7 +1021,7 @@ footer h2 {
 
     /* Adjustments for tools section */
     .tools-section {
-        padding-top: 40px; /* Reduced space from above section */
+        padding-top: 40px;
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -867,6 +1047,56 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
+    }
+
+    /* Services Section - mobile specific overrides */
+    .services-section {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
+    .services-heading {
+        font-size: 3.5em;
+        margin-bottom: 30px;
+    }
+    .services-layout {
+        flex-direction: column; /* Stack columns */
+        gap: 20px; /* Reduce gap */
+    }
+    .services-timeline {
+        position: relative; /* Not sticky on mobile */
+        top: auto;
+        width: 100%; /* Full width */
+        flex-direction: row; /* Horizontal layout */
+        flex-wrap: wrap; /* Wrap items */
+        justify-content: center; /* Center horizontally */
+        min-height: unset;
+        padding: 0;
+    }
+    .services-timeline::before {
+        display: none; /* Hide vertical line on mobile */
+    }
+    .timeline-item {
+        flex-direction: column; /* Stack number and title */
+        margin: 0 8px 15px; /* Adjust spacing */
+        align-items: center;
+        padding-left: 0;
+    }
+    .timeline-number {
+        font-size: 1.6em;
+    }
+    .timeline-title {
+        font-size: 0.8em;
+    }
+    .services-content {
+        width: 100%;
+        max-width: 100%; /* Take full width of parent */
+        margin: 0 auto;
+    }
+    .service-item {
+        font-size: 0.9em;
+        margin-bottom: 60px; /* Further reduced margin */
+        min-height: 150px; /* Smaller min-height for mobile */
+        padding: 10px;
     }
 }
 
@@ -968,5 +1198,30 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.7em;
+    }
+
+    /* Services Section - mobile specific overrides */
+    .services-section {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    .services-heading {
+        font-size: 2.8em;
+        margin-bottom: 25px;
+    }
+    .timeline-item {
+        margin: 0 5px 10px; /* Tighter spacing */
+    }
+    .timeline-number {
+        font-size: 1.4em;
+    }
+    .timeline-title {
+        font-size: 0.7em;
+    }
+    .service-item {
+        font-size: 0.8em;
+        margin-bottom: 40px; /* Even less space */
+        min-height: 120px; /* Adjusted min-height */
+        padding: 8px;
     }
 }
