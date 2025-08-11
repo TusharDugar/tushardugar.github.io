@@ -1,12 +1,21 @@
 /* Basic Reset & Font */
 :root {
-    --bg-dark: #0A0A0A; /* Deeper dark background */
-    --text-light: #F0F0F0;
-    --section-bg: rgba(20, 20, 20, 0.9);
-    --primary-accent-blue: #3498DB; /* Figma's vibrant blue */
-    --secondary-accent-orange: #FF4500; /* Figma's bright orange-red */
-    --primary-heading-color: #F0F0F0;
-    --secondary-heading-color: var(--primary-accent-blue);
+    /* Figma-inspired Color Palette */
+    --bg-dark: #070707; /* Very dark background */
+    --bg-dark-light: #1A1A1A; /* Slightly lighter dark for body gradient */
+    --text-light: #F0F0F0; /* Light text for readability */
+    --section-bg-alpha: rgba(20, 20, 20, 0.85); /* Section background with transparency */
+    
+    /* Gradients from Figma */
+    --gradient-blue-main: linear-gradient(to right, #0F2027, #203A43, #2C5364); /* Deep to lighter blue */
+    --gradient-orange-main: linear-gradient(to right, #FF7B00, #FF4500); /* Fiery orange-red */
+
+    /* Individual color accents */
+    --accent-blue: #3498DB; /* Primary vibrant blue */
+    --accent-orange: #FF4500; /* Primary vibrant orange-red */
+    --text-on-orange-dark: #333333; /* Dark text for orange backgrounds (if needed, currently not used) */
+
+    --primary-heading-color: var(--text-light);
     --shadow-color: rgba(0, 0, 0, 0.5); /* Stronger shadow on dark bg */
 }
 
@@ -15,7 +24,7 @@ body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
     color: var(--text-light);
-    background-color: var(--bg-dark);
+    background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-light)); /* Subtle dark background gradient */
     overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
@@ -30,67 +39,67 @@ body::before, body::after {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    filter: blur(150px); /* More blur for softer glow */
-    opacity: 0.4; /* Softer opacity */
+    filter: blur(150px);
+    opacity: 0.5; /* Adjusted opacity */
     z-index: -1;
 }
 
 body::before {
-    width: 700px;
-    height: 700px;
-    background: radial-gradient(circle at center, var(--primary-accent-blue) 0%, transparent 70%);
+    width: 750px; /* Larger glow */
+    height: 750px;
+    background: radial-gradient(circle at center, rgba(52, 152, 219, 0.7) 0%, transparent 70%); /* Blue glow */
     animation: glow1 18s infinite alternate ease-in-out;
 }
 
 body::after {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle at center, var(--secondary-accent-orange) 0%, transparent 70%);
+    width: 650px; /* Slightly smaller glow */
+    height: 650px;
+    background: radial-gradient(circle at center, rgba(255, 69, 0, 0.7) 0%, transparent 70%); /* Orange-red glow */
     animation: glow2 22s infinite alternate-reverse ease-in-out;
 }
 
 @keyframes glow1 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
-    50% { transform: translate(-60%, -40%) scale(1.1); opacity: 0.5; }
-    100% { transform: translate(-40%, -60%) scale(1); opacity: 0.4; }
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-55%, -45%) scale(1.1); opacity: 0.6; }
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.5; }
 }
 
 @keyframes glow2 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
-    50% { transform: translate(-40%, -60%) scale(1.05); opacity: 0.5; }
-    100% { transform: translate(-60%, -40%) scale(1); opacity: 0.4; }
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-45%, -55%) scale(1.05); opacity: 0.6; }
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.5; }
 }
 
 
 /* Global Section Styling */
 .section {
     padding: 60px 5%;
-    margin-bottom: 20px;
-    background-color: var(--section-bg);
-    box-shadow: 0 8px 25px var(--shadow-color); /* Stronger shadow for depth */
-    border-radius: 15px; /* More pronounced rounded corners */
+    margin-bottom: 30px; /* More margin between sections */
+    background-color: var(--section-bg-alpha); /* Darker transparent background for sections */
+    box-shadow: 0 8px 30px var(--shadow-color); /* Stronger shadow for depth */
+    border-radius: 18px; /* More rounded corners */
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     backdrop-filter: blur(10px); /* More blur for glassy effect */
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08); /* Slightly more visible border */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle light border */
 }
 
 .section h2 {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
-    margin-bottom: 40px;
-    font-size: 3em; /* Larger headings for impact */
+    margin-bottom: 45px; /* More space below heading */
+    font-size: 3.2em; /* Larger headings for impact */
     color: var(--primary-heading-color);
     font-weight: 700;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.6); /* More prominent text shadow */
-    letter-spacing: 1px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7); /* More prominent text shadow */
+    letter-spacing: 1.5px;
 }
 
 .section h2 i {
-    color: var(--primary-accent-blue);
-    margin-right: 18px; /* More space for icons */
+    color: var(--accent-blue); /* Icon color */
+    margin-right: 20px;
     font-size: 0.9em; /* Adjust icon size relative to text */
 }
 
@@ -99,31 +108,36 @@ body::after {
     background: transparent;
     color: var(--text-light);
     text-align: center;
-    padding: 200px 5% 100px; /* More padding */
+    padding: 220px 5% 120px; /* More padding */
     position: relative;
     overflow: hidden;
-    min-height: 700px; /* Tall hero section */
+    min-height: 750px; /* Tall hero section */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More prominent separator */
 }
 
 .hero-section h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 5em; /* Even larger for main name */
-    margin-bottom: 15px;
+    font-size: 5.5em; /* Even larger for main name */
+    margin-bottom: 18px;
     line-height: 1.1;
-    text-shadow: 4px 4px 8px rgba(0,0,0,0.7);
+    text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
     font-weight: 700;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     position: relative;
     z-index: 2; /* Ensure text is above 3D */
+    background: var(--gradient-blue-main); /* Apply blue gradient to text */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
 }
 
 .hero-section p {
-    font-size: 2em; /* Larger tagline */
+    font-size: 2.2em; /* Larger tagline */
     opacity: 0.9;
     font-weight: 300;
     position: relative;
@@ -140,38 +154,38 @@ body::after {
     justify-content: space-between;
     align-items: center;
     padding: 30px 5%; /* Larger initial padding */
-    background-color: rgba(0, 0, 0, 0.2); /* More transparent initial background */
+    background-color: rgba(0, 0, 0, 0.3); /* More transparent initial background */
     box-sizing: border-box;
     transition: background-color 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
     z-index: 1000;
-    backdrop-filter: blur(8px); /* Stronger initial blur */
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Subtle border */
+    backdrop-filter: blur(10px); /* Stronger initial blur */
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Subtle border */
 }
 
 /* Navbar when scrolled */
 .navbar.scrolled {
     background-color: var(--bg-dark); /* Solid dark on scroll */
-    padding: 18px 5%; /* Smaller padding on scroll */
-    box-shadow: 0 6px 20px var(--shadow-color); /* More prominent shadow on scroll */
-    backdrop-filter: blur(15px); /* Even more blur when scrolled */
-    -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* More visible border on scroll */
+    padding: 20px 5%; /* Slightly smaller padding on scroll */
+    box-shadow: 0 8px 25px var(--shadow-color); /* More prominent shadow on scroll */
+    backdrop-filter: blur(18px); /* Even more blur when scrolled */
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* More visible border on scroll */
 }
 
 /* Logo in Navbar */
 .navbar .logo {
     font-family: 'Montserrat', sans-serif;
-    font-size: 2.5em; /* Larger logo */
+    font-size: 2.8em; /* Larger logo */
     font-weight: 700;
-    color: var(--primary-accent-blue); /* Primary accent blue initially */
+    color: var(--accent-blue); /* Accent blue initially */
     transition: color 0.4s ease;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
 
 /* Logo in Navbar when scrolled */
 .navbar.scrolled .logo {
-    color: var(--primary-accent-blue); /* Keeps accent blue when scrolled */
+    color: var(--accent-blue); /* Keeps accent blue when scrolled */
 }
 
 /* Navigation Links */
@@ -183,14 +197,14 @@ body::after {
 }
 
 .nav-links li {
-    margin-left: 40px; /* More spacing for links */
+    margin-left: 45px; /* More spacing for links */
 }
 
 .nav-links a {
-    color: var(--text-light); /* Light text initially */
+    color: var(--text-light);
     text-decoration: none;
     font-weight: 400;
-    font-size: 1.2em; /* Larger links */
+    font-size: 1.25em; /* Larger links */
     position: relative;
     transition: color 0.3s ease, transform 0.2s ease;
 }
@@ -204,10 +218,10 @@ body::after {
     content: '';
     position: absolute;
     width: 0;
-    height: 3px; /* Thicker underline */
-    bottom: -8px; /* More space below text */
+    height: 3px;
+    bottom: -8px;
     left: 0;
-    background-color: var(--primary-accent-blue);
+    background: var(--gradient-blue-main); /* Blue gradient for underline */
     transition: width 0.3s ease;
 }
 
@@ -216,14 +230,14 @@ body::after {
 }
 
 .nav-links a:hover {
-    color: var(--primary-accent-blue);
-    transform: translateY(-3px); /* Slightly more lift */
+    color: var(--accent-blue); /* Blue accent on hover */
+    transform: translateY(-3px);
 }
 
 /* Spline Container */
 #spline-container {
     width: 100%;
-    height: 550px; /* Adjusted height to fit hero section */
+    height: 600px; /* Adjusted height to fit hero section */
     margin-top: 50px;
     display: flex;
     justify-content: center;
@@ -243,72 +257,72 @@ body::after {
 
 /* Project Cards (Experience) */
 .project-card {
-    background-color: var(--section-bg);
-    padding: 35px; /* More padding */
+    background-color: var(--section-bg-alpha);
+    padding: 35px;
     margin-bottom: 35px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px var(--shadow-color);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    box-shadow: 0 4px 18px var(--shadow-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .project-card h3 {
     font-family: 'Montserrat', sans-serif;
-    color: var(--secondary-heading-color); /* Vibrant blue for sub-headings */
+    color: var(--accent-blue); /* Primary accent blue for sub-headings */
     margin-top: 0;
     font-weight: 700;
-    font-size: 1.9em; /* Slightly larger project titles */
+    font-size: 2em; /* Slightly larger project titles */
 }
 
 .project-card .date {
     font-style: italic;
     color: #bbb;
-    margin-bottom: 18px; /* More space below date */
-    font-size: 1em;
+    margin-bottom: 20px;
+    font-size: 1.05em;
 }
 
 .project-card ul {
     list-style: disc;
-    margin-left: 25px; /* More left margin for lists */
+    margin-left: 30px; /* More left margin for lists */
     padding: 0;
 }
 
 .project-card li {
-    margin-bottom: 10px; /* More space between list items */
+    margin-bottom: 12px; /* More space between list items */
     color: var(--text-light);
 }
 
 .video-placeholder {
     width: 100%;
-    height: 280px; /* Slightly taller placeholder */
-    background-color: rgba(0, 0, 0, 0.4); /* Darker placeholder */
+    height: 300px; /* Taller placeholder */
+    background-color: rgba(0, 0, 0, 0.5); /* Darker, more transparent placeholder */
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgba(255, 255, 255, 0.6);
-    margin-top: 25px; /* More space above video */
-    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 30px; /* More space above video */
+    border-radius: 10px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .video-placeholder video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 /* Skills Grid (Flippable Cards) */
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px; /* Increased gap for cards */
+    gap: 35px; /* Increased gap for cards */
     perspective: 1000px; /* For 3D transform */
 }
 
 .skill-card-container {
-    width: 100%; /* Take full width of grid column */
-    height: 250px; /* Fixed height for skill cards */
+    width: 100%;
+    height: 280px; /* Increased fixed height for skill cards */
     position: relative;
     cursor: pointer;
 }
@@ -318,14 +332,18 @@ body::after {
     height: 100%;
     position: absolute;
     transform-style: preserve-3d;
-    transition: transform 0.8s; /* Flip animation speed */
-    box-shadow: 0 4px 15px var(--shadow-color);
-    border-radius: 12px;
+    transition: transform 0.8s ease-in-out; /* Flip animation speed */
+    box-shadow: 0 6px 20px var(--shadow-color);
+    border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--section-bg-alpha);
 }
 
+/* Hover effect for the entire card container */
 .skill-card-container:hover .skill-card {
     transform: rotateY(180deg);
+    box-shadow: 0 0 25px var(--accent-orange), 0 0 40px rgba(255, 69, 0, 0.4); /* Stronger orange glow on hover */
+    border-color: var(--accent-orange); /* Orange border on hover */
 }
 
 .skill-front, .skill-back {
@@ -333,95 +351,91 @@ body::after {
     width: 100%;
     height: 100%;
     backface-visibility: hidden; /* Hide back side when flipped away */
-    border-radius: 12px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 30px; /* More padding */
     box-sizing: border-box;
     text-align: center;
+    background-color: var(--section-bg-alpha); /* Consistent dark background for both sides */
 }
 
 .skill-front {
-    background-color: rgba(30, 30, 30, 0.95); /* Dark background for front */
     color: var(--text-light);
 }
 
 .skill-front i {
-    font-size: 3.5em; /* Large icon for impact */
-    margin-bottom: 20px;
-    color: var(--secondary-accent-orange); /* Orange accent for skill icons */
+    font-size: 4em; /* Large icon for impact */
+    margin-bottom: 25px;
+    background: var(--gradient-orange-main); /* Apply orange gradient to icon */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
 }
 
 .skill-front h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.8em;
-    color: var(--text-light);
+    font-size: 2em; /* Larger heading */
+    color: var(--text-light); /* Keep text light */
     margin: 0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .skill-back {
-    background-color: var(--secondary-accent-orange); /* Orange background for back */
-    color: var(--bg-dark); /* Dark text on orange background */
+    background-color: rgba(30, 30, 30, 0.9); /* Slightly lighter dark for back side */
+    color: var(--text-light); /* Light text on dark background */
     transform: rotateY(180deg); /* Initial rotation for back side */
     display: flex;
-    justify-content: flex-start; /* Align content to top for lists */
-    align-items: flex-start;
-    text-align: left;
-    padding-top: 30px;
-}
-
-.skill-back p {
-    font-size: 1.1em;
-    font-weight: 500;
-    margin: 0;
-    line-height: 1.5;
-    color: var(--bg-dark); /* Ensure text is dark on orange */
-}
-
-
-/* Education & Leadership Items */
-.education-item, .leadership-item {
-    background-color: var(--section-bg);
+    justify-content: flex-start; /* Start content from top */
+    align-items: flex-start; /* Align content to left */
+    text-align: left; /* Align text to left */
     padding: 30px;
-    margin-bottom: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px var(--shadow-color);
-    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.education-item h3, .leadership-item h3 {
-    font-family: 'Montserrat', sans-serif;
-    color: var(--primary-accent-blue); /* Consistent accent blue for sub-headings */
-    margin-top: 0;
-    font-weight: 700;
-    font-size: 1.7em;
-}
-
-.achievements-list ul {
-    list-style: decimal;
-    margin-left: 25px;
+.skill-back ul {
+    list-style: none; /* Remove default bullet points */
     padding: 0;
+    margin: 0;
+    width: 100%; /* Ensure ul takes full width */
+}
+
+.skill-back li {
+    font-size: 1.15em; /* Larger text for readability */
+    font-weight: 400;
+    line-height: 1.6;
     color: var(--text-light);
+    margin-bottom: 8px; /* Space between list items */
+    position: relative;
+    padding-left: 20px; /* Space for custom bullet */
 }
-.achievements-list li {
-    margin-bottom: 8px;
+
+.skill-back li::before {
+    content: '\2022'; /* Unicode character for a circle bullet */
+    color: var(--accent-orange); /* Orange bullet point */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em; /* Space for bullet */
+    margin-left: -1em; /* Pull bullet left */
 }
+
 
 /* Footer */
 footer {
     background-color: var(--bg-dark);
     color: var(--text-light);
     text-align: center;
-    padding: 50px 5%; /* More padding */
-    margin-top: 50px;
-    border-radius: 15px 15px 0 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 50px 5%;
+    margin-top: 60px; /* More margin */
+    border-radius: 20px 20px 0 0; /* More rounded top corners */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* More prominent border */
+    box-shadow: 0 -4px 20px var(--shadow-color); /* Shadow on top */
 }
 
 footer a {
-    color: var(--primary-accent-blue);
+    color: var(--accent-blue);
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -431,57 +445,69 @@ footer a:hover {
 }
 
 .contact-info p {
-    margin-bottom: 12px;
-    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-size: 1.2em;
     color: var(--text-light);
 }
 .contact-info i {
-    color: var(--primary-accent-blue);
-    margin-right: 10px;
-    font-size: 1.2em;
+    color: var(--accent-blue);
+    margin-right: 12px;
+    font-size: 1.3em;
 }
 
 .social-links {
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 .social-links a {
     color: var(--text-light);
-    margin: 0 18px; /* More spacing */
+    margin: 0 20px;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .social-links a:hover {
-    color: var(--secondary-accent-orange); /* Orange hover for social icons */
-    transform: scale(1.2); /* More prominent hover effect */
+    color: var(--accent-orange); /* Orange hover for social icons */
+    transform: scale(1.3); /* More prominent hover effect */
 }
 .copyright {
-    font-size: 0.95em;
+    font-size: 1em;
     opacity: 0.8;
-    margin-top: 35px;
+    margin-top: 40px;
 }
 
 
 /* Responsive Design */
 @media (max-width: 992px) {
     .hero-section h1 {
-        font-size: 4em;
+        font-size: 4.5em;
     }
     .hero-section p {
-        font-size: 1.6em;
+        font-size: 1.8em;
     }
     .section h2 {
-        font-size: 2.5em;
+        font-size: 2.8em;
     }
     .project-card h3 {
-        font-size: 1.7em;
+        font-size: 1.8em;
     }
     .navbar .logo {
-        font-size: 2.2em;
+        font-size: 2.5em;
     }
     .nav-links li {
-        margin-left: 30px;
+        margin-left: 35px;
     }
     .nav-links a {
+        font-size: 1.15em;
+    }
+    .skill-card-container {
+        height: 260px;
+    }
+    .skill-front i {
+        font-size: 3.5em;
+    }
+    .skill-front h3 {
+        font-size: 1.8em;
+    }
+    .skill-back p {
         font-size: 1.1em;
     }
 }
@@ -493,8 +519,8 @@ footer a:hover {
         padding-bottom: 15px;
         background-color: var(--bg-dark); /* Always solid dark on mobile for better readability */
         box-shadow: 0 4px 15px var(--shadow-color);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
     }
     .nav-links {
         margin-top: 15px;
@@ -502,96 +528,113 @@ footer a:hover {
         justify-content: center;
     }
     .nav-links li {
-        margin: 8px 15px;
+        margin: 10px 18px;
     }
     .navbar .logo {
-        font-size: 2em;
+        font-size: 2.2em;
     }
-    .navbar.scrolled .logo { /* Keep logo color consistent on mobile */
-        color: var(--primary-accent-blue);
+    .navbar.scrolled .logo {
+        color: var(--accent-blue);
     }
     .nav-links a {
-        color: var(--text-light); /* Keep nav links light on mobile */
+        color: var(--text-light);
     }
-    .nav-links a::after { /* Adjust underline for mobile */
+    .nav-links a::after {
         bottom: -3px;
     }
 
     .hero-section {
-        padding: 150px 5% 80px;
-        min-height: 550px;
+        padding: 180px 5% 100px;
+        min-height: 600px;
     }
     .hero-section h1 {
-        font-size: 3.2em;
+        font-size: 3.8em;
         letter-spacing: 1px;
     }
     .hero-section p {
-        font-size: 1.5em;
+        font-size: 1.6em;
     }
     .section {
         padding: 40px 3%;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
     .section h2 {
-        font-size: 2.3em;
-        margin-bottom: 30px;
+        font-size: 2.5em;
+        margin-bottom: 35px;
     }
     .skills-grid {
         grid-template-columns: 1fr; /* Stack skills vertically on small screens */
-        gap: 25px;
+        gap: 30px;
     }
     .skill-card-container {
-        height: 200px; /* Adjust height for mobile */
+        height: 220px; /* Adjust height for mobile */
     }
     .skill-front i {
-        font-size: 3em;
-        margin-bottom: 15px;
+        font-size: 3.2em;
+        margin-bottom: 20px;
     }
     .skill-front h3 {
-        font-size: 1.6em;
+        font-size: 1.7em;
     }
-    .skill-back p {
-        font-size: 1em;
+    .skill-back p { /* Remove specific p styling if no longer needed */
+        display: none; /* Hide if ul is used instead */
+    }
+    .skill-back ul {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        text-align: left;
+    }
+    .skill-back li {
+        font-size: 1.05em; /* Adjusted for mobile readability */
     }
     #spline-container {
-        height: 400px; /* Adjust height for smaller screens */
+        height: 450px; /* Adjust height for smaller screens */
     }
     body::before, body::after {
-        width: 350px; /* Smaller blurs for mobile */
-        height: 350px;
+        width: 450px;
+        height: 450px;
         filter: blur(100px);
     }
 }
 
 @media (max-width: 480px) {
     .hero-section h1 {
-        font-size: 2.5em;
+        font-size: 3em;
     }
     .hero-section p {
-        font-size: 1.2em;
+        font-size: 1.4em;
     }
     .section h2 {
-        font-size: 2em;
+        font-size: 2.2em;
     }
     .project-card h3 {
-        font-size: 1.5em;
+        font-size: 1.6em;
     }
     .skill-card-container {
-        height: 180px;
+        height: 200px; /* Further adjust for very small screens */
     }
     .skill-front i {
         font-size: 2.8em;
     }
     .skill-front h3 {
-        font-size: 1.4em;
+        font-size: 1.5em;
     }
-    .skill-back p {
-        font-size: 0.9em;
+    .skill-back li {
+        font-size: 0.95em;
     }
     #spline-container {
-        height: 300px;
+        height: 350px;
     }
     .navbar .logo {
-        font-size: 1.6em;
+        font-size: 2em;
+    }
+    .nav-links a {
+        font-size: 1.05em;
+    }
+    body::before, body::after {
+        width: 300px;
+        height: 300px;
+        filter: blur(80px);
     }
 }
