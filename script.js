@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Scroll Reveal Animation (Intersection Observer) - for main sections
-    const observerOptions = {
+    // Scroll Reveal Animation (Intersection Observer) - for main sections (one-shot reveal)
+    const sectionObserverOptions = {
         root: null, // viewport as the root
         rootMargin: '0px',
         threshold: 0.1 // 10% of the item must be visible to trigger
@@ -43,118 +43,123 @@ document.addEventListener('DOMContentLoaded', () => {
                 observer.unobserve(entry.target); // Stop observing once revealed
             }
         });
-    }, observerOptions);
+    }, sectionObserverOptions);
 
-    // Observe specific elements for reveal triggers
+    // Observe all main sections with the section observer
     document.querySelectorAll('.about-left-content').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#contact').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#hero-right').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#tools').forEach(el => sectionObserver.observe(el));
-    // Note: Services section (#services) itself no longer has 'reveal-item' as its contents have continuous animation.
 
 
-    // Services Timeline and Content Scroll Interaction
-    const serviceContentElements = document.querySelectorAll('.service-item');
-    const timelineNumberElements = document.querySelectorAll('.timeline-item');
+    // --- Services Section Animation Logic (Framer-like scroll effect) ---
+    const servicesSection = document.getElementById('services');
+    const serviceItems = document.querySelectorAll('.service-item');
+    
+    // Check if services section and items exist before proceeding
+    if (!servicesSection || serviceItems.length === 0) {
+        console.warn('Services section or service items not found. Skipping services animation setup.');
+        return; // Exit if elements aren't present
+    }
 
-    // Options for the IntersectionObserver for services.
-    // Use multiple thresholds to get more granular updates.
+    // This spacer creates the necessary scrollable height to trigger item changes
+    const scrollSpacer = document.createElement('div');
+    scrollSpacer.classList.add('services-section-scroll-spacer');
+    // We add this spacer AFTER all service-items to ensure their absolute positioning works within their parent,
+    // and this spacer creates the global scroll effect.
+    servicesSection.appendChild(scrollSpacer);
+
+    // Initial state: set the first item to active-content on load
+    serviceItems[0].classList.add('active-content');
+
+    // Options for the IntersectionObserver for service items
+    // rootMargin: Defines the active zone in the viewport.
+    // -20% 0px -70% 0px means:
+    // Top is 20% down from viewport top (triggers when top of item enters this line)
+    // Bottom is 70% down from viewport top (triggers when bottom of item passes this line)
+    // This creates an activation zone in the central 50% of the viewport.
     const servicesObserverOptions = {
         root: null, // the viewport
-        rootMargin: '0px 0px 0px 0px', // Observe entire element
-        threshold: Array.from({length: 101}, (v, k) => k / 100) // All thresholds from 0.00 to 1.00
+        rootMargin: '-20% 0px -70% 0px', // Top starts at 20% from viewport top, Bottom ends at 70% from viewport top
+        threshold: 0 // Trigger as soon as element crosses the root margin
     };
 
-    const servicesObserver = new IntersectionObserver((entries) => {
-        // Find the service item that is most centrally located and visible
-        let activeIndex = -1;
-        let minDistanceToCenter = Infinity;
-        const viewportCenter = window.innerHeight / 2; // Vertical center of the viewport
+    let currentActiveIndex = 0; // Keep track of the currently active service item index
 
+    const servicesIntersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const serviceIndex = parseInt(entry.target.dataset.serviceIndex);
-            const itemRect = entry.target.getBoundingClientRect();
-            const itemCenter = itemRect.top + itemRect.height / 2;
-            
-            // Check if the item is currently visible in the viewport
-            const isVisible = itemRect.top < window.innerHeight && itemRect.bottom > 0;
 
-            if (isVisible) {
-                const distance = Math.abs(itemCenter - viewportCenter);
-
-                // If this item is closer to the viewport center and is sufficiently in view
-                // We consider an item "sufficiently in view" if its top is above the 75% mark
-                // and its bottom is below the 25% mark, indicating it's broadly covering the center
-                if (itemRect.top < window.innerHeight * 0.75 && itemRect.bottom > window.innerHeight * 0.25) {
-                    if (distance < minDistanceToCenter) {
-                        minDistanceToCenter = distance;
-                        activeIndex = serviceIndex;
+            if (entry.isIntersecting) {
+                // An item is entering the active zone. Make it active.
+                if (serviceIndex !== currentActiveIndex) {
+                    // Only change if a new item is truly becoming active
+                    serviceItems[currentActiveIndex].classList.remove('active-content'); // Deactivate old
+                    entry.target.classList.add('active-content'); // Activate new
+                    currentActiveIndex = serviceIndex;
+                }
+            } else {
+                // An item is exiting the active zone.
+                // If the exiting item is the currently active one, and it's scrolling *up* (i.e., its bottom is above the rootMargin top),
+                // then activate the previous item.
+                if (serviceIndex === currentActiveIndex && entry.boundingClientRect.bottom < 0) {
+                    const prevIndex = currentActiveIndex - 1;
+                    if (prevIndex >= 0) {
+                        serviceItems[currentActiveIndex].classList.remove('active-content');
+                        serviceItems[prevIndex].classList.add('active-content');
+                        currentActiveIndex = prevIndex;
+                    }
+                }
+                // If the exiting item is the currently active one, and it's scrolling *down* (i.e., its top is below the rootMargin bottom),
+                // then activate the next item. (This should be handled by the next item entering, but good for robustness)
+                else if (serviceIndex === currentActiveIndex && entry.boundingClientRect.top > window.innerHeight) {
+                    const nextIndex = currentActiveIndex + 1;
+                    if (nextIndex < serviceItems.length) {
+                        serviceItems[currentActiveIndex].classList.remove('active-content');
+                        serviceItems[nextIndex].classList.add('active-content');
+                        currentActiveIndex = nextIndex;
                     }
                 }
             }
         });
-
-        // Apply/remove active classes based on the determined activeIndex
-        timelineNumberElements.forEach((el, index) => {
-            if (index === activeIndex) {
-                el.classList.add('active');
-            } else {
-                el.classList.remove('active');
-            }
-        });
-
-        serviceContentElements.forEach((el, index) => {
-            if (index === activeIndex) {
-                el.classList.add('active-content');
-            } else {
-                el.classList.remove('active-content');
-            }
-        });
-
-        // Fallback for initial load or if no item perfectly aligns with center
-        // This ensures the first item is active if the section is at the top of the page
-        // and no other specific item is dominant.
-        if (activeIndex === -1 && timelineNumberElements.length > 0) {
-            const servicesSectionRect = document.getElementById('services').getBoundingClientRect();
-            if (servicesSectionRect.top < window.innerHeight / 2 && servicesSectionRect.bottom > 0) {
-                // If the services section is broadly in view, default to the first element
-                // or the first one that is currently visible.
-                let firstVisibleServiceIndex = -1;
-                for (let i = 0; i < serviceContentElements.length; i++) {
-                    const rect = serviceContentElements[i].getBoundingClientRect();
-                    if (rect.top < window.innerHeight && rect.bottom > 0) {
-                        firstVisibleServiceIndex = i;
-                        break;
-                    }
-                }
-
-                if (firstVisibleServiceIndex !== -1) {
-                    timelineNumberElements[firstVisibleServiceIndex].classList.add('active');
-                    serviceContentElements[firstVisibleServiceIndex].classList.add('active-content');
-                } else {
-                     // If for some reason nothing is visible in the section (e.g., scrolled too fast),
-                     // and the section itself is in view, activate the first.
-                    timelineNumberElements[0].classList.add('active');
-                    serviceContentElements[0].classList.add('active-content');
-                }
-            }
-        }
-
     }, servicesObserverOptions);
 
-    // Observe all service content elements
-    serviceContentElements.forEach(item => {
-        servicesObserver.observe(item);
+    // Observe each service item with the custom observer
+    serviceItems.forEach(item => {
+        servicesIntersectionObserver.observe(item);
     });
 
-    // Initial check (once observer is set up) to correctly set active state on page load
-    // This helps if the page loads directly onto the services section.
-    // Triggering a scroll event or re-evaluating after a small timeout can help.
-    setTimeout(() => {
-        // Force a re-evaluation of current visible items after everything is rendered
-        if (servicesSection && servicesSection.getBoundingClientRect().top < window.innerHeight && timelineNumberElements.length > 0) {
-             // Simulate a scroll for the observer to fire
-            window.dispatchEvent(new Event('scroll'));
+    // Adjust the height of the scroll spacer dynamically
+    // The total scrollable height for the services section will be:
+    // (Number of service items - 1) * scroll distance per item + viewport height
+    // This allows each item to have its own scroll "stop" point.
+    const serviceItemHeight = servicesSection.querySelector('.services-content-wrapper').offsetHeight;
+    const scrollPerItem = window.innerHeight * 0.8; // Example: 80% of viewport height per item
+
+    // Calculate total needed height for the spacer
+    // The spacer only needs to cover (N-1) transitions, plus enough room for the last item to be centered
+    // Min 100vh to ensure the whole section is scrollable enough
+    let totalSpacerHeight = (serviceItems.length - 1) * scrollPerItem;
+    // Ensure that if there's only one item or very few, there's still some scroll
+    totalSpacerHeight = Math.max(totalSpacerHeight, window.innerHeight * 0.5); // At least half viewport height if content is short
+
+    scrollSpacer.style.height = `${totalSpacerHeight}px`;
+
+    // Initialize the active state on page load by forcing a scroll check if section is visible
+    const initialServicesRect = servicesSection.getBoundingClientRect();
+    if (initialServicesRect.top < window.innerHeight && initialServicesRect.bottom > 0) {
+        // Scroll to the start of the services section to ensure first item is active correctly
+        // This is a common workaround for IntersectionObserver not firing immediately on initial load.
+        window.scrollTo({
+            top: servicesSection.offsetTop + 1, // +1px to ensure a scroll event is triggered
+            behavior: 'instant'
+        });
+        // Then scroll back if not exactly at the top
+        if (window.scrollY !== servicesSection.offsetTop + 1) {
+             window.scrollTo({
+                top: servicesSection.offsetTop,
+                behavior: 'instant'
+            });
         }
-    }, 100); // Small delay to ensure all elements are rendered and positioned
+    }
 });

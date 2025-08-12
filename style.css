@@ -370,12 +370,14 @@ body {
 }
 
 
-/* NEW: Services Section Styles */
+/* Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    /* Removed reveal-item here as its children will handle animation dynamically */
+    /* No reveal-item here as children animate continuously */
+    /* Add perspective to a parent for 3D transforms */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
 }
 
 .services-heading {
@@ -389,116 +391,88 @@ body {
 
 /* Reusing text-white and text-gray for services-heading */
 
-.services-layout {
-    display: flex;
-    gap: 50px; /* Space between timeline and content */
-    align-items: flex-start; /* Align columns to the top */
-}
-
-.services-timeline {
-    position: sticky;
-    top: 150px; /* Adjust this value as needed so it's vertically centered in its sticky container */
-    flex-shrink: 0; /* Prevent shrinking */
-    width: 250px; /* Fixed width for the timeline column */
-    display: flex;
-    flex-direction: column;
-    /* This min-height is crucial to ensure the sticky element has enough scrollable parent space */
-    min-height: calc(100vh - 200px); /* Example: 100vh minus top offset and some footer space */
-    justify-content: space-between; /* Distribute items evenly */
-    padding-top: 10px; /* Small padding at the top */
-    padding-bottom: 10px; /* Small padding at the bottom */
-    position: relative; /* For pseudo-element line */
-}
-
-.services-timeline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 45px; /* Adjust to align with the number's center */
-    width: 2px;
-    height: 100%;
-    border-left: 2px dashed var(--services-number-color); /* Dashed line */
-    z-index: 0; /* Behind timeline items */
-}
-
-.timeline-item {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Space between number and title */
-    margin-bottom: 50px; /* Increased margin for more scroll space per item */
-    transition: color 0.3s ease;
+.services-content-wrapper {
+    /* This wrapper helps contain the overflow for the 3D effect */
     position: relative;
-    z-index: 1; /* Above the dashed line */
-    padding-left: 5px; /* Small offset */
-}
-
-.timeline-item:last-child {
-    margin-bottom: 0; /* No margin on last item */
-}
-
-.timeline-number {
-    font-size: 2.2em; /* Large number */
-    font-weight: 700;
-    color: var(--services-number-color); /* Default gray */
-    transition: color 0.3s ease;
-    line-height: 1;
-}
-
-.timeline-title {
-    font-size: 1.1em;
-    font-weight: 500;
-    color: var(--services-title-color); /* Default gray */
-    transition: color 0.3s ease;
-    line-height: 1.2;
-    padding-bottom: 3px; /* Align with bottom of number */
-}
-
-/* Active state for timeline items */
-.timeline-item.active .timeline-number,
-.timeline-item.active .timeline-title {
-    color: var(--services-active-color); /* White when active */
-}
-
-.timeline-item.active .timeline-number {
-    text-shadow: 0 0 10px rgba(255,255,255,0.2); /* Subtle glow */
-}
-
-.services-content {
-    flex-grow: 1;
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    /* Adjust height as needed to show one item at a time effectively */
+    height: 450px; /* Fixed height to control content display window */
     display: flex;
     flex-direction: column;
-    /* width: calc(100% - 300px); This can be removed, flex-grow handles width */
+    justify-content: center; /* Center content vertically within the window */
 }
+
 
 .service-item {
-    font-size: 1.15em;
-    line-height: 1.8;
-    color: var(--text-medium);
-    margin-bottom: 250px; /* Very large space between service descriptions to ensure clear active state changes */
-    min-height: 300px; /* Ensure enough height for each item to "fill" view briefly */
-    max-width: 650px; /* Limit width for readability */
-    padding: 20px; 
+    position: absolute; /* Position items absolutely within the wrapper */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Take full height of the wrapper */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center text vertically within the item */
+    align-items: flex-start; /* Align text left */
+    padding: 20px; /* Inner padding */
     box-sizing: border-box;
 
-    /* Initial state for parallax/reveal effect */
+    /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(100px); /* Pushed down significantly */
-    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
+    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
+    transform-origin: top center; /* Rotation pivot point */
+    transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
+    backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
-}
 
-.service-item:first-child {
-    margin-top: 0; /* Ensure no extra top margin */
-}
-
-.service-item:last-child {
-    margin-bottom: 0; /* No margin below the last one */
+    /* Text styling */
+    color: var(--text-medium); /* Default text color */
+    font-size: 1.15em;
+    line-height: 1.8;
 }
 
 /* Active state for service content */
 .service-item.active-content {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
+    position: relative; /* Temporarily set to relative to be counted in flow, then absolute again */
+    /* This position property needs careful handling with JS to ensure correct stacking for the effect */
+    z-index: 1;
+}
+
+/* Styling for the large background number */
+.service-bg-number {
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15em; /* Huge size */
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.05); /* Very translucent white */
+    top: 50%;
+    right: 0px; /* Position it to the far right */
+    transform: translateY(-50%) translateX(20%); /* Center vertically and push slightly off-screen */
+    line-height: 1;
+    user-select: none; /* Prevent text selection */
+    pointer-events: none; /* Do not interfere with clicks */
+    z-index: -1; /* Behind other content */
+}
+
+/* Title and Description for each service item */
+.service-title {
+    font-size: 2em; /* Title for the service */
+    font-weight: 700;
+    color: var(--text-light); /* White color */
+    margin-bottom: 20px;
+}
+.service-description {
+    font-size: 1.15em; /* Description text size */
+    color: var(--text-medium);
+    max-width: 600px; /* Limit width for readability */
+    line-height: 1.8;
+}
+
+/* Since service-items are absolute, we need to create virtual scroll space */
+.services-section-scroll-spacer {
+    height: 2000px; /* Adjust this value to control how much scroll is needed per item */
+    /* This element is added dynamically by JS to control scroll length */
 }
 
 
@@ -840,46 +814,21 @@ footer h2 {
         font-size: 4.5em;
         margin-bottom: 40px;
     }
-    .services-layout {
-        flex-direction: column; /* Stack columns on smaller desktop */
-        gap: 30px;
-    }
-    .services-timeline {
-        position: relative; /* Not sticky on smaller screens */
-        top: auto;
-        width: 100%; /* Full width */
-        flex-direction: row; /* Layout numbers horizontally */
-        flex-wrap: wrap; /* Allow wrapping */
-        justify-content: center; /* Center horizontally */
-        min-height: unset; /* Remove min-height */
-        padding: 0;
-    }
-    .services-timeline::before {
-        display: none; /* Hide vertical line */
-    }
-    .timeline-item {
-        flex-direction: column; /* Stack number and title */
-        margin: 0 10px 20px; /* Adjust spacing */
-        align-items: center; /* Center items */
-        padding-left: 0;
-    }
-    .timeline-number {
-        font-size: 1.8em;
-    }
-    .timeline-title {
-        font-size: 0.9em;
-        padding-bottom: 0;
-    }
-    .services-content {
-        width: 100%; /* Full width */
-        max-width: 600px; /* Keep max-width for readability */
-        margin: 0 auto; /* Center the content */
+    .services-content-wrapper {
+        height: 400px; /* Adjust height for smaller desktop */
     }
     .service-item {
-        font-size: 1em;
-        margin-bottom: 80px; /* Reduced space between service descriptions */
-        min-height: 180px; /* Adjusted min-height */
         padding: 15px;
+    }
+    .service-bg-number {
+        font-size: 12em; /* Scale down background number */
+    }
+    .service-title {
+        font-size: 1.8em;
+    }
+    .service-description {
+        font-size: 1em;
+        max-width: 500px;
     }
 
     /* Adjustments for tools section */
@@ -1034,50 +983,36 @@ footer h2 {
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
+        perspective: none; /* Disable 3D perspective on mobile for simpler animation */
     }
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
     }
-    .services-layout {
-        flex-direction: column; /* Stack columns */
-        gap: 20px; /* Reduce gap */
-    }
-    .services-timeline {
-        position: relative; /* Not sticky on mobile */
-        top: auto;
-        width: 100%; /* Full width */
-        flex-direction: row; /* Horizontal layout */
-        flex-wrap: wrap; /* Wrap items */
-        justify-content: center; /* Center horizontally */
-        min-height: unset;
-        padding: 0;
-    }
-    .services-timeline::before {
-        display: none; /* Hide vertical line on mobile */
-    }
-    .timeline-item {
-        flex-direction: column; /* Stack number and title */
-        margin: 0 8px 15px; /* Adjust spacing */
-        align-items: center;
-        padding-left: 0;
-    }
-    .timeline-number {
-        font-size: 1.6em;
-    }
-    .timeline-title {
-        font-size: 0.8em;
-    }
-    .services-content {
-        width: 100%;
-        max-width: 100%; /* Take full width of parent */
-        margin: 0 auto;
+    .services-content-wrapper {
+        height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
-        font-size: 0.9em;
-        margin-bottom: 60px; /* Further reduced margin */
-        min-height: 150px; /* Smaller min-height for mobile */
+        opacity: 0; /* Initial state for mobile will be simpler fade-in */
+        transform: translateY(50px); /* Simpler translateY */
+        /* Rotation is effectively ignored due to perspective: none; */
         padding: 10px;
+    }
+    .service-item.active-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .service-bg-number {
+        font-size: 8em; /* Smaller background number on mobile */
+        right: -10px; /* Adjust position */
+    }
+    .service-title {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+    .service-description {
+        font-size: 0.9em;
+        max-width: 100%;
     }
 
     /* Adjustments for tools section */
@@ -1195,20 +1130,17 @@ footer h2 {
         font-size: 2.8em;
         margin-bottom: 25px;
     }
-    .timeline-item {
-        margin: 0 5px 10px; /* Tighter spacing */
+    .services-content-wrapper {
+        height: 200px; /* Further adjusted fixed height for very small mobile */
     }
-    .timeline-number {
+    .service-bg-number {
+        font-size: 6em; /* Even smaller background number */
+    }
+    .service-title {
         font-size: 1.4em;
     }
-    .timeline-title {
-        font-size: 0.7em;
-    }
-    .service-item {
+    .service-description {
         font-size: 0.8em;
-        margin-bottom: 40px; /* Even less space */
-        min-height: 120px; /* Adjusted min-height */
-        padding: 8px;
     }
 
     /* Adjustments for tools section */
