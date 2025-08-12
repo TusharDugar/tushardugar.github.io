@@ -447,9 +447,8 @@ body {
 
     /* Base state (will be overridden by JS for animation) */
     opacity: 0; 
-    transform: translateY(0) rotateX(0deg); /* Set initial to neutral for JS to control */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    transition: none; /* JS will directly control transforms, but keep this for opacity if needed */
+    transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: transform, opacity; /* Performance hint */
 
@@ -457,10 +456,10 @@ body {
     color: var(--text-light); /* Default text color */
 }
 
-/* Active state for service content - used as a fallback if JS fails, but JS will control now */
+/* Active state for service content - Used for initial load and fallback, but JS controls main animation */
 .service-item.active-content {
     opacity: 1;
-    transform: translateY(0) rotateX(0deg); /* Set by JS, but here for clarity */
+    transform: translateY(0) rotateX(0deg); /* This will be set by JS */
     z-index: 1; /* Ensure active item is on top */
 }
 
@@ -850,6 +849,7 @@ footer h2 {
     }
     .service-item {
         padding: 15px;
+        transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     }
     .service-bg-number {
         font-size: 12em; /* Scale down background number */
@@ -1025,13 +1025,7 @@ footer h2 {
     }
     .service-item {
         padding: 10px;
-        /* Transitions are handled by JS directly now */
-        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out; /* Set transition here for JS-controlled properties */
-    }
-    .service-item.active-content {
-        /* This class is now primarily for initial state/fallback, JS controls main animation */
-        opacity: 1;
-        transform: translateY(0) rotateX(0deg);
+        transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
