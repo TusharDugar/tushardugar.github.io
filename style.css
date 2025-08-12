@@ -422,11 +422,11 @@ body {
 }
 
 .services-heading .text-white { /* This is now the same as .text-gray, effectively making both lines grey */
-    color: var(--text-medium);
+    color: var(--text-medium); /* Changed to grey */
 }
 
 .services-heading .text-gray { 
-    color: var(--text-medium);
+    color: var(--text-medium); /* Grey as requested */
 }
 
 
@@ -472,7 +472,7 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: -100px; /* Adjusted to prevent cutoff */
+    right: -30px; /* Adjusted to prevent cutoff and bring closer to text */
     transform: translateY(-50%); /* Simplified, only vertical translation */
     line-height: 1;
     user-select: none;
@@ -1017,7 +1017,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em;
-        right: -40px; /* Adjusted to prevent cutoff */
+        right: -10px; /* Adjusted to prevent cutoff */
     }
     .service-title {
         font-size: 1.6em;
@@ -1146,7 +1146,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em;
-        right: -30px; /* Adjusted to prevent cutoff */
+        right: -10px; /* Adjusted to prevent cutoff */
     }
     .service-title {
         font-size: 1.4em;

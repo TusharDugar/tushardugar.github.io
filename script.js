@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return; 
     }
 
-    // Create the scroll spacer if it doesn't exist within the services section
+    // Create the scroll spacer if it's not already there
     let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
     if (!scrollSpacer) {
         scrollSpacer = document.createElement('div');
