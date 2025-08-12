@@ -365,7 +365,7 @@ body {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
     padding-left: 60px; /* Reduced padding for wider content */
-    padding-right: 50px; /* Reduced padding for wider content (10px more width from right) */
+    padding-right: 0; /* REMOVED extra space / padding */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
@@ -399,13 +399,13 @@ body {
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
-    margin-bottom: 30px; /* Reduced space below hero description */
+    margin-bottom: 15px; /* REDUCED space below hero description globally */
 }
 
 
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
-    padding-top: 0px; /* Reduced space from hero section to 0 */
+    padding-top: 120px; /* INCREASED padding from hero section for all views */
     padding-bottom: 0px; /* Reduced space before tools section to 0 */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
@@ -415,8 +415,7 @@ body {
 /* The new sticky container for the heading + animation content */
 #services-sticky-container {
     position: sticky;
-    top: 80px; /* Adjusted sticky top to bring content more towards center */
-    /* No explicit height here, it will grow with its children */
+    /* top property is now controlled by JavaScript for centering */
     z-index: 10; /* Ensure it stays above other content during scroll */
     background: transparent; /* No background */
 }
@@ -425,7 +424,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Matched hero heading size */
     line-height: 0.9;
-    margin-bottom: 35px; /* Increased margin for more space below heading */
+    margin-bottom: 15px; /* REDUCED margin-bottom significantly for heading */
     text-transform: uppercase;
 }
 
@@ -440,7 +439,7 @@ body {
 
 .services-content-wrapper {
     position: relative; /* Now relative to its new parent: #services-sticky-container */
-    height: 140px; /* Reduced height for compactness */
+    height: 140px; /* Fixed height for desktop to maintain 3D animation */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
@@ -448,7 +447,7 @@ body {
     overflow: visible; /* CRITICAL: Allows background number to escape container */
     background: transparent; /* Ensure no background interferes */
     z-index: 1; /* Relative to its parent sticky container */
-    padding-right: 64px; /* 4rem: Extra breathing room for the number */
+    padding-right: 64px; /* 4rem: Extra breathing room for the number (KEPT for number overlap) */
 }
 
 .service-item {
@@ -497,7 +496,7 @@ body {
     margin-bottom: 2px; /* Reduced to 2px */
     line-height: 1.2;
     font-style: normal; /* Removed italics */
-    padding-right: 56px; /* 3.5rem: Extra padding to avoid overlap with background number */
+    padding-right: 56px; /* 3.5rem: Extra padding to avoid overlap with background number (KEPT for number overlap) */
 }
 
 /* Service Description - no italics */
@@ -773,7 +772,7 @@ footer h2 {
         flex-grow: 1;
         width: 100%;
         padding-left: 40px; /* Adjusted padding */
-        padding-right: 30px; /* Reduced padding (10px more width from right) */
+        padding-right: 0; /* Explicitly removed padding */
         margin-top: 50px;
         text-align: center;
     }
@@ -827,28 +826,32 @@ footer h2 {
 
     .hero-heading {
         font-size: 5.8em; /* Reduced font size */
-        margin-bottom: 25px;
+        margin-bottom: 25px; /* Reduced for tighter spacing */
     }
     .hero-description {
         font-size: 1.1em;
-        margin-bottom: 30px; /* Reduced for tighter spacing */
+        line-height: 1.6;
+        max-width: 500px; /* Adjusted for readability on smaller screens */
+        margin-left: auto; /* Center text block in its container */
+        margin-right: auto; /* Center text block in its container */
+        margin-bottom: 20px; /* Further reduced space below hero description */
     }
 
     .services-section {
-        padding-top: 0px; /* Reduced */
-        padding-bottom: 0px; /* Reduced */
+        padding-top: 120px; /* Increased padding from hero section */
+        padding-bottom: 0px; /* Reduced space before tools section to 0 */
+        text-align: left;
+        position: relative; /* Needed for spacer to take up space */
+        z-index: 1;
     }
     .services-heading {
-        font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 20px; /* Increased margin for more space below heading */
+        font-size: 5.5em; /* Adjusted for this breakpoint */
+        margin-bottom: 15px; /* REDUCED margin-bottom for heading */
     }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 60px; /* Adjusted sticky top to bring content more towards center */
-    }
+    /* #services-sticky-container top property is now controlled by JavaScript for centering */
     .services-content-wrapper {
-        height: 180px; /* Reduced height for compactness */
-        padding-right: 48px; /* 3rem (48px) for 1200px breakpoint */
+        height: 160px; /* Adjusted height for compactness */
+        padding-right: 48px; /* 3rem (48px) for 1200px breakpoint (KEPT for number overlap) */
     }
     .service-item {
         padding: 10px 9px; /* Adjusted padding */
@@ -861,7 +864,7 @@ footer h2 {
     }
     .service-title {
         font-size: 1.8em;
-        padding-right: 40px; /* 2.5rem (40px) for 1200px breakpoint */
+        padding-right: 40px; /* 2.5rem (40px) for 1200px breakpoint (KEPT for number overlap) */
     }
     .service-description {
         font-size: 1em;
@@ -900,7 +903,7 @@ footer h2 {
     .tool-category {
         font-size: 0.8em;
     }
-}
+} /* Closing brace for @media (max-width: 1200px) */
 
 @media (max-width: 768px) {
     .main-layout-container {
@@ -951,7 +954,6 @@ footer h2 {
     .about-short-desc {
         font-size: 0.8em;
         margin-bottom: 15px;
-        padding: 0 2px;
     }
     .about-social-icons a {
         font-size: 1.3em;
@@ -1000,9 +1002,11 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding: 40px 10px; /* Adjusted padding */
+        padding-left: 10px; /* Adjusted padding */
+        padding-right: 0; /* Explicitly removed padding */
+        padding-top: 20px;
+        padding-bottom: 40px; /* Explicitly set to maintain vertical spacing */
         min-height: auto;
-        padding-top: 20px; /* Drastically reduced space from top for hero section */
     }
     .hero-heading {
         font-size: 4.3em; /* Reduced font size */
@@ -1012,24 +1016,29 @@ footer h2 {
         font-size: 1em;
         line-height: 1.6;
         max-width: 100%;
-        margin-bottom: 30px; /* Reduced */
+        margin-left: auto; /* Center text block in its container */
+        margin-right: auto; /* Center text block in its container */
+        margin-bottom: 15px; /* REDUCED space below hero description */
     }
 
     .services-section {
-        padding-top: 0px; /* Reduced */
-        padding-bottom: 0px; /* Reduced */
+        padding-top: 80px; /* Increased padding from hero section */
+        padding-bottom: 0px; /* Reduced space before tools section to 0 */
+        text-align: left;
+        position: relative; /* Needed for spacer to take up space */
+        z-index: 1;
     }
     .services-heading {
-        font-size: 3.5em;
-        margin-bottom: 25px; /* Increased margin */
+        font-size: 3em; /* Further reduced for 768px */
+        margin-bottom: 8px; /* REDUCED margin-bottom for heading */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
         top: 40px; /* Adjusted sticky top to bring content more towards center */
     }
     .services-content-wrapper {
-        height: 120px; /* Reduced height for compactness */
-        padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint */
+        height: 100px; /* Further reduced height for 768px */
+        padding-right: 30px; /* Reduced padding */
     }
     .service-item {
         padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
@@ -1042,10 +1051,10 @@ footer h2 {
     }
     .service-title {
         font-size: 1.6em;
-        padding-right: 32px; /* 2rem (32px) for 768px breakpoint */
+        padding-right: 25px; /* Reduced padding */
     }
     .service-description {
-        font-size: 0.9em;
+        font-size: 0.85em;
         max-width: 100%;
     }
     /* spacer height calculation is in JS */
@@ -1060,6 +1069,7 @@ footer h2 {
         margin-bottom: 30px;
     }
     .tools-grid {
+        display: grid;
         grid-template-columns: 1fr;
         gap: 15px;
         max-width: 100%;
@@ -1079,7 +1089,7 @@ footer h2 {
     .tool-category {
         font-size: 0.75em;
     }
-}
+} /* Closing brace for @media (max-width: 768px) */
 
 @media (max-width: 480px) {
     .main-layout-container {
@@ -1131,7 +1141,6 @@ footer h2 {
     .about-short-desc {
         font-size: 0.75em;
         margin-bottom: 10px;
-        padding: 0;
     }
     .about-social-icons a {
         font-size: 1.1em;
@@ -1146,6 +1155,11 @@ footer h2 {
         right: -25px;
     }
 
+    .right-column-scroll {
+        width: 100%;
+        padding: 20px 5px 40px 5px; /* Consolidated padding for mobile */
+        min-height: auto;
+    }
     .hero-heading {
         font-size: 3.3em; /* Reduced font size */
         margin-bottom: 15px;
@@ -1153,40 +1167,45 @@ footer h2 {
     .hero-description {
         font-size: 0.9em;
         line-height: 1.5;
-        margin-bottom: 20px; /* Reduced */
+        max-width: 100%;
+        margin-left: auto; /* Center text block in its container */
+        margin-right: auto; /* Center text block in its container */
+        margin-bottom: 10px; /* REDUCED space below hero description */
     }
 
     .services-section {
-        padding-top: 15px; /* Reduced */
-        padding-bottom: 0px; /* Reduced */
+        padding-top: 60px; /* Increased padding from hero section */
+        padding-bottom: 0px; /* Reduced space before tools section to 0 */
+        text-align: left;
+        position: relative; /* Needed for spacer to take up space */
+        z-index: 1;
     }
     .services-heading {
-        font-size: 2.8em;
-        margin-bottom: 15px; /* Reduced */
+        font-size: 2.2em; /* Even smaller for 480px */
+        margin-bottom: 5px; /* REDUCED minimal margin */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 20px; /* Adjusted sticky top for mobile */
+        top: 20px; /* Adjusted sticky top to bring content more towards center */
     }
     .services-content-wrapper {
-        height: 100px; /* Reduced height for compactness */
-        padding-right: 24px; /* 1.5rem (24px) for 480px breakpoint */
+        height: 80px; /* Even smaller height for 480px */
+        padding-right: 15px; /* Reduced padding */
     }
     .service-item {
-        padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
+        padding: 5px 5px; /* Tighter padding */
     }
     .service-bg-number {
-        font-size: 5.2em; /* Reduced size */
-        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -15px; /* Adjusted based on new padding-right to be fully visible */
+        font-size: 4em; /* Significantly smaller */
+        right: 0; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
-        font-size: 1.4em;
-        padding-right: 20px; /* 1.25rem (20px) for 480px breakpoint */
+        font-size: 1.1em;
+        padding-right: 10px; /* Reduced padding */
     }
     .service-description {
-        font-size: 0.8em;
+        font-size: 0.75em;
     }
     /* spacer height calculation is in JS */
 
@@ -1213,4 +1232,4 @@ footer h2 {
     .tool-category {
         font-size: 0.7em;
     }
-}
+} /* Closing brace for @media (max-width: 480px) */
