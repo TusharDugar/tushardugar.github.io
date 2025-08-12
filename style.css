@@ -25,7 +25,7 @@
     /* New colors for Tool Cards */
     --bg-tool-card: #1A1A1A; /* Dark background for tool cards */
     --tool-icon-bg: #FFFFFF; /* White background for tool icons */
-    --tool-name-color: var(--text-light); /* White for tool names */
+    --tool-name-color: var(--tool-name-color); /* White for tool names */
     --tool-category-color: var(--text-medium); /* Gray for categories */
 
     /* New colors for Services Section */
