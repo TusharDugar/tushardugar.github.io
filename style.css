@@ -408,7 +408,7 @@ body {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for child sticky positioning */
+    position: relative; /* Needed for spacer to take up space */
     z-index: 1;
 }
 
@@ -420,6 +420,15 @@ body {
     margin-bottom: 50px;
     text-transform: uppercase;
 }
+
+.services-heading .text-white { /* Ensure these styles are still available if needed */
+    color: var(--text-light);
+}
+
+.services-heading .text-gray { /* Ensure these styles are still available if needed */
+    color: var(--text-medium);
+}
+
 
 .services-content-wrapper {
     position: sticky; /* Back to sticky */
@@ -448,7 +457,7 @@ body {
     box-sizing: border-box;
 
     opacity: 0; /* Controlled by JS */
-    transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
+    transform-origin: top center; /* Changed to top center for outward rotation */
     transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     backface-visibility: hidden;
     will-change: transform, opacity;
@@ -463,8 +472,8 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: 0px;
-    transform: translateY(-50%) translateX(20%);
+    right: -100px; /* Adjusted to prevent cutoff */
+    transform: translateY(-50%) translateX(0%); /* Removed translateX from here for clarity */
     line-height: 1;
     user-select: none;
     pointer-events: none;
@@ -472,23 +481,23 @@ body {
     transition: opacity 0.5s ease-out;
 }
 
-/* Service Title - will be green as per Framer example's first line */
+/* Service Title - will be orange as per request */
 .service-title {
     font-size: 2em;
     font-weight: 700;
-    color: var(--services-title-active-color);
+    color: var(--accent-primary-sawad); /* Changed to orange */
     margin-bottom: 10px;
     line-height: 1.2;
-    font-style: italic;
+    font-style: normal; /* Removed italics */
 }
 
-/* Service Description - will be white as per Framer example's second line */
+/* Service Description - no italics */
 .service-description {
     font-size: 1.2em;
     color: var(--services-description-color);
     max-width: 650px;
     line-height: 1.6;
-    font-style: italic;
+    font-style: normal; /* Removed italics */
 }
 
 /* The element that creates the total scrollable height for the services section to allow sticky effect */
@@ -821,17 +830,19 @@ footer h2 {
         padding-top: 60px;
     }
     .services-heading {
-        font-size: 6em; /* Match hero heading size */
+        font-size: 6em; /* Matched hero heading size */
         margin-bottom: 40px;
     }
     .services-content-wrapper {
         height: 400px;
+        top: 40px; /* Adjusted sticky top for smaller screens */
     }
     .service-item {
         padding: 15px;
     }
     .service-bg-number {
         font-size: 12em;
+        right: -80px; /* Adjusted to prevent cutoff */
     }
     .service-title {
         font-size: 1.8em;
@@ -840,7 +851,10 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
-    /* spacer height calculation is in JS */
+    .services-section-scroll-spacer {
+        padding-top: calc(400px + 40px); /* services-content-wrapper height + its top offset */
+    }
+
 
     .tools-section {
         padding-top: 60px;
@@ -989,7 +1003,6 @@ footer h2 {
 
     .services-section {
         padding-top: 40px;
-        /* perspective: none; /* Keep 3D on mobile for consistency, if desired */
     }
     .services-heading {
         font-size: 3.5em;
@@ -997,15 +1010,14 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 250px;
-        position: sticky; /* Keep sticky on smaller screens for this effect */
-        top: 20px; /* Adjust sticky top for mobile */
+        top: 20px; /* Adjusted sticky top for mobile */
     }
     .service-item {
         padding: 10px;
     }
     .service-bg-number {
         font-size: 8em;
-        right: -10px;
+        right: -40px; /* Adjusted to prevent cutoff */
     }
     .service-title {
         font-size: 1.6em;
@@ -1135,6 +1147,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em;
+        right: -30px; /* Adjusted to prevent cutoff */
     }
     .service-title {
         font-size: 1.4em;

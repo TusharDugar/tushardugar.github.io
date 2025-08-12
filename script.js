@@ -78,14 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define the fixed height of the visible services content wrapper (from CSS)
-    let SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; 
+    let SECTION_VISIBLE_HEIGHT; // Will be read dynamically
     // Define the top offset for the sticky effect (from CSS)
-    let STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top); 
+    let STICKY_TOP_OFFSET; // Will be read dynamically
     
     // Define how much scroll distance is needed to fully transition one item.
     // This value is crucial for controlling the animation speed and overall section length.
     // Adjust '1.2' for faster/slower transitions per slide (e.g., 1.0 for very fast, 2.0 for slow).
-    const SCROLL_DISTANCE_PER_ITEM = SECTION_VISIBLE_HEIGHT * 1.2; 
+    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.2; 
+    let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on SECTION_VISIBLE_HEIGHT
 
     let currentActiveIndex = -1; // Tracks the currently active slide index
     let lastScrollY = window.scrollY; // For scroll direction detection
@@ -96,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Recalculate dynamic values on resize or initial load
         SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight;
         STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
+        SCROLL_DISTANCE_PER_ITEM = SECTION_VISIBLE_HEIGHT * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
         // The total scroll range needed for all animations:
         // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
@@ -146,14 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let zIndex = 0;
 
             if (index === currentIndex) {
-                // The current item: animating out (rotating upwards and fading)
-                rotateX = -90 * fractionalProgress; // Rotates from 0deg to -90deg
+                // The current item: animating out (rotating outwards and fading)
+                rotateX = 90 * fractionalProgress; // Rotates from 0deg to 90deg (forward/outwards)
                 translateY = -SECTION_VISIBLE_HEIGHT * fractionalProgress; // Moves upwards
                 opacity = 1 - fractionalProgress; // Fades out
                 zIndex = 2; // Ensures it's on top when exiting
             } else if (index === currentIndex + 1) {
-                // The next item: animating in (rotating downwards and fading)
-                rotateX = 90 * (1 - fractionalProgress); // Rotates from 90deg (off-screen below) to 0deg (fully visible)
+                // The next item: animating in (rotating into view from behind/below)
+                rotateX = 90 * (1 - fractionalProgress) - 90; // Rotates from 0deg to -90deg (comes in from "bottom" of cube)
                 translateY = SECTION_VISIBLE_HEIGHT * (1 - fractionalProgress); // Moves downwards into place
                 opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
@@ -189,10 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Set the initial height for the services section and the spacer
     // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
     setTimeout(() => {
-        // Read initial dimensions now that DOM is likely settled
-        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; 
-        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
-
         adjustServicesSectionHeight();
         // 2. Trigger initial animation state on page load
         requestAnimationFrame(updateServiceAnimation);
@@ -200,10 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
-        // Re-read dimensions as they might change with screen size
-        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight;
-        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
-        
         adjustServicesSectionHeight();
         requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
     });
