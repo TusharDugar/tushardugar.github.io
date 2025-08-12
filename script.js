@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return; 
     }
 
-    // Create the scroll spacer if it doesn't exist
+    // Create the scroll spacer if it doesn't exist within the services section
     let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
     if (!scrollSpacer) {
         scrollSpacer = document.createElement('div');
@@ -77,13 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.appendChild(scrollSpacer);
     }
 
-    // The fixed height of the visible content window (from CSS)
-    const SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; // Should be 450px initially based on CSS
-    const STICKY_TOP_OFFSET = 50; // Matches `top: 50px;` in .services-content-wrapper CSS
-
-    // How much scroll is needed to fully transition from one slide to the next.
-    // Making it slightly more than the visible height creates a smooth transition pace.
-    // You can adjust '1.2' for faster/slower transitions per slide.
+    // Define the fixed height of the visible services content wrapper (from CSS)
+    const SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; 
+    
+    // Define how much scroll distance is needed to fully transition one item.
+    // This value is crucial for controlling the animation speed and overall section length.
+    // Adjust '1.2' for faster/slower transitions per slide (e.g., 1.0 for very fast, 2.0 for slow).
     const SCROLL_DISTANCE_PER_ITEM = SECTION_VISIBLE_HEIGHT * 1.2; 
 
     let currentActiveIndex = -1; // Tracks the currently active slide index
@@ -96,29 +95,26 @@ document.addEventListener('DOMContentLoaded', () => {
         // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
         const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
-        // The servicesSection needs to be tall enough to allow the sticky wrapper to "pin"
-        // and for the user to scroll through the entire animation.
-        // This height is provided by the `scrollSpacer`.
-        // Add `SECTION_VISIBLE_HEIGHT` so the last item is fully in view when the animation ends,
-        // plus the `STICKY_TOP_OFFSET` so the sticky effect feels natural from the beginning of the section.
-        scrollSpacer.style.height = `${totalAnimationScrollRange + SECTION_VISIBLE_HEIGHT + STICKY_TOP_OFFSET}px`;
-        // console.log(`Services Section effective scroll height: ${scrollSpacer.offsetHeight}px`);
+        // The scroll spacer's height extends the services section.
+        // It needs to provide enough height for all transitions,
+        // PLUS the visible height of the last item so it can be fully displayed at the end.
+        scrollSpacer.style.height = `${totalAnimationScrollRange + SECTION_VISIBLE_HEIGHT}px`;
+        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items.`);
     };
 
     // This is the core animation logic, triggered by scroll
     const updateServiceAnimation = () => {
-        // Calculate the point where the `servicesContentWrapper` would start sticking.
-        // It's the top of the `servicesSection` minus the sticky offset.
-        const servicesSectionStartScroll = servicesSection.offsetTop - STICKY_TOP_OFFSET;
+        const servicesSectionTop = servicesSection.offsetTop; // Top position of the entire services section
 
-        // Calculate how far the user has scrolled *within* the services section's designated animation area.
-        let scrollProgressInAnimation = window.scrollY - servicesSectionStartScroll;
+        // Calculate how far the user has scrolled *relative to the start of the animation*.
+        // The animation starts when the top of the `servicesContentWrapper` enters the viewport.
+        // We consider `servicesContentWrapper.offsetTop` relative to its parent `servicesSection`.
+        const animationStartPoint = servicesSectionTop + servicesContentWrapper.offsetTop;
+        let scrollProgressInAnimation = window.scrollY - animationStartPoint;
 
         // Clamp the scroll progress to the valid range for our animation.
-        // The maximum value is the total height of the spacer, minus the sticky offset and visible height,
-        // to ensure the animation completes as the section ends.
-        const maxScrollProgress = scrollSpacer.offsetHeight - STICKY_TOP_OFFSET - SECTION_VISIBLE_HEIGHT;
-        scrollProgressInAnimation = Math.max(0, Math.min(maxScrollProgress, scrollProgressInAnimation));
+        // The maximum value is the height of the spacer.
+        scrollProgressInAnimation = Math.max(0, Math.min(scrollSpacer.offsetHeight, scrollProgressInAnimation));
 
         // Determine which item should be active based on scroll progress
         const normalizedProgress = scrollProgressInAnimation / SCROLL_DISTANCE_PER_ITEM;
@@ -153,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
             } else {
-                // All other items are hidden and reset
+                // All other items are completely hidden and reset
                 opacity = 0;
                 translateY = 0;
                 rotateX = 0;
@@ -181,30 +177,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialize animation and event listeners ---
 
-    // 1. Set the initial height for the services section
-    adjustServicesSectionHeight();
-
-    // 2. Recalculate height and re-render on window resize
-    window.addEventListener('resize', () => {
-        // Re-calculate visible height on resize as it might change
-        const updatedSectionVisibleHeight = servicesContentWrapper.offsetHeight;
-        if (SECTION_VISIBLE_HEIGHT !== updatedSectionVisibleHeight) {
-            // Update the constant if necessary, though it's typically fixed by CSS
-            // SECTION_VISIBLE_HEIGHT = updatedSectionVisibleHeight; // Would need to make this a `let`
-        }
+    // 1. Set the initial height for the services section and the spacer
+    // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
+    setTimeout(() => {
         adjustServicesSectionHeight();
-        // Immediately update animation state to prevent visual glitches after resize
-        requestAnimationFrame(updateServiceAnimation); 
+        // 2. Trigger initial animation state on page load
+        requestAnimationFrame(updateServiceAnimation);
+    }, 100); // Small delay to allow CSS to render and get accurate offsetHeights
+
+    // 3. Recalculate height and re-render on window resize
+    window.addEventListener('resize', () => {
+        adjustServicesSectionHeight();
+        requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
     });
 
-    // 3. Attach the optimized scroll handler
+    // 4. Attach the optimized scroll handler
     window.addEventListener('scroll', handleScrollEvent);
-
-    // 4. Trigger initial animation state on page load
-    // Using setTimeout to ensure all DOM elements and CSS are rendered and calculated.
-    setTimeout(() => {
-        requestAnimationFrame(updateServiceAnimation);
-    }, 100);
 
     // Ensure the services section itself gets the 'revealed' class
     sectionObserver.observe(servicesSection); 

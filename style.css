@@ -406,11 +406,10 @@ body {
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 80px; /* Space from hero section */
-    /* Adjust padding-bottom if needed after sticky calculation */
+    padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Crucial for child sticky positioning */
+    position: relative; /* Needed for spacer to take up space */
     z-index: 1;
-    /* No reveal-item here as its children animate continuously */
 }
 
 .services-heading {
@@ -422,11 +421,8 @@ body {
     text-transform: uppercase;
 }
 
-/* Reusing text-white and text-gray for services-heading */
-
 .services-content-wrapper {
-    position: sticky; /* Make this element stick while its parent scrolls */
-    top: 50px; /* Sticks 50px from the top of the viewport */
+    position: relative; /* Changed to relative */
     height: 450px; /* Fixed height for the visible content window */
     display: flex;
     flex-direction: column;
@@ -435,14 +431,7 @@ body {
     overflow: hidden; /* Crucial for clipping the 3D effect */
     background: transparent; /* Ensure no background interferes */
     z-index: 10; /* Ensure it stays above other content during scroll */
-    /* pointer-events: none; /* Removed: Was preventing interaction with content inside */
 }
-
-/* Ensure content inside sticky wrapper is interactive */
-.services-content-wrapper > * { 
-    /* pointer-events: auto; /* Removed: Not needed if services-content-wrapper doesn't have pointer-events: none; */
-}
-
 
 .service-item {
     position: absolute; /* Position items absolutely within the wrapper */
@@ -466,12 +455,7 @@ body {
     color: var(--text-light); /* Default text color */
 }
 
-/* Active state for service content - Used for initial load and fallback, but JS controls main animation */
-/* .service-item.active-content {
-    opacity: 1;
-    transform: translateY(0) rotateX(0deg); 
-    z-index: 1; 
-} */
+/* .service-item.active-content is now deprecated, JS directly controls transforms/opacity */
 
 /* Styling for the large background number */
 .service-bg-number, #service-bg-number { /* Both class and ID now reference this styling */
@@ -513,8 +497,7 @@ body {
 .services-section-scroll-spacer {
     display: block; /* Ensure it takes up space */
     height: 0; /* Will be set by JS */
-    /* Add padding-top equal to the sticky top + height of wrapper, to push content below sticky zone */
-    padding-top: calc(50px + 450px); /* Adjust this if top or height of wrapper change */
+    /* No padding-top needed here as the wrapper is no longer sticky */
 }
 
 
@@ -531,7 +514,7 @@ body {
     font-size: 5em; /* Slightly smaller than hero heading */
     line-height: 0.9;
     font-weight: 800;
-    margin-bottom: 50px; /* Space below heading */
+    margin-bottom: 50px;
     text-transform: uppercase;
 }
 
@@ -857,7 +840,8 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 400px; /* Adjust height for smaller desktop */
-        top: 40px; /* Adjust sticky top for smaller screens */
+        position: relative; /* Ensure relative on mobile as well */
+        top: auto; /* Ensure no sticky top from desktop overrides */
     }
     .service-item {
         padding: 15px;
@@ -873,9 +857,8 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
-    .services-section-scroll-spacer {
-        padding-top: calc(40px + 400px); /* Adjust padding for responsive sticky */
-    }
+    /* `services-section-scroll-spacer` padding-top is now removed as sticky is gone. Its height is directly set. */
+
 
     /* Adjustments for tools section */
     .tools-section {
@@ -1036,15 +1019,13 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 250px; /* Adjusted fixed height for mobile */
-        position: relative; /* Not sticky on mobile (simpler fade-in) */
-        top: auto; /* Remove sticky top */
+        position: relative; /* Ensure relative on mobile as well */
+        top: auto; /* Remove sticky top from desktop overrides */
     }
     .service-item {
         padding: 10px;
-        /* Transitions are handled by JS directly now */
-        transition: opacity 0.3s ease-out; /* Set transition here for JS-controlled properties */
+        transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     }
-    /* Removed .service-item.active-content here as JS will manage */
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
         right: -10px; /* Adjust position */
@@ -1057,9 +1038,8 @@ footer h2 {
         font-size: 0.9em;
         max-width: 100%;
     }
-    .services-section-scroll-spacer {
-        padding-top: 0; /* No sticky padding on mobile */
-    }
+    /* `services-section-scroll-spacer` padding-top is now removed as sticky is gone. Its height is directly set. */
+
 
     /* Adjustments for tools section */
     .tools-section {
