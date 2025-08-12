@@ -433,7 +433,7 @@ body {
 .services-content-wrapper {
     position: sticky; /* Back to sticky */
     top: 50px; /* Stick 50px from the top of the viewport */
-    height: 400px; /* Reduced height for compactness */
+    height: 300px; /* Reduced height for compactness */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
@@ -472,8 +472,8 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: 0px; /* Place its right edge at the wrapper's right edge */
-    transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to the right to cut it off */
+    right: -100px; /* Adjusted to prevent cutoff and push fully right */
+    transform: translateY(-50%); /* Simplified, only vertical translation */
     line-height: 1;
     user-select: none;
     pointer-events: none;
@@ -505,7 +505,7 @@ body {
     display: block;
     height: 0; /* JS will set this height */
     /* Add padding-top to make space for the sticky element that will eventually be here */
-    padding-top: calc(400px + 50px); /* services-content-wrapper height + its top offset */
+    padding-top: calc(300px + 50px); /* services-content-wrapper height + its top offset */
 }
 
 
@@ -835,7 +835,7 @@ footer h2 {
         margin-bottom: 30px; /* Reduced */
     }
     .services-content-wrapper {
-        height: 400px; /* Set height */
+        height: 280px; /* Reduced height for compactness */
         top: 40px; /* Adjusted sticky top for smaller screens */
     }
     .service-item {
@@ -843,8 +843,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em;
-        right: 0px; /* Aligned to right edge */
-        transform: translateY(-50%) translateX(20%); /* Shift 20% to cut off */
+        right: -80px; /* Adjusted to prevent cutoff and push fully right */
+        transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
         font-size: 1.8em;
@@ -854,7 +854,7 @@ footer h2 {
         max-width: 500px;
     }
     .services-section-scroll-spacer {
-        padding-top: calc(400px + 40px); /* services-content-wrapper height + its top offset */
+        padding-top: calc(280px + 40px); /* services-content-wrapper height + its top offset */
     }
 
 
@@ -1012,7 +1012,7 @@ footer h2 {
         margin-bottom: 30px;
     }
     .services-content-wrapper {
-        height: 220px; /* Reduced height */
+        height: 180px; /* Reduced height for compactness */
         top: 20px; /* Adjusted sticky top for mobile */
     }
     .service-item {
@@ -1020,8 +1020,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em;
-        right: 0px; /* Aligned to right edge */
-        transform: translateY(-50%) translateX(20%); /* Shift 20% to cut off */
+        right: -40px; /* Adjusted to prevent cutoff and push fully right */
+        transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
         font-size: 1.6em;
@@ -1031,7 +1031,7 @@ footer h2 {
         max-width: 100%;
     }
     .services-section-scroll-spacer {
-        padding-top: calc(220px + 20px); /* services-content-wrapper height + its top offset */
+        padding-top: calc(180px + 20px); /* services-content-wrapper height + its top offset */
     }
 
 
@@ -1146,12 +1146,12 @@ footer h2 {
         margin-bottom: 25px;
     }
     .services-content-wrapper {
-        height: 180px; /* Reduced height */
+        height: 150px; /* Reduced height for compactness */
     }
     .service-bg-number {
         font-size: 6em;
-        right: 0px; /* Aligned to right edge */
-        transform: translateY(-50%) translateX(20%); /* Shift 20% to cut off */
+        right: -10px; /* Adjusted to prevent cutoff and push fully right */
+        transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
         font-size: 1.4em;
@@ -1160,7 +1160,7 @@ footer h2 {
         font-size: 0.8em;
     }
     .services-section-scroll-spacer {
-        padding-top: calc(180px + 20px); /* services-content-wrapper height + its top offset */
+        padding-top: calc(150px + 20px); /* services-content-wrapper height + its top offset */
     }
 
     .tools-section {

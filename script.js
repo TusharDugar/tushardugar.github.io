@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Define how much scroll distance is needed to fully transition one item.
     // This value is crucial for controlling the animation speed and overall section length.
-    // Reduced multiplier to make transitions tighter and reduce overall section length.
+    // Multiplier reduced for tighter transitions.
     const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 0.9; 
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on SECTION_VISIBLE_HEIGHT
 
