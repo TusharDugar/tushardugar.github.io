@@ -475,7 +475,7 @@ body {
 .service-bg-number, #service-bg-number {
     position: absolute;
     font-family: 'Poppins', sans-serif;
-    font-size: 14.2em; /* Reduced size by 0.3em (approx 5px) */
+    font-size: 13.9em; /* Reduced size (approx 5px from last) */
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
@@ -493,7 +493,7 @@ body {
     font-size: 2em;
     font-weight: 700;
     color: var(--accent-primary-sawad); /* Changed to orange */
-    margin-bottom: 10px;
+    margin-bottom: 2px; /* Reduced to 2px */
     line-height: 1.2;
     font-style: normal; /* Removed italics */
 }
@@ -838,7 +838,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 20px; /* Increased margin for more space below heading */
+        margin-bottom: 20px; /* Reduced */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
@@ -851,7 +851,7 @@ footer h2 {
         padding: 10px 9px; /* Adjusted padding */
     }
     .service-bg-number {
-        font-size: 11.5em; /* Reduced size by 0.5em */
+        font-size: 11.2em; /* Reduced size (approx 5px from last) */
         right: 0px; /* Aligned to right edge */
         transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
@@ -1028,7 +1028,7 @@ footer h2 {
         padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
     }
     .service-bg-number {
-        font-size: 7.2em; /* Reduced size by 0.3em */
+        font-size: 7.2em; /* Reduced size */
         right: 0px; /* Aligned to right edge */
         transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
@@ -1163,7 +1163,7 @@ footer h2 {
         height: 100px; /* Reduced height for compactness */
     }
     .service-bg-number {
-        font-size: 5.2em; /* Reduced size by 0.3em */
+        font-size: 5.2em; /* Reduced size */
         right: 0px; /* Aligned to right edge */
         transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
