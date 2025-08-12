@@ -399,13 +399,13 @@ body {
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
-    margin-bottom: 30px; /* Reduced space below hero description */
+    margin-bottom: 15px; /* REDUCED space below hero description */
 }
 
 
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
-    padding-top: 80px; /* Increased padding from hero section for all views */
+    padding-top: 100px; /* INCREASED padding from hero section for all views */
     padding-bottom: 0px; /* Reduced space before tools section to 0 */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
@@ -424,7 +424,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Matched hero heading size */
     line-height: 0.9;
-    margin-bottom: 35px; /* Increased margin for more space below heading */
+    margin-bottom: 25px; /* REDUCED margin-bottom for heading */
     text-transform: uppercase;
 }
 
@@ -838,7 +838,7 @@ footer h2 {
     }
 
     .services-section {
-        padding-top: 80px; /* Increased padding from hero section */
+        padding-top: 100px; /* Increased padding from hero section */
         padding-bottom: 0px; /* Reduced space before tools section to 0 */
         text-align: left;
         position: relative; /* Needed for spacer to take up space */
@@ -1018,7 +1018,7 @@ footer h2 {
         max-width: 100%;
         margin-left: auto; /* Center text block in its container */
         margin-right: auto; /* Center text block in its container */
-        margin-bottom: 20px; /* Reduced space below hero description */
+        margin-bottom: 15px; /* Reduced space below hero description */
     }
 
     .services-section {
@@ -1170,7 +1170,7 @@ footer h2 {
         max-width: 100%; /* No max-width on mobile */
         margin-left: auto; /* Center text block in its container */
         margin-right: auto; /* Center text block in its container */
-        margin-bottom: 20px; /* Reduced */
+        margin-bottom: 15px; /* Reduced space below hero description */
     }
 
     .services-section {
