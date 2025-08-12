@@ -405,7 +405,7 @@ body {
 
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
-    padding-top: 80px; /* Increased padding from hero section for all views */
+    padding-top: 0px; /* Reduced space from hero section to 0 */
     padding-bottom: 0px; /* Reduced space before tools section to 0 */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
@@ -826,7 +826,7 @@ footer h2 {
 
     .hero-heading {
         font-size: 5.8em; /* Reduced font size */
-        margin-bottom: 25px; /* Reduced for tighter spacing */
+        margin-bottom: 25px;
     }
     .hero-description {
         font-size: 1.1em;
@@ -834,15 +834,12 @@ footer h2 {
         max-width: 500px; /* Adjusted for readability on smaller screens */
         margin-left: auto; /* Center text block in its container */
         margin-right: auto; /* Center text block in its container */
-        margin-bottom: 20px; /* Further reduced space below hero description */
+        margin-bottom: 30px; /* Reduced for tighter spacing */
     }
 
     .services-section {
-        padding-top: 80px; /* Increased padding from hero section */
-        padding-bottom: 0px; /* Reduced space before tools section to 0 */
-        text-align: left;
-        position: relative; /* Needed for spacer to take up space */
-        z-index: 1;
+        padding-top: 0px; /* Reduced */
+        padding-bottom: 0px; /* Reduced */
     }
     .services-heading {
         font-size: 5.5em; /* Adjusted for this breakpoint */
@@ -1018,15 +1015,12 @@ footer h2 {
         max-width: 100%;
         margin-left: auto; /* Center text block in its container */
         margin-right: auto; /* Center text block in its container */
-        margin-bottom: 20px; /* Reduced space below hero description */
+        margin-bottom: 30px; /* Reduced */
     }
 
     .services-section {
-        padding-top: 60px; /* Increased padding from hero section */
-        padding-bottom: 0px; /* Reduced space before tools section to 0 */
-        text-align: left;
-        position: relative; /* Needed for spacer to take up space */
-        z-index: 1;
+        padding-top: 0px; /* Reduced */
+        padding-bottom: 0px; /* Reduced */
     }
     .services-heading {
         font-size: 3em; /* Further reduced for 768px */
@@ -1141,6 +1135,7 @@ footer h2 {
     .about-short-desc {
         font-size: 0.75em;
         margin-bottom: 10px;
+        padding: 0;
     }
     .about-social-icons a {
         font-size: 1.1em;
@@ -1174,11 +1169,8 @@ footer h2 {
     }
 
     .services-section {
-        padding-top: 40px; /* Increased padding from hero section */
-        padding-bottom: 0px; /* Reduced space before tools section to 0 */
-        text-align: left;
-        position: relative; /* Needed for spacer to take up space */
-        z-index: 1;
+        padding-top: 15px; /* Reduced */
+        padding-bottom: 0px; /* Reduced */
     }
     .services-heading {
         font-size: 2.2em; /* Even smaller for 480px */
