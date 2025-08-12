@@ -422,7 +422,7 @@ body {
 }
 
 .services-content-wrapper {
-    position: relative; /* Changed to relative */
+    position: relative; /* IMPORTANT: Changed from sticky to relative. JS will handle the effect. */
     height: 450px; /* Fixed height for the visible content window */
     display: flex;
     flex-direction: column;
@@ -497,7 +497,6 @@ body {
 .services-section-scroll-spacer {
     display: block; /* Ensure it takes up space */
     height: 0; /* Will be set by JS */
-    /* No padding-top needed here as the wrapper is no longer sticky */
 }
 
 

@@ -187,6 +187,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
+        // Re-calculate visible height and other dimensions as they might change
+        // We might need to get servicesContentWrapper.offsetHeight again if its size is dynamic
+        // For now, assuming SECTION_VISIBLE_HEIGHT is fixed by CSS
         adjustServicesSectionHeight();
         requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
     });
