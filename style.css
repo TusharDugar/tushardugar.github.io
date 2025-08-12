@@ -138,7 +138,7 @@ body {
 @keyframes glow2 {
     0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
     50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.3; } /* Updated opacity */
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Updated opacity */
 }
 
 
@@ -415,7 +415,7 @@ body {
 /* The new sticky container for the heading + animation content */
 #services-sticky-container {
     position: sticky;
-    top: 20px; /* Reduced sticky top to bring content higher */
+    top: 80px; /* Adjusted sticky top to bring content more towards center */
     /* No explicit height here, it will grow with its children */
     z-index: 10; /* Ensure it stays above other content during scroll */
     background: transparent; /* No background */
@@ -478,7 +478,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 13.6em; /* Reduced size by 0.3em (approx 5px) */
     font-weight: 800;
-    color: rgba(51, 51, 51, 0.35); /* Grey color with 35% opacity */
+    color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
     top: 50%;
     right: -50px; /* Pushed further right to be fully visible and out of the way of text */
     transform: translateY(-50%); /* Simplified, only vertical translation */
@@ -541,6 +541,7 @@ body {
 .tools-heading .text-gray {
     color: var(--text-medium);
     display: block;
+
 }
 
 .tools-grid {
@@ -855,7 +856,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 11.2em; /* Reduced size (approx 5px from last) */
-        color: rgba(51, 51, 51, 0.35); /* Grey color with 35% opacity */
+        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
         right: -100px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
@@ -1035,7 +1036,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6.9em; /* Reduced size */
-        color: rgba(51, 51, 51, 0.35); /* Grey color with 35% opacity */
+        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
         right: -25px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
@@ -1176,7 +1177,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 5.2em; /* Reduced size */
-        color: rgba(51, 51, 51, 0.35); /* Grey color with 35% opacity */
+        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
         right: -15px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
