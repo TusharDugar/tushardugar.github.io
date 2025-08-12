@@ -406,7 +406,7 @@ body {
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 60px; /* Reduced space from hero section */
-    padding-bottom: 60px; /* Reduced space before tools section */
+    padding-bottom: 30px; /* Drastically reduced space before tools section */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
     z-index: 1;
@@ -481,7 +481,7 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: -100px; /* Pushed further right so entire number is visible */
+    right: -100px; /* Adjusted to prevent cutoff and push fully right */
     transform: translateY(-50%); /* Simplified, only vertical translation */
     line-height: 1;
     user-select: none;
@@ -519,7 +519,7 @@ body {
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 60px; /* Reduced space from services section */
+    padding-top: 30px; /* Reduced space from services section */
     padding-bottom: 80px;
     text-align: left;
 }
@@ -836,7 +836,7 @@ footer h2 {
 
     .services-section {
         padding-top: 40px; /* Reduced */
-        padding-bottom: 40px; /* Reduced */
+        padding-bottom: 20px; /* Reduced from 40px for tighter gap */
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
@@ -868,7 +868,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 40px; /* Reduced for tighter fit */
+        padding-top: 20px; /* Reduced from 40px for tighter gap */
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -927,7 +927,6 @@ footer h2 {
         max-width: 320px;
         height: 150px;
         margin-bottom: 20px;
-        border-radius: 12px;
     }
     .about-left-content h3 {
         font-size: 2.2em;
@@ -1014,7 +1013,7 @@ footer h2 {
 
     .services-section {
         padding-top: 30px; /* Reduced */
-        padding-bottom: 30px; /* Reduced */
+        padding-bottom: 15px; /* Reduced from 30px for tighter gap */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1046,7 +1045,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 30px; /* Reduced for tighter fit */
+        padding-top: 15px; /* Reduced from 30px for tighter gap */
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -1102,7 +1101,6 @@ footer h2 {
         max-width: 290px;
         height: 130px;
         margin-bottom: 15px;
-        border-radius: 10px;
     }
     .about-left-content h3 {
         font-size: 2em;
@@ -1150,6 +1148,7 @@ footer h2 {
 
     .services-section {
         padding-top: 20px; /* Reduced */
+        padding-bottom: 10px; /* Reduced for tightest gap */
     }
     .services-heading {
         font-size: 2.8em;
@@ -1176,7 +1175,7 @@ footer h2 {
     /* spacer height calculation is in JS */
 
     .tools-section {
-        padding-top: 20px; /* Reduced */
+        padding-top: 10px; /* Reduced from 20px for tightest gap */
         padding-bottom: 50px;
     }
     .tools-heading {
