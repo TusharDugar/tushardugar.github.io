@@ -62,63 +62,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
     const serviceBgNumber = servicesContentWrapper ? servicesContentWrapper.querySelector('#service-bg-number') : null;
     
-    // Check if services section and its critical elements exist before proceeding
-    if (!servicesSection || serviceItems.length === 0 || !serviceBgNumber) {
-        console.warn('Services section elements not found. Skipping services animation setup.');
-        // Ensure the section is still revealed even if animation is skipped
-        if (servicesSection) servicesSection.classList.add('revealed');
-        return; // Exit if elements aren't present
+    // Critical check for existence
+    if (!servicesSection || serviceItems.length === 0 || !servicesContentWrapper || !serviceBgNumber) {
+        console.warn('Services section or required elements not found. Skipping services animation setup.');
+        if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
+        return; 
     }
 
-    // Ensure the scroll spacer element exists within the services section
+    // Create the scroll spacer if it doesn't exist
     let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
     if (!scrollSpacer) {
         scrollSpacer = document.createElement('div');
         scrollSpacer.classList.add('services-section-scroll-spacer');
         servicesSection.appendChild(scrollSpacer);
     }
-    
-    // Constants for animation control
-    // This is the fixed height of the .services-content-wrapper that holds the visible service item.
-    const SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; 
-    
-    // This defines how much scroll distance is needed to fully transition one item.
-    // Making it 1.5 times the visible height provides a smooth, unhurried 3D rotation.
-    const SCROLL_DISTANCE_PER_ITEM = SECTION_VISIBLE_HEIGHT * 1.5; 
 
-    let currentActiveIndex = -1; // Keep track of the currently "active" item for efficiency
-    let lastScrollY = window.scrollY;
-    let rafId = null; // Used for requestAnimationFrame optimization
+    // The fixed height of the visible content window (from CSS)
+    const SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; // Should be 450px initially based on CSS
+    const STICKY_TOP_OFFSET = 50; // Matches `top: 50px;` in .services-content-wrapper CSS
 
-    // Function to adjust the scroll spacer height dynamically
-    const adjustScrollSpacerHeight = () => {
-        // The total scrollable height of the spacer is calculated to allow for:
-        // (number of items - 1) full transitions, plus
-        // an additional SCROLL_DISTANCE_PER_ITEM at the end to ensure the last item animates fully into view
-        // and stays visible for a moment before scrolling to the next section.
-        const totalSpacerHeight = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM + SCROLL_DISTANCE_PER_ITEM;
-        scrollSpacer.style.height = `${totalSpacerHeight}px`;
-        // console.log(`Spacer height set to: ${totalSpacerHeight}px`);
+    // How much scroll is needed to fully transition from one slide to the next.
+    // Making it slightly more than the visible height creates a smooth transition pace.
+    // You can adjust '1.2' for faster/slower transitions per slide.
+    const SCROLL_DISTANCE_PER_ITEM = SECTION_VISIBLE_HEIGHT * 1.2; 
+
+    let currentActiveIndex = -1; // Tracks the currently active slide index
+    let lastScrollY = window.scrollY; // For scroll direction detection
+    let rafId = null; // For requestAnimationFrame optimization
+
+    // Function to set the total scrollable height of the services section
+    const adjustServicesSectionHeight = () => {
+        // The total scroll range needed for all animations:
+        // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
+        const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
+
+        // The servicesSection needs to be tall enough to allow the sticky wrapper to "pin"
+        // and for the user to scroll through the entire animation.
+        // This height is provided by the `scrollSpacer`.
+        // Add `SECTION_VISIBLE_HEIGHT` so the last item is fully in view when the animation ends,
+        // plus the `STICKY_TOP_OFFSET` so the sticky effect feels natural from the beginning of the section.
+        scrollSpacer.style.height = `${totalAnimationScrollRange + SECTION_VISIBLE_HEIGHT + STICKY_TOP_OFFSET}px`;
+        // console.log(`Services Section effective scroll height: ${scrollSpacer.offsetHeight}px`);
     };
 
-    // Main function to update the transforms and opacity of service items based on scroll
+    // This is the core animation logic, triggered by scroll
     const updateServiceAnimation = () => {
-        const servicesSectionTop = servicesSection.offsetTop; // Top position of the entire services section
-        const windowScrollTop = window.scrollY;
+        // Calculate the point where the `servicesContentWrapper` would start sticking.
+        // It's the top of the `servicesSection` minus the sticky offset.
+        const servicesSectionStartScroll = servicesSection.offsetTop - STICKY_TOP_OFFSET;
 
-        // Calculate scroll progress relative to the start of the services section.
-        // The animation zone effectively starts when the top of the services section aligns with the top of the viewport.
-        let scrollProgressInServices = windowScrollTop - servicesSectionTop;
+        // Calculate how far the user has scrolled *within* the services section's designated animation area.
+        let scrollProgressInAnimation = window.scrollY - servicesSectionStartScroll;
 
-        // Clamp scrollProgress to ensure it stays within the effective animation range defined by the spacer.
-        scrollProgressInServices = Math.max(0, Math.min(scrollSpacer.offsetHeight, scrollProgressInServices));
+        // Clamp the scroll progress to the valid range for our animation.
+        // The maximum value is the total height of the spacer, minus the sticky offset and visible height,
+        // to ensure the animation completes as the section ends.
+        const maxScrollProgress = scrollSpacer.offsetHeight - STICKY_TOP_OFFSET - SECTION_VISIBLE_HEIGHT;
+        scrollProgressInAnimation = Math.max(0, Math.min(maxScrollProgress, scrollProgressInAnimation));
 
-        // Determine the current "active" item index and its fractional progress through the transition.
-        const normalizedScroll = scrollProgressInServices / SCROLL_DISTANCE_PER_ITEM;
-        const currentIndex = Math.floor(normalizedScroll);
-        const fractionalProgress = normalizedScroll - currentIndex; // Value from 0 to 1 for the transition between current and next item
+        // Determine which item should be active based on scroll progress
+        const normalizedProgress = scrollProgressInAnimation / SCROLL_DISTANCE_PER_ITEM;
+        const currentIndex = Math.floor(normalizedProgress);
+        const fractionalProgress = normalizedProgress - currentIndex; // Progress within the current item's transition (0 to 1)
 
-        // Update background number only if the active index has truly changed
+        // Update the background number for the active slide
         const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
         if (newActiveIndex !== currentActiveIndex) {
             currentActiveIndex = newActiveIndex;
@@ -126,27 +133,27 @@ document.addEventListener('DOMContentLoaded', () => {
             serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
         }
 
-        // Apply transforms and opacity to each service item
+        // Apply 3D transforms and opacity to each service item
         serviceItems.forEach((item, index) => {
             let translateY = 0;
             let rotateX = 0;
             let opacity = 0;
-            let zIndex = 0; // Control stacking order during transitions
+            let zIndex = 0;
 
             if (index === currentIndex) {
-                // This is the item that is currently visible and is potentially rotating out.
-                rotateX = -90 * fractionalProgress; // Rotates from 0deg (fully visible) to -90deg (rotated upwards)
-                translateY = -SECTION_VISIBLE_HEIGHT * fractionalProgress; // Moves upwards as it rotates out
+                // The current item: animating out (rotating upwards and fading)
+                rotateX = -90 * fractionalProgress; // Rotates from 0deg to -90deg
+                translateY = -SECTION_VISIBLE_HEIGHT * fractionalProgress; // Moves upwards
                 opacity = 1 - fractionalProgress; // Fades out
-                zIndex = 2; // Ensures the current item is on top while it's exiting
+                zIndex = 2; // Ensures it's on top when exiting
             } else if (index === currentIndex + 1) {
-                // This is the next item that is rotating into view.
-                rotateX = 90 * (1 - fractionalProgress); // Rotates from 90deg (off-screen below) to 0deg (fully visible)
+                // The next item: animating in (rotating downwards and fading)
+                rotateX = 90 * (1 - fractionalProgress); // Rotates from 90deg to 0deg
                 translateY = SECTION_VISIBLE_HEIGHT * (1 - fractionalProgress); // Moves downwards into place
                 opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
             } else {
-                // All other items are completely hidden and reset to default state to avoid interference.
+                // All other items are hidden and reset
                 opacity = 0;
                 translateY = 0;
                 rotateX = 0;
@@ -157,41 +164,48 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.opacity = opacity;
             item.style.zIndex = zIndex;
         });
+
+        rafId = null; // Reset requestAnimationFrame ID
     };
 
-    // Debounced scroll handler using requestAnimationFrame for performance
-    const handleScroll = () => {
-        // Only update if scroll position has actually changed to avoid unnecessary work
+    // Debounced scroll handler to optimize performance with requestAnimationFrame
+    const handleScrollEvent = () => {
         if (window.scrollY !== lastScrollY) {
             lastScrollY = window.scrollY;
-            // Cancel any pending animation frame to ensure only the latest scroll position is rendered
             if (rafId) {
                 cancelAnimationFrame(rafId);
             }
-            // Request a new animation frame to call updateServiceAnimation
             rafId = requestAnimationFrame(updateServiceAnimation);
         }
     };
 
-    // Initial setup and event listeners
-    adjustScrollSpacerHeight(); // Calculate spacer height initially
+    // --- Initialize animation and event listeners ---
 
-    // Handle resizing: recalculate spacer height and re-render animation to adapt to new dimensions
+    // 1. Set the initial height for the services section
+    adjustServicesSectionHeight();
+
+    // 2. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
-        adjustScrollSpacerHeight();
-        updateServiceAnimation(); // Re-render immediately on resize
+        // Re-calculate visible height on resize as it might change
+        const updatedSectionVisibleHeight = servicesContentWrapper.offsetHeight;
+        if (SECTION_VISIBLE_HEIGHT !== updatedSectionVisibleHeight) {
+            // Update the constant if necessary, though it's typically fixed by CSS
+            // SECTION_VISIBLE_HEIGHT = updatedSectionVisibleHeight; // Would need to make this a `let`
+        }
+        adjustServicesSectionHeight();
+        // Immediately update animation state to prevent visual glitches after resize
+        requestAnimationFrame(updateServiceAnimation); 
     });
 
-    // Attach the main scroll handler to the window's scroll event
-    window.addEventListener('scroll', handleScroll);
+    // 3. Attach the optimized scroll handler
+    window.addEventListener('scroll', handleScrollEvent);
 
-    // Call updateServiceAnimation immediately on page load to set the correct initial state.
-    // This is crucial for the first item to be visible and correctly positioned when the page loads.
-    // A small delay ensures all CSS and element dimensions are correctly calculated by the browser.
+    // 4. Trigger initial animation state on page load
+    // Using setTimeout to ensure all DOM elements and CSS are rendered and calculated.
     setTimeout(() => {
-        updateServiceAnimation();
+        requestAnimationFrame(updateServiceAnimation);
     }, 100);
 
-    // The 'servicesSection' is already observed by 'sectionObserver'
-    // to add the 'revealed' class for its initial fade-in (as a whole section).
+    // Ensure the services section itself gets the 'revealed' class
+    sectionObserver.observe(servicesSection); 
 });

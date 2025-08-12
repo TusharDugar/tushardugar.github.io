@@ -406,8 +406,10 @@ body {
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 80px; /* Space from hero section */
-    padding-bottom: 100px; /* Space before tools section */
+    /* Adjust padding-bottom if needed after sticky calculation */
     text-align: left;
+    position: relative; /* Crucial for child sticky positioning */
+    z-index: 1;
     /* No reveal-item here as its children animate continuously */
 }
 
@@ -423,14 +425,24 @@ body {
 /* Reusing text-white and text-gray for services-heading */
 
 .services-content-wrapper {
-    position: relative;
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
-    height: 450px; /* Fixed height to control content display window */
+    position: sticky; /* Make this element stick while its parent scrolls */
+    top: 50px; /* Sticks 50px from the top of the viewport */
+    height: 450px; /* Fixed height for the visible content window */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
+    perspective: 1000px; /* Defines the depth for 3D transforms */
+    overflow: hidden; /* Crucial for clipping the 3D effect */
+    background: transparent; /* Ensure no background interferes */
+    z-index: 10; /* Ensure it stays above other content during scroll */
+    /* pointer-events: none; /* Removed: Was preventing interaction with content inside */
 }
+
+/* Ensure content inside sticky wrapper is interactive */
+.services-content-wrapper > * { 
+    /* pointer-events: auto; /* Removed: Not needed if services-content-wrapper doesn't have pointer-events: none; */
+}
+
 
 .service-item {
     position: absolute; /* Position items absolutely within the wrapper */
@@ -445,23 +457,21 @@ body {
     padding: 20px; /* Inner padding */
     box-sizing: border-box;
 
-    /* Base state (will be overridden by JS for animation) */
-    opacity: 0; 
+    opacity: 0; /* Controlled by JS */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
     transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: transform, opacity; /* Performance hint */
 
-    /* Text styling */
     color: var(--text-light); /* Default text color */
 }
 
 /* Active state for service content - Used for initial load and fallback, but JS controls main animation */
-.service-item.active-content {
+/* .service-item.active-content {
     opacity: 1;
-    transform: translateY(0) rotateX(0deg); /* This will be set by JS */
-    z-index: 1; /* Ensure active item is on top */
-}
+    transform: translateY(0) rotateX(0deg); 
+    z-index: 1; 
+} */
 
 /* Styling for the large background number */
 .service-bg-number, #service-bg-number { /* Both class and ID now reference this styling */
@@ -477,7 +487,7 @@ body {
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
-    transition: text-content 0.2s ease-out, opacity 0.5s ease-out; /* Smooth transition for number fade-in/out */
+    transition: opacity 0.5s ease-out; /* Smooth transition for number fade-in/out */
 }
 
 /* Service Title - will be green as per Framer example's first line */
@@ -499,10 +509,12 @@ body {
     font-style: italic; /* Added italic as per reference */
 }
 
-/* Since service-items are absolute, we need to create virtual scroll space */
+/* The element that creates the total scrollable height for the services section */
 .services-section-scroll-spacer {
-    /* This element is added dynamically by JS to control scroll length */
-    /* Its height will be calculated by JS */
+    display: block; /* Ensure it takes up space */
+    height: 0; /* Will be set by JS */
+    /* Add padding-top equal to the sticky top + height of wrapper, to push content below sticky zone */
+    padding-top: calc(50px + 450px); /* Adjust this if top or height of wrapper change */
 }
 
 
@@ -838,7 +850,6 @@ footer h2 {
     /* Adjustments for services section */
     .services-section {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
-        padding-bottom: 80px; /* Space before tools section */
     }
     .services-heading {
         font-size: 4.5em;
@@ -846,6 +857,7 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 400px; /* Adjust height for smaller desktop */
+        top: 40px; /* Adjust sticky top for smaller screens */
     }
     .service-item {
         padding: 15px;
@@ -860,6 +872,9 @@ footer h2 {
     .service-description {
         font-size: 1em;
         max-width: 500px;
+    }
+    .services-section-scroll-spacer {
+        padding-top: calc(40px + 400px); /* Adjust padding for responsive sticky */
     }
 
     /* Adjustments for tools section */
@@ -1013,7 +1028,6 @@ footer h2 {
     /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 40px;
-        padding-bottom: 60px;
         perspective: none; /* Disable 3D perspective on mobile for simpler animation */
     }
     .services-heading {
@@ -1022,11 +1036,15 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 250px; /* Adjusted fixed height for mobile */
+        position: relative; /* Not sticky on mobile (simpler fade-in) */
+        top: auto; /* Remove sticky top */
     }
     .service-item {
         padding: 10px;
-        transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
+        /* Transitions are handled by JS directly now */
+        transition: opacity 0.3s ease-out; /* Set transition here for JS-controlled properties */
     }
+    /* Removed .service-item.active-content here as JS will manage */
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
         right: -10px; /* Adjust position */
@@ -1038,6 +1056,9 @@ footer h2 {
     .service-description {
         font-size: 0.9em;
         max-width: 100%;
+    }
+    .services-section-scroll-spacer {
+        padding-top: 0; /* No sticky padding on mobile */
     }
 
     /* Adjustments for tools section */
@@ -1149,7 +1170,6 @@ footer h2 {
     /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 30px;
-        padding-bottom: 50px;
     }
     .services-heading {
         font-size: 2.8em;
