@@ -86,7 +86,7 @@ body {
 .services-heading {
     font-size: 2.5rem;
     line-height: 1.2;
-    margin-bottom: 20px;
+    margin-bottom: 40px; /* Increased spacing from 20px */
 }
 
 .services-content-wrapper {
@@ -134,7 +134,7 @@ body {
     transform: translate(-50%, -50%);
     font-size: 8rem;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.14); /* Increased opacity for visibility */
     z-index: 0;
     pointer-events: none;
     white-space: nowrap;
