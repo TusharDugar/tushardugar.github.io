@@ -138,7 +138,7 @@ body {
 @keyframes glow2 {
     0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
     50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Updated opacity */
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.3; } /* Updated opacity */
 }
 
 
@@ -541,7 +541,6 @@ body {
 .tools-heading .text-gray {
     color: var(--text-medium);
     display: block;
-
 }
 
 .tools-grid {
@@ -845,7 +844,7 @@ footer h2 {
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 30px; /* Reduced sticky top to bring content higher */
+        top: 60px; /* Adjusted sticky top to bring content more towards center */
     }
     .services-content-wrapper {
         height: 180px; /* Reduced height for compactness */
@@ -880,6 +879,7 @@ footer h2 {
         margin-bottom: 40px;
     }
     .tools-grid {
+        display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px;
         max-width: 500px;
@@ -1025,7 +1025,7 @@ footer h2 {
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 20px; /* Adjusted sticky top for mobile */
+        top: 40px; /* Adjusted sticky top to bring content more towards center */
     }
     .services-content-wrapper {
         height: 120px; /* Reduced height for compactness */
@@ -1037,7 +1037,7 @@ footer h2 {
     .service-bg-number {
         font-size: 6.9em; /* Reduced size */
         color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -25px; /* Adjusted based on new padding-right to be fully visible */
+        right: -40px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
@@ -1166,7 +1166,7 @@ footer h2 {
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 15px; /* Reduced sticky top for mobile */
+        top: 20px; /* Adjusted sticky top for mobile */
     }
     .services-content-wrapper {
         height: 100px; /* Reduced height for compactness */
