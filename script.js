@@ -7,20 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const contactValue = button.dataset.contact;
 
             if (button.classList.contains('copied')) {
-                // console.log('Button already showing "Copied!". Returning.');
                 return; 
             }
 
             try {
                 await navigator.clipboard.writeText(contactValue);
-                // console.log('Text copied to clipboard:', contactValue);
-                
                 button.classList.add('copied');
-                // console.log('Class "copied" added to button.');
 
                 setTimeout(() => {
                     button.classList.remove('copied');
-                    // console.log('Class "copied" removed from button after 1.5 seconds.');
                 }, 1500);
             } catch (err) {
                 console.error('Failed to copy text: ', err);
@@ -66,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Critical check for existence
     if (!servicesSection || serviceItems.length === 0 || !servicesStickyContainer || !servicesSlidesViewport || !serviceBgNumber) {
         console.warn('Services section or required elements not found. Skipping services animation setup.');
-        if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
+        if (servicesSection) servicesSection.classList.add('revealed'); 
         return; 
     }
 
@@ -78,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let ANIMATION_VIEWPORT_HEIGHT; 
-    let STICKY_CONTAINER_OFFSET_FOR_SPACER; // Renamed to clarify its role for spacer calculation
+    let STICKY_CONTAINER_OFFSET_FOR_SPACER; 
     const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 0.9; 
     let SCROLL_DISTANCE_PER_ITEM; 
 
@@ -86,87 +81,89 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastScrollY = window.scrollY; 
     let rafId = null; 
 
-    // This function is now simplified as CSS handles the actual centering via `top: 50%`
-    // The `offsetHeight` is used for spacer calculation.
     const getStickyOffsetForSpacer = () => {
-        // When CSS has `top: 50%; transform: translateY(-50%);`, the visual top offset
-        // where the element 'sticks' is effectively `(viewportHeight / 2) - (stickyContainerHeight / 2)`.
-        // The spacer needs to account for the height of the sticky container
-        // and how much "vertical space" it occupies from its actual sticky position.
-        // For the spacer calculation, what matters is the full height of the sticky container.
         const viewportHeight = window.innerHeight;
         const stickyContainerHeight = servicesStickyContainer.offsetHeight;
-
-        // The effective offset from the top of the viewport when centered.
-        // This is primarily for the spacer calculation's starting point.
-        let calculatedTopOffset = (viewportHeight - stickyContainerHeight) / 2;
-        calculatedTopOffset = Math.max(0, calculatedTopOffset); // Clamp to 0
+        const stickyContainerDisplay = getComputedStyle(servicesStickyContainer).display;
 
         console.log('--- getStickyOffsetForSpacer Debug ---');
         console.log('  Viewport Height:', viewportHeight);
-        console.log('  Sticky Container OffsetHeight:', stickyContainerHeight);
+        console.log('  Sticky Container OffsetHeight (raw):', stickyContainerHeight);
+        console.log('  Sticky Container Computed Display:', stickyContainerDisplay);
+
+        // If height is 0 or display is none, it cannot be centered normally.
+        if (stickyContainerHeight === 0 || stickyContainerDisplay === 'none') {
+            console.error('ERROR: Sticky Container has 0 height or display: none. Cannot calculate proper offset for spacer.');
+            return 0; // Fallback to 0, which will prevent spacer from having excessive height
+        }
+
+        let calculatedTopOffset = (viewportHeight - stickyContainerHeight) / 2;
+        calculatedTopOffset = Math.max(0, calculatedTopOffset); // Clamp to 0
         console.log('  Calculated Sticky Top Offset (for spacer):', calculatedTopOffset);
         return calculatedTopOffset;
     };
 
     const adjustServicesSectionHeight = () => {
-        // Recalculate dynamic values on resize or initial load
-        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight; 
-        
-        // DEBUGGING: Log main animation viewport height
-        console.log('--- adjustServicesSectionHeight Debug ---');
-        console.log('  Services Slides Viewport OffsetHeight (ANIMATION_VIEWPORT_HEIGHT):', ANIMATION_VIEWPORT_HEIGHT);
+        const servicesSlidesViewportHeight = servicesSlidesViewport.offsetHeight;
+        const servicesSlidesViewportDisplay = getComputedStyle(servicesSlidesViewport).display;
 
-        // Get the offset that the spacer needs to account for
+        // DEBUGGING: Log main animation viewport height and display style
+        console.log('--- adjustServicesSectionHeight Debug ---');
+        console.log('  Services Slides Viewport OffsetHeight (raw):', servicesSlidesViewportHeight);
+        console.log('  Services Slides Viewport Computed Display:', servicesSlidesViewportDisplay);
+
+        // Check if the viewport itself has a valid height before proceeding
+        if (servicesSlidesViewportHeight === 0 || servicesSlidesViewportDisplay === 'none') {
+            console.error('ERROR: Services Slides Viewport has 0 height or display: none. Services animation cannot calculate correctly. Check CSS visibility/height for .services-content-wrapper.');
+            serviceBgNumber.textContent = 'ER'; // Immediate visual error feedback
+            scrollSpacer.style.height = '0px'; 
+            return; // Exit function early if critical dimensions are invalid
+        }
+        
+        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewportHeight; 
+
         STICKY_CONTAINER_OFFSET_FOR_SPACER = getStickyOffsetForSpacer(); 
-        // We no longer set servicesStickyContainer.style.top here, as CSS handles top: 50%
+        // Note: We no longer set servicesStickyContainer.style.top here, as CSS handles top: 50%
 
         SCROLL_DISTANCE_PER_ITEM = ANIMATION_VIEWPORT_HEIGHT * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
         
-        // DEBUGGING: Log scroll distance per item
-        console.log('  Scroll Distance Per Item:', SCROLL_DISTANCE_PER_ITEM);
+        console.log('  Calculated SCROLL_DISTANCE_PER_ITEM:', SCROLL_DISTANCE_PER_ITEM);
 
-        // Crucial check: if ANIMATION_VIEWPORT_HEIGHT is 0 (e.g., element hidden or not rendered),
-        // SCROLL_DISTANCE_PER_ITEM will be 0, leading to division by zero or NaN.
+        // Final check on critical values before setting spacer height
         if (isNaN(SCROLL_DISTANCE_PER_ITEM) || SCROLL_DISTANCE_PER_ITEM === 0) {
-            console.error('ERROR: ANIMATION_VIEWPORT_HEIGHT is 0 or caused NaN. Services animation cannot calculate correctly. Check CSS visibility/height for .services-content-wrapper or its parents.');
-            scrollSpacer.style.height = '0px'; // Prevent infinite scroll if calculations are bad
-            // Set a default state for service items (e.g., show the first one)
-            serviceItems.forEach((item, index) => {
-                item.style.opacity = index === 0 ? 1 : 0;
-                item.style.transform = 'translateY(0) rotateX(0deg)';
-                item.style.zIndex = index === 0 ? 2 : 0;
-            });
-            serviceBgNumber.textContent = 'ER'; // Display "ER" for error
-            return; // Exit function early if critical dimensions are invalid
+            console.error('ERROR: SCROLL_DISTANCE_PER_ITEM is 0 or NaN. Services animation will be disabled. Check ANIMATION_VIEWPORT_HEIGHT calculation.');
+            serviceBgNumber.textContent = 'ER';
+            scrollSpacer.style.height = '0px';
+            return;
         }
 
         const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
-        // Ensure these values are valid before calculating final spacer height
         if (isNaN(totalAnimationScrollRange) || isNaN(servicesStickyContainer.offsetHeight) || isNaN(STICKY_CONTAINER_OFFSET_FOR_SPACER)) {
             console.error('ERROR: Invalid dimension detected for total scroll range. Animation may not work correctly.');
             console.error('  totalAnimationScrollRange:', totalAnimationScrollRange, ' servicesStickyContainer.offsetHeight:', servicesStickyContainer.offsetHeight, ' STICKY_CONTAINER_OFFSET_FOR_SPACER:', STICKY_CONTAINER_OFFSET_FOR_SPACER);
+            serviceBgNumber.textContent = 'ER';
             scrollSpacer.style.height = '0px'; 
             return;
         }
 
-        // The spacer height ensures enough scroll space to go through all animation steps,
-        // plus the height of the sticky container itself, plus the offset it takes to reach its sticky point.
         scrollSpacer.style.height = `${totalAnimationScrollRange + servicesStickyContainer.offsetHeight + STICKY_CONTAINER_OFFSET_FOR_SPACER}px`;
         console.log(`  Scroll Spacer Height Set To: ${scrollSpacer.offsetHeight}px`);
         console.log(`  Total Animation Scroll Range: ${totalAnimationScrollRange}`);
+
+        // Ensure the background number is set to a valid value if it was 'ER' previously
+        if (serviceBgNumber.textContent === 'ER') {
+            serviceBgNumber.textContent = '01'; // Reset to initial if error was cleared
+        }
     };
 
     const updateServiceAnimation = () => {
-        // If critical dimensions are invalid, stop trying to animate
+        // If critical dimensions are invalid (from adjustServicesSectionHeight), stop trying to animate
         if (isNaN(SCROLL_DISTANCE_PER_ITEM) || SCROLL_DISTANCE_PER_ITEM === 0) {
-            console.warn('Skipping updateServiceAnimation due to invalid SCROLL_DISTANCE_PER_ITEM.');
+            console.warn('Skipping updateServiceAnimation due to invalid SCROLL_DISTANCE_PER_ITEM. Animation is effectively disabled.');
             return;
         }
 
-        // Calculate scroll progress relative to when the sticky effect should start
-        // This accounts for the offset from the top of the viewport due to the parent section's padding-top and the sticky element's top/transform.
         let scrollProgress = window.scrollY - (servicesSection.offsetTop + STICKY_CONTAINER_OFFSET_FOR_SPACER);
         
         const maxScrollableRangeForAnimation = scrollSpacer.offsetHeight - servicesStickyContainer.offsetHeight - STICKY_CONTAINER_OFFSET_FOR_SPACER;
@@ -179,10 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
         const displayIndex = newActiveIndex + 1;
 
-        // DEBUGGING: Log display index and progress
         // console.log(`Update Animation Loop: Active Index: ${newActiveIndex}, Fractional Progress: ${fractionalProgress.toFixed(2)}, Display Index: ${displayIndex}`);
         
-        serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
+        // Only update text content if it's not already 'ER'
+        if (serviceBgNumber.textContent !== 'ER') {
+            serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
+        }
 
 
         serviceItems.forEach((item, index) => {
@@ -228,11 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialize animation and event listeners ---
 
-    // Increased delay to ensure elements are fully rendered before measurements
+    // Increased delay for desktop environments for layout stability
     setTimeout(() => {
         adjustServicesSectionHeight();
         requestAnimationFrame(updateServiceAnimation);
-    }, 500); // 500ms delay
+    }, 1000); // Increased delay from 500ms to 1000ms
 
     window.addEventListener('resize', () => {
         adjustServicesSectionHeight();
