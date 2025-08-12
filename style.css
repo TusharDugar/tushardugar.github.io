@@ -365,7 +365,7 @@ body {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
     padding-left: 60px; /* Reduced padding for wider content */
-    padding-right: 60px; /* Reduced padding for wider content */
+    padding-right: 50px; /* Reduced padding for wider content (10px more width from right) */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
@@ -433,7 +433,7 @@ body {
 .services-content-wrapper {
     position: sticky; /* Back to sticky */
     top: 50px; /* Stick 50px from the top of the viewport */
-    height: 450px; /* Fixed height for the visible content window */
+    height: 400px; /* Reduced height for compactness */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
@@ -453,11 +453,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px;
+    padding: 20px 17px; /* Reduced horizontal padding for increased width */
     box-sizing: border-box;
 
     opacity: 0; /* Controlled by JS */
-    transform-origin: top center; /* Changed to top center for outward rotation */
+    transform-origin: top center; /* Top center for outward rotation */
     transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     backface-visibility: hidden;
     will-change: transform, opacity;
@@ -505,7 +505,7 @@ body {
     display: block;
     height: 0; /* JS will set this height */
     /* Add padding-top to make space for the sticky element that will eventually be here */
-    padding-top: calc(450px + 50px); /* services-content-wrapper height + its top offset */
+    padding-top: calc(400px + 50px); /* services-content-wrapper height + its top offset */
 }
 
 
@@ -765,7 +765,7 @@ footer h2 {
         flex-grow: 1;
         width: 100%;
         padding-left: 40px; /* Adjusted padding */
-        padding-right: 40px; /* Adjusted padding */
+        padding-right: 30px; /* Reduced padding (10px more width from right) */
         margin-top: 50px;
         text-align: center;
     }
@@ -835,11 +835,11 @@ footer h2 {
         margin-bottom: 30px; /* Reduced */
     }
     .services-content-wrapper {
-        height: 400px;
+        height: 400px; /* Set height */
         top: 40px; /* Adjusted sticky top for smaller screens */
     }
     .service-item {
-        padding: 15px;
+        padding: 15px 12px; /* Reduced horizontal padding for increased width */
     }
     .service-bg-number {
         font-size: 12em;
@@ -988,7 +988,7 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding: 40px 20px; /* Adjusted padding */
+        padding: 40px 10px; /* Adjusted padding (10px more width from right) */
         min-height: auto;
         padding-top: 50px;
     }
@@ -1012,11 +1012,11 @@ footer h2 {
         margin-bottom: 30px;
     }
     .services-content-wrapper {
-        height: 250px;
+        height: 220px; /* Reduced height */
         top: 20px; /* Adjusted sticky top for mobile */
     }
     .service-item {
-        padding: 10px;
+        padding: 10px 7px; /* Reduced horizontal padding for increased width */
     }
     .service-bg-number {
         font-size: 8em;
@@ -1031,7 +1031,7 @@ footer h2 {
         max-width: 100%;
     }
     .services-section-scroll-spacer {
-        padding-top: calc(250px + 20px); /* services-content-wrapper height + its top offset */
+        padding-top: calc(220px + 20px); /* services-content-wrapper height + its top offset */
     }
 
 
@@ -1146,7 +1146,7 @@ footer h2 {
         margin-bottom: 25px;
     }
     .services-content-wrapper {
-        height: 200px;
+        height: 180px; /* Reduced height */
     }
     .service-bg-number {
         font-size: 6em;
@@ -1160,7 +1160,7 @@ footer h2 {
         font-size: 0.8em;
     }
     .services-section-scroll-spacer {
-        padding-top: calc(200px + 20px); /* services-content-wrapper height + its top offset */
+        padding-top: calc(180px + 20px); /* services-content-wrapper height + its top offset */
     }
 
     .tools-section {
