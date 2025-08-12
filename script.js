@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to set the total scrollable height of the services section
     const adjustServicesSectionHeight = () => {
         // Recalculate dynamic values on resize or initial load
-        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight;
+        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight; 
         STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
         SCROLL_DISTANCE_PER_ITEM = ANIMATION_VIEWPORT_HEIGHT * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
@@ -107,11 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // The servicesSection (parent of sticky) needs to be tall enough to allow the sticky container to "pin"
         // and for the user to scroll through the entire animation range.
-        // It's the `totalAnimationScrollRange` (for the animation part)
-        // PLUS the `servicesStickyContainer.offsetHeight` (the full height of the sticky block itself, which includes the heading and animation viewport)
-        // PLUS the `STICKY_CONTAINER_TOP_OFFSET` (extra buffer so it activates correctly from top).
+        // This height is provided by the `scrollSpacer`.
+        // It's the `totalAnimationScrollRange` plus the `servicesStickyContainer.offsetHeight` (the full height of the sticky block itself, which includes the heading and animation viewport)
+        // plus the `STICKY_CONTAINER_TOP_OFFSET` (extra buffer so it activates correctly from top).
         scrollSpacer.style.height = `${totalAnimationScrollRange + servicesStickyContainer.offsetHeight + STICKY_CONTAINER_TOP_OFFSET}px`;
-        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items. Animation Viewport Height: ${ANIMATION_VIEWPORT_HEIGHT}`);
+        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items. Animation Viewport Height: ${ANIMATION_VIEWPORT_HEIGHT}. Sticky top: ${STICKY_CONTAINER_TOP_OFFSET}`);
     };
 
     // This is the core animation logic, triggered by scroll
