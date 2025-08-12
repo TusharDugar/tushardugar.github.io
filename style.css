@@ -406,7 +406,7 @@ body {
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 20px; /* Reduced space from hero section */
-    padding-bottom: 10px; /* Reduced space before tools section */
+    padding-bottom: 0px; /* Reduced space before tools section to 0 */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
     z-index: 1;
@@ -425,7 +425,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Matched hero heading size */
     line-height: 0.9;
-    margin-bottom: 25px; /* Increased margin for more space below heading */
+    margin-bottom: 35px; /* Increased margin for more space below heading */
     text-transform: uppercase;
 }
 
@@ -478,9 +478,9 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 13.6em; /* Reduced size by 0.3em (approx 5px) */
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.08); /* Increased transparency/opacity */
+    color: rgba(51, 51, 51, 0.25); /* Grey color with 25% opacity */
     top: 50%;
-    right: -150px; /* Pushed further right to be fully visible and out of the way of text */
+    right: -50px; /* Pushed further right to be fully visible and out of the way of text */
     transform: translateY(-50%); /* Simplified, only vertical translation */
     line-height: 1;
     user-select: none;
@@ -519,7 +519,7 @@ body {
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 15px; /* Reduced space from services section */
+    padding-top: 0px; /* Reduced space from services section to 0 */
     padding-bottom: 80px;
     text-align: left;
 }
@@ -1015,11 +1015,11 @@ footer h2 {
 
     .services-section {
         padding-top: 20px; /* Reduced */
-        padding-bottom: 10px; /* Reduced */
+        padding-bottom: 0px; /* Reduced */
     }
     .services-heading {
         font-size: 3.5em;
-        margin-bottom: 15px; /* Reduced */
+        margin-bottom: 25px; /* Increased margin */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
@@ -1034,7 +1034,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6.9em; /* Reduced size */
-        right: -70px; /* Adjusted based on new padding-right to be fully visible */
+        right: -40px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
@@ -1049,7 +1049,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 10px; /* Reduced */
+        padding-top: 0px; /* Reduced */
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -1074,139 +1074,4 @@ footer h2 {
         font-size: 0.95em;
     }
     .tool-category {
-        font-size: 0.75em;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-layout-container {
-        padding: 0 5px; /* Even tighter padding */
-    }
-    .section h2 {
-        font-size: 2.8em;
-        letter-spacing: 0.5px;
-        margin-bottom: 30px;
-    }
-    .contact-tagline {
-        font-size: 1em;
-        margin-bottom: 25px;
-    }
-    .contact-buttons {
-        width: 95%;
-        max-width: 300px;
-    }
-    .contact-button {
-        width: 100%;
-        height: 85px;
-    }
-    .about-left-content {
-        max-width: 260px;
-        padding: 15px 10px;
-    }
-    .profile-image-container {
-        width: calc(100% + 30px);
-        max-width: 290px;
-        height: 130px;
-        margin-bottom: 15px;
-    }
-    .about-left-content h3 {
-        font-size: 2em;
-        margin-bottom: 10px;
-    }
-    .fire-icon-with-line {
-        height: 30px;
-        margin-bottom: 15px;
-    }
-    .fire-icon {
-        padding: 5px;
-        font-size: 0.8em;
-    }
-    .fire-icon-with-line::before,
-    .fire-icon-with-line::after {
-        width: calc(50% - 18px);
-    }
-    .about-short-desc {
-        font-size: 0.75em;
-        margin-bottom: 10px;
-        padding: 0;
-    }
-    .about-social-icons a {
-        font-size: 1.1em;
-        gap: 10px;
-    }
-    .top-left-curve, .bottom-right-curve {
-        width: 80px;
-        height: 80px;
-        top: -25px;
-        left: -25px;
-        bottom: -25px;
-        right: -25px;
-    }
-
-    .hero-heading {
-        font-size: 3.5em;
-        margin-bottom: 15px;
-    }
-    .hero-description {
-        font-size: 0.9em;
-        line-height: 1.5;
-        margin-bottom: 20px; /* Reduced */
-    }
-
-    .services-section {
-        padding-top: 15px; /* Reduced */
-        padding-bottom: 5px; /* Reduced */
-    }
-    .services-heading {
-        font-size: 2.8em;
-        margin-bottom: 15px; /* Reduced */
-    }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 15px; /* Reduced sticky top for mobile */
-    }
-    .services-content-wrapper {
-        height: 100px; /* Reduced height for compactness */
-        padding-right: 24px; /* 1.5rem (24px) for 480px breakpoint */
-    }
-    .service-item {
-        padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
-    }
-    .service-bg-number {
-        font-size: 5.2em; /* Reduced size */
-        right: -40px; /* Adjusted based on new padding-right to be fully visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
-    }
-    .service-title {
-        font-size: 1.4em;
-        padding-right: 20px; /* 1.25rem (20px) for 480px breakpoint */
-    }
-    .service-description {
-        font-size: 0.8em;
-    }
-    /* spacer height calculation is in JS */
-
-    .tools-section {
-        padding-top: 5px; /* Reduced */
-        padding-bottom: 50px;
-    }
-    .tools-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
-    }
-    .tool-card {
-        padding: 12px;
-        gap: 8px;
-    }
-    .tool-icon-wrapper {
-        width: 35px;
-        height: 35px;
-        border-radius: 6px;
-    }
-    .tool-name {
-        font-size: 0.9em;
-    }
-    .tool-category {
-        font-size: 0.7em;
-    }
-}
+    
