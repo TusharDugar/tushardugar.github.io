@@ -480,8 +480,8 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: -250px; /* Adjusted to push fully right and be visible */
-    transform: translateY(-50%); /* Simplified, only vertical translation */
+    right: 0px; /* Aligned to right edge */
+    transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to the right to cut it off as per image */
     line-height: 1;
     user-select: none;
     pointer-events: none;
@@ -853,8 +853,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em;
-        right: -170px; /* Adjusted to push fully right and be visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
+        right: 0px; /* Aligned to right edge */
+        transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
     .service-title {
         font-size: 1.8em;
@@ -995,7 +995,7 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding: 40px 10px; /* Adjusted padding (10px more width from right) */
+        padding: 40px 10px; /* Adjusted padding */
         min-height: auto;
         padding-top: 50px;
     }
@@ -1030,8 +1030,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em;
-        right: -115px; /* Adjusted to push fully right and be visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
+        right: 0px; /* Aligned to right edge */
+        transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
     .service-title {
         font-size: 1.6em;
@@ -1165,8 +1165,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em;
-        right: -65px; /* Adjusted to push fully right and be visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
+        right: 0px; /* Aligned to right edge */
+        transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
     .service-title {
         font-size: 1.4em;
