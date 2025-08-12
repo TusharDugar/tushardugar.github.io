@@ -370,14 +370,14 @@ body {
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
     
-    padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
+    padding-top: 30px; /* Drastically reduced space from top for hero section */
     text-align: left; /* Align text to the left as per the design */
 }
 
 /* Hero Right Content */
 .hero-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 7em; /* Very large font size for headings */
+    font-size: 6.8em; /* Reduced font size by approx 3px */
     line-height: 0.9;
     font-weight: 800; /* Extra bold */
     margin-bottom: 30px; /* Space below heading */
@@ -399,13 +399,13 @@ body {
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
-    margin-bottom: 40px; /* Reduced space below hero description */
+    margin-bottom: 30px; /* Reduced space below hero description */
 }
 
 
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
-    padding-top: 20px; /* Reduced space from hero section */
+    padding-top: 0px; /* Reduced space from hero section to 0 */
     padding-bottom: 0px; /* Reduced space before tools section to 0 */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
@@ -826,7 +826,7 @@ footer h2 {
     }
 
     .hero-heading {
-        font-size: 6em;
+        font-size: 5.8em; /* Reduced font size */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -835,7 +835,7 @@ footer h2 {
     }
 
     .services-section {
-        padding-top: 20px; /* Reduced */
+        padding-top: 0px; /* Reduced */
         padding-bottom: 0px; /* Reduced */
     }
     .services-heading {
@@ -1002,10 +1002,10 @@ footer h2 {
         width: 100%;
         padding: 40px 10px; /* Adjusted padding */
         min-height: auto;
-        padding-top: 50px;
+        padding-top: 20px; /* Drastically reduced space from top for hero section */
     }
     .hero-heading {
-        font-size: 4.5em;
+        font-size: 4.3em; /* Reduced font size */
         margin-bottom: 20px;
     }
     .hero-description {
@@ -1016,7 +1016,7 @@ footer h2 {
     }
 
     .services-section {
-        padding-top: 20px; /* Reduced */
+        padding-top: 0px; /* Reduced */
         padding-bottom: 0px; /* Reduced */
     }
     .services-heading {
@@ -1037,7 +1037,7 @@ footer h2 {
     .service-bg-number {
         font-size: 6.9em; /* Reduced size */
         color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -25px; /* Adjusted based on new padding-right to be fully visible */
+        right: -40px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
@@ -1147,7 +1147,7 @@ footer h2 {
     }
 
     .hero-heading {
-        font-size: 3.5em;
+        font-size: 3.3em; /* Reduced font size */
         margin-bottom: 15px;
     }
     .hero-description {
