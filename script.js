@@ -155,7 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 zIndex = 2; // Ensures it's on top when exiting
             } else if (index === currentIndex + 1) {
                 // The next item: animating in (rotating into view from behind/below)
-                rotateX = 90 * (1 - fractionalProgress) - 90; // Rotates from 0deg to -90deg (comes in from "bottom" of cube)
+                // Starts rotated -90 degrees (as if coming from the 'bottom' face of the cube)
+                // and rotates back to 0 degrees (flat).
+                rotateX = -90 + (90 * fractionalProgress); 
                 translateY = SECTION_VISIBLE_HEIGHT * (1 - fractionalProgress); // Moves downwards into place
                 opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
@@ -191,6 +193,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Set the initial height for the services section and the spacer
     // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
     setTimeout(() => {
+        // Read initial dimensions now that DOM is likely settled
+        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; 
+        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
+
         adjustServicesSectionHeight();
         // 2. Trigger initial animation state on page load
         requestAnimationFrame(updateServiceAnimation);
@@ -198,6 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
+        // Re-read dimensions as they might change with screen size
+        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight;
+        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
+        
         adjustServicesSectionHeight();
         requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
     });
