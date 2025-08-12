@@ -29,9 +29,10 @@
     --tool-category-color: var(--text-medium); /* Gray for categories */
 
     /* New colors for Services Section */
-    --services-number-color: #555555; /* Dark gray for inactive numbers */
-    --services-title-color: #555555; /* Dark gray for inactive titles */
-    --services-active-color: var(--text-light); /* White for active elements */
+    --services-bg-number-color: #333; /* Dark gray for background numbers */
+    --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
+    --services-description-color: var(--text-light); /* White for descriptions */
+    --services-grid-line-color: rgba(255, 255, 255, 0.05); /* Very faint white for background grid */
 }
 
 body {
@@ -72,6 +73,38 @@ body {
     height: 100%;
     background: radial-gradient(circle at center, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.9) 100%); /* Dark radial vignette */
     z-index: -1; /* Above video, below content */
+}
+
+/* Geometric Background Lines - This will be applied globally to achieve the look from the reference */
+.main-layout-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Below content, above video/glows */
+    background-image: 
+        linear-gradient(to right, transparent 99%, var(--services-grid-line-color) 1%),
+        linear-gradient(to bottom, transparent 99%, var(--services-grid-line-color) 1%);
+    background-size: 100px 100px; /* Adjust grid size */
+    opacity: 0.8; /* Subtle visibility */
+}
+
+/* Add diagonal lines for a more complex grid, similar to Framer.ai */
+.main-layout-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: 
+        linear-gradient(45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%),
+        linear-gradient(-45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%);
+    background-size: 100px 100px; /* Adjust grid size, match to before */
+    opacity: 0.8;
 }
 
 
@@ -370,14 +403,12 @@ body {
 }
 
 
-/* Services Section Styles - Revised for 3D-like animation */
+/* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    /* No reveal-item here as children animate continuously */
-    /* Add perspective to a parent for 3D transforms */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
+    /* No reveal-item here as its children animate continuously */
 }
 
 .services-heading {
@@ -392,16 +423,15 @@ body {
 /* Reusing text-white and text-gray for services-heading */
 
 .services-content-wrapper {
-    /* This wrapper helps contain the overflow for the 3D effect */
     position: relative;
     overflow: hidden; /* Crucial for clipping the "cuboid" effect */
-    /* Adjust height as needed to show one item at a time effectively */
     height: 450px; /* Fixed height to control content display window */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
+    /* Add perspective to this wrapper if content is only inside here */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
 }
-
 
 .service-item {
     position: absolute; /* Position items absolutely within the wrapper */
@@ -411,7 +441,7 @@ body {
     height: 100%; /* Take full height of the wrapper */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center text vertically within the item */
+    justify-content: center; /* Center content vertically within the item */
     align-items: flex-start; /* Align text left */
     padding: 20px; /* Inner padding */
     box-sizing: border-box;
@@ -419,24 +449,20 @@ body {
     /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
     transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
-    transform-origin: top center; /* Rotation pivot point */
+    transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
     transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
     /* Text styling */
-    color: var(--text-medium); /* Default text color */
-    font-size: 1.15em;
-    line-height: 1.8;
+    color: var(--text-light); /* Default text color */
 }
 
 /* Active state for service content */
 .service-item.active-content {
     opacity: 1;
     transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
-    position: relative; /* Temporarily set to relative to be counted in flow, then absolute again */
-    /* This position property needs careful handling with JS to ensure correct stacking for the effect */
-    z-index: 1;
+    z-index: 1; /* Ensure active item is on top */
 }
 
 /* Styling for the large background number */
@@ -445,7 +471,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 15em; /* Huge size */
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.05); /* Very translucent white */
+    color: var(--services-bg-number-color); /* Dark gray, very translucent */
     top: 50%;
     right: 0px; /* Position it to the far right */
     transform: translateY(-50%) translateX(20%); /* Center vertically and push slightly off-screen */
@@ -455,24 +481,29 @@ body {
     z-index: -1; /* Behind other content */
 }
 
-/* Title and Description for each service item */
+/* Service Title - will be green as per Framer example's first line */
 .service-title {
     font-size: 2em; /* Title for the service */
     font-weight: 700;
-    color: var(--text-light); /* White color */
-    margin-bottom: 20px;
+    color: var(--services-title-active-color); /* Green color */
+    margin-bottom: 10px; /* Reduced margin */
+    line-height: 1.2;
+    font-style: italic; /* Added italic as per reference */
 }
+
+/* Service Description - will be white as per Framer example's second line */
 .service-description {
-    font-size: 1.15em; /* Description text size */
-    color: var(--text-medium);
-    max-width: 600px; /* Limit width for readability */
-    line-height: 1.8;
+    font-size: 1.2em; /* Description text size, slightly larger */
+    color: var(--services-description-color); /* White color */
+    max-width: 650px; /* Limit width for readability */
+    line-height: 1.6; /* Tighter line height */
+    font-style: italic; /* Added italic as per reference */
 }
 
 /* Since service-items are absolute, we need to create virtual scroll space */
 .services-section-scroll-spacer {
-    height: 2000px; /* Adjust this value to control how much scroll is needed per item */
     /* This element is added dynamically by JS to control scroll length */
+    /* Its height will be calculated by JS */
 }
 
 
