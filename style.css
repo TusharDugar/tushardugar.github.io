@@ -425,7 +425,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Matched hero heading size */
     line-height: 0.9;
-    margin-bottom: 25px; /* Increased margin for more space below heading */
+    margin-bottom: 2px; /* Set to 2px as requested */
     text-transform: uppercase;
 }
 
@@ -475,7 +475,7 @@ body {
 .service-bg-number, #service-bg-number {
     position: absolute;
     font-family: 'Poppins', sans-serif;
-    font-size: 13.9em; /* Reduced size (approx 5px from last) */
+    font-size: 13.9em; /* Reduced size by 0.3em (approx 5px) */
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
@@ -838,7 +838,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 20px; /* Reduced */
+        margin-bottom: 15px; /* Reduced */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
@@ -1028,7 +1028,7 @@ footer h2 {
         padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
     }
     .service-bg-number {
-        font-size: 7.2em; /* Reduced size */
+        font-size: 6.9em; /* Reduced size */
         right: 0px; /* Aligned to right edge */
         transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
     }
