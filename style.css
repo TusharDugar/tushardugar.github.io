@@ -193,7 +193,7 @@ body {
     text-align: center;
 }
 
-/* Updated: About Left Content (White Card) - Based on Aabid Ahmed design */
+/* Updated: About Left Content (White Card) */
 .about-left-content {
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
@@ -1000,11 +1000,9 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding-left: 10px; /* Adjusted padding */
-        padding-right: 0; /* Removed extra space */
-        padding-top: 20px;
-        padding-bottom: 40px; /* Explicitly set to maintain vertical spacing */
+        padding: 40px 10px; /* Adjusted padding */
         min-height: auto;
+        padding-top: 20px; /* Drastically reduced space from top for hero section */
     }
     .hero-heading {
         font-size: 4.3em; /* Reduced font size */
@@ -1027,7 +1025,10 @@ footer h2 {
         font-size: 3.5em;
         margin-bottom: 25px; /* Increased margin */
     }
-    /* #services-sticky-container top property is now controlled by JavaScript for centering */
+    /* Sticky container for heading + content wrapper */
+    #services-sticky-container {
+        top: 40px; /* Adjusted sticky top to bring content more towards center */
+    }
     .services-content-wrapper {
         height: 120px; /* Reduced height for compactness */
         padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint (KEPT for number overlap) */
@@ -1149,10 +1150,7 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding-left: 5px; /* Adjusted padding */
-        padding-right: 0; /* Removed extra space */
-        padding-top: 20px;
-        padding-bottom: 40px; /* Explicitly set to maintain vertical spacing */
+        padding: 20px 5px 40px 5px; /* Consolidated padding for mobile */
         min-height: auto;
     }
     .hero-heading {
