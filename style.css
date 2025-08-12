@@ -25,7 +25,7 @@
     /* New colors for Tool Cards */
     --bg-tool-card: #1A1A1A; /* Dark background for tool cards */
     --tool-icon-bg: #FFFFFF; /* White background for tool icons */
-    --tool-name-color: var(--tool-name-color); /* White for tool names */
+    --tool-name-color: #FFFFFF; /* White for tool names - corrected this variable usage */
     --tool-category-color: var(--text-medium); /* Gray for categories */
 
     /* New colors for Services Section */
@@ -429,7 +429,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
-    /* Add perspective to this wrapper if content is only inside here */
     perspective: 1000px; /* Defines the depth of 3D transforms */
 }
 
@@ -446,27 +445,27 @@ body {
     padding: 20px; /* Inner padding */
     box-sizing: border-box;
 
-    /* Initial state for parallax/3D effect */
-    opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
+    /* Base state (will be overridden by JS for animation) */
+    opacity: 0; 
+    transform: translateY(0) rotateX(0deg); /* Set initial to neutral for JS to control */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
+    transition: none; /* JS will directly control transforms, but keep this for opacity if needed */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
-    will-change: opacity, transform; /* Performance hint */
+    will-change: transform, opacity; /* Performance hint */
 
     /* Text styling */
     color: var(--text-light); /* Default text color */
 }
 
-/* Active state for service content */
+/* Active state for service content - used as a fallback if JS fails, but JS will control now */
 .service-item.active-content {
     opacity: 1;
-    transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
+    transform: translateY(0) rotateX(0deg); /* Set by JS, but here for clarity */
     z-index: 1; /* Ensure active item is on top */
 }
 
 /* Styling for the large background number */
-.service-bg-number {
+.service-bg-number, #service-bg-number { /* Both class and ID now reference this styling */
     position: absolute;
     font-family: 'Poppins', sans-serif;
     font-size: 15em; /* Huge size */
@@ -479,6 +478,7 @@ body {
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
+    transition: text-content 0.2s ease-out, opacity 0.5s ease-out; /* Smooth transition for number fade-in/out */
 }
 
 /* Service Title - will be green as per Framer example's first line */
@@ -1024,14 +1024,14 @@ footer h2 {
         height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
-        opacity: 0; /* Initial state for mobile will be simpler fade-in */
-        transform: translateY(50px); /* Simpler translateY */
-        /* Rotation is effectively ignored due to perspective: none; */
         padding: 10px;
+        /* Transitions are handled by JS directly now */
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out; /* Set transition here for JS-controlled properties */
     }
     .service-item.active-content {
+        /* This class is now primarily for initial state/fallback, JS controls main animation */
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) rotateX(0deg);
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
