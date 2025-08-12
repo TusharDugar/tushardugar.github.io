@@ -365,7 +365,7 @@ body {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
     padding-left: 60px; /* Reduced padding for wider content */
-    padding-right: 50px; /* Reduced padding for wider content (10px more width from right) */
+    padding-right: 0; /* REMOVED extra space / padding */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
@@ -415,8 +415,7 @@ body {
 /* The new sticky container for the heading + animation content */
 #services-sticky-container {
     position: sticky;
-    top: 80px; /* Adjusted sticky top to bring content more towards center */
-    /* No explicit height here, it will grow with its children */
+    /* top property is now controlled by JavaScript for centering */
     z-index: 10; /* Ensure it stays above other content during scroll */
     background: transparent; /* No background */
 }
@@ -448,7 +447,7 @@ body {
     overflow: visible; /* CRITICAL: Allows background number to escape container */
     background: transparent; /* Ensure no background interferes */
     z-index: 1; /* Relative to its parent sticky container */
-    padding-right: 64px; /* 4rem: Extra breathing room for the number */
+    padding-right: 64px; /* 4rem: Extra breathing room for the number (KEPT for number overlap) */
 }
 
 .service-item {
@@ -497,7 +496,7 @@ body {
     margin-bottom: 2px; /* Reduced to 2px */
     line-height: 1.2;
     font-style: normal; /* Removed italics */
-    padding-right: 56px; /* 3.5rem: Extra padding to avoid overlap with background number */
+    padding-right: 56px; /* 3.5rem: Extra padding to avoid overlap with background number (KEPT for number overlap) */
 }
 
 /* Service Description - no italics */
@@ -773,7 +772,7 @@ footer h2 {
         flex-grow: 1;
         width: 100%;
         padding-left: 40px; /* Adjusted padding */
-        padding-right: 30px; /* Reduced padding (10px more width from right) */
+        padding-right: 0; /* Removed extra space */
         margin-top: 50px;
         text-align: center;
     }
@@ -831,6 +830,10 @@ footer h2 {
     }
     .hero-description {
         font-size: 1.1em;
+        line-height: 1.6;
+        max-width: 500px; /* Adjusted for readability on smaller screens */
+        margin-left: auto; /* Center text block in its container */
+        margin-right: auto; /* Center text block in its container */
         margin-bottom: 30px; /* Reduced for tighter spacing */
     }
 
@@ -842,13 +845,10 @@ footer h2 {
         font-size: 6em; /* Matched hero heading size */
         margin-bottom: 20px; /* Increased margin for more space below heading */
     }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 60px; /* Adjusted sticky top to bring content more towards center */
-    }
+    /* #services-sticky-container top property is now controlled by JavaScript for centering */
     .services-content-wrapper {
         height: 180px; /* Reduced height for compactness */
-        padding-right: 48px; /* 3rem (48px) for 1200px breakpoint */
+        padding-right: 48px; /* 3rem (48px) for 1200px breakpoint (KEPT for number overlap) */
     }
     .service-item {
         padding: 10px 9px; /* Adjusted padding */
@@ -861,7 +861,7 @@ footer h2 {
     }
     .service-title {
         font-size: 1.8em;
-        padding-right: 40px; /* 2.5rem (40px) for 1200px breakpoint */
+        padding-right: 40px; /* 2.5rem (40px) for 1200px breakpoint (KEPT for number overlap) */
     }
     .service-description {
         font-size: 1em;
@@ -1000,9 +1000,11 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding: 40px 10px; /* Adjusted padding */
+        padding-left: 10px; /* Adjusted padding */
+        padding-right: 0; /* Removed extra space */
+        padding-top: 20px;
+        padding-bottom: 40px; /* Explicitly set to maintain vertical spacing */
         min-height: auto;
-        padding-top: 20px; /* Drastically reduced space from top for hero section */
     }
     .hero-heading {
         font-size: 4.3em; /* Reduced font size */
@@ -1011,7 +1013,9 @@ footer h2 {
     .hero-description {
         font-size: 1em;
         line-height: 1.6;
-        max-width: 100%;
+        max-width: 100%; /* No max-width on mobile */
+        margin-left: auto; /* Center text block in its container */
+        margin-right: auto; /* Center text block in its container */
         margin-bottom: 30px; /* Reduced */
     }
 
@@ -1023,13 +1027,10 @@ footer h2 {
         font-size: 3.5em;
         margin-bottom: 25px; /* Increased margin */
     }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 40px; /* Adjusted sticky top to bring content more towards center */
-    }
+    /* #services-sticky-container top property is now controlled by JavaScript for centering */
     .services-content-wrapper {
         height: 120px; /* Reduced height for compactness */
-        padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint */
+        padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint (KEPT for number overlap) */
     }
     .service-item {
         padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
@@ -1042,7 +1043,7 @@ footer h2 {
     }
     .service-title {
         font-size: 1.6em;
-        padding-right: 32px; /* 2rem (32px) for 768px breakpoint */
+        padding-right: 32px; /* 2rem (32px) for 768px breakpoint (KEPT for number overlap) */
     }
     .service-description {
         font-size: 0.9em;
@@ -1146,6 +1147,14 @@ footer h2 {
         right: -25px;
     }
 
+    .right-column-scroll {
+        width: 100%;
+        padding-left: 5px; /* Adjusted padding */
+        padding-right: 0; /* Removed extra space */
+        padding-top: 20px;
+        padding-bottom: 40px; /* Explicitly set to maintain vertical spacing */
+        min-height: auto;
+    }
     .hero-heading {
         font-size: 3.3em; /* Reduced font size */
         margin-bottom: 15px;
@@ -1153,6 +1162,9 @@ footer h2 {
     .hero-description {
         font-size: 0.9em;
         line-height: 1.5;
+        max-width: 100%; /* No max-width on mobile */
+        margin-left: auto; /* Center text block in its container */
+        margin-right: auto; /* Center text block in its container */
         margin-bottom: 20px; /* Reduced */
     }
 
@@ -1170,7 +1182,7 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 100px; /* Reduced height for compactness */
-        padding-right: 24px; /* 1.5rem (24px) for 480px breakpoint */
+        padding-right: 24px; /* 1.5rem (24px) for 480px breakpoint (KEPT for number overlap) */
     }
     .service-item {
         padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
@@ -1183,7 +1195,7 @@ footer h2 {
     }
     .service-title {
         font-size: 1.4em;
-        padding-right: 20px; /* 1.25rem (20px) for 480px breakpoint */
+        padding-right: 20px; /* 1.25rem (20px) for 480px breakpoint (KEPT for number overlap) */
     }
     .service-description {
         font-size: 0.8em;
