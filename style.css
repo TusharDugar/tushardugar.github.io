@@ -900,7 +900,7 @@ footer h2 {
     .tool-category {
         font-size: 0.8em;
     }
-}
+} /* Closing brace for @media (max-width: 1200px) */
 
 @media (max-width: 768px) {
     .main-layout-container {
@@ -1081,7 +1081,7 @@ footer h2 {
     .tool-category {
         font-size: 0.75em;
     }
-}
+} /* Closing brace for @media (max-width: 768px) */
 
 @media (max-width: 480px) {
     .main-layout-container {
@@ -1223,4 +1223,4 @@ footer h2 {
     .tool-category {
         font-size: 0.7em;
     }
-}
+} /* Closing brace for @media (max-width: 480px) */
