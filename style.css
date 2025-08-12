@@ -378,7 +378,7 @@ body {
 .hero-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Very large font size for headings */
-    line-height: 0.9; /* Tight line height */
+    line-height: 0.9;
     font-weight: 800; /* Extra bold */
     margin-bottom: 30px; /* Space below heading */
     text-transform: uppercase; /* Ensure all text is uppercase */
@@ -425,7 +425,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Matched hero heading size */
     line-height: 0.9;
-    margin-bottom: 2px; /* Set to 2px as requested */
+    margin-bottom: 25px; /* Increased margin for more space below heading */
     text-transform: uppercase;
 }
 
@@ -440,7 +440,7 @@ body {
 
 .services-content-wrapper {
     position: relative; /* Now relative to its new parent: #services-sticky-container */
-    height: 150px; /* Reduced height for compactness */
+    height: 140px; /* Reduced height for compactness */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
@@ -838,7 +838,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 15px; /* Reduced */
+        margin-bottom: 20px; /* Reduced */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
