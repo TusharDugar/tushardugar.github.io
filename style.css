@@ -478,7 +478,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 13.6em; /* Reduced size by 0.3em (approx 5px) */
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.2); /* Increased transparency/opacity */
+    color: rgba(255, 255, 255, 0.08); /* Increased transparency/opacity */
     top: 50%;
     right: -150px; /* Pushed further right to be fully visible and out of the way of text */
     transform: translateY(-50%); /* Simplified, only vertical translation */
