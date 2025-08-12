@@ -138,7 +138,7 @@ body {
 @keyframes glow2 {
     0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
     50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.3; } /* Updated opacity */
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Updated opacity */
 }
 
 
@@ -1037,7 +1037,7 @@ footer h2 {
     .service-bg-number {
         font-size: 6.9em; /* Reduced size */
         color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -40px; /* Adjusted based on new padding-right to be fully visible */
+        right: -25px; /* Adjusted based on new padding-right to be fully visible */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
