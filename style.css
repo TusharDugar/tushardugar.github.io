@@ -445,9 +445,10 @@ body {
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
     perspective: 1000px; /* Defines the depth for 3D transforms */
-    overflow: hidden; /* Crucial for clipping the 3D effect */
+    overflow: visible; /* CRITICAL: Allows background number to escape container */
     background: transparent; /* Ensure no background interferes */
     z-index: 1; /* Relative to its parent sticky container */
+    padding-right: 64px; /* 4rem: Extra breathing room for the number */
 }
 
 .service-item {
@@ -477,14 +478,14 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 13.6em; /* Reduced size by 0.3em (approx 5px) */
     font-weight: 800;
-    color: var(--services-bg-number-color);
+    color: rgba(255, 255, 255, 0.05); /* Match your original opacity for the background number */
     top: 50%;
-    right: 0px; /* Aligned to right edge */
-    transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to the right to cut it off as per image */
+    right: -150px; /* Pushed further right to be fully visible and out of the way of text */
+    transform: translateY(-50%); /* Only vertical translation */
     line-height: 1;
     user-select: none;
     pointer-events: none;
-    z-index: -1;
+    z-index: 0; /* Behind content, now that overflow is visible */
     transition: opacity 0.5s ease-out;
 }
 
@@ -496,6 +497,7 @@ body {
     margin-bottom: 2px; /* Reduced to 2px */
     line-height: 1.2;
     font-style: normal; /* Removed italics */
+    padding-right: 56px; /* 3.5rem: Extra padding to avoid overlap with background number */
 }
 
 /* Service Description - no italics */
@@ -517,7 +519,7 @@ body {
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 10px; /* Reduced space from services section */
+    padding-top: 15px; /* Reduced space from services section */
     padding-bottom: 80px;
     text-align: left;
 }
@@ -838,7 +840,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 20px; /* Reduced */
+        margin-bottom: 20px; /* Increased margin for more space below heading */
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
@@ -846,17 +848,19 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 180px; /* Reduced height for compactness */
+        padding-right: 48px; /* 3rem (48px) for 1200px breakpoint */
     }
     .service-item {
         padding: 10px 9px; /* Adjusted padding */
     }
     .service-bg-number {
         font-size: 11.2em; /* Reduced size (approx 5px from last) */
-        right: 0px; /* Aligned to right edge */
-        transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
+        right: -100px; /* Adjusted based on new padding-right to be fully visible */
+        transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
         font-size: 1.8em;
+        padding-right: 40px; /* 2.5rem (40px) for 1200px breakpoint */
     }
     .service-description {
         font-size: 1em;
@@ -1023,17 +1027,19 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 120px; /* Reduced height for compactness */
+        padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint */
     }
     .service-item {
         padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
     }
     .service-bg-number {
         font-size: 6.9em; /* Reduced size */
-        right: 0px; /* Aligned to right edge */
-        transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
+        right: -70px; /* Adjusted based on new padding-right to be fully visible */
+        transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
         font-size: 1.6em;
+        padding-right: 32px; /* 2rem (32px) for 768px breakpoint */
     }
     .service-description {
         font-size: 0.9em;
@@ -1161,14 +1167,19 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 100px; /* Reduced height for compactness */
+        padding-right: 24px; /* 1.5rem (24px) for 480px breakpoint */
+    }
+    .service-item {
+        padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
     }
     .service-bg-number {
         font-size: 5.2em; /* Reduced size */
-        right: 0px; /* Aligned to right edge */
-        transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to cut it off */
+        right: -40px; /* Adjusted based on new padding-right to be fully visible */
+        transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
         font-size: 1.4em;
+        padding-right: 20px; /* 1.25rem (20px) for 480px breakpoint */
     }
     .service-description {
         font-size: 0.8em;
