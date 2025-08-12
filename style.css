@@ -415,7 +415,12 @@ body {
 /* The new sticky container for the heading + animation content */
 #services-sticky-container {
     position: sticky;
-    /* top property is now controlled by JavaScript for centering */
+    top: 50%; /* Center vertically when sticky */
+    transform: translateY(-50%); /* Pull up by half its height to perfectly center */
+    display: flex; /* Use flexbox for internal centering */
+    flex-direction: column;
+    align-items: center; /* Center content horizontally within sticky container */
+    text-align: center; /* Center text within sticky container */
     z-index: 10; /* Ensure it stays above other content during scroll */
     background: transparent; /* No background */
 }
@@ -838,7 +843,7 @@ footer h2 {
     }
 
     .services-section {
-        padding-top: 120px; /* Increased padding from hero section */
+        padding-top: 100px; /* Increased padding from hero section */
         padding-bottom: 0px; /* Reduced space before tools section to 0 */
         text-align: left;
         position: relative; /* Needed for spacer to take up space */
@@ -848,7 +853,7 @@ footer h2 {
         font-size: 5.5em; /* Adjusted for this breakpoint */
         margin-bottom: 15px; /* REDUCED margin-bottom for heading */
     }
-    /* #services-sticky-container top property is now controlled by JavaScript for centering */
+    /* #services-sticky-container top property is now handled by CSS */
     .services-content-wrapper {
         height: 160px; /* Adjusted height for compactness */
         padding-right: 48px; /* 3rem (48px) for 1200px breakpoint (KEPT for number overlap) */
@@ -1032,10 +1037,7 @@ footer h2 {
         font-size: 3em; /* Further reduced for 768px */
         margin-bottom: 8px; /* REDUCED margin-bottom for heading */
     }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 40px; /* Adjusted sticky top to bring content more towards center */
-    }
+    /* #services-sticky-container top property is now handled by CSS */
     .services-content-wrapper {
         height: 100px; /* Further reduced height for 768px */
         padding-right: 30px; /* Reduced padding */
@@ -1184,10 +1186,7 @@ footer h2 {
         font-size: 2.2em; /* Even smaller for 480px */
         margin-bottom: 5px; /* REDUCED minimal margin */
     }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 20px; /* Adjusted sticky top to bring content more towards center */
-    }
+    /* #services-sticky-container top property is now handled by CSS */
     .services-content-wrapper {
         height: 80px; /* Even smaller height for 480px */
         padding-right: 15px; /* Reduced padding */

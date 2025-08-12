@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Contact Button Copy to Clipboard Functionality
+    // Contact Button Copy to Clipboard Functionality (UNCHANGED)
     const contactButtons = document.querySelectorAll('.contact-button');
 
     contactButtons.forEach(button => {
@@ -7,20 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const contactValue = button.dataset.contact;
 
             if (button.classList.contains('copied')) {
-                console.log('Button already showing "Copied!". Returning.');
+                // console.log('Button already showing "Copied!". Returning.');
                 return; 
             }
 
             try {
                 await navigator.clipboard.writeText(contactValue);
-                console.log('Text copied to clipboard:', contactValue);
+                // console.log('Text copied to clipboard:', contactValue);
                 
                 button.classList.add('copied');
-                console.log('Class "copied" added to button.');
+                // console.log('Class "copied" added to button.');
 
                 setTimeout(() => {
                     button.classList.remove('copied');
-                    console.log('Class "copied" removed from button after 1.5 seconds.');
+                    // console.log('Class "copied" removed from button after 1.5 seconds.');
                 }, 1500);
             } catch (err) {
                 console.error('Failed to copy text: ', err);
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Scroll Reveal Animation (Intersection Observer) - for main sections (one-shot reveal)
+    // Scroll Reveal Animation (Intersection Observer) - for main sections (one-shot reveal) (UNCHANGED)
     const sectionObserverOptions = {
         root: null, // viewport as the root
         rootMargin: '0px',
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, sectionObserverOptions);
 
-    // Observe all main sections with the section observer
+    // Observe all main sections with the section observer (UNCHANGED)
     document.querySelectorAll('.about-left-content').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#contact').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#hero-right').forEach(el => sectionObserver.observe(el));
@@ -58,9 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Services Section Animation Logic (Framer-like "cuboid" scroll effect) ---
     const servicesSection = document.getElementById('services');
-    // Reference to the new sticky container that wraps both heading and animation viewport
     const servicesStickyContainer = servicesSection ? servicesSection.querySelector('#services-sticky-container') : null;
-    // Reference to the actual div where the slides animate
     const servicesSlidesViewport = servicesStickyContainer ? servicesStickyContainer.querySelector('.services-content-wrapper') : null;
     const serviceItems = servicesSlidesViewport ? servicesSlidesViewport.querySelectorAll('.service-item') : [];
     const serviceBgNumber = servicesSlidesViewport ? servicesSlidesViewport.querySelector('#service-bg-number') : null;
@@ -72,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return; 
     }
 
-    // Create the scroll spacer if it's not already there
     let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
     if (!scrollSpacer) {
         scrollSpacer = document.createElement('div');
@@ -80,67 +77,114 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.appendChild(scrollSpacer);
     }
 
-    // Define the fixed height of the visual viewport where slides animate (from CSS)
     let ANIMATION_VIEWPORT_HEIGHT; 
-    // Define the top offset for the sticky container (from CSS)
-    let STICKY_CONTAINER_TOP_OFFSET; 
-    
-    // Define how much scroll distance is needed to fully transition one item.
-    // Multiplier reduced for tighter transitions.
+    let STICKY_CONTAINER_OFFSET_FOR_SPACER; // Renamed to clarify its role for spacer calculation
     const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 0.9; 
-    let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on ANIMATION_VIEWPORT_HEIGHT
+    let SCROLL_DISTANCE_PER_ITEM; 
 
-    let currentActiveIndex = -1; // Tracks the currently active slide index
-    let lastScrollY = window.scrollY; // For scroll direction detection
-    let rafId = null; // For requestAnimationFrame optimization
+    let currentActiveIndex = -1; 
+    let lastScrollY = window.scrollY; 
+    let rafId = null; 
 
-    // Function to set the total scrollable height of the services section
+    // This function is now simplified as CSS handles the actual centering via `top: 50%`
+    // The `offsetHeight` is used for spacer calculation.
+    const getStickyOffsetForSpacer = () => {
+        // When CSS has `top: 50%; transform: translateY(-50%);`, the visual top offset
+        // where the element 'sticks' is effectively `(viewportHeight / 2) - (stickyContainerHeight / 2)`.
+        // The spacer needs to account for the height of the sticky container
+        // and how much "vertical space" it occupies from its actual sticky position.
+        // For the spacer calculation, what matters is the full height of the sticky container.
+        const viewportHeight = window.innerHeight;
+        const stickyContainerHeight = servicesStickyContainer.offsetHeight;
+
+        // The effective offset from the top of the viewport when centered.
+        // This is primarily for the spacer calculation's starting point.
+        let calculatedTopOffset = (viewportHeight - stickyContainerHeight) / 2;
+        calculatedTopOffset = Math.max(0, calculatedTopOffset); // Clamp to 0
+
+        console.log('--- getStickyOffsetForSpacer Debug ---');
+        console.log('  Viewport Height:', viewportHeight);
+        console.log('  Sticky Container OffsetHeight:', stickyContainerHeight);
+        console.log('  Calculated Sticky Top Offset (for spacer):', calculatedTopOffset);
+        return calculatedTopOffset;
+    };
+
     const adjustServicesSectionHeight = () => {
         // Recalculate dynamic values on resize or initial load
         ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight; 
-        STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
+        
+        // DEBUGGING: Log main animation viewport height
+        console.log('--- adjustServicesSectionHeight Debug ---');
+        console.log('  Services Slides Viewport OffsetHeight (ANIMATION_VIEWPORT_HEIGHT):', ANIMATION_VIEWPORT_HEIGHT);
+
+        // Get the offset that the spacer needs to account for
+        STICKY_CONTAINER_OFFSET_FOR_SPACER = getStickyOffsetForSpacer(); 
+        // We no longer set servicesStickyContainer.style.top here, as CSS handles top: 50%
+
         SCROLL_DISTANCE_PER_ITEM = ANIMATION_VIEWPORT_HEIGHT * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
+        
+        // DEBUGGING: Log scroll distance per item
+        console.log('  Scroll Distance Per Item:', SCROLL_DISTANCE_PER_ITEM);
 
-        // The total scroll range needed for all animations:
-        // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
-        const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
-
-        // The servicesSection (parent of sticky) needs to be tall enough to allow the sticky container to "pin"
-        // and for the user to scroll through the entire animation range.
-        // This height is provided by the `scrollSpacer`.
-        // It's the `totalAnimationScrollRange` plus the `servicesStickyContainer.offsetHeight` (the full height of the sticky block itself, which includes the heading and animation viewport)
-        // plus the `STICKY_CONTAINER_TOP_OFFSET` (extra buffer so it activates correctly from top).
-        scrollSpacer.style.height = `${totalAnimationScrollRange + servicesStickyContainer.offsetHeight + STICKY_CONTAINER_TOP_OFFSET}px`;
-        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items. Animation Viewport Height: ${ANIMATION_VIEWPORT_HEIGHT}. Sticky top: ${STICKY_CONTAINER_TOP_OFFSET}`);
-    };
-
-    // This is the core animation logic, triggered by scroll
-    const updateServiceAnimation = () => {
-        // `servicesSection.offsetTop` is where the whole services section begins in the document.
-        // The sticky effect for `#services-sticky-container` starts when `window.scrollY` matches `servicesSection.offsetTop`.
-        let scrollProgress = window.scrollY - servicesSection.offsetTop;
-
-        // Clamp the scroll progress to the valid range for our animation.
-        // The animation effectively runs from `servicesSection.offsetTop` until `servicesSection.offsetTop + totalAnimationScrollRange`.
-        // The maximum value for `scrollProgress` should be the full extent of the animation + the sticky container's height.
-        const maxScrollableRangeForAnimation = scrollSpacer.offsetHeight - servicesStickyContainer.offsetHeight - STICKY_CONTAINER_TOP_OFFSET;
-        scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
-
-        // Determine which item should be active based on scroll progress
-        const normalizedProgress = scrollProgress / SCROLL_DISTANCE_PER_ITEM;
-        const currentIndex = Math.floor(normalizedProgress);
-        const fractionalProgress = normalizedProgress - currentIndex; // Progress within the current item's transition (0 to 1)
-
-        // Update the background number for the active slide
-        const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
-        if (newActiveIndex !== currentActiveIndex) {
-            currentActiveIndex = newActiveIndex;
-            const displayIndex = currentActiveIndex + 1; // Service numbers are 1-based
-            serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
-            // console.log(`Active Index: ${currentActiveIndex}, Fractional Progress: ${fractionalProgress.toFixed(2)}`);
+        // Crucial check: if ANIMATION_VIEWPORT_HEIGHT is 0 (e.g., element hidden or not rendered),
+        // SCROLL_DISTANCE_PER_ITEM will be 0, leading to division by zero or NaN.
+        if (isNaN(SCROLL_DISTANCE_PER_ITEM) || SCROLL_DISTANCE_PER_ITEM === 0) {
+            console.error('ERROR: ANIMATION_VIEWPORT_HEIGHT is 0 or caused NaN. Services animation cannot calculate correctly. Check CSS visibility/height for .services-content-wrapper or its parents.');
+            scrollSpacer.style.height = '0px'; // Prevent infinite scroll if calculations are bad
+            // Set a default state for service items (e.g., show the first one)
+            serviceItems.forEach((item, index) => {
+                item.style.opacity = index === 0 ? 1 : 0;
+                item.style.transform = 'translateY(0) rotateX(0deg)';
+                item.style.zIndex = index === 0 ? 2 : 0;
+            });
+            serviceBgNumber.textContent = 'ER'; // Display "ER" for error
+            return; // Exit function early if critical dimensions are invalid
         }
 
-        // Apply 3D transforms and opacity to each service item
+        const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
+
+        // Ensure these values are valid before calculating final spacer height
+        if (isNaN(totalAnimationScrollRange) || isNaN(servicesStickyContainer.offsetHeight) || isNaN(STICKY_CONTAINER_OFFSET_FOR_SPACER)) {
+            console.error('ERROR: Invalid dimension detected for total scroll range. Animation may not work correctly.');
+            console.error('  totalAnimationScrollRange:', totalAnimationScrollRange, ' servicesStickyContainer.offsetHeight:', servicesStickyContainer.offsetHeight, ' STICKY_CONTAINER_OFFSET_FOR_SPACER:', STICKY_CONTAINER_OFFSET_FOR_SPACER);
+            scrollSpacer.style.height = '0px'; 
+            return;
+        }
+
+        // The spacer height ensures enough scroll space to go through all animation steps,
+        // plus the height of the sticky container itself, plus the offset it takes to reach its sticky point.
+        scrollSpacer.style.height = `${totalAnimationScrollRange + servicesStickyContainer.offsetHeight + STICKY_CONTAINER_OFFSET_FOR_SPACER}px`;
+        console.log(`  Scroll Spacer Height Set To: ${scrollSpacer.offsetHeight}px`);
+        console.log(`  Total Animation Scroll Range: ${totalAnimationScrollRange}`);
+    };
+
+    const updateServiceAnimation = () => {
+        // If critical dimensions are invalid, stop trying to animate
+        if (isNaN(SCROLL_DISTANCE_PER_ITEM) || SCROLL_DISTANCE_PER_ITEM === 0) {
+            console.warn('Skipping updateServiceAnimation due to invalid SCROLL_DISTANCE_PER_ITEM.');
+            return;
+        }
+
+        // Calculate scroll progress relative to when the sticky effect should start
+        // This accounts for the offset from the top of the viewport due to the parent section's padding-top and the sticky element's top/transform.
+        let scrollProgress = window.scrollY - (servicesSection.offsetTop + STICKY_CONTAINER_OFFSET_FOR_SPACER);
+        
+        const maxScrollableRangeForAnimation = scrollSpacer.offsetHeight - servicesStickyContainer.offsetHeight - STICKY_CONTAINER_OFFSET_FOR_SPACER;
+        scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
+
+        const normalizedProgress = scrollProgress / SCROLL_DISTANCE_PER_ITEM;
+        const currentIndex = Math.floor(normalizedProgress);
+        const fractionalProgress = normalizedProgress - currentIndex; 
+
+        const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
+        const displayIndex = newActiveIndex + 1;
+
+        // DEBUGGING: Log display index and progress
+        // console.log(`Update Animation Loop: Active Index: ${newActiveIndex}, Fractional Progress: ${fractionalProgress.toFixed(2)}, Display Index: ${displayIndex}`);
+        
+        serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
+
+
         serviceItems.forEach((item, index) => {
             let translateY = 0;
             let rotateX = 0;
@@ -148,21 +192,16 @@ document.addEventListener('DOMContentLoaded', () => {
             let zIndex = 0;
 
             if (index === currentIndex) {
-                // The current item: animating out (rotating outwards and fading)
-                rotateX = 90 * fractionalProgress; // Rotates from 0deg to 90deg (forward/outwards)
-                translateY = -ANIMATION_VIEWPORT_HEIGHT * fractionalProgress; // Moves upwards
-                opacity = 1 - fractionalProgress; // Fades out
-                zIndex = 2; // Ensures it's on top when exiting
+                rotateX = 90 * fractionalProgress; 
+                translateY = -ANIMATION_VIEWPORT_HEIGHT * fractionalProgress; 
+                opacity = 1 - fractionalProgress; 
+                zIndex = 2; 
             } else if (index === currentIndex + 1) {
-                // The next item: animating in (rotating into view from behind/below)
-                // Starts rotated -90 degrees (as if coming from the 'bottom' face of the cube)
-                // and rotates back to 0 degrees (flat).
                 rotateX = -90 + (90 * fractionalProgress); 
-                translateY = ANIMATION_VIEWPORT_HEIGHT * (1 - fractionalProgress); // Moves downwards into place
-                opacity = fractionalProgress; // Fades in
-                zIndex = 1; // Appears just below the exiting item
+                translateY = ANIMATION_VIEWPORT_HEIGHT * (1 - fractionalProgress); 
+                opacity = fractionalProgress; 
+                zIndex = 1; 
             } else {
-                // All other items are completely hidden and reset
                 opacity = 0;
                 translateY = 0;
                 rotateX = 0;
@@ -174,10 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.zIndex = zIndex;
         });
 
-        rafId = null; // Reset requestAnimationFrame ID
+        rafId = null; 
     };
 
-    // Debounced scroll handler to optimize performance with requestAnimationFrame
     const handleScrollEvent = () => {
         if (window.scrollY !== lastScrollY) {
             lastScrollY = window.scrollY;
@@ -190,31 +228,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialize animation and event listeners ---
 
-    // 1. Set the initial height for the services section and the spacer
-    // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
+    // Increased delay to ensure elements are fully rendered before measurements
     setTimeout(() => {
-        // Read initial dimensions now that DOM is likely settled
-        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight; 
-        STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
-
         adjustServicesSectionHeight();
-        // 2. Trigger initial animation state on page load
         requestAnimationFrame(updateServiceAnimation);
-    }, 100); // Small delay to allow CSS to render and get accurate offsetHeights
+    }, 500); // 500ms delay
 
-    // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
-        // Re-read dimensions as they might change with screen size
-        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight;
-        STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
-        
         adjustServicesSectionHeight();
-        requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
+        requestAnimationFrame(updateServiceAnimation); 
     });
 
-    // 4. Attach the optimized scroll handler
     window.addEventListener('scroll', handleScrollEvent);
 
-    // Ensure the services section itself gets the 'revealed' class
     sectionObserver.observe(servicesSection); 
 });
