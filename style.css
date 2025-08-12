@@ -408,13 +408,13 @@ body {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for spacer to take up space */
+    position: relative; /* Needed for child sticky positioning */
     z-index: 1;
 }
 
 .services-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 5em; /* Match tools heading size */
+    font-size: 7em; /* Match hero heading size */
     line-height: 0.9;
     font-weight: 800;
     margin-bottom: 50px;
@@ -422,7 +422,8 @@ body {
 }
 
 .services-content-wrapper {
-    position: relative; /* IMPORTANT: Changed from sticky to relative. JS will handle the effect. */
+    position: sticky; /* Back to sticky */
+    top: 50px; /* Stick 50px from the top of the viewport */
     height: 450px; /* Fixed height for the visible content window */
     display: flex;
     flex-direction: column;
@@ -438,86 +439,83 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Take full height of the wrapper */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically within the item */
-    align-items: flex-start; /* Align text left */
-    padding: 20px; /* Inner padding */
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
     box-sizing: border-box;
 
     opacity: 0; /* Controlled by JS */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
     transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
-    backface-visibility: hidden; /* Prevents back of element from being seen during flip */
-    will-change: transform, opacity; /* Performance hint */
-
-    color: var(--text-light); /* Default text color */
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    color: var(--text-light);
 }
 
-/* .service-item.active-content is now deprecated, JS directly controls transforms/opacity */
-
 /* Styling for the large background number */
-.service-bg-number, #service-bg-number { /* Both class and ID now reference this styling */
+.service-bg-number, #service-bg-number {
     position: absolute;
     font-family: 'Poppins', sans-serif;
-    font-size: 15em; /* Huge size */
+    font-size: 15em;
     font-weight: 800;
-    color: var(--services-bg-number-color); /* Dark gray, very translucent */
+    color: var(--services-bg-number-color);
     top: 50%;
-    right: 0px; /* Position it to the far right */
-    transform: translateY(-50%) translateX(20%); /* Center vertically and push slightly off-screen */
+    right: 0px;
+    transform: translateY(-50%) translateX(20%);
     line-height: 1;
-    user-select: none; /* Prevent text selection */
-    pointer-events: none; /* Do not interfere with clicks */
-    z-index: -1; /* Behind other content */
-    transition: opacity 0.5s ease-out; /* Smooth transition for number fade-in/out */
+    user-select: none;
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity 0.5s ease-out;
 }
 
 /* Service Title - will be green as per Framer example's first line */
 .service-title {
-    font-size: 2em; /* Title for the service */
+    font-size: 2em;
     font-weight: 700;
-    color: var(--services-title-active-color); /* Green color */
-    margin-bottom: 10px; /* Reduced margin */
+    color: var(--services-title-active-color);
+    margin-bottom: 10px;
     line-height: 1.2;
-    font-style: italic; /* Added italic as per reference */
+    font-style: italic;
 }
 
 /* Service Description - will be white as per Framer example's second line */
 .service-description {
-    font-size: 1.2em; /* Description text size, slightly larger */
-    color: var(--services-description-color); /* White color */
-    max-width: 650px; /* Limit width for readability */
-    line-height: 1.6; /* Tighter line height */
-    font-style: italic; /* Added italic as per reference */
+    font-size: 1.2em;
+    color: var(--services-description-color);
+    max-width: 650px;
+    line-height: 1.6;
+    font-style: italic;
 }
 
-/* The element that creates the total scrollable height for the services section */
+/* The element that creates the total scrollable height for the services section to allow sticky effect */
 .services-section-scroll-spacer {
-    display: block; /* Ensure it takes up space */
-    height: 0; /* Will be set by JS */
+    display: block;
+    height: 0; /* JS will set this height */
+    /* Add padding-top to make space for the sticky element that will eventually be here */
+    padding-top: calc(450px + 50px); /* services-content-wrapper height + its top offset */
 }
 
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 80px; /* Space from services section */
-    padding-bottom: 80px; /* Space before footer */
-    text-align: left; /* Align title left */
-    /* This section already has reveal-item class from HTML */
+    padding-top: 80px;
+    padding-bottom: 80px;
+    text-align: left;
 }
 
 .tools-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 5em; /* Slightly smaller than hero heading */
+    font-size: 5em;
     line-height: 0.9;
     font-weight: 800;
     margin-bottom: 50px;
     text-transform: uppercase;
 }
 
-/* Reusing text-white and text-gray for tools-heading */
 .tools-heading .text-white {
     color: var(--text-light);
     display: block;
@@ -530,69 +528,61 @@ body {
 
 .tools-grid {
     display: grid;
-    /* Responsive 2-column grid: at least 250px wide, max 1fr */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px; /* Gap between cards */
+    gap: 25px;
 }
 
 .tool-card {
     background-color: var(--bg-tool-card);
-    border-radius: 15px; /* Rounded corners for cards */
+    border-radius: 15px;
     padding: 20px;
     display: flex;
     align-items: center;
-    gap: 15px; /* Space between icon and text */
+    gap: 15px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
 }
 
 .tool-card:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    background-color: rgba(26, 26, 26, 0.9); /* Slightly lighter on hover */
+    transform: translateY(-5px);
+    background-color: rgba(26, 26, 26, 0.9);
 }
 
 .tool-icon-wrapper {
-    width: 50px; /* Size of the icon container */
+    width: 50px;
     height: 50px;
-    background-color: var(--tool-icon-bg); /* White background */
-    border-radius: 10px; /* Rounded square */
+    background-color: var(--tool-icon-bg);
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0; /* Prevent shrinking */
-    overflow: hidden; /* Ensure logo doesn't overflow */
+    flex-shrink: 0;
+    overflow: hidden;
 }
 
 .tool-logo {
-    max-width: 70%; /* Adjust logo size within wrapper */
+    max-width: 70%;
     max-height: 70%;
     object-fit: contain;
-    /* Apply a filter to ensure the logo appears dark/black against white background */
-    /* This works well if the original SVG is single-colored or has a dark primary color */
     filter: brightness(0.1); 
 }
 
-/* If a specific logo is colorful and needs to be grayscale/black on white,
-   you might need a more specific filter like invert(1) or a combination.
-   For Simple Icons, brightness(0.1) usually works fine for colored logos to turn them black.
-*/
-
 .tool-info {
-    flex-grow: 1; /* Allow text to take remaining space */
+    flex-grow: 1;
     text-align: left;
 }
 
 .tool-name {
-    font-size: 1.1em; /* Tool name font size */
-    font-weight: 600; /* Medium bold */
+    font-size: 1.1em;
+    font-weight: 600;
     color: var(--tool-name-color);
-    margin: 0 0 5px 0; /* Adjust margins */
+    margin: 0 0 5px 0;
     line-height: 1.2;
 }
 
 .tool-category {
-    font-size: 0.85em; /* Category description font size */
+    font-size: 0.85em;
     color: var(--tool-category-color);
     margin: 0;
     line-height: 1.2;
@@ -601,16 +591,16 @@ body {
 
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
-    background-color: var(--bg-main); /* Match body background for seamless blend */
-    color: var(--text-light); /* White */
+    background-color: var(--bg-main);
+    color: var(--text-light);
     text-align: center;
-    padding: 60px 5%; /* Reduced padding for more compact footer */
+    padding: 60px 5%;
     position: relative;
-    z-index: 1; /* Ensure footer stays above any potential background elements */
+    z-index: 1;
 }
 
 footer a {
-    color: var(--accent-secondary-sawad); /* Green for footer links */
+    color: var(--accent-secondary-sawad);
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -624,7 +614,7 @@ footer h2 {
     text-align: center;
     margin-bottom: 25px;
     font-size: 3.2em;
-    color: var(--primary-heading-color); /* White */
+    color: var(--primary-heading-color);
     font-weight: 700;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
     letter-spacing: 1.5px;
@@ -632,13 +622,13 @@ footer h2 {
 
 .contact-tagline {
     font-size: 1.25em;
-    margin-bottom: 40px; /* Reduced margin below tagline */
+    margin-bottom: 40px;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     opacity: 0.95;
     line-height: 1.8;
-    color: var(--text-light); /* White */
+    color: var(--text-light);
 }
 
 .contact-buttons {
@@ -650,18 +640,18 @@ footer h2 {
 }
 
 .contact-button {
-    background-color: rgba(255, 255, 255, 0.05); /* Subtle background for buttons */
-    color: var(--text-light); /* White */
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 0;
     font-size: 1.2em;
-    font-weight: 600; /* Medium bold */
+    font-weight: 600;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    width: 280px; /* Slightly wider buttons */
-    height: 130px; /* Slightly taller buttons */
+    width: 280px;
+    height: 130px;
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     text-align: center;
 }
@@ -669,7 +659,7 @@ footer h2 {
 .contact-button:hover {
     transform: translateY(-8px);
     background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad); /* Green glow on hover */
+    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad);
 }
 
 .contact-button .button-content-main {
@@ -688,12 +678,12 @@ footer h2 {
 }
 
 .contact-button i {
-    font-size: 2.8em; /* Larger icons in buttons */
-    color: var(--accent-primary-sawad); /* Accent color for icons */
+    font-size: 2.8em;
+    color: var(--accent-primary-sawad);
 }
 
 .contact-button .button-value {
-    font-size: 15px; /* Set to 15px */
+    font-size: 15px;
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -701,8 +691,8 @@ footer h2 {
     text-overflow: ellipsis;
     padding: 0 5px;
     max-width: 90%;
-    color: var(--text-light); /* White */
-    margin-top: 5px; /* Space between icon and value */
+    color: var(--text-light);
+    margin-top: 5px;
 }
 
 .contact-button .copied-text {
@@ -714,9 +704,9 @@ footer h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--gradient-skills-front); /* Orange gradient for copied state */
+    background: var(--gradient-skills-front);
     color: var(--text-light);
-    font-size: 1.5em; /* Larger "Copied!" text */
+    font-size: 1.5em;
     font-weight: bold;
     border-radius: 12px;
     opacity: 0;
@@ -741,7 +731,7 @@ footer h2 {
     margin-top: 30px;
 }
 .social-links a {
-    color: var(--text-light); /* White */
+    color: var(--text-light);
     margin: 0 20px;
     transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -757,30 +747,29 @@ footer h2 {
         padding: 0 40px;
     }
     .left-column-sticky {
-        width: 100%; /* On smaller desktops, expand to full width of container */
-        padding-right: 0; /* Remove right padding */
-        max-width: 400px; /* Keep max width to center content */
-        margin: 0 auto; /* Center it */
+        width: 100%;
+        padding-right: 0;
+        max-width: 400px;
+        margin: 0 auto;
     }
     .right-column-scroll { 
-        flex-grow: 1; /* Allow it to take up space */
-        width: 100%; /* Take full width of main container when stacked */
-        padding-left: 0; /* Adjust padding for full width layout */
-        padding-right: 0; /* Adjust padding for full width layout */
-        margin-top: 50px; /* Add some space above when stacked below left column */
-        text-align: center; /* Center content horizontally within the now full-width right column */
+        flex-grow: 1;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: 50px;
+        text-align: center;
     }
-    .section h2 { /* Global heading for sections (like footer) */
+    .section h2 {
         font-size: 3.2em;
         margin-bottom: 40px;
     }
-    /* Specific adjustments for profile card on 1200px screens - NO CHANGES */
     .about-left-content {
-        max-width: 300px; /* Adjust for slightly smaller desktop */
+        max-width: 300px;
         padding: 25px 20px;
     }
     .profile-image-container {
-        width: calc(100% + 40px); /* Keep proportion */
+        width: calc(100% + 40px);
         max-width: 340px;
         height: 160px;
         margin-bottom: 20px;
@@ -808,7 +797,7 @@ footer h2 {
     }
 
     .dashed-decoration {
-        border-width: 1.5px; /* Thinner for smaller screens */
+        border-width: 1.5px;
     }
     .top-left-curve, .bottom-right-curve {
         width: 120px;
@@ -819,9 +808,8 @@ footer h2 {
         right: -40px;
     }
 
-    /* Adjustments for hero content */
     .hero-heading {
-        font-size: 6em; /* Scale down heading */
+        font-size: 6em;
         margin-bottom: 25px;
     }
     .hero-description {
@@ -829,25 +817,21 @@ footer h2 {
         margin-bottom: 60px;
     }
 
-    /* Adjustments for services section */
     .services-section {
-        padding-top: 60px; /* Adjusted spacing now that it's after hero */
+        padding-top: 60px;
     }
     .services-heading {
-        font-size: 4.5em;
+        font-size: 6em; /* Match hero heading size */
         margin-bottom: 40px;
     }
     .services-content-wrapper {
-        height: 400px; /* Adjust height for smaller desktop */
-        position: relative; /* Ensure relative on mobile as well */
-        top: auto; /* Ensure no sticky top from desktop overrides */
+        height: 400px;
     }
     .service-item {
         padding: 15px;
-        transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     }
     .service-bg-number {
-        font-size: 12em; /* Scale down background number */
+        font-size: 12em;
     }
     .service-title {
         font-size: 1.8em;
@@ -856,12 +840,10 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
-    /* `services-section-scroll-spacer` padding-top is now removed as sticky is gone. Its height is directly set. */
+    /* spacer height calculation is in JS */
 
-
-    /* Adjustments for tools section */
     .tools-section {
-        padding-top: 60px; /* Adjusted space now that it's after services */
+        padding-top: 60px;
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -869,10 +851,10 @@ footer h2 {
         margin-bottom: 40px;
     }
     .tools-grid {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px;
-        max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
-        margin: 0 auto; /* Center the grid */
+        max-width: 500px;
+        margin: 0 auto;
     }
     .tool-card {
         padding: 18px;
@@ -893,13 +875,13 @@ footer h2 {
 
 @media (max-width: 768px) {
     .main-layout-container {
-        flex-direction: column; /* Stack columns vertically */
-        padding: 0 10px; /* Adjust padding for mobile */
-        padding-top: 20px; /* Space from top */
+        flex-direction: column;
+        padding: 0 10px;
+        padding-top: 20px;
     }
     .left-column-sticky {
-        width: 100%; /* Full width */
-        position: relative; /* Not sticky on mobile */
+        width: 100%;
+        position: relative;
         top: 0;
         padding-right: 0;
         min-height: unset;
@@ -910,14 +892,13 @@ footer h2 {
         flex-direction: column;
         padding-top: 0;
     }
-    /* Specific adjustments for profile card on 768px screens - NO CHANGES */
     .about-left-content {
-        max-width: 280px; /* Narrower for actual mobile */
+        max-width: 280px;
         padding: 20px 15px;
         border-radius: 15px;
     }
     .profile-image-container {
-        width: calc(100% + 40px); /* Adjust width for smaller screens */
+        width: calc(100% + 40px);
         max-width: 320px;
         height: 150px;
         margin-bottom: 20px;
@@ -959,8 +940,8 @@ footer h2 {
     .contact-buttons {
         flex-direction: column;
         gap: 20px;
-        max-width: 350px; /* Set max-width for the flex container */
-        margin: 0 auto; /* Center the flex container itself */
+        max-width: 350px;
+        margin: 0 auto;
     }
     .contact-button {
         width: 90%;
@@ -978,7 +959,7 @@ footer h2 {
         font-size: 1.1em;
     }
     .dashed-decoration {
-        border-width: 1px; /* Even thinner */
+        border-width: 1px;
     }
     .top-left-curve, .bottom-right-curve {
         width: 100px;
@@ -989,45 +970,42 @@ footer h2 {
         right: -30px;
     }
 
-    /* Adjustments for hero content */
     .right-column-scroll {
-        width: 100%; /* Full width on mobile */
-        padding: 40px 20px; /* More generous padding for content */
-        min-height: auto; /* Allow height to shrink on mobile */
-        padding-top: 50px; /* Reduced space from above section */
+        width: 100%;
+        padding: 40px 20px;
+        min-height: auto;
+        padding-top: 50px;
     }
     .hero-heading {
-        font-size: 4.5em; /* Scale down heading for tablets/larger phones */
+        font-size: 4.5em;
         margin-bottom: 20px;
     }
     .hero-description {
         font-size: 1em;
         line-height: 1.6;
-        max-width: 100%; /* Allow to take full width */
-        margin-bottom: 40px; /* Reduced space before next section */
+        max-width: 100%;
+        margin-bottom: 40px;
     }
 
-    /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 40px;
-        perspective: none; /* Disable 3D perspective on mobile for simpler animation */
+        /* perspective: none; /* Keep 3D on mobile for consistency, if desired */
     }
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
     }
     .services-content-wrapper {
-        height: 250px; /* Adjusted fixed height for mobile */
-        position: relative; /* Ensure relative on mobile as well */
-        top: auto; /* Remove sticky top from desktop overrides */
+        height: 250px;
+        position: sticky; /* Keep sticky on smaller screens for this effect */
+        top: 20px; /* Adjust sticky top for mobile */
     }
     .service-item {
         padding: 10px;
-        transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
     }
     .service-bg-number {
-        font-size: 8em; /* Smaller background number on mobile */
-        right: -10px; /* Adjust position */
+        font-size: 8em;
+        right: -10px;
     }
     .service-title {
         font-size: 1.6em;
@@ -1037,10 +1015,11 @@ footer h2 {
         font-size: 0.9em;
         max-width: 100%;
     }
-    /* `services-section-scroll-spacer` padding-top is now removed as sticky is gone. Its height is directly set. */
+    .services-section-scroll-spacer {
+        padding-top: calc(250px + 20px); /* services-content-wrapper height + its top offset */
+    }
 
 
-    /* Adjustments for tools section */
     .tools-section {
         padding-top: 40px;
         padding-bottom: 60px;
@@ -1050,9 +1029,9 @@ footer h2 {
         margin-bottom: 30px;
     }
     .tools-grid {
-        grid-template-columns: 1fr; /* Single column on mobile */
+        grid-template-columns: 1fr;
         gap: 15px;
-        max-width: 100%; /* Allow to take full width */
+        max-width: 100%;
     }
     .tool-card {
         padding: 15px;
@@ -1082,14 +1061,13 @@ footer h2 {
         margin-bottom: 25px;
     }
     .contact-buttons {
-        width: 95%; /* Adjust width for very small screens */
-        max-width: 300px; /* Tighter max-width */
+        width: 95%;
+        max-width: 300px;
     }
     .contact-button {
-        width: 100%; /* Ensure button takes full width of its container */
+        width: 100%;
         height: 85px;
     }
-    /* Specific adjustments for profile card on 480px screens - NO CHANGES */
     .about-left-content {
         max-width: 260px;
         padding: 15px 10px;
@@ -1135,18 +1113,16 @@ footer h2 {
         right: -25px;
     }
 
-    /* Adjustments for hero content */
     .hero-heading {
-        font-size: 3.5em; /* Further scale down for small phones */
+        font-size: 3.5em;
         margin-bottom: 15px;
     }
     .hero-description {
         font-size: 0.9em;
         line-height: 1.5;
-        margin-bottom: 30px; /* Further reduced space */
+        margin-bottom: 30px;
     }
 
-    /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 30px;
     }
@@ -1155,10 +1131,10 @@ footer h2 {
         margin-bottom: 25px;
     }
     .services-content-wrapper {
-        height: 200px; /* Further adjusted fixed height for very small mobile */
+        height: 200px;
     }
     .service-bg-number {
-        font-size: 6em; /* Even smaller background number */
+        font-size: 6em;
     }
     .service-title {
         font-size: 1.4em;
@@ -1166,8 +1142,10 @@ footer h2 {
     .service-description {
         font-size: 0.8em;
     }
+    .services-section-scroll-spacer {
+        padding-top: calc(200px + 20px); /* services-content-wrapper height + its top offset */
+    }
 
-    /* Adjustments for tools section */
     .tools-section {
         padding-top: 30px;
         padding-bottom: 50px;
