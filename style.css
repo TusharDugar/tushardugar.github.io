@@ -406,7 +406,7 @@ body {
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 80px; /* Space from hero section */
-    padding-bottom: 100px; /* Space before tools section */
+    padding-bottom: 80px; /* Reduced space before tools section */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
     z-index: 1;
@@ -421,12 +421,12 @@ body {
     text-transform: uppercase;
 }
 
-.services-heading .text-white { /* This is now the same as .text-gray, effectively making both lines grey */
-    color: var(--text-medium); /* Changed to grey */
+.services-heading .text-white { /* "Our" will be white */
+    color: var(--text-light); 
 }
 
-.services-heading .text-gray { 
-    color: var(--text-medium); /* Grey as requested */
+.services-heading .text-gray { /* "Services" will be grey */
+    color: var(--text-medium);
 }
 
 
@@ -472,8 +472,8 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: -30px; /* Adjusted to prevent cutoff and bring closer to text */
-    transform: translateY(-50%); /* Simplified, only vertical translation */
+    right: 0px; /* Place its right edge at the wrapper's right edge */
+    transform: translateY(-50%) translateX(20%); /* Shift 20% of its own width to the right to cut it off */
     line-height: 1;
     user-select: none;
     pointer-events: none;
@@ -481,7 +481,7 @@ body {
     transition: opacity 0.5s ease-out;
 }
 
-/* Service Title - will be orange as per request */
+/* Service Title - will be orange as per request, no italics */
 .service-title {
     font-size: 2em;
     font-weight: 700;
@@ -511,7 +511,7 @@ body {
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 80px;
+    padding-top: 80px; /* Reduced space from services section */
     padding-bottom: 80px;
     text-align: left;
 }
@@ -828,6 +828,7 @@ footer h2 {
 
     .services-section {
         padding-top: 60px;
+        padding-bottom: 60px; /* Reduced for smaller screens */
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
@@ -842,7 +843,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em;
-        right: -80px; /* Adjusted to prevent cutoff */
+        right: 0px; /* Aligned to right edge */
+        transform: translateY(-50%) translateX(20%); /* Shift 20% to cut off */
     }
     .service-title {
         font-size: 1.8em;
@@ -857,7 +859,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 60px;
+        padding-top: 60px; /* Reduced for tighter fit */
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -1003,6 +1005,7 @@ footer h2 {
 
     .services-section {
         padding-top: 40px;
+        padding-bottom: 40px; /* Reduced for mobile */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1017,7 +1020,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em;
-        right: -10px; /* Adjusted to prevent cutoff */
+        right: 0px; /* Aligned to right edge */
+        transform: translateY(-50%) translateX(20%); /* Shift 20% to cut off */
     }
     .service-title {
         font-size: 1.6em;
@@ -1032,7 +1036,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 40px;
+        padding-top: 40px; /* Reduced for tighter fit */
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -1146,7 +1150,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em;
-        right: -10px; /* Adjusted to prevent cutoff */
+        right: 0px; /* Aligned to right edge */
+        transform: translateY(-50%) translateX(20%); /* Shift 20% to cut off */
     }
     .service-title {
         font-size: 1.4em;
