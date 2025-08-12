@@ -1,3 +1,4 @@
+/* style.css */
 /* Basic Reset & Font */
 :root {
     /* Sawad-inspired Color Palette */
@@ -415,7 +416,7 @@ body {
 /* The new sticky container for the heading + animation content */
 #services-sticky-container {
     position: sticky;
-    top: 80px; /* Adjusted sticky top to bring content more towards center */
+    /* top: 80px;  REMOVED fixed top value, JS will calculate dynamically */
     /* No explicit height here, it will grow with its children */
     z-index: 10; /* Ensure it stays above other content during scroll */
     background: transparent; /* No background */
@@ -844,7 +845,7 @@ footer h2 {
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 60px; /* Adjusted sticky top to bring content more towards center */
+        /* top: 60px; REMOVED fixed top value, JS will calculate dynamically */
     }
     .services-content-wrapper {
         height: 180px; /* Reduced height for compactness */
@@ -1027,7 +1028,7 @@ footer h2 {
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 40px; /* Adjusted sticky top to bring content more towards center */
+        /* top: 40px; REMOVED fixed top value, JS will calculate dynamically */
     }
     .services-content-wrapper {
         height: 120px; /* Reduced height for compactness */
@@ -1176,7 +1177,7 @@ footer h2 {
     }
     /* Sticky container for heading + content wrapper */
     #services-sticky-container {
-        top: 20px; /* Adjusted sticky top for mobile */
+        /* top: 20px; REMOVED fixed top value, JS will calculate dynamically */
     }
     .services-content-wrapper {
         height: 100px; /* Reduced height for compactness */
