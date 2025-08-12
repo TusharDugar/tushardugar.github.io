@@ -364,8 +364,8 @@ body {
 .right-column-scroll {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
-    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
-    padding-right: 80px; /* Add right padding to prevent content from touching edge */
+    padding-left: 60px; /* Reduced padding for wider content */
+    padding-right: 60px; /* Reduced padding for wider content */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
@@ -399,14 +399,14 @@ body {
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
-    margin-bottom: 80px; /* Ample space before the next section (statistics) */
+    margin-bottom: 60px; /* Reduced space below hero description */
 }
 
 
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
-    padding-top: 80px; /* Space from hero section */
-    padding-bottom: 80px; /* Reduced space before tools section */
+    padding-top: 60px; /* Reduced space from hero section */
+    padding-bottom: 60px; /* Reduced space before tools section */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
     z-index: 1;
@@ -511,7 +511,7 @@ body {
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 80px; /* Reduced space from services section */
+    padding-top: 60px; /* Reduced space from services section */
     padding-bottom: 80px;
     text-align: left;
 }
@@ -764,8 +764,8 @@ footer h2 {
     .right-column-scroll { 
         flex-grow: 1;
         width: 100%;
-        padding-left: 0;
-        padding-right: 0;
+        padding-left: 40px; /* Adjusted padding */
+        padding-right: 40px; /* Adjusted padding */
         margin-top: 50px;
         text-align: center;
     }
@@ -823,16 +823,16 @@ footer h2 {
     }
     .hero-description {
         font-size: 1.1em;
-        margin-bottom: 60px;
+        margin-bottom: 40px; /* Reduced for tighter spacing */
     }
 
     .services-section {
-        padding-top: 60px;
-        padding-bottom: 60px; /* Reduced for smaller screens */
+        padding-top: 40px; /* Reduced */
+        padding-bottom: 40px; /* Reduced */
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 40px;
+        margin-bottom: 30px; /* Reduced */
     }
     .services-content-wrapper {
         height: 400px;
@@ -859,7 +859,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 60px; /* Reduced for tighter fit */
+        padding-top: 40px; /* Reduced for tighter fit */
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -988,7 +988,7 @@ footer h2 {
 
     .right-column-scroll {
         width: 100%;
-        padding: 40px 20px;
+        padding: 40px 20px; /* Adjusted padding */
         min-height: auto;
         padding-top: 50px;
     }
@@ -1000,12 +1000,12 @@ footer h2 {
         font-size: 1em;
         line-height: 1.6;
         max-width: 100%;
-        margin-bottom: 40px;
+        margin-bottom: 30px; /* Reduced */
     }
 
     .services-section {
-        padding-top: 40px;
-        padding-bottom: 40px; /* Reduced for mobile */
+        padding-top: 30px; /* Reduced */
+        padding-bottom: 30px; /* Reduced */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1036,7 +1036,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 40px; /* Reduced for tighter fit */
+        padding-top: 30px; /* Reduced for tighter fit */
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -1135,11 +1135,11 @@ footer h2 {
     .hero-description {
         font-size: 0.9em;
         line-height: 1.5;
-        margin-bottom: 30px;
+        margin-bottom: 20px; /* Reduced */
     }
 
     .services-section {
-        padding-top: 30px;
+        padding-top: 20px; /* Reduced */
     }
     .services-heading {
         font-size: 2.8em;
@@ -1164,7 +1164,7 @@ footer h2 {
     }
 
     .tools-section {
-        padding-top: 30px;
+        padding-top: 20px; /* Reduced */
         padding-bottom: 50px;
     }
     .tools-heading {
