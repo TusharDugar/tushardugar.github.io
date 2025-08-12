@@ -841,7 +841,6 @@ footer h2 {
         font-size: 6em; /* Matched hero heading size */
         margin-bottom: 20px; /* Increased margin for more space below heading */
     }
-    /* #services-sticky-container empty ruleset removed */
     .services-content-wrapper {
         height: 180px; /* Reduced height for compactness */
         padding-right: 48px; /* 3rem (48px) for 1200px breakpoint (KEPT for number overlap) */
@@ -1021,7 +1020,6 @@ footer h2 {
         font-size: 3.5em;
         margin-bottom: 25px; /* Increased margin */
     }
-    /* #services-sticky-container empty ruleset removed */
     .services-content-wrapper {
         height: 120px; /* Reduced height for compactness */
         padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint (KEPT for number overlap) */
