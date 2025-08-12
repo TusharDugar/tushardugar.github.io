@@ -412,6 +412,16 @@ body {
     z-index: 1;
 }
 
+/* The new sticky container for the heading + animation content */
+#services-sticky-container {
+    position: sticky;
+    top: 50px; /* Will stick 50px from the top of the viewport */
+    /* This element's height will dynamically include the heading + services-content-wrapper */
+    /* No explicit height here, it will grow with its children */
+    z-index: 10; /* Ensure it stays above other content during scroll */
+    background: transparent; /* No background */
+}
+
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 7em; /* Match hero heading size */
@@ -431,8 +441,7 @@ body {
 
 
 .services-content-wrapper {
-    position: sticky; /* Back to sticky */
-    top: 50px; /* Stick 50px from the top of the viewport */
+    position: relative; /* Now relative to its new parent: #services-sticky-container */
     height: 300px; /* Reduced height for compactness */
     display: flex;
     flex-direction: column;
@@ -440,7 +449,7 @@ body {
     perspective: 1000px; /* Defines the depth for 3D transforms */
     overflow: hidden; /* Crucial for clipping the 3D effect */
     background: transparent; /* Ensure no background interferes */
-    z-index: 10; /* Ensure it stays above other content during scroll */
+    z-index: 1; /* Relative to its parent sticky container */
 }
 
 .service-item {
@@ -472,7 +481,7 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: -100px; /* Adjusted to prevent cutoff and push fully right */
+    right: -100px; /* Pushed further right so entire number is visible */
     transform: translateY(-50%); /* Simplified, only vertical translation */
     line-height: 1;
     user-select: none;
@@ -481,7 +490,7 @@ body {
     transition: opacity 0.5s ease-out;
 }
 
-/* Service Title - will be orange as per request, no italics */
+/* Service Title - will be orange, no italics */
 .service-title {
     font-size: 2em;
     font-weight: 700;
@@ -504,8 +513,7 @@ body {
 .services-section-scroll-spacer {
     display: block;
     height: 0; /* JS will set this height */
-    /* Add padding-top to make space for the sticky element that will eventually be here */
-    padding-top: calc(300px + 50px); /* services-content-wrapper height + its top offset */
+    /* No additional padding-top here; the height is handled by JS based on sticky container */
 }
 
 
@@ -834,9 +842,12 @@ footer h2 {
         font-size: 6em; /* Matched hero heading size */
         margin-bottom: 30px; /* Reduced */
     }
+    /* Sticky container for heading + content wrapper */
+    #services-sticky-container {
+        top: 40px; /* Adjusted sticky top for smaller screens */
+    }
     .services-content-wrapper {
         height: 280px; /* Reduced height for compactness */
-        top: 40px; /* Adjusted sticky top for smaller screens */
     }
     .service-item {
         padding: 15px 12px; /* Reduced horizontal padding for increased width */
@@ -853,9 +864,7 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
-    .services-section-scroll-spacer {
-        padding-top: calc(280px + 40px); /* services-content-wrapper height + its top offset */
-    }
+    /* spacer height calculation is in JS */
 
 
     .tools-section {
@@ -1011,9 +1020,12 @@ footer h2 {
         font-size: 3.5em;
         margin-bottom: 30px;
     }
+    /* Sticky container for heading + content wrapper */
+    #services-sticky-container {
+        top: 20px; /* Adjusted sticky top for mobile */
+    }
     .services-content-wrapper {
         height: 180px; /* Reduced height for compactness */
-        top: 20px; /* Adjusted sticky top for mobile */
     }
     .service-item {
         padding: 10px 7px; /* Reduced horizontal padding for increased width */
@@ -1030,9 +1042,7 @@ footer h2 {
         font-size: 0.9em;
         max-width: 100%;
     }
-    .services-section-scroll-spacer {
-        padding-top: calc(180px + 20px); /* services-content-wrapper height + its top offset */
-    }
+    /* spacer height calculation is in JS */
 
 
     .tools-section {
@@ -1145,6 +1155,10 @@ footer h2 {
         font-size: 2.8em;
         margin-bottom: 25px;
     }
+    /* Sticky container for heading + content wrapper */
+    #services-sticky-container {
+        top: 20px; /* Adjusted sticky top for mobile */
+    }
     .services-content-wrapper {
         height: 150px; /* Reduced height for compactness */
     }
@@ -1159,9 +1173,7 @@ footer h2 {
     .service-description {
         font-size: 0.8em;
     }
-    .services-section-scroll-spacer {
-        padding-top: calc(150px + 20px); /* services-content-wrapper height + its top offset */
-    }
+    /* spacer height calculation is in JS */
 
     .tools-section {
         padding-top: 20px; /* Reduced */

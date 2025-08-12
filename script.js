@@ -58,12 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Services Section Animation Logic (Framer-like "cuboid" scroll effect) ---
     const servicesSection = document.getElementById('services');
-    const servicesContentWrapper = servicesSection ? servicesSection.querySelector('.services-content-wrapper') : null;
-    const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
-    const serviceBgNumber = servicesContentWrapper ? servicesContentWrapper.querySelector('#service-bg-number') : null;
+    // Reference to the new sticky container that wraps both heading and animation viewport
+    const servicesStickyContainer = servicesSection ? servicesSection.querySelector('#services-sticky-container') : null;
+    // Reference to the actual div where the slides animate
+    const servicesSlidesViewport = servicesStickyContainer ? servicesStickyContainer.querySelector('.services-content-wrapper') : null;
+    const serviceItems = servicesSlidesViewport ? servicesSlidesViewport.querySelectorAll('.service-item') : [];
+    const serviceBgNumber = servicesSlidesViewport ? servicesSlidesViewport.querySelector('#service-bg-number') : null;
     
     // Critical check for existence
-    if (!servicesSection || serviceItems.length === 0 || !servicesContentWrapper || !serviceBgNumber) {
+    if (!servicesSection || serviceItems.length === 0 || !servicesStickyContainer || !servicesSlidesViewport || !serviceBgNumber) {
         console.warn('Services section or required elements not found. Skipping services animation setup.');
         if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
         return; 
@@ -77,16 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.appendChild(scrollSpacer);
     }
 
-    // Define the fixed height of the visible services content wrapper (from CSS)
-    let SECTION_VISIBLE_HEIGHT; // Will be read dynamically
-    // Define the top offset for the sticky effect (from CSS)
-    let STICKY_TOP_OFFSET; // Will be read dynamically
+    // Define the fixed height of the visual viewport where slides animate (from CSS)
+    let ANIMATION_VIEWPORT_HEIGHT; 
+    // Define the top offset for the sticky container (from CSS)
+    let STICKY_CONTAINER_TOP_OFFSET; 
     
     // Define how much scroll distance is needed to fully transition one item.
-    // This value is crucial for controlling the animation speed and overall section length.
     // Multiplier reduced for tighter transitions.
     const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 0.9; 
-    let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on SECTION_VISIBLE_HEIGHT
+    let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on ANIMATION_VIEWPORT_HEIGHT
 
     let currentActiveIndex = -1; // Tracks the currently active slide index
     let lastScrollY = window.scrollY; // For scroll direction detection
@@ -95,35 +97,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to set the total scrollable height of the services section
     const adjustServicesSectionHeight = () => {
         // Recalculate dynamic values on resize or initial load
-        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight;
-        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
-        SCROLL_DISTANCE_PER_ITEM = SECTION_VISIBLE_HEIGHT * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
+        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight;
+        STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
+        SCROLL_DISTANCE_PER_ITEM = ANIMATION_VIEWPORT_HEIGHT * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
         // The total scroll range needed for all animations:
         // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
         const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
-        // The servicesSection needs to be tall enough to allow the sticky wrapper to "pin"
-        // and for the user to scroll through the entire animation.
-        // This height is provided by the `scrollSpacer`.
-        // It's the `totalAnimationScrollRange` plus the `SECTION_VISIBLE_HEIGHT` (for the last slide to display)
-        // plus the `STICKY_TOP_OFFSET` so the sticky effect can start and finish cleanly within the section.
-        scrollSpacer.style.height = `${totalAnimationScrollRange + SECTION_VISIBLE_HEIGHT + STICKY_TOP_OFFSET}px`;
-        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items. Visible height: ${SECTION_VISIBLE_HEIGHT}`);
+        // The servicesSection (parent of sticky) needs to be tall enough to allow the sticky container to "pin"
+        // and for the user to scroll through the entire animation range.
+        // It's the `totalAnimationScrollRange` (for the animation part)
+        // PLUS the `servicesStickyContainer.offsetHeight` (the full height of the sticky block itself, which includes the heading and animation viewport)
+        // PLUS the `STICKY_CONTAINER_TOP_OFFSET` (extra buffer so it activates correctly from top).
+        scrollSpacer.style.height = `${totalAnimationScrollRange + servicesStickyContainer.offsetHeight + STICKY_CONTAINER_TOP_OFFSET}px`;
+        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items. Animation Viewport Height: ${ANIMATION_VIEWPORT_HEIGHT}`);
     };
 
     // This is the core animation logic, triggered by scroll
     const updateServiceAnimation = () => {
-        // `servicesSection.offsetTop` gives the distance from the top of the document to the top of the services section.
-        // The animation effectively starts when the `servicesContentWrapper` (which is sticky)
-        // reaches its `top` offset in the viewport.
-        // So, the scroll point where the animation *begins* is `servicesSection.offsetTop`.
+        // `servicesSection.offsetTop` is where the whole services section begins in the document.
+        // The sticky effect for `#services-sticky-container` starts when `window.scrollY` matches `servicesSection.offsetTop`.
         let scrollProgress = window.scrollY - servicesSection.offsetTop;
 
         // Clamp the scroll progress to the valid range for our animation.
-        // Max progress is the total height of the spacer MINUS the height of the sticky element
-        // (because the sticky element takes up space *below* the scroll top when it's active).
-        const maxScrollableRangeForAnimation = scrollSpacer.offsetHeight - SECTION_VISIBLE_HEIGHT - STICKY_TOP_OFFSET;
+        // The animation effectively runs from `servicesSection.offsetTop` until `servicesSection.offsetTop + totalAnimationScrollRange`.
+        // The maximum value for `scrollProgress` should be the full extent of the animation + the sticky container's height.
+        const maxScrollableRangeForAnimation = scrollSpacer.offsetHeight - servicesStickyContainer.offsetHeight - STICKY_CONTAINER_TOP_OFFSET;
         scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
 
         // Determine which item should be active based on scroll progress
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (index === currentIndex) {
                 // The current item: animating out (rotating outwards and fading)
                 rotateX = 90 * fractionalProgress; // Rotates from 0deg to 90deg (forward/outwards)
-                translateY = -SECTION_VISIBLE_HEIGHT * fractionalProgress; // Moves upwards
+                translateY = -ANIMATION_VIEWPORT_HEIGHT * fractionalProgress; // Moves upwards
                 opacity = 1 - fractionalProgress; // Fades out
                 zIndex = 2; // Ensures it's on top when exiting
             } else if (index === currentIndex + 1) {
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Starts rotated -90 degrees (as if coming from the 'bottom' face of the cube)
                 // and rotates back to 0 degrees (flat).
                 rotateX = -90 + (90 * fractionalProgress); 
-                translateY = SECTION_VISIBLE_HEIGHT * (1 - fractionalProgress); // Moves downwards into place
+                translateY = ANIMATION_VIEWPORT_HEIGHT * (1 - fractionalProgress); // Moves downwards into place
                 opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
             } else {
@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
     setTimeout(() => {
         // Read initial dimensions now that DOM is likely settled
-        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight; 
-        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
+        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight; 
+        STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
 
         adjustServicesSectionHeight();
         // 2. Trigger initial animation state on page load
@@ -205,8 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
         // Re-read dimensions as they might change with screen size
-        SECTION_VISIBLE_HEIGHT = servicesContentWrapper.offsetHeight;
-        STICKY_TOP_OFFSET = parseInt(getComputedStyle(servicesContentWrapper).top);
+        ANIMATION_VIEWPORT_HEIGHT = servicesSlidesViewport.offsetHeight;
+        STICKY_CONTAINER_TOP_OFFSET = parseInt(getComputedStyle(servicesStickyContainer).top);
         
         adjustServicesSectionHeight();
         requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
