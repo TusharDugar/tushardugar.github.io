@@ -406,7 +406,7 @@ body {
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 30px; /* Reduced space from hero section */
-    padding-bottom: 15px; /* Drastically reduced space before tools section */
+    padding-bottom: 15px; /* Reduced space before tools section */
     text-align: left;
     position: relative; /* Needed for spacer to take up space */
     z-index: 1;
@@ -441,7 +441,7 @@ body {
 
 .services-content-wrapper {
     position: relative; /* Now relative to its new parent: #services-sticky-container */
-    height: 250px; /* Reduced height for compactness */
+    height: 200px; /* Reduced height for compactness */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
@@ -461,7 +461,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 12px 9px; /* Reduced horizontal padding for increased width and reduced vertical padding */
+    padding: 8px 9px; /* Reduced vertical and horizontal padding for compactness and increased width */
     box-sizing: border-box;
 
     opacity: 0; /* Controlled by JS */
@@ -480,7 +480,7 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color);
     top: 50%;
-    right: -200px; /* Pushed further right so entire number is visible */
+    right: -200px; /* Adjusted to push fully right and be visible */
     transform: translateY(-50%); /* Simplified, only vertical translation */
     line-height: 1;
     user-select: none;
@@ -830,12 +830,12 @@ footer h2 {
     }
     .hero-description {
         font-size: 1.1em;
-        margin-bottom: 40px; /* Reduced for tighter spacing */
+        margin-bottom: 30px; /* Reduced for tighter spacing */
     }
 
     .services-section {
         padding-top: 20px; /* Reduced */
-        padding-bottom: 10px; /* Reduced from 15px for tighter gap */
+        padding-bottom: 10px; /* Reduced */
     }
     .services-heading {
         font-size: 6em; /* Matched hero heading size */
@@ -846,10 +846,10 @@ footer h2 {
         top: 30px; /* Reduced sticky top to bring content higher */
     }
     .services-content-wrapper {
-        height: 230px; /* Reduced height for compactness */
+        height: 180px; /* Reduced height for compactness */
     }
     .service-item {
-        padding: 12px 9px; /* Reduced horizontal padding for increased width and reduced vertical padding */
+        padding: 10px 9px; /* Reduced vertical and horizontal padding for compactness and increased width */
     }
     .service-bg-number {
         font-size: 12em;
@@ -867,7 +867,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 10px; /* Reduced from 15px for tighter gap */
+        padding-top: 10px; /* Reduced */
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -1012,7 +1012,7 @@ footer h2 {
 
     .services-section {
         padding-top: 20px; /* Reduced */
-        padding-bottom: 5px; /* Reduced from 10px for tighter gap */
+        padding-bottom: 10px; /* Reduced */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1026,11 +1026,11 @@ footer h2 {
         height: 150px; /* Reduced height for compactness */
     }
     .service-item {
-        padding: 10px 7px; /* Reduced horizontal padding for increased width and reduced vertical padding */
+        padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
     }
     .service-bg-number {
         font-size: 8em;
-        right: -40px; /* Adjusted to prevent cutoff and push fully right */
+        right: -80px; /* Adjusted to prevent cutoff and push fully right */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
@@ -1044,7 +1044,7 @@ footer h2 {
 
 
     .tools-section {
-        padding-top: 5px; /* Reduced from 10px for tighter gap */
+        padding-top: 10px; /* Reduced */
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -1138,12 +1138,6 @@ footer h2 {
         right: -25px;
     }
 
-    .right-column-scroll {
-        width: 100%;
-        padding: 30px 5px; /* Even tighter padding */
-        min-height: auto;
-        padding-top: 30px; /* Reduced */
-    }
     .hero-heading {
         font-size: 3.5em;
         margin-bottom: 15px;
@@ -1171,7 +1165,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em;
-        right: -10px; /* Adjusted to prevent cutoff and push fully right */
+        right: -100px; /* Adjusted to prevent cutoff and push fully right */
         transform: translateY(-50%); /* Simplified, only vertical translation */
     }
     .service-title {
@@ -1183,7 +1177,7 @@ footer h2 {
     /* spacer height calculation is in JS */
 
     .tools-section {
-        padding-top: 5px; /* Reduced from 10px for tightest gap */
+        padding-top: 5px; /* Reduced */
         padding-bottom: 50px;
     }
     .tools-heading {
