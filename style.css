@@ -466,7 +466,7 @@ body {
 }
 
 /* Styling for the large background number */
-.service-bg-number {
+.service-bg-number, #service-bg-number { /* Both class and ID now reference this styling */
     position: absolute;
     font-family: 'Poppins', sans-serif;
     font-size: 15em; /* Huge size */
@@ -479,7 +479,9 @@ body {
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
+    transition: opacity 0.5s ease-out; /* Smooth transition for number fade-in/out */
 }
+
 
 /* Service Title - will be green as per Framer example's first line */
 .service-title {
