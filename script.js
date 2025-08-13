@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
-    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; // Reverted to 1.0 for cleaner 1:1 scroll interaction.
+    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1; // Increased for more scroll per item
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
 
     let currentActiveIndex = 0; // Tracks the currently active slide index, initialized to 0
@@ -90,76 +90,59 @@ document.addEventListener('DOMContentLoaded', () => {
     // and the sticky container's top offset for centering
     const adjustServicesLayout = () => {
         // Recalculate dynamic values on resize or initial load
-        const contentWrapperHeight = servicesContentWrapper.offsetHeight;
+        const contentWrapperHeight = servicesContentWrapper.offsetHeight; 
         const servicesHeadingHeight = servicesHeading.offsetHeight;
         const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
 
-        // Total visual height of the sticky block when it is stuck
-        const totalVisualStickyBlockHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
-
         // Calculate the ideal top offset for the heading to be visually centered
-        // It's (viewport height - total visual sticky block height) / 2
-        let stickyTopH2 = (window.innerHeight - totalVisualStickyBlockHeight) / 2;
+        // It's (viewport height - total visible sticky content height) / 2
+        // Total visible sticky content is heading + gap + contentWrapper
+        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
+        let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
         stickyTopH2 = Math.max(0, stickyTopH2); // Ensure it's not negative
 
-        // The wrapper's sticky top should be right below the heading + gap when both are sticky
+        // The wrapper's sticky top should be right below the heading + gap
         let stickyTopWrapper = stickyTopH2 + servicesHeadingHeight + gapBetweenHeadingAndWrapper;
 
         // Set CSS variables for sticky top offsets
         servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
-        // The actual scroll distance for one item's animation (1:1 scroll with wrapper height)
+        // The actual scroll distance for one item's animation
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
-        // Total scroll required for ALL N items to have their full display and transition time.
-        // For N items, we need N "slots" of SCROLL_DISTANCE_PER_ITEM.
-        const totalAnimationDurationScroll = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
+        // The total animation scroll range for all items to transition
+        const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
         // The spacer needs to provide enough height for:
-        // 1. All N items to have their full display and transition time (`totalAnimationDurationScroll`).
-        // 2. The entire sticky block (heading + content wrapper) to scroll out of view
-        //    after the animation sequence is complete.
-        scrollSpacer.style.height = `${totalAnimationDurationScroll + totalVisualStickyBlockHeight}px`;
+        // 1. Scrolling until the sticky elements hit their top position (stickyTopH2)
+        // 2. Scrolling through the entire animation range (totalAnimationScrollRange)
+        // 3. A buffer at the end so the last animation can complete before the section ends.
+        scrollSpacer.style.height = `${stickyTopH2 + totalAnimationScrollRange + (window.innerHeight * 0.8)}px`; // Increased end buffer
 
-        console.log('--- Services Layout Adjusted (Final, Precise Logic) ---');
-        console.log(`Viewport Height: ${window.innerHeight}px`);
-        console.log(`Heading Height: ${servicesHeadingHeight}px, Wrapper Height: ${contentWrapperHeight}px`);
-        console.log(`Total Visual Sticky Block Height: ${totalVisualStickyBlockHeight}px`);
-        console.log(`Sticky Top H2 (CSS variable): ${stickyTopH2}px`);
-        console.log(`Sticky Top Wrapper (CSS variable): ${stickyTopWrapper}px`);
-        console.log(`SCROLL_DISTANCE_PER_ITEM: ${SCROLL_DISTANCE_PER_ITEM}px`);
-        console.log(`Total Animation Duration Scroll (N items * dist/item): ${totalAnimationDurationScroll}px`);
-        console.log(`Calculated Scroll Spacer Height: ${scrollSpacer.offsetHeight}px`);
-        console.log(`servicesSection.offsetTop: ${servicesSection.offsetTop}px`);
+        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items.`);
+        // console.log(`Heading Height: ${servicesHeadingHeight}, Wrapper Height: ${contentWrapperHeight}`);
+        // console.log(`Sticky Top H2: ${stickyTopH2}, Sticky Top Wrapper: ${stickyTopWrapper}`);
+        // console.log(`Scroll Distance Per Item: ${SCROLL_DISTANCE_PER_ITEM}`);
     };
 
     // This is the core animation logic, triggered by scroll
     const updateServiceAnimation = () => {
         // Calculate scroll progress relative to when the services section's heading starts sticking
+        // This makes the animation independent of the overall scroll position of the services section.
         const stickyH2Top = parseFloat(getComputedStyle(servicesSection).getPropertyValue('--services-sticky-top-h2'));
         const animationStartScroll = servicesSection.offsetTop + stickyH2Top;
 
         let scrollProgress = window.scrollY - animationStartScroll;
 
-        // Clamp the scroll progress to ensure it only covers the defined animation duration.
-        // Max range is N items * SCROLL_DISTANCE_PER_ITEM, because the last item also gets a full "scroll slot" to hold its position.
-        const maxScrollableRangeForAnimation = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
+        // Clamp the scroll progress to the valid range for our animation.
+        const maxScrollableRangeForAnimation = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
         scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
 
         // Determine which item should be active based on scroll progress
         const normalizedProgress = scrollProgress / SCROLL_DISTANCE_PER_ITEM;
-        
         const currentIndex = Math.floor(normalizedProgress);
-        // fractionalProgress should be 0 for the fully active item, and animate to 1 as it exits.
-        // For the last item, fractionalProgress should remain 0 once it's fully in view.
-        let fractionalProgress = normalizedProgress - currentIndex;
-
-        // If we are on the last item AND it has fully entered (meaning fractionalProgress > 0 in its slot),
-        // we lock fractionalProgress to 0 to make it hold.
-        if (currentIndex === serviceItems.length - 1 && fractionalProgress > 0) {
-            fractionalProgress = 0; // Lock the last item in place for its entire slot
-        }
+        const fractionalProgress = normalizedProgress - currentIndex; // Progress within the current item's transition (0 to 1)
 
         // Update the background number for the active slide
         const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
@@ -180,15 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (index === currentIndex) {
                 // The current item: animating out (rotating outwards and fading)
-                rotateX = 90 * fractionalProgress; 
-                translateY = -contentWrapperHeight * fractionalProgress; 
-                opacity = 1 - fractionalProgress; 
-                zIndex = 2; // On top when exiting
+                rotateX = 90 * fractionalProgress; // Rotates from 0deg to 90deg (forward/outwards)
+                translateY = -contentWrapperHeight * fractionalProgress; // Moves upwards
+                opacity = 1 - fractionalProgress; // Fades out
+                zIndex = 2; // Ensures it's on top when exiting
             } else if (index === currentIndex + 1) {
                 // The next item: animating in (rotating into view from behind/below)
                 rotateX = -90 + (90 * fractionalProgress); 
-                translateY = contentWrapperHeight * (1 - fractionalProgress); 
-                opacity = fractionalProgress; 
+                translateY = contentWrapperHeight * (1 - fractionalProgress); // Moves downwards into place
+                opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
             } else {
                 // All other items are completely hidden and reset
@@ -202,9 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.opacity = opacity;
             item.style.zIndex = zIndex;
         });
-
-        // Uncomment for detailed debugging in console
-        // console.log(`ScrollY: ${window.scrollY}, StartScroll: ${animationStartScroll.toFixed(2)}, Progress: ${scrollProgress.toFixed(2)}, CurrentIndex: ${currentIndex}, Fractional: ${fractionalProgress.toFixed(2)}`);
 
         rafId = null; // Reset requestAnimationFrame ID
     };
@@ -222,31 +202,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialize animation and event listeners ---
 
-    const initializeServices = () => {
+    // 1. Set the initial height for the services section and the spacer
+    // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
+    setTimeout(() => {
         adjustServicesLayout();
-        requestAnimationFrame(updateServiceAnimation); // Trigger initial animation state
+        // 2. Trigger initial animation state on page load
+        requestAnimationFrame(updateServiceAnimation);
         // Ensure first item is active on load
         if (serviceItems.length > 0) {
-            serviceItems[0].classList.add('active-content'); // Ensure first item is visible initially
-            serviceBgNumber.textContent = '01'; // Set initial background number
+            serviceItems[0].classList.add('active-content');
+            serviceBgNumber.textContent = '01';
         }
-    };
+    }, 200); // Increased delay for robust calculation
 
-    // Use a small delay with setTimeout for robust calculation after page render
-    setTimeout(initializeServices, 500); 
-
-    // Recalculate height and re-render on window resize (debounced)
+    // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
-        clearTimeout(window.resizeServicesTimeout);
-        window.resizeServicesTimeout = setTimeout(() => {
-            adjustServicesLayout();
-            requestAnimationFrame(updateServiceAnimation); 
-        }, 100);
+        adjustServicesLayout();
+        requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
     });
 
-    // Attach the optimized scroll handler
+    // 4. Attach the optimized scroll handler
     window.addEventListener('scroll', handleScrollEvent);
 
     // Ensure the services section itself gets the 'revealed' class
-    sectionObserver.observe(servicesSection);
+    sectionObserver.observe(servicesSection); 
 });

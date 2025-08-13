@@ -66,7 +66,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the entire container */
-    filter: brightness(0.5) grayscale(0.5); /* Restored original brightness/grayscale */
+    filter: brightness(0.2) grayscale(0.8); /* Reverted to old code brightness/grayscale */
 }
 
 .video-overlay {
@@ -79,7 +79,7 @@ body {
     z-index: -1; /* Above video, below content */
 }
 
-/* Geometric Background Lines - Restored original brightness/opacity */
+/* Geometric Background Lines - Reverted to old code brightness/opacity */
 .main-layout-container::before {
     content: '';
     position: absolute;
@@ -92,10 +92,10 @@ body {
         linear-gradient(to right, transparent 99%, var(--services-grid-line-color) 1%),
         linear-gradient(to bottom, transparent 99%, var(--services-grid-line-color) 1%);
     background-size: 100px 100px; /* Adjust grid size */
-    opacity: 1; /* Restored opacity */
+    opacity: 0.8; /* Reverted opacity */
 }
 
-/* Add diagonal lines for a more complex grid, similar to Framer.ai - Restored original brightness/opacity */
+/* Add diagonal lines for a more complex grid, similar to Framer.ai - Reverted to old code brightness/opacity */
 .main-layout-container::after {
     content: '';
     position: absolute;
@@ -108,11 +108,11 @@ body {
         linear-gradient(45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%),
         linear-gradient(-45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%);
     background-size: 100px 100px; /* Adjust grid size, match to before */
-    opacity: 1; /* Restored opacity */
+    opacity: 0.8; /* Reverted opacity */
 }
 
 
-/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) - Restored original brightness/animation */
+/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) - Reverted to old code brightness/animation */
 .background-glows::before, .background-glows::after {
     content: '';
     position: fixed;
@@ -121,7 +121,7 @@ body {
     transform: translate(-50%, -50%);
     border-radius: 50%;
     filter: blur(200px); /* Very soft blur for large, subtle glows */
-    opacity: 0.3; /* Restored opacity */
+    opacity: 0.15; /* Reverted opacity */
     z-index: -1; /* Behind all content */
     pointer-events: none; /* Ensure no interaction with glows */
 }
@@ -130,19 +130,19 @@ body {
     width: 900px;
     height: 900px;
     background: radial-gradient(circle at center, var(--accent-primary-sawad) 0%, transparent 60%);
-    animation: glow1 20s infinite alternate ease-in-out; /* Restored duration */
+    animation: glow1 25s infinite alternate ease-in-out; /* Reverted duration */
 }
 
 @keyframes glow1 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Restored opacity */
-    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.4; } /* Restored opacity */
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Restored opacity */
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; } /* Reverted opacity */
+    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.2; } /* Reverted opacity */
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.15; } /* Reverted opacity */
 }
 
 @keyframes glow2 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Restored opacity */
-    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Restored opacity */
-    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.3; } /* Restored opacity */
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; } /* Reverted opacity */
+    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.2; } /* Reverted opacity */
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.15; } /* Reverted opacity */
 }
 
 
@@ -488,7 +488,7 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color); /* Darker gray, more visible */
     top: 50%;
-    right: 20px; /* Restored right padding for full visibility */
+    right: 50px; /* Adjusted to ensure numbers are fully visible */
     transform: translateY(-50%); /* Removed translateX to keep it on screen */
     line-height: 1;
     user-select: none; /* Prevent text selection */
@@ -502,8 +502,7 @@ body {
     font-weight: 700;
     color: var(--accent-primary-sawad); /* Reverted to orange */
     margin-bottom: 10px; /* Reduced margin */
-    line-height: 1.2;
-    font-style: normal; /* Reverted to normal (no italics) */
+    font-style: normal; /* Ensured no italics */
 }
 
 /* Service Description - Reverted to normal (no italics) */
@@ -512,7 +511,7 @@ body {
     color: var(--services-description-color); /* White color */
     max-width: 650px; /* Limit width for readability */
     line-height: 1.6; /* Tighter line height */
-    font-style: normal; /* Reverted to normal (no italics) */
+    font-style: normal; /* Ensured no italics */
 }
 
 /* Since service-items are absolute, we need to create virtual scroll space */
@@ -872,6 +871,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em; /* Scale down background number */
+        right: 40px; /* Adjusted for smaller screens */
     }
     .service-title {
         font-size: 1.8em;
@@ -1056,7 +1056,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
-        right: 20px; /* Reverted position for numbers */
+        right: 40px; /* Adjusted for smaller screens */
         transform: translateY(-50%); /* Removed translateX to keep it on screen */
     }
     .service-title {
@@ -1189,7 +1189,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
-        right: 20px; /* Reverted position for numbers */
+        right: 40px; /* Adjusted for smaller screens */
         transform: translateY(-50%); /* Removed translateX to keep it on screen */
     }
     .service-title {
