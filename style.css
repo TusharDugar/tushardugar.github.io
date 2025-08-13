@@ -59,7 +59,7 @@ html {
     margin: 0;
     padding: 0;
     position: relative; /* Needed for fixed children positioning in some browsers */
-    overflow-x: hidden; /* Ensure HTML also hides overflow */
+    overflow-x: hidden; /* FIX: Ensure HTML also hides horizontal overflow */
 }
 
 /* Keyframes for the animated colorful gradient */
@@ -74,7 +74,7 @@ body {
     line-height: 1.6;
     color: var(--text-light);
     background-color: transparent; /* Make body transparent to show html background */
-    overflow-x: hidden; /* Crucial to prevent horizontal scroll showing background on the right */
+    overflow-x: hidden; /* FIX: Crucial to prevent horizontal scroll showing background on the right */
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
@@ -239,31 +239,18 @@ html::before { /* Re-using html::before to cover the whole page */
     transform: translateY(0);
 }
 
-/* New: Profile Image Container - FURTHER ADJUSTED WIDTH AND ALIGNMENT FOR ALL VERSIONS */
+/* FIX: Profile Image Container - Further reduced width, and ensured central alignment */
 .profile-image-container {
-    width: calc(100% + 40px); /* Adjust to visually extend 20px on each side */
-    max-width: 320px; /* Further reduced max-width to make it narrower overall */
-    height: 220px; /* Kept longer (taller) as per previous request */
+    width: 100%; /* Take full available width within parent's padding */
+    max-width: 250px; /* NEW: Even narrower max-width for all versions */
+    height: 250px; /* Made visibly longer (taller) */
+    margin: 0 auto 25px auto; /* Centered with auto margins within its flex parent */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
     overflow: hidden; /* Ensure image doesn't overflow */
-    margin: 0 auto 25px auto; /* Center horizontally with auto margins */
-    transform: translateX(0); /* Ensure it's centered initially, no external transform needed */
     position: relative; /* For the silhouette filter */
+    transform: translateX(0); /* Ensure it's centered initially */
 }
-/* Important for central alignment with negative margins within flex container */
-.about-left-content > .profile-image-container {
-    margin-left: calc(50% - (var(--profile-image-max-width) / 2));
-    margin-right: calc(50% - (var(--profile-image-max-width) / 2));
-    /* Using CSS variables for dynamic centering if the max-width changes */
-    /* This dynamic width/margin might be complex with 'calc(100% + XXpx)' */
-    /* Simpler: just ensure the negative margins align it to the 50% mark of the parent (which is center) */
-    margin-left: -20px; /* To account for width: calc(100% + 40px) */
-    margin-right: -20px;
-    /* Ensure the max-width takes precedence and it is centered by auto-margins, then override for the visual extension */
-    /* Remove auto margin and manage offset with transform or specific negative margins based on padding */
-}
-
 
 .profile-photo {
     width: 100%;
@@ -464,9 +451,9 @@ html::before { /* Re-using html::before to cover the whole page */
     display: block; /* Force this span onto its own line */
 }
 
-/* Crafting Digital Experiences text size - REDUCED BY 0.5EM */
+/* FIX: Crafting Digital Experiences text size - REVERTED */
 .hero-description {
-    font-size: 0.7em; /* 1.2em - 0.5em = 0.7em */
+    font-size: 1.2em; /* REVERTED: Back to original 1.2em for desktop */
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
@@ -484,15 +471,14 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1;
 }
 
-/* Main sticky wrapper for services section */
+/* FIX: Main sticky wrapper for services section - Increased height to prevent scrolling */
 .services-content-wrapper {
     position: sticky; /* Makes this entire container sticky */
     top: var(--services-sticky-top-wrapper); /* JS will set this variable, should aim for screen center */
     will-change: top;
     z-index: 1; /* Ensure wrapper stays below content it might scroll over */
 
-    /* INCREASED HEIGHT to ensure content fits and does not scroll internally */
-    height: 500px; /* Adjusted for desktop and larger tablets */
+    height: 700px; /* FIX: Increased substantially from 600px to ensure entire content remains visible and centered */
     display: flex; /* Use flexbox to center its inner content */
     justify-content: center; /* Center content vertically within the sticky window */
     align-items: flex-start; /* Align content to the left of the sticky window */
@@ -507,7 +493,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%; /* Take full height of the wrapper */
     display: flex;
     flex-direction: column; /* Stack heading and items vertically */
-    justify-content: center; /* ALIGN ENTIRE SECTION (HEADING AND TEXT) VERTICALLY CENTERED - FIX FOR SCROLLING HEADING */
+    justify-content: center; /* FIX: ALIGN ENTIRE SECTION (HEADING AND TEXT) VERTICALLY CENTERED */
     align-items: flex-start; /* Align text left */
     box-sizing: border-box; /* Include padding in dimensions */
 }
@@ -874,15 +860,11 @@ footer h2 {
         max-width: 350px; /* Adjusted for slightly larger card on mid-size screens */
         padding: 25px 20px;
     }
-    /* Profile Image Container - Adjusted width and alignment */
+    /* FIX: Profile Image Container - Adjusted for 1200px */
     .profile-image-container {
-        width: calc(100% + 30px); /* Adjusted to visually extend 15px on each side */
-        max-width: 290px; /* FURTHER REDUCED max-width to make it narrower */
-        height: 200px; /* Kept taller */
-        margin-left: -15px; /* Negative margin to visually extend */
-        margin-right: -15px; /* Negative margin to visually extend */
-        /* This combination of width and negative margins ensures it stretches across its parent's padding */
-        /* and max-width ensures it doesn't get too wide, while remaining centered implicitly */
+        max-width: 230px; /* NEW: Narrower max-width */
+        height: 230px; /* Slightly shorter than desktop, still taller */
+        margin: 0 auto 20px auto; /* Centered */
     }
     .about-left-content h3 {
         font-size: 2.6em; /* Adjusted for larger card */
@@ -932,20 +914,19 @@ footer h2 {
         font-size: 6em; /* Scale down heading */
         margin-bottom: 25px;
     }
-    /* Crafting Digital Experiences text size - REDUCED BY 0.5EM */
+    /* FIX: Crafting Digital Experiences text size - REVERTED for 1200px */
     .hero-description {
-        font-size: 0.6em; /* 1.1em - 0.5em = 0.6em */
+        font-size: 1.1em; /* REVERTED: Back to original 1.1em for 1200px */
         margin-bottom: 60px;
     }
 
-    /* Services Section - mobile specific overrides */
+    /* FIX: Services sticky wrapper - Increased height for 1200px */
     .services-section {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
-    /* Services sticky wrapper - INCREASED HEIGHT */
     .services-content-wrapper {
-        height: 450px; /* Increased from 400px */
+        height: 600px; /* FIX: Increased from 550px */
     }
     .services-heading {
         font-size: 4.5em;
@@ -1024,13 +1005,11 @@ footer h2 {
         padding: 30px 25px; /* More generous padding */
         border-radius: 18px; /* Slightly more rounded */
     }
-    /* Profile Image Container - Adjusted width and alignment */
+    /* FIX: Profile Image Container - Adjusted for 768px */
     .profile-image-container {
-        width: calc(100% + 40px); /* Adjusted to visually extend 20px on each side */
-        max-width: 310px; /* FURTHER REDUCED max-width to make it narrower */
-        height: 230px; /* Kept taller */
-        margin-left: -20px; /* Negative margin to visually extend */
-        margin-right: -20px; /* Negative margin to visually extend */
+        max-width: 220px; /* NEW: Narrower max-width */
+        height: 250px; /* Still longer */
+        margin: 0 auto 30px auto; /* Centered */
     }
     .about-left-content h3 {
         font-size: 2.8em; /* Back to larger size for tablet */
@@ -1101,22 +1080,21 @@ footer h2 {
         font-size: 4.5em; /* Reduced by 5em from desktop 7em */
         margin-bottom: 20px;
     }
-    /* Crafting Digital Experiences text size - REDUCED BY 0.5EM */
+    /* FIX: Crafting Digital Experiences text size - REVERTED for 768px */
     .hero-description {
-        font-size: 0.6em; /* 1.1em - 0.5em = 0.6em */
+        font-size: 1.1em; /* REVERTED: Back to original 1.1em for 768px */
         line-height: 1.6;
         max-width: 100%; /* Allow to take full width */
         margin-bottom: 40px; /* Reduced space before next section */
     }
 
-    /* Services Section - mobile specific overrides */
+    /* FIX: Services sticky wrapper - Increased height for 768px */
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
     }
-    /* Services sticky wrapper - INCREASED HEIGHT */
     .services-content-wrapper {
-        height: 350px; /* Increased from 250px */
+        height: 500px; /* FIX: Increased from 450px */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1218,13 +1196,11 @@ footer h2 {
         padding: 25px 20px;
         border-radius: 15px;
     }
-    /* Profile Image Container - Adjusted width and alignment */
+    /* FIX: Profile Image Container - Adjusted for 480px */
     .profile-image-container {
-        width: calc(100% + 20px); /* Adjusted to visually extend 10px on each side */
-        max-width: 270px; /* FURTHER REDUCED max-width to make it narrower */
-        height: 200px; /* Kept taller */
-        margin-left: -10px; /* Negative margin to visually extend */
-        margin-right: -10px; /* Negative margin to visually extend */
+        max-width: 200px; /* NEW: Narrower max-width */
+        height: 250px; /* Still longer */
+        margin: 0 auto 25px auto; /* Centered */
     }
     .about-left-content h3 {
         font-size: 2.5em;
@@ -1291,27 +1267,20 @@ footer h2 {
         font-size: 3.5em; /* Further reduced for very small phones */
         margin-bottom: 15px;
     }
-    /* Crafting Digital Experiences text size - REDUCED BY 0.5EM */
+    /* FIX: Crafting Digital Experiences text size - REVERTED for 480px */
     .hero-description {
-        /*
-            WARNING: This font size (0.45em) will be extremely small and likely unreadable
-            on mobile devices. Please verify if this level of reduction is truly desired.
-            A more readable size might be closer to 0.7em - 0.8em even on small phones.
-            Original (0.95em) - 0.5em = 0.45em.
-        */
-        font-size: 0.45em; /* 0.95em - 0.5em = 0.45em */
+        font-size: 0.95em; /* REVERTED: Back to original 0.95em for 480px */
         line-height: 1.5;
         margin-bottom: 30px; /* Further reduced space */
     }
 
-    /* Services Section - mobile specific overrides */
+    /* FIX: Services sticky wrapper - Increased height for 480px */
     .services-section {
         padding-top: 30px;
         padding-bottom: 50px;
     }
-    /* Services sticky wrapper - INCREASED HEIGHT */
     .services-content-wrapper {
-        height: 300px; /* Increased from 200px */
+        height: 450px; /* FIX: Increased from 400px */
     }
     .services-heading {
         font-size: 2.8em;
@@ -1360,5 +1329,10 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
+    }
+
+    /* FIX: Footer - Adjusted padding for very small screens to prevent overflow */
+    footer {
+        padding: 40px 15px; /* Reduced vertical padding, fixed horizontal padding */
     }
 }
