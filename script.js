@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
-    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; 
+    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; // Reverted to 1.0 for cleaner 1:1 scroll interaction.
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
 
     let currentActiveIndex = 0; // Tracks the currently active slide index, initialized to 0
@@ -112,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // The actual scroll distance for one item's animation (1:1 scroll with wrapper height)
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
-        // Total scroll required for all items to transition AND the last item to hold its position.
-        // If there are N items, there are N "positions" for items to be fully displayed/held.
+        // Total scroll required for ALL N items to have their full display and transition time.
+        // For N items, we need N "slots" of SCROLL_DISTANCE_PER_ITEM.
         const totalAnimationDurationScroll = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
 
         // The spacer needs to provide enough height for:
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //    after the animation sequence is complete.
         scrollSpacer.style.height = `${totalAnimationDurationScroll + totalVisualStickyBlockHeight}px`;
 
-        console.log('--- Services Layout Adjusted (Final Revision) ---');
+        console.log('--- Services Layout Adjusted (Final, Precise Logic) ---');
         console.log(`Viewport Height: ${window.innerHeight}px`);
         console.log(`Heading Height: ${servicesHeadingHeight}px, Wrapper Height: ${contentWrapperHeight}px`);
         console.log(`Total Visual Sticky Block Height: ${totalVisualStickyBlockHeight}px`);
@@ -155,10 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // For the last item, fractionalProgress should remain 0 once it's fully in view.
         let fractionalProgress = normalizedProgress - currentIndex;
 
-        // If we are on the last item AND it has fully entered (meaning fractionalProgress > 0),
+        // If we are on the last item AND it has fully entered (meaning fractionalProgress > 0 in its slot),
         // we lock fractionalProgress to 0 to make it hold.
         if (currentIndex === serviceItems.length - 1 && fractionalProgress > 0) {
-            fractionalProgress = 0; // Lock the last item in place
+            fractionalProgress = 0; // Lock the last item in place for its entire slot
         }
 
         // Update the background number for the active slide
