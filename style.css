@@ -238,19 +238,17 @@ html::before { /* Re-using html::before to cover the whole page */
     transform: translateY(0);
 }
 
-/* New: Profile Image Container */
+/* New: Profile Image Container - Adjusted width and alignment for all versions */
 .profile-image-container {
-    /* Adjusted to be longer (taller) and visually narrower */
-    width: 100%; /* Now always 100% of parent width for layout purposes */
-    height: 220px; /* Made longer (taller) */
-    max-width: 400px; /* Reduced max-width to make it narrower overall */
+    width: calc(100% + 40px); /* Adjust to achieve desired overflow and central alignment (2*20px) */
+    max-width: 360px; /* Reduced max-width to make it narrower overall */
+    height: 220px; /* Kept longer (taller) as per previous request */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
     overflow: hidden; /* Ensure image doesn't overflow */
-    margin-bottom: 25px; /* Space below image */
+    margin: 0 -20px 25px -20px; /* Negative margins to visually extend and keep centered */
     position: relative; /* For the silhouette filter */
     transform: translateX(0); /* Ensure it's centered initially */
-    margin: 0 -25px 25px -25px; /* Use negative margins to visually extend 25px left and right (total 50px beyond parent) */
 }
 
 .profile-photo {
@@ -453,7 +451,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 .hero-description {
-    font-size: 0.7em; /* Reduced by .5em (from 1.2em to 0.7em) */
+    font-size: 0.7em; /* Reduced by 0.5em (from 1.2em) as requested */
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
@@ -493,7 +491,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%; /* Take full height of the wrapper */
     display: flex;
     flex-direction: column; /* Stack heading and items vertically */
-    justify-content: flex-start; /* Aligns content to the top to prevent heading scroll during animation */
+    justify-content: center; /* ALIGN ENTIRE SECTION (HEADING AND TEXT) VERTICALLY CENTERED */
     align-items: flex-start; /* Align text left */
     box-sizing: border-box; /* Include padding in dimensions */
 }
@@ -860,11 +858,12 @@ footer h2 {
         max-width: 350px; /* Adjusted for slightly larger card on mid-size screens */
         padding: 25px 20px;
     }
+    /* Profile Image Container - Adjusted width and alignment */
     .profile-image-container {
-        width: 100%; /* Ensure it's 100% of parent for calculation */
-        height: 200px; /* Made longer (taller) */
-        max-width: 350px; /* Reduced max-width to make it narrower */
-        margin: 0 -20px 20px -20px; /* Use negative margins to visually extend 20px left and right (total 40px beyond parent) */
+        width: calc(100% + 30px); /* Adjusted to achieve desired overflow and central alignment (2*15px) */
+        max-width: 320px; /* Reduced max-width to make it narrower */
+        height: 200px; /* Kept taller */
+        margin: 0 -15px 20px -15px; /* Negative margins to visually extend and keep centered */
     }
     .about-left-content h3 {
         font-size: 2.6em; /* Adjusted for larger card */
@@ -915,7 +914,7 @@ footer h2 {
         margin-bottom: 25px;
     }
     .hero-description {
-        font-size: 0.6em; /* Reduced by .5em (from 1.1em to 0.6em) */
+        font-size: 0.6em; /* Reduced by 0.5em (from 1.1em) */
         margin-bottom: 60px;
     }
 
@@ -1004,11 +1003,12 @@ footer h2 {
         padding: 30px 25px; /* More generous padding */
         border-radius: 18px; /* Slightly more rounded */
     }
+    /* Profile Image Container - Adjusted width and alignment */
     .profile-image-container {
-        width: 100%; /* Ensure it's 100% of parent for calculation */
-        height: 230px; /* Made longer (taller) */
-        max-width: 380px; /* Reduced max-width to make it narrower */
-        margin: 0 -25px 30px -25px; /* Use negative margins to visually extend 25px left and right (total 50px beyond parent) */
+        width: calc(100% + 40px); /* Adjusted to achieve desired overflow and central alignment (2*20px) */
+        max-width: 350px; /* Reduced max-width to make it narrower */
+        height: 230px; /* Kept taller */
+        margin: 0 -20px 30px -20px; /* Negative margins to visually extend and keep centered */
         border-radius: 15px;
     }
     .about-left-content h3 {
@@ -1081,7 +1081,7 @@ footer h2 {
         margin-bottom: 20px;
     }
     .hero-description {
-        font-size: 0.6em; /* Reduced by .5em (from 1.1em to 0.6em) */
+        font-size: 0.9em; /* Adjusted to remain readable */
         line-height: 1.6;
         max-width: 100%; /* Allow to take full width */
         margin-bottom: 40px; /* Reduced space before next section */
@@ -1195,11 +1195,12 @@ footer h2 {
         padding: 25px 20px;
         border-radius: 15px;
     }
+    /* Profile Image Container - Adjusted width and alignment */
     .profile-image-container {
-        width: 100%; /* Ensure it's 100% of parent for calculation */
-        height: 200px; /* Made longer (taller) */
-        max-width: 330px; /* Reduced max-width to make it narrower */
-        margin: 0 -15px 25px -15px; /* Use negative margins to visually extend 15px left and right (total 30px beyond parent) */
+        width: calc(100% + 20px); /* Adjusted to achieve desired overflow and central alignment (2*10px) */
+        max-width: 300px; /* Reduced max-width to make it narrower */
+        height: 200px; /* Kept taller */
+        margin: 0 -10px 25px -10px; /* Negative margins to visually extend and keep centered */
         border-radius: 12px;
     }
     .about-left-content h3 {
@@ -1268,7 +1269,7 @@ footer h2 {
         margin-bottom: 15px;
     }
     .hero-description {
-        font-size: 0.8em; /* Adjusted to maintain readability (from 0.95em to 0.8em) */
+        font-size: 0.8em; /* Adjusted to remain readable */
         line-height: 1.5;
         margin-bottom: 30px; /* Further reduced space */
     }
