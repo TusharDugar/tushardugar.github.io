@@ -39,15 +39,6 @@
     --services-sticky-top-wrapper: 0px;
 }
 
-/* Global utility text colors */
-.text-white {
-    color: var(--text-light);
-}
-.text-gray {
-    color: var(--text-medium);
-}
-
-
 /* Layer 1: Solid Black Background (Base) */
 html {
     background-color: var(--bg-main); /* Solid black */
@@ -127,7 +118,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%;
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
-    opacity: 0.1299375; /* Current opacity from previous calculation */
+    opacity: 0.1299375; /* Changed: Increased opacity by 10% from previous value */
     
     /* The animated colorful gradient as the background that will be masked */
     background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -426,38 +417,11 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for sticky child to properly detach */
+    position: relative; /* Needed for sticky child */
     z-index: 1;
 }
 
-/* Main sticky wrapper for services section */
-.services-content-wrapper {
-    position: sticky; /* Makes this entire container sticky */
-    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
-    will-change: top;
-    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
-
-    height: 450px; /* Fixed height to control content display window for sticky effect */
-    display: flex; /* Use flexbox to center its inner content */
-    justify-content: center; /* Center content vertically within the sticky window */
-    align-items: flex-start; /* Align content to the left of the sticky window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
-}
-
-/* New inner container to hold heading and service items for unified layout */
-.services-sticky-content-inner {
-    position: relative; /* Provides positioning context for absolute children */
-    width: 100%;
-    height: 100%; /* Take full height of the wrapper */
-    display: flex;
-    flex-direction: column; /* Stack heading and items vertically */
-    justify-content: center; /* Center content vertically within this inner container */
-    align-items: flex-start; /* Align text left */
-    box-sizing: border-box; /* Include padding in dimensions */
-}
-
-/* Services Heading (now inside .services-sticky-content-inner) */
+/* These elements are now directly sticky and their 'top' property is controlled by JS for centering */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em; /* Match tools heading size */
@@ -466,22 +430,34 @@ html::before { /* Re-using html::before to cover the whole page */
     margin-bottom: 50px;
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    /* Removed position: sticky and top from here - handled by .services-content-wrapper */
+    position: sticky; /* Made sticky */
+    top: var(--services-sticky-top-h2); /* JS will set this variable */
+    will-change: top;
+    z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
 }
 
-/* Container for absolute service items */
-.services-items-container {
-    position: relative; /* Provides positioning context for .service-item */
-    width: 100%;
-    height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
+/* Reusing text-white and text-gray for services-heading */
+
+.services-content-wrapper {
+    position: relative;
+    height: 450px; /* Fixed height to control content display window */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically within the window */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    position: sticky; /* Made sticky */
+    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
+    will-change: top;
+    z-index: 1; /* Ensure wrapper stays below heading when sticky */
 }
 
 .service-item {
-    position: absolute; /* Position items absolutely within .services-items-container */
+    position: absolute; /* Position items absolutely within the wrapper */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Take full height of the container */
+    height: 100%; /* Take full height of the wrapper */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the item */
@@ -493,8 +469,7 @@ html::before { /* Re-using html::before to cover the whole page */
     opacity: 0; /* Fully transparent when inactive */
     transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    /* Refined transition for a cleaner fade-out */
-    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
@@ -887,12 +862,13 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
-    .services-content-wrapper {
-        height: 400px; /* Adjust height for smaller desktop */
-    }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 40px;
+    }
+    .services-content-wrapper {
+        height: 400px; /* Adjust height for smaller desktop */
     }
     .service-item {
         padding: 15px;
@@ -920,6 +896,7 @@ footer h2 {
     }
     .tools-grid {
         display: grid;
+        /* Responsive 2-column grid: at least 250px wide, max 1fr */
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
         gap: 20px;
         max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
@@ -1065,20 +1042,30 @@ footer h2 {
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
+        /* Perspective is handled by .services-content-wrapper, so removed specific mobile override here */
     }
-    .services-content-wrapper {
-        height: 250px; /* Adjusted fixed height for mobile */
-    }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
     }
+    .services-content-wrapper {
+        height: 250px; /* Adjusted fixed height for mobile */
+    }
     .service-item {
+        /* JS still handles transforms, these are defaults */
+        opacity: 0; 
+        transform: translateY(100px) rotateX(90deg); /* Maintained 3D transform for consistency */
         padding: 10px;
+    }
+    .service-item.active-content {
+        opacity: 1;
+        transform: translateY(0) rotateX(0deg); /* Maintained 3D transform for consistency */
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
         right: 40px; /* Adjusted for smaller screens */
+        transform: translateY(-50%); /* Removed translateX to keep it on screen */
     }
     .service-title {
         font-size: 1.6em;
@@ -1100,6 +1087,7 @@ footer h2 {
     }
     .tools-grid {
         display: grid;
+        /* Responsive 2-column grid: at least 250px wide, max 1fr */
         grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
         max-width: 100%; /* Allow to take full width */
@@ -1216,19 +1204,18 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
-    .services-content-wrapper {
-        height: 200px; /* Further adjusted fixed height for very small mobile */
-    }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
     }
-    .service-item {
-        padding: 12px; /* Adjusted padding */
+    .services-content-wrapper {
+        height: 200px; /* Further adjusted fixed height for very small mobile */
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
         right: 40px; /* Adjusted for smaller screens */
+        transform: translateY(-50%); /* Removed translateX to keep it on screen */
     }
     .service-title {
         font-size: 1.4em;
@@ -1248,6 +1235,7 @@ footer h2 {
     }
     .tools-grid {
         display: grid;
+        /* Responsive 2-column grid: at least 250px wide, max 1fr */
         grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
         max-width: 100%; /* Allow to take full width */
