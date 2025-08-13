@@ -374,6 +374,7 @@ body {
     
     padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
     text-align: left; /* Always left-align content within this column */
+    /* REMOVED: overflow-y: scroll; and overflow-x: hidden; */
 }
 
 /* Hero Right Content */
