@@ -34,7 +34,9 @@
     --services-description-color: var(--text-light); /* White for descriptions */
     --services-grid-line-color: rgba(255, 255, 255, 0.05); /* Very faint white for background grid */
 
-    /* Removed CSS Variables for sticky services top offset, as sticky behavior is removed */
+    /* CSS Variables for sticky services top offset (set by JS) */
+    --services-sticky-top-h2: 0px;
+    --services-sticky-top-wrapper: 0px;
 }
 
 body {
@@ -64,7 +66,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the entire container */
-    filter: brightness(0.2) grayscale(0.8); /* Darken and desaturate video even more for Sawad look */
+    filter: brightness(0.5) grayscale(0.5); /* Increased brightness and reduced grayscale */
 }
 
 .video-overlay {
@@ -128,7 +130,7 @@ body {
     width: 900px;
     height: 900px;
     background: radial-gradient(circle at center, var(--accent-primary-sawad) 0%, transparent 60%);
-    animation: glow1 25s infinite alternate ease-in-out;
+    animation: glow1 20s infinite alternate ease-in-out; /* Slightly faster glow */
 }
 
 @keyframes glow1 {
@@ -253,7 +255,7 @@ body {
     line-height: 1.1; /* Tighter line height for single-line name */
 }
 
-/* The .about-tagline rule was removed */
+/* The .about-tagline rule has been completely removed */
 
 
 /* New: Fire Icon with connecting dashed lines */
@@ -305,7 +307,7 @@ body {
     position: absolute;
     border: 2px dashed var(--accent-primary-sawad);
     border-radius: 50%; /* Used for creating circular segments */
-    box-sizing: border;
+    box-sizing: border-box;
     pointer-events: none;
     z-index: 0; /* Behind all content */
 }
@@ -405,16 +407,16 @@ body {
 }
 
 
-/* NEW: Services Section Styles - Revised for 3D-like animation (non-sticky) */
+/* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative;
+    position: relative; /* Needed for sticky child */
     z-index: 1;
 }
 
-/* Services Heading (no longer sticky, scrolls with content) */
+/* These elements are now directly sticky and their 'top' property is controlled by JS for centering */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em; /* Match tools heading size */
@@ -423,20 +425,26 @@ body {
     margin-bottom: 50px;
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    /* Removed sticky properties */
+    position: sticky; /* Made sticky */
+    top: var(--services-sticky-top-h2); /* JS will set this variable */
+    will-change: top;
+    z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
 }
 
 /* Reusing text-white and text-gray for services-heading */
 
 .services-content-wrapper {
-    position: relative; /* All items are absolute within this */
-    height: 450px; /* Fixed height for the visual viewport of the animation */
+    position: relative;
+    height: 450px; /* Fixed height to control content display window */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
-    perspective: 1000px; /* Defines the depth for 3D transforms */
-    overflow: visible; /* CRITICAL: Allows elements to rotate fully out of container */
-    /* Removed sticky properties */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    position: sticky; /* Made sticky */
+    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
+    will-change: top;
+    z-index: 1; /* Ensure wrapper stays below heading when sticky */
 }
 
 .service-item {
@@ -471,7 +479,7 @@ body {
     z-index: 1; /* Ensure active item is on top */
 }
 
-/* Styling for the large background number (now inside each service-item) */
+/* Styling for the large background number */
 .service-bg-number {
     position: absolute;
     font-family: 'Poppins', sans-serif;
@@ -479,31 +487,31 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color); /* Darker gray, more visible */
     top: 50%;
-    right: 0px; /* Position it to the far right */
-    transform: translateY(-50%) translateX(20%); /* Center vertically and push slightly off-screen */
+    right: 20px; /* Adjusted to ensure numbers are visible within overflow: hidden */
+    transform: translateY(-50%); /* Center vertically and no problematic translateX */
     line-height: 1;
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
 }
 
-/* Service Title - will be orange, not italic */
+/* Service Title - will be orange, no italics */
 .service-title {
     font-size: 2em; /* Title for the service */
     font-weight: 700;
-    color: var(--accent-primary-sawad); /* Changed to orange */
+    color: var(--accent-primary-sawad); /* Reverted to orange */
     margin-bottom: 10px; /* Reduced margin */
     line-height: 1.2;
-    font-style: normal; /* Removed italics */
+    font-style: normal; /* Reverted to normal (no italics) */
 }
 
-/* Service Description - will be white, not italic */
+/* Service Description - no italics */
 .service-description {
     font-size: 1.2em; /* Description text size, slightly larger */
     color: var(--services-description-color); /* White color */
     max-width: 650px; /* Limit width for readability */
     line-height: 1.6; /* Tighter line height */
-    font-style: normal; /* Removed italics */
+    font-style: normal; /* Reverted to normal (no italics) */
 }
 
 /* Since service-items are absolute, we need to create virtual scroll space */
@@ -850,6 +858,7 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 40px;
@@ -862,8 +871,6 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em; /* Scale down background number */
-        right: -10px; /* Adjusted to keep visible */
-        transform: translateY(-50%) translateX(10%); /* Adjusted for smaller screens */
     }
     .service-title {
         font-size: 1.8em;
@@ -1026,8 +1033,9 @@ footer h2 {
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
-        perspective: none; /* Disable 3D perspective on mobile for simpler animation */
+        /* Removed perspective: none; to enable 3D animation on mobile */
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
@@ -1036,19 +1044,18 @@ footer h2 {
         height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
-        opacity: 0; /* Initial state for mobile will be simpler fade-in */
-        transform: translateY(50px); /* Simpler translateY */
-        /* Rotation is effectively ignored due to perspective: none; */
+        /* JS still handles transforms, but this sets initial state if JS isn't ready */
+        opacity: 0; 
+        transform: translateY(100px) rotateX(90deg);
         padding: 10px;
     }
     .service-item.active-content {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) rotateX(0deg);
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
-        right: -10px; /* Adjust position */
-        transform: translateY(-50%) translateX(5%); /* Adjusted for smaller screens */
+        right: 20px; /* Adjusted position for mobile visibility */
     }
     .service-title {
         font-size: 1.6em;
@@ -1170,6 +1177,7 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
@@ -1179,8 +1187,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
-        right: -5px; /* Adjusted to keep visible */
-        transform: translateY(-50%) translateX(0%); /* Remove extra translation for small screens */
+        right: 20px; /* Adjusted position for mobile visibility */
     }
     .service-title {
         font-size: 1.4em;
