@@ -58,13 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Services Section Animation Logic (Framer-like "cuboid" scroll effect) ---
     const servicesSection = document.getElementById('services');
-    const servicesHeading = servicesSection ? servicesSection.querySelector('.services-heading') : null;
     const servicesContentWrapper = servicesSection ? servicesSection.querySelector('.services-content-wrapper') : null;
     const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
-    const serviceBgNumber = servicesContentWrapper ? servicesContentWrapper.querySelector('.service-bg-number') : null;
+    // serviceBgNumber is now inside each service-item, so we don't grab it globally anymore.
     
     // Critical check for existence
-    if (!servicesSection || serviceItems.length === 0 || !servicesHeading || !servicesContentWrapper || !serviceBgNumber) {
+    if (!servicesSection || serviceItems.length === 0 || !servicesContentWrapper) {
         console.warn('Services section or required elements not found. Skipping services animation setup.');
         if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
         return; 
@@ -79,7 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
-    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 0.9; 
+    // Set to 1.0 to ensure one full viewport scroll for each item's transition.
+    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; 
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
 
     let currentActiveIndex = 0; // Tracks the currently active slide index, initialized to 0
@@ -87,28 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let rafId = null; // For requestAnimationFrame optimization
 
     // Function to calculate and set the total scrollable height of the services section
-    // and the sticky container's top offset for centering
     const adjustServicesLayout = () => {
         // Recalculate dynamic values on resize or initial load
         const contentWrapperHeight = servicesContentWrapper.offsetHeight; 
-        const servicesHeadingHeight = servicesHeading.offsetHeight;
-        const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
-
-        // Calculate the ideal top offset for the heading to be visually centered
-        // It's (viewport height - total visible sticky content height) / 2
-        // Total visible sticky content is heading + gap + contentWrapper
-        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
-        let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
-        stickyTopH2 = Math.max(0, stickyTopH2); // Ensure it's not negative
-
-        // The wrapper's sticky top should be right below the heading + gap
-        let stickyTopWrapper = stickyTopH2 + servicesHeadingHeight + gapBetweenHeadingAndWrapper;
-
-        // Set CSS variables for sticky top offsets
-        servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
-        servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
-
-        // The actual scroll distance for one item's animation
+        const servicesHeadingHeight = servicesSection.querySelector('.services-heading').offsetHeight;
+        
+        // The actual scroll distance for one item's animation is based on its visual height
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
         // The total scroll range needed for all animations:
@@ -116,25 +100,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
         // The spacer needs to provide enough height for:
-        // 1. Scrolling until the sticky elements hit their top position (stickyTopH2)
-        // 2. Scrolling through the entire animation range (totalAnimationScrollRange)
-        // 3. A buffer at the end so the last animation can complete before the section ends.
-        scrollSpacer.style.height = `${stickyTopH2 + totalAnimationScrollRange + (window.innerHeight * 0.5)}px`; // Add half viewport height as end buffer
+        // 1. The total scroll range of the animation
+        // 2. A buffer at the end so the last item can be fully viewed as it animates in.
+        // It's attached to servicesSection, so it extends the scroll area of the entire section.
+        scrollSpacer.style.height = `${totalAnimationScrollRange + (window.innerHeight * 0.5)}px`; // Add half viewport height as end buffer
 
         // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items.`);
-        // console.log(`Heading Height: ${servicesHeadingHeight}, Wrapper Height: ${contentWrapperHeight}`);
-        // console.log(`Sticky Top H2: ${stickyTopH2}, Sticky Top Wrapper: ${stickyTopWrapper}`);
+        // console.log(`Content Wrapper Height: ${contentWrapperHeight}`);
         // console.log(`Scroll Distance Per Item: ${SCROLL_DISTANCE_PER_ITEM}`);
     };
 
     // This is the core animation logic, triggered by scroll
     const updateServiceAnimation = () => {
-        // Calculate scroll progress relative to when the services section's heading starts sticking
-        // This makes the animation independent of the overall scroll position of the services section.
-        const stickyH2Top = parseFloat(getComputedStyle(servicesSection).getPropertyValue('--services-sticky-top-h2'));
-        const animationStartScroll = servicesSection.offsetTop + stickyH2Top;
-
-        let scrollProgress = window.scrollY - animationStartScroll;
+        // Calculate scroll progress relative to the start of the servicesContentWrapper
+        // The animation starts when the top of servicesContentWrapper enters the viewport.
+        const animationStartPoint = servicesContentWrapper.offsetTop; 
+        let scrollProgress = window.scrollY - animationStartPoint;
 
         // Clamp the scroll progress to the valid range for our animation.
         const maxScrollableRangeForAnimation = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
@@ -145,18 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentIndex = Math.floor(normalizedProgress);
         const fractionalProgress = normalizedProgress - currentIndex; // Progress within the current item's transition (0 to 1)
 
-        // Update the background number for the active slide
-        const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
-        if (newActiveIndex !== currentActiveIndex) {
-            currentActiveIndex = newActiveIndex;
-        }
-        const displayIndex = currentActiveIndex + 1; // Service numbers are 1-based
-        serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
-
-        const contentWrapperHeight = servicesContentWrapper.offsetHeight; // Get current height
-
         // Apply 3D transforms and opacity to each service item
         serviceItems.forEach((item, index) => {
+            const serviceBgNumber = item.querySelector('.service-bg-number'); // Get individual background number
             let translateY = 0;
             let rotateX = 0;
             let opacity = 0;
@@ -165,13 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (index === currentIndex) {
                 // The current item: animating out (rotating outwards and fading)
                 rotateX = 90 * fractionalProgress; // Rotates from 0deg to 90deg (forward/outwards)
-                translateY = -contentWrapperHeight * fractionalProgress; // Moves upwards
+                translateY = -servicesContentWrapper.offsetHeight * fractionalProgress; // Moves upwards
                 opacity = 1 - fractionalProgress; // Fades out
                 zIndex = 2; // Ensures it's on top when exiting
             } else if (index === currentIndex + 1) {
                 // The next item: animating in (rotating into view from behind/below)
                 rotateX = -90 + (90 * fractionalProgress); 
-                translateY = contentWrapperHeight * (1 - fractionalProgress); // Moves downwards into place
+                translateY = servicesContentWrapper.offsetHeight * (1 - fractionalProgress); // Moves downwards into place
                 opacity = fractionalProgress; // Fades in
                 zIndex = 1; // Appears just below the exiting item
             } else {
@@ -185,6 +157,16 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.transform = `translateY(${translateY}px) rotateX(${rotateX}deg)`;
             item.style.opacity = opacity;
             item.style.zIndex = zIndex;
+
+            // Update the background number for the active slide
+            if (serviceBgNumber) {
+                const displayIndex = index + 1; // Service numbers are 1-based
+                serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
+                // Set opacity for the number based on the item's visibility
+                // It should be visible when the item is active, and fade out slightly.
+                serviceBgNumber.style.opacity = opacity > 0.1 ? 1 : 0; // Make number fully visible when its slide is somewhat active
+                // However, the CSS `color` property handles its base visibility.
+            }
         });
 
         rafId = null; // Reset requestAnimationFrame ID
@@ -212,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ensure first item is active on load
         if (serviceItems.length > 0) {
             serviceItems[0].classList.add('active-content');
-            serviceBgNumber.textContent = '01';
+            // Background number text content is updated within updateServiceAnimation
         }
     }, 200); // Increased delay for robust calculation
 
