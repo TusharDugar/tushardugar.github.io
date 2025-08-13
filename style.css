@@ -118,7 +118,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%;
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
-    opacity: 0.9; /* Changed: Increased opacity to reduce transparency by 50% from 0.8 */
+    opacity: 0.45; /* Changed: Increased transparency (reduced opacity) for less visibility */
     
     /* The animated colorful gradient as the background that will be masked */
     background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -1118,13 +1118,28 @@ footer h2 {
         margin-bottom: 25px;
     }
     .contact-buttons {
-        width: 95%; /* Adjust width for very small screens */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px; /* Reduced gap */
         max-width: 300px; /* Tighter max-width */
+        margin: 0 auto; /* Center buttons */
     }
     .contact-button {
         width: 100%; /* Ensure button takes full width of its container */
         height: 85px;
+        font-size: 1em; /* Adjusted font size */
     }
+    .contact-button i {
+        font-size: 1.8em; /* Adjusted icon size */
+    }
+    .contact-button .button-value {
+        font-size: 0.8em; /* Adjusted button value font size */
+    }
+    .contact-button .copied-text {
+        font-size: 1em; /* Adjusted copied text font size */
+    }
+
     /* Specific adjustments for profile card */
     .about-left-content {
         max-width: 260px;
@@ -1215,6 +1230,13 @@ footer h2 {
     .tools-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
+    }
+    .tools-grid {
+        display: grid;
+        /* Responsive 2-column grid: at least 250px wide, max 1fr */
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 15px;
+        max-width: 100%; /* Allow to take full width */
     }
     .tool-card {
         padding: 12px;
