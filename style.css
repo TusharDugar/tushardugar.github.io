@@ -241,7 +241,8 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* New: Profile Image Container */
 .profile-image-container {
-    width: 100%; /* Set to 100% and use max-width for narrower effect */
+    /* Made narrower and longer for all versions */
+    width: 100%; /* Removed calc to prevent potential overflow issues */
     max-width: 350px; /* Adjusted max-width for narrower effect */
     height: 220px; /* Adjusted height for longer effect */
     background-color: var(--accent-primary-sawad); /* Orange background */
@@ -331,8 +332,8 @@ html::before { /* Re-using html::before to cover the whole page */
 .top-left-curve {
     width: 150px;
     height: 150px;
-    top: -50px; /* Adjusted position to start from top-left of the card */
-    left: -50px;
+    top: -40px; /* Adjusted position for better visibility */
+    left: -40px; /* Adjusted position for better visibility */
     border-right-color: transparent; /* Hide parts of the circle border to make it an arc */
     border-bottom-color: transparent;
     transform: rotate(-10deg); /* Slight rotation for the angle */
@@ -341,8 +342,8 @@ html::before { /* Re-using html::before to cover the whole page */
 .bottom-right-curve {
     width: 150px;
     height: 150px;
-    bottom: -50px; /* Adjusted position to start from bottom-right of the card */
-    right: -50px;
+    bottom: -40px; /* Adjusted position for better visibility */
+    right: -40px; /* Adjusted position for better visibility */
     border-left-color: transparent;
     border-top-color: transparent;
     transform: rotate(10deg); /* Slight rotation for the angle */
@@ -470,19 +471,7 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1;
 }
 
-/* Services Heading (now a direct child of .services-section so it scrolls naturally) */
-.services-heading {
-    font-family: 'Poppins', sans-serif;
-    font-size: 5em; /* Match tools heading size */
-    line-height: 0.9;
-    font-weight: 800;
-    margin-bottom: 50px; /* Space below heading before the sticky wrapper */
-    text-transform: uppercase;
-    text-align: left; /* Ensure heading is left-aligned */
-    /* Removed position: sticky and top from here - handled by .services-content-wrapper */
-}
-
-/* Main sticky wrapper for services section content (excluding heading) */
+/* Main sticky wrapper for services section */
 .services-content-wrapper {
     position: sticky; /* Makes this entire container sticky */
     top: var(--services-sticky-top-wrapper); /* JS will set this variable */
@@ -497,23 +486,36 @@ html::before { /* Re-using html::before to cover the whole page */
     overflow: hidden; /* Crucial for clipping the "cuboid" effect */
 }
 
-/* New inner container to hold service items for unified layout */
+/* New inner container to hold heading and service items for unified layout */
 .services-sticky-content-inner {
     position: relative; /* Provides positioning context for absolute children */
     width: 100%;
     height: 100%; /* Take full height of the wrapper */
-    display: flex; 
-    flex-direction: column; /* Stack title and description vertically */
-    justify-content: center; /* Center content vertically within this inner container */
+    display: flex;
+    flex-direction: column; /* Stack heading and items vertically */
+    justify-content: flex-start; /* Aligned to start, not centered, to keep heading visible */
     align-items: flex-start; /* Align text left */
     box-sizing: border-box; /* Include padding in dimensions */
+}
+
+/* Services Heading (now inside .services-sticky-content-inner) */
+.services-heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5em; /* Match tools heading size */
+    line-height: 0.9;
+    font-weight: 800;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    text-align: left; /* Ensure heading is left-aligned */
+    /* Removed position: sticky and top from here - handled by .services-content-wrapper */
 }
 
 /* Container for absolute service items */
 .services-items-container {
     position: relative; /* Provides positioning context for .service-item */
     width: 100%;
-    height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
+    flex-grow: 1; /* Allow it to take up remaining height */
+    /* height: 100%; /* REMOVED: Conflicts with flex-grow */
 }
 
 .service-item {
@@ -695,7 +697,7 @@ footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light); /* White */
     text-align: center;
-    padding: 60px 5%; /* Reduced padding for more compact footer */
+    padding: 60px 0; /* Changed to 0 horizontal padding for full width black */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
@@ -719,6 +721,8 @@ footer h2 {
     font-weight: 700;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
     letter-spacing: 1.5px;
+    padding: 0 80px; /* Added padding to align with main content */
+    box-sizing: border-box; /* Include padding in width */
 }
 
 .contact-tagline {
@@ -730,6 +734,8 @@ footer h2 {
     opacity: 0.95;
     line-height: 1.8;
     color: var(--text-light); /* White */
+    padding: 0 80px; /* Added padding to align with main content */
+    box-sizing: border-box; /* Include padding in width */
 }
 
 .contact-buttons {
@@ -738,6 +744,8 @@ footer h2 {
     justify-content: center;
     gap: 30px;
     margin-bottom: 40px;
+    padding: 0 80px; /* Added padding to align with main content */
+    box-sizing: border-box; /* Include padding in width */
 }
 
 .contact-button {
@@ -830,6 +838,8 @@ footer h2 {
 
 .social-links {
     margin-top: 30px;
+    padding: 0 80px; /* Added padding to align with main content */
+    box-sizing: border-box; /* Include padding in width */
 }
 .social-links a {
     color: var(--text-light); /* White */
@@ -860,9 +870,10 @@ footer h2 {
         padding: 25px 20px;
     }
     .profile-image-container {
+        /* Made narrower and longer */
         width: 100%;
-        max-width: 330px; /* Adjusted max-width for narrower effect */
-        height: 210px; /* Adjusted height for longer effect */
+        max-width: 300px; /* Adjusted max-width for narrower effect (350-50) */
+        height: 210px; /* Adjusted height for longer effect (170+40) */
         margin-bottom: 20px;
     }
     .about-left-content h3 {
@@ -899,13 +910,17 @@ footer h2 {
     .dashed-decoration {
         border-width: 1.5px; /* Thinner for smaller screens */
     }
-    .top-left-curve, .bottom-right-curve {
+    .top-left-curve {
         width: 130px; /* Slightly smaller */
         height: 130px;
-        top: -45px;
-        left: -45px;
-        bottom: -45px;
-        right: -45px;
+        top: -35px; /* Adjusted position for better visibility */
+        left: -35px; /* Adjusted position for better visibility */
+    }
+    .bottom-right-curve {
+        width: 130px; /* Slightly smaller */
+        height: 130px;
+        bottom: -35px; /* Adjusted position for better visibility */
+        right: -35px; /* Adjusted position for better visibility */
     }
 
     /* Adjustments for hero content */
@@ -976,6 +991,14 @@ footer h2 {
     .tool-category {
         font-size: 0.8em;
     }
+
+    /* Footer adjustments for smaller screens */
+    footer h2,
+    .contact-tagline,
+    .contact-buttons,
+    .social-links {
+        padding: 0 40px; /* Match main-layout-container padding */
+    }
 }
 
 @media (max-width: 768px) {
@@ -1004,9 +1027,10 @@ footer h2 {
         border-radius: 18px; /* Slightly more rounded */
     }
     .profile-image-container {
+        /* Made narrower and longer */
         width: 100%;
-        max-width: 380px; /* Adjusted max-width for narrower effect */
-        height: 230px; /* Adjusted height for longer effect */
+        max-width: 330px; /* Adjusted max-width for narrower effect (380-50) */
+        height: 230px; /* Adjusted height for longer effect (190+40) */
         margin-bottom: 30px; /* More space */
         border-radius: 15px;
     }
@@ -1058,13 +1082,17 @@ footer h2 {
     .dashed-decoration {
         border-width: 2px; /* Standard thickness */
     }
-    .top-left-curve, .bottom-right-curve {
+    .top-left-curve {
         width: 160px; /* Larger */
         height: 160px;
-        top: -55px;
-        left: -55px;
-        bottom: -55px;
-        right: -55px;
+        top: -45px; /* Adjusted position for better visibility */
+        left: -45px; /* Adjusted position for better visibility */
+    }
+    .bottom-right-curve {
+        width: 160px; /* Larger */
+        height: 160px;
+        bottom: -45px; /* Adjusted position for better visibility */
+        right: -45px; /* Adjusted position for better visibility */
     }
 
     /* Adjustments for hero content */
@@ -1146,9 +1174,11 @@ footer h2 {
     }
 
     /* Footer - Full width black background on mobile */
-    footer {
-        padding-left: 0;
-        padding-right: 0;
+    footer h2,
+    .contact-tagline,
+    .contact-buttons,
+    .social-links {
+        padding: 0 20px; /* Consistent with main-layout-container padding */
     }
 }
 
@@ -1195,9 +1225,10 @@ footer h2 {
         border-radius: 15px;
     }
     .profile-image-container {
+        /* Made narrower and longer */
         width: 100%;
-        max-width: 330px; /* Adjusted max-width for narrower effect */
-        height: 200px; /* Adjusted height for longer effect */
+        max-width: 300px; /* Adjusted max-width for narrower effect (350-50) */
+        height: 200px; /* Adjusted height for longer effect (160+40) */
         margin-bottom: 25px;
         border-radius: 12px;
     }
@@ -1248,13 +1279,17 @@ footer h2 {
     .dashed-decoration {
         border-width: 1.5px;
     }
-    .top-left-curve, .bottom-right-curve {
+    .top-left-curve {
         width: 140px;
         height: 140px;
-        top: -45px;
-        left: -45px;
-        bottom: -45px;
-        right: -45px;
+        top: -35px; /* Adjusted position for better visibility */
+        left: -35px; /* Adjusted position for better visibility */
+    }
+    .bottom-right-curve {
+        width: 140px;
+        height: 140px;
+        bottom: -35px; /* Adjusted position for better visibility */
+        right: -35px; /* Adjusted position for better visibility */
     }
 
     /* Adjustments for hero content */
@@ -1327,5 +1362,13 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
+    }
+
+    /* Footer - Full width black background on mobile */
+    footer h2,
+    .contact-tagline,
+    .contact-buttons,
+    .social-links {
+        padding: 0 15px; /* Consistent with main-layout-container padding */
     }
 }
