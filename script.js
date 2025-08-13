@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
-    // Reverting to 1.0 multiplier for cleaner 1:1 scroll interaction, which aligns better with "hold" each item.
     const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; 
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
 
@@ -113,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // The actual scroll distance for one item's animation (1:1 scroll with wrapper height)
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
-        // Total scroll required for all items to transition AND the last item to hold.
-        // If there are N items, there are N "positions" for items to be fully displayed.
+        // Total scroll required for all items to transition AND the last item to hold its position.
+        // If there are N items, there are N "positions" for items to be fully displayed/held.
         const totalAnimationDurationScroll = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
 
         // The spacer needs to provide enough height for:
@@ -123,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //    after the animation sequence is complete.
         scrollSpacer.style.height = `${totalAnimationDurationScroll + totalVisualStickyBlockHeight}px`;
 
-        console.log('--- Services Layout Adjusted (Revised Final) ---');
+        console.log('--- Services Layout Adjusted (Final Revision) ---');
         console.log(`Viewport Height: ${window.innerHeight}px`);
         console.log(`Heading Height: ${servicesHeadingHeight}px, Wrapper Height: ${contentWrapperHeight}px`);
         console.log(`Total Visual Sticky Block Height: ${totalVisualStickyBlockHeight}px`);
@@ -144,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let scrollProgress = window.scrollY - animationStartScroll;
 
         // Clamp the scroll progress to ensure it only covers the defined animation duration.
-        // Max range is now N items * SCROLL_DISTANCE_PER_ITEM, because the last item also gets a full "scroll slot" to hold its position.
+        // Max range is N items * SCROLL_DISTANCE_PER_ITEM, because the last item also gets a full "scroll slot" to hold its position.
         const maxScrollableRangeForAnimation = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
         scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
 
@@ -156,7 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // For the last item, fractionalProgress should remain 0 once it's fully in view.
         let fractionalProgress = normalizedProgress - currentIndex;
 
-        // If we are on the last item and it has fully entered, lock fractionalProgress to 0
+        // If we are on the last item AND it has fully entered (meaning fractionalProgress > 0),
+        // we lock fractionalProgress to 0 to make it hold.
         if (currentIndex === serviceItems.length - 1 && fractionalProgress > 0) {
             fractionalProgress = 0; // Lock the last item in place
         }
