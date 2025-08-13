@@ -55,8 +55,6 @@ html {
     margin: 0;
     padding: 0;
     position: relative; /* Needed for fixed children positioning in some browsers */
-    width: 100%; /* Ensure html is 100% width */
-    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Keyframes for the animated colorful gradient */
@@ -71,11 +69,10 @@ body {
     line-height: 1.6;
     color: var(--text-light);
     background-color: transparent; /* Make body transparent to show html background */
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
-    width: 100%; /* Ensure body is 100% width */
 }
 
 /* Layer 2: Subtle Background Glowing Elements (Over Black Background) */
@@ -241,10 +238,9 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* New: Profile Image Container */
 .profile-image-container {
-    /* REMOVED: width: calc(100% + 50px); - This was a potential source of overflow */
-    width: 100%; /* Set to 100% of parent for better control */
-    max-width: 400px; /* Profile image section narrower */
-    height: 220px; /* Profile image section longer */
+    width: calc(100% + 50px); /* Slightly wider than the card to mimic the image in the Aabid Ahmed example */
+    max-width: 450px; /* Adjusted max-width relative to card */
+    height: 180px; /* Fixed height for the image area */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
     overflow: hidden; /* Ensure image doesn't overflow */
@@ -332,8 +328,8 @@ html::before { /* Re-using html::before to cover the whole page */
 .top-left-curve {
     width: 150px;
     height: 150px;
-    top: -40px; /* Adjusted position to start from top-left of the card */
-    left: -40px;
+    top: -50px; /* Adjusted position to start from top-left of the card */
+    left: -50px;
     border-right-color: transparent; /* Hide parts of the circle border to make it an arc */
     border-bottom-color: transparent;
     transform: rotate(-10deg); /* Slight rotation for the angle */
@@ -342,8 +338,8 @@ html::before { /* Re-using html::before to cover the whole page */
 .bottom-right-curve {
     width: 150px;
     height: 150px;
-    bottom: -40px; /* Adjusted position to start from bottom-right of the card */
-    right: -40px;
+    bottom: -50px; /* Adjusted position to start from bottom-right of the card */
+    right: -50px;
     border-left-color: transparent;
     border-top-color: transparent;
     transform: rotate(10deg); /* Slight rotation for the angle */
@@ -434,7 +430,7 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Hero Right Content */
 .hero-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 6.5em; /* REDUCED: 7em - 0.5em = 6.5em */
+    font-size: 7em; /* Very large font size for headings */
     line-height: 0.9;
     font-weight: 800; /* Extra bold */
     margin-bottom: 30px; /* Space below heading */
@@ -471,19 +467,7 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1;
 }
 
-/* Services Heading (now a direct child of .services-section so it scrolls naturally) */
-.services-heading {
-    font-family: 'Poppins', sans-serif;
-    font-size: 5em; /* Match tools heading size */
-    line-height: 0.9;
-    font-weight: 800;
-    margin-bottom: 50px; /* Space below heading before the sticky wrapper */
-    text-transform: uppercase;
-    text-align: left; /* Ensure heading is left-aligned */
-    /* No sticky properties here, it scrolls with the page content */
-}
-
-/* Main sticky wrapper for services section content (excluding heading) */
+/* Main sticky wrapper for services section */
 .services-content-wrapper {
     position: sticky; /* Makes this entire container sticky */
     top: var(--services-sticky-top-wrapper); /* JS will set this variable */
@@ -498,16 +482,28 @@ html::before { /* Re-using html::before to cover the whole page */
     overflow: hidden; /* Crucial for clipping the "cuboid" effect */
 }
 
-/* New inner container to hold service items for unified layout */
+/* New inner container to hold heading and service items for unified layout */
 .services-sticky-content-inner {
     position: relative; /* Provides positioning context for absolute children */
     width: 100%;
     height: 100%; /* Take full height of the wrapper */
-    display: flex; /* Now only contains service-items */
-    flex-direction: column; 
+    display: flex;
+    flex-direction: column; /* Stack heading and items vertically */
     justify-content: center; /* Center content vertically within this inner container */
     align-items: flex-start; /* Align text left */
     box-sizing: border-box; /* Include padding in dimensions */
+}
+
+/* Services Heading (now inside .services-sticky-content-inner) */
+.services-heading {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5em; /* Match tools heading size */
+    line-height: 0.9;
+    font-weight: 800;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    text-align: left; /* Ensure heading is left-aligned */
+    /* Removed position: sticky and top from here - handled by .services-content-wrapper */
 }
 
 /* Container for absolute service items */
@@ -861,10 +857,9 @@ footer h2 {
         padding: 25px 20px;
     }
     .profile-image-container {
-        /* Adjusted width and height for "longer" and "narrower" */
-        width: 100%; 
-        max-width: 340px; /* Profile image section narrower (390px - 50px) */
-        height: 210px; /* Profile image section longer (170px + 40px) */
+        width: calc(100% + 40px);
+        max-width: 390px; /* Adjusted max-width */
+        height: 170px; /* Slightly smaller height */
         margin-bottom: 20px;
     }
     .about-left-content h3 {
@@ -904,15 +899,15 @@ footer h2 {
     .top-left-curve, .bottom-right-curve {
         width: 130px; /* Slightly smaller */
         height: 130px;
-        top: -35px; /* Adjusted */
-        left: -35px; /* Adjusted */
-        bottom: -35px; /* Adjusted */
-        right: -35px; /* Adjusted */
+        top: -45px;
+        left: -45px;
+        bottom: -45px;
+        right: -45px;
     }
 
     /* Adjustments for hero content */
     .hero-heading {
-        font-size: 5.5em; /* REDUCED: 6em - 0.5em = 5.5em */
+        font-size: 6em; /* Scale down heading */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -1006,10 +1001,9 @@ footer h2 {
         border-radius: 18px; /* Slightly more rounded */
     }
     .profile-image-container {
-        /* Adjusted width and height for "longer" and "narrower" */
-        width: 100%;
-        max-width: 380px; /* Profile image section narrower (430px - 50px) */
-        height: 230px; /* Profile image section longer (190px + 40px) */
+        width: calc(100% + 50px);
+        max-width: 430px; /* Adjusted max-width */
+        height: 190px; /* Slightly taller */
         margin-bottom: 30px; /* More space */
         border-radius: 15px;
     }
@@ -1064,10 +1058,10 @@ footer h2 {
     .top-left-curve, .bottom-right-curve {
         width: 160px; /* Larger */
         height: 160px;
-        top: -45px; /* Adjusted */
-        left: -45px; /* Adjusted */
-        bottom: -45px; /* Adjusted */
-        right: -45px; /* Adjusted */
+        top: -55px;
+        left: -55px;
+        bottom: -55px;
+        right: -55px;
     }
 
     /* Adjustments for hero content */
@@ -1079,7 +1073,7 @@ footer h2 {
         text-align: left; /* Keep left-aligned */
     }
     .hero-heading {
-        font-size: 4em; /* REDUCED: 4.5em - 0.5em = 4em */
+        font-size: 4.5em; /* Reduced by 5em from desktop 7em */
         margin-bottom: 20px;
     }
     .hero-description {
@@ -1198,10 +1192,9 @@ footer h2 {
         border-radius: 15px;
     }
     .profile-image-container {
-        /* Adjusted width and height for "longer" and "narrower" */
-        width: 100%;
-        max-width: 330px; /* Profile image section narrower (380px - 50px) */
-        height: 200px; /* Profile image section longer (160px + 40px) */
+        width: calc(100% + 30px);
+        max-width: 380px;
+        height: 160px;
         margin-bottom: 25px;
         border-radius: 12px;
     }
@@ -1255,10 +1248,10 @@ footer h2 {
     .top-left-curve, .bottom-right-curve {
         width: 140px;
         height: 140px;
-        top: -35px; /* Adjusted */
-        left: -35px; /* Adjusted */
-        bottom: -35px; /* Adjusted */
-        right: -35px; /* Adjusted */
+        top: -45px;
+        left: -45px;
+        bottom: -45px;
+        right: -45px;
     }
 
     /* Adjustments for hero content */
@@ -1267,7 +1260,7 @@ footer h2 {
         padding-top: 40px; /* Reduced space from above section */
     }
     .hero-heading {
-        font-size: 3em; /* REDUCED: 3.5em - 0.5em = 3em */
+        font-size: 3.5em; /* Further reduced for very small phones */
         margin-bottom: 15px;
     }
     .hero-description {
