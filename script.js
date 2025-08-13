@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 setTimeout(() => {
                     button.classList.remove('copied');
-                    console.log('Class "copied" removed after 1.5 seconds.');
+                    console.log('Class "copied" removed from button after 1.5 seconds.');
                 }, 1500);
             } catch (err) {
                 console.error('Failed to copy text: ', err);
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
+    // Reverting to 1.0 multiplier for cleaner 1:1 scroll interaction, which aligns better with "hold" each item.
     const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; 
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
 
@@ -112,28 +113,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // The actual scroll distance for one item's animation (1:1 scroll with wrapper height)
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
-        // The total scroll needed to complete all (N-1) transitions, making the last item (index N-1) fully active.
-        const scrollForTransitions = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
+        // Total scroll required for all items to transition AND the last item to hold.
+        // If there are N items, there are N "positions" for items to be fully displayed.
+        const totalAnimationDurationScroll = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
 
-        // The additional scroll needed to hold the last item in view before the section unsticks.
-        const scrollForLastItemHold = SCROLL_DISTANCE_PER_ITEM;
+        // The spacer needs to provide enough height for:
+        // 1. All N items to have their full display and transition time (`totalAnimationDurationScroll`).
+        // 2. The entire sticky block (heading + content wrapper) to scroll out of view
+        //    after the animation sequence is complete.
+        scrollSpacer.style.height = `${totalAnimationDurationScroll + totalVisualStickyBlockHeight}px`;
 
-        // The total height the spacer needs to be.
-        // It must cover:
-        // 1. All item transitions up to the last item being fully active.
-        // 2. The dedicated "hold" time for the last item.
-        // 3. The distance for the entire sticky block to scroll out of view.
-        scrollSpacer.style.height = `${scrollForTransitions + scrollForLastItemHold + totalVisualStickyBlockHeight}px`;
-
-        console.log('--- Services Layout Adjusted (Final Revision) ---');
+        console.log('--- Services Layout Adjusted (Revised Final) ---');
         console.log(`Viewport Height: ${window.innerHeight}px`);
         console.log(`Heading Height: ${servicesHeadingHeight}px, Wrapper Height: ${contentWrapperHeight}px`);
         console.log(`Total Visual Sticky Block Height: ${totalVisualStickyBlockHeight}px`);
         console.log(`Sticky Top H2 (CSS variable): ${stickyTopH2}px`);
         console.log(`Sticky Top Wrapper (CSS variable): ${stickyTopWrapper}px`);
         console.log(`SCROLL_DISTANCE_PER_ITEM: ${SCROLL_DISTANCE_PER_ITEM}px`);
-        console.log(`Scroll For Transitions: ${scrollForTransitions}px`);
-        console.log(`Scroll For Last Item Hold: ${scrollForLastItemHold}px`);
+        console.log(`Total Animation Duration Scroll (N items * dist/item): ${totalAnimationDurationScroll}px`);
         console.log(`Calculated Scroll Spacer Height: ${scrollSpacer.offsetHeight}px`);
         console.log(`servicesSection.offsetTop: ${servicesSection.offsetTop}px`);
     };
@@ -146,17 +143,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let scrollProgress = window.scrollY - animationStartScroll;
 
-        // The total scroll needed to complete all (N-1) transitions, making the last item (index N-1) fully active.
-        const totalTransitionsScroll = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
+        // Clamp the scroll progress to ensure it only covers the defined animation duration.
+        // Max range is now N items * SCROLL_DISTANCE_PER_ITEM, because the last item also gets a full "scroll slot" to hold its position.
+        const maxScrollableRangeForAnimation = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; 
+        scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
 
-        // Clamp scrollProgress to only cover the transition phase.
-        // Once scrollProgress hits `totalTransitionsScroll`, the last item should be fully active and hold.
-        scrollProgress = Math.max(0, Math.min(totalTransitionsScroll, scrollProgress));
-
+        // Determine which item should be active based on scroll progress
         const normalizedProgress = scrollProgress / SCROLL_DISTANCE_PER_ITEM;
         
         const currentIndex = Math.floor(normalizedProgress);
-        const fractionalProgress = normalizedProgress - currentIndex;
+        // fractionalProgress should be 0 for the fully active item, and animate to 1 as it exits.
+        // For the last item, fractionalProgress should remain 0 once it's fully in view.
+        let fractionalProgress = normalizedProgress - currentIndex;
+
+        // If we are on the last item and it has fully entered, lock fractionalProgress to 0
+        if (currentIndex === serviceItems.length - 1 && fractionalProgress > 0) {
+            fractionalProgress = 0; // Lock the last item in place
+        }
 
         // Update the background number for the active slide
         const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));

@@ -66,7 +66,8 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the entire container */
-    filter: brightness(0.5) grayscale(0.5); /* Increased brightness and reduced grayscale */
+    /* Reverted filter for brighter, less grayscale video */
+    filter: brightness(0.5) grayscale(0.5); 
 }
 
 .video-overlay {
@@ -79,7 +80,7 @@ body {
     z-index: -1; /* Above video, below content */
 }
 
-/* Geometric Background Lines - Made brighter */
+/* Geometric Background Lines - Reverted to original brightness */
 .main-layout-container::before {
     content: '';
     position: absolute;
@@ -92,10 +93,10 @@ body {
         linear-gradient(to right, transparent 99%, var(--services-grid-line-color) 1%),
         linear-gradient(to bottom, transparent 99%, var(--services-grid-line-color) 1%);
     background-size: 100px 100px; /* Adjust grid size */
-    opacity: 1; /* Increased visibility */
+    opacity: 1; /* Increased visibility as originally requested */
 }
 
-/* Add diagonal lines for a more complex grid, similar to Framer.ai - Made brighter */
+/* Add diagonal lines for a more complex grid, similar to Framer.ai - Reverted to original brightness */
 .main-layout-container::after {
     content: '';
     position: absolute;
@@ -108,11 +109,11 @@ body {
         linear-gradient(45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%),
         linear-gradient(-45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%);
     background-size: 100px 100px; /* Adjust grid size, match to before */
-    opacity: 1; /* Increased visibility */
+    opacity: 1; /* Increased visibility as originally requested */
 }
 
 
-/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) - Made brighter */
+/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) - Reverted to original brightness/animation */
 .background-glows::before, .background-glows::after {
     content: '';
     position: fixed;
@@ -121,7 +122,7 @@ body {
     transform: translate(-50%, -50%);
     border-radius: 50%;
     filter: blur(200px); /* Very soft blur for large, subtle glows */
-    opacity: 0.3; /* Increased visibility */
+    opacity: 0.3; /* Reverted opacity */
     z-index: -1; /* Behind all content */
     pointer-events: none; /* Ensure no interaction with glows */
 }
@@ -130,19 +131,19 @@ body {
     width: 900px;
     height: 900px;
     background: radial-gradient(circle at center, var(--accent-primary-sawad) 0%, transparent 60%);
-    animation: glow1 20s infinite alternate ease-in-out; /* Slightly faster glow */
+    animation: glow1 20s infinite alternate ease-in-out; /* Reverted duration */
 }
 
 @keyframes glow1 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
-    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Updated opacity */
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Reverted opacity */
+    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.4; } /* Reverted opacity */
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Reverted opacity */
 }
 
 @keyframes glow2 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
-    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.3; } /* Updated opacity */
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Reverted opacity */
+    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Reverted opacity */
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.3; } /* Reverted opacity */
 }
 
 
@@ -374,7 +375,7 @@ body {
     
     padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
     text-align: left; /* Always left-align content within this column */
-    /* Crucial: Ensure NO overflow-x or overflow-y is set here! */
+    /* CRUCIAL: ENSURE NO OVERFLOW PROPERTIES HERE. They were removed in a previous step. */
 }
 
 /* Hero Right Content */
@@ -488,15 +489,16 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color); /* Darker gray, more visible */
     top: 50%;
-    right: 20px; /* Adjusted to ensure numbers are visible within overflow: hidden */
-    transform: translateY(-50%); /* Center vertically and no problematic translateX */
+    /* Reverted position for numbers */
+    right: 20px; 
+    transform: translateY(-50%); /* Center vertically, no translateX */
     line-height: 1;
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
 }
 
-/* Service Title - will be orange, no italics */
+/* Service Title - Reverted to orange, no italics */
 .service-title {
     font-size: 2em; /* Title for the service */
     font-weight: 700;
@@ -1034,7 +1036,8 @@ footer h2 {
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
-        /* Removed perspective: none; to enable 3D animation on mobile */
+        /* Reverted perspective property for consistent 3D on mobile if possible, but keep other mobile tweaks */
+        /* If 3D performance is bad on mobile, consider adding perspective: none; back here */
     }
     /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
@@ -1045,18 +1048,19 @@ footer h2 {
         height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
-        /* JS still handles transforms, but this sets initial state if JS isn't ready */
+        /* JS still handles transforms, these are defaults */
         opacity: 0; 
-        transform: translateY(100px) rotateX(90deg);
+        transform: translateY(100px) rotateX(90deg); /* Reverted to 3D for consistency */
         padding: 10px;
     }
     .service-item.active-content {
         opacity: 1;
-        transform: translateY(0) rotateX(0deg);
+        transform: translateY(0) rotateX(0deg); /* Reverted to 3D for consistency */
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
-        right: 20px; /* Adjusted position for mobile visibility */
+        right: 20px; /* Reverted position for numbers */
+        transform: translateY(-50%); /* No translateX on mobile */
     }
     .service-title {
         font-size: 1.6em;
@@ -1188,7 +1192,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
-        right: 20px; /* Adjusted position for mobile visibility */
+        right: 20px; /* Reverted position for numbers */
+        transform: translateY(-50%); /* No translateX on mobile */
     }
     .service-title {
         font-size: 1.4em;
