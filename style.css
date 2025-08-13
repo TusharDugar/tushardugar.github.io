@@ -39,6 +39,15 @@
     --services-sticky-top-wrapper: 0px;
 }
 
+/* Global utility text colors */
+.text-white {
+    color: var(--text-light);
+}
+.text-gray {
+    color: var(--text-medium);
+}
+
+
 /* Layer 1: Solid Black Background (Base) */
 html {
     background-color: var(--bg-main); /* Solid black */
@@ -118,7 +127,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%;
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
-    opacity: 0.1299375; /* Changed: Increased opacity by 10% from previous value */
+    opacity: 0.1299375; /* Current opacity for the pattern */
     
     /* The animated colorful gradient as the background that will be masked */
     background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -209,7 +218,7 @@ html::before { /* Re-using html::before to cover the whole page */
     padding: 30px 25px; /* Adjust padding to match the target image better */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
-    max-width: 320px; /* Max-width to match Aabid Ahmed's card size */
+    max-width: 400px; /* INCREASED MAX WIDTH */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
@@ -230,7 +239,7 @@ html::before { /* Re-using html::before to cover the whole page */
 /* New: Profile Image Container */
 .profile-image-container {
     width: calc(100% + 50px); /* Slightly wider than the card to mimic the image in the Aabid Ahmed example */
-    max-width: 350px; /* Limit its max width */
+    max-width: 450px; /* Adjusted max-width relative to card */
     height: 180px; /* Fixed height for the image area */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
@@ -347,6 +356,43 @@ html::before { /* Re-using html::before to cover the whole page */
     max-width: 90%; /* Keep text within reasonable bounds */
 }
 
+/* NEW: Contact Info List */
+.contact-info-list {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 20px 0 30px; /* Space above and below list */
+    width: 100%; /* Take full width of the card */
+    text-align: left; /* Align list items left */
+}
+
+.contact-info-list li {
+    display: flex; /* Use flexbox for icon and text alignment */
+    align-items: center;
+    margin-bottom: 15px; /* Space between list items */
+    font-size: 0.95em;
+    color: var(--text-medium-card);
+}
+
+.contact-info-list li:last-child {
+    margin-bottom: 0; /* No margin after the last item */
+}
+
+.contact-info-list li i {
+    color: var(--accent-primary-sawad); /* Icon color */
+    margin-right: 15px; /* Space between icon and text */
+    font-size: 1.2em;
+    width: 20px; /* Fixed width for icons to align text */
+    text-align: center;
+}
+
+.contact-info-list li span {
+    font-weight: 600; /* Bold the category text */
+    color: var(--text-dark-card); /* Darker color for category */
+    margin-right: 8px; /* Space between category and value */
+    flex-shrink: 0; /* Prevent category from shrinking */
+}
+
+
 /* Updated: Social Icons */
 .about-social-icons {
     display: flex;
@@ -417,11 +463,38 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for sticky child */
+    position: relative; /* Needed for sticky child to properly detach */
     z-index: 1;
 }
 
-/* These elements are now directly sticky and their 'top' property is controlled by JS for centering */
+/* Main sticky wrapper for services section */
+.services-content-wrapper {
+    position: sticky; /* Makes this entire container sticky */
+    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
+    will-change: top;
+    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
+
+    height: 450px; /* Fixed height to control content display window for sticky effect */
+    display: flex; /* Use flexbox to center its inner content */
+    justify-content: center; /* Center content vertically within the sticky window */
+    align-items: flex-start; /* Align content to the left of the sticky window */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+}
+
+/* New inner container to hold heading and service items for unified layout */
+.services-sticky-content-inner {
+    position: relative; /* Provides positioning context for absolute children */
+    width: 100%;
+    height: 100%; /* Take full height of the wrapper */
+    display: flex;
+    flex-direction: column; /* Stack heading and items vertically */
+    justify-content: center; /* Center content vertically within this inner container */
+    align-items: flex-start; /* Align text left */
+    box-sizing: border-box; /* Include padding in dimensions */
+}
+
+/* Services Heading (now inside .services-sticky-content-inner) */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em; /* Match tools heading size */
@@ -430,34 +503,22 @@ html::before { /* Re-using html::before to cover the whole page */
     margin-bottom: 50px;
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    position: sticky; /* Made sticky */
-    top: var(--services-sticky-top-h2); /* JS will set this variable */
-    will-change: top;
-    z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
+    /* Removed position: sticky and top from here - handled by .services-content-wrapper */
 }
 
-/* Reusing text-white and text-gray for services-heading */
-
-.services-content-wrapper {
-    position: relative;
-    height: 450px; /* Fixed height to control content display window */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center content vertically within the window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
-    position: sticky; /* Made sticky */
-    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
-    will-change: top;
-    z-index: 1; /* Ensure wrapper stays below heading when sticky */
+/* Container for absolute service items */
+.services-items-container {
+    position: relative; /* Provides positioning context for .service-item */
+    width: 100%;
+    height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
 }
 
 .service-item {
-    position: absolute; /* Position items absolutely within the wrapper */
+    position: absolute; /* Position items absolutely within .services-items-container */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Take full height of the wrapper */
+    height: 100%; /* Take full height of the container */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the item */
@@ -469,7 +530,8 @@ html::before { /* Re-using html::before to cover the whole page */
     opacity: 0; /* Fully transparent when inactive */
     transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
+    /* Refined transition for a cleaner fade-out */
+    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
@@ -787,34 +849,21 @@ footer h2 {
     .left-column-sticky {
         width: 100%; /* On smaller desktops, expand to full width of container */
         padding-right: 0; /* Remove right padding */
-        max-width: 400px; /* Keep max width to center content */
+        max-width: 450px; /* Slightly wider on mid-size screens */
         margin: 0 auto; /* Center it */
     }
-    .right-column-scroll { 
-        flex-grow: 1; /* Allow it to take up space */
-        width: 100%; /* Take full width of main container when stacked */
-        padding-left: 40px; /* Adjusted padding */
-        padding-right: 40px; /* Adjusted padding */
-        margin-top: 50px; /* Add some space above when stacked below left column */
-        text-align: left; /* Keep left-aligned */
-    }
-    .section h2 { /* Global heading for sections (like footer) */
-        font-size: 3.2em;
-        margin-bottom: 40px;
-    }
-    /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 300px; /* Adjust for slightly smaller desktop */
+        max-width: 350px; /* Adjusted for slightly larger card on mid-size screens */
         padding: 25px 20px;
     }
     .profile-image-container {
-        width: calc(100% + 40px); /* Keep proportion */
-        max-width: 340px;
-        height: 160px;
+        width: calc(100% + 40px);
+        max-width: 390px; /* Adjusted max-width */
+        height: 170px; /* Slightly smaller height */
         margin-bottom: 20px;
     }
     .about-left-content h3 {
-        font-size: 2.5em;
+        font-size: 2.6em; /* Adjusted for larger card */
     }
     .fire-icon-with-line {
         margin-bottom: 20px;
@@ -823,13 +872,22 @@ footer h2 {
         padding: 7px;
         font-size: 1em;
     }
-    .fire-icon-with-line::before,
-    .fire-icon-with-line::after {
-        width: calc(50% - 22px);
-    }
     .about-short-desc {
-        font-size: 0.85em;
+        font-size: 0.88em;
         margin-bottom: 20px;
+    }
+    .contact-info-list {
+        margin: 15px 0 25px; /* Adjust spacing */
+    }
+    .contact-info-list li {
+        font-size: 0.9em;
+    }
+    .contact-info-list li i {
+        margin-right: 12px;
+        font-size: 1.1em;
+    }
+    .contact-info-list li span {
+        margin-right: 6px;
     }
     .about-social-icons a {
         font-size: 1.4em;
@@ -839,12 +897,12 @@ footer h2 {
         border-width: 1.5px; /* Thinner for smaller screens */
     }
     .top-left-curve, .bottom-right-curve {
-        width: 120px;
-        height: 120px;
-        top: -40px;
-        left: -40px;
-        bottom: -40px;
-        right: -40px;
+        width: 130px; /* Slightly smaller */
+        height: 130px;
+        top: -45px;
+        left: -45px;
+        bottom: -45px;
+        right: -45px;
     }
 
     /* Adjustments for hero content */
@@ -862,13 +920,12 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
-    /* Sticky heading and wrapper top are set by JS variables */
+    .services-content-wrapper {
+        height: 400px; /* Adjust height for smaller desktop */
+    }
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 40px;
-    }
-    .services-content-wrapper {
-        height: 400px; /* Adjust height for smaller desktop */
     }
     .service-item {
         padding: 15px;
@@ -896,7 +953,6 @@ footer h2 {
     }
     .tools-grid {
         display: grid;
-        /* Responsive 2-column grid: at least 250px wide, max 1fr */
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
         gap: 20px;
         max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
@@ -922,7 +978,7 @@ footer h2 {
 @media (max-width: 768px) {
     .main-layout-container {
         flex-direction: column; /* Stack columns vertically */
-        padding: 0 10px; /* Adjust padding for mobile */
+        padding: 0 20px; /* Adjusted padding for tablet/mobile */
         padding-top: 20px; /* Space from top */
     }
     .left-column-sticky {
@@ -940,83 +996,72 @@ footer h2 {
     }
     /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 280px; /* Narrower for actual mobile */
-        padding: 20px 15px;
-        border-radius: 15px;
+        max-width: 380px; /* Wider for tablet/larger phone */
+        padding: 30px 25px; /* More generous padding */
+        border-radius: 18px; /* Slightly more rounded */
     }
     .profile-image-container {
-        width: calc(100% + 40px); /* Adjust width for smaller screens */
-        max-width: 320px;
-        height: 150px;
-        margin-bottom: 20px;
-        border-radius: 12px;
+        width: calc(100% + 50px);
+        max-width: 430px; /* Adjusted max-width */
+        height: 190px; /* Slightly taller */
+        margin-bottom: 30px; /* More space */
+        border-radius: 15px;
     }
     .about-left-content h3 {
-        font-size: 2.2em;
-        margin-bottom: 15px;
+        font-size: 2.8em; /* Back to larger size for tablet */
+        margin-bottom: 25px;
     }
     .fire-icon-with-line {
-        height: 35px;
-        margin-bottom: 20px;
+        height: 45px; /* Taller icon area */
+        margin-bottom: 30px;
     }
     .fire-icon {
-        padding: 6px;
-        font-size: 0.9em;
+        padding: 9px; /* Larger padding */
+        font-size: 1.2em; /* Larger icon */
     }
     .fire-icon-with-line::before,
     .fire-icon-with-line::after {
-        width: calc(50% - 20px);
+        width: calc(50% - 30px); /* Adjust line length */
     }
     .about-short-desc {
-        font-size: 0.8em;
-        margin-bottom: 15px;
-        padding: 0 2px;
+        font-size: 1em; /* Slightly larger text */
+        margin-bottom: 30px;
+        padding: 0 10px; /* More padding */
+        max-width: 100%; /* Allow full width in card */
+    }
+    .contact-info-list {
+        margin: 25px 0 35px; /* More space */
+    }
+    .contact-info-list li {
+        font-size: 1em;
+        margin-bottom: 18px;
+    }
+    .contact-info-list li i {
+        margin-right: 18px;
+        font-size: 1.3em;
+        width: 25px;
+    }
+    .contact-info-list li span {
+        margin-right: 10px;
+    }
+    .about-social-icons {
+        gap: 20px; /* More space between icons */
+        padding-top: 15px;
     }
     .about-social-icons a {
-        font-size: 1.3em;
-        gap: 12px;
+        font-size: 1.6em;
     }
-    .section h2 {
-        font-size: 3.2em;
-        margin-bottom: 40px;
-    }
-    .contact-tagline {
-        font-size: 1.1em;
-        margin-bottom: 30px;
-    }
-    .contact-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px; /* Reduced gap */
-        max-width: 350px; /* Set max-width for the flex container */
-        margin: 0 auto; /* Center the flex container itself */
-    }
-    .contact-button {
-        width: 90%;
-        max-width: 320px;
-        font-size: 1.1em;
-        height: 100px;
-    }
-    .contact-button i {
-        font-size: 2em;
-    }
-    .contact-button .button-value {
-        font-size: 0.9em;
-    }
-    .contact-button .copied-text {
-        font-size: 1.1em;
-    }
+    
     .dashed-decoration {
-        border-width: 1px; /* Even thinner */
+        border-width: 2px; /* Standard thickness */
     }
     .top-left-curve, .bottom-right-curve {
-        width: 100px;
-        height: 100px;
-        top: -30px;
-        left: -30px;
-        bottom: -30px;
-        right: -30px;
+        width: 160px; /* Larger */
+        height: 160px;
+        top: -55px;
+        left: -55px;
+        bottom: -55px;
+        right: -55px;
     }
 
     /* Adjustments for hero content */
@@ -1028,11 +1073,11 @@ footer h2 {
         text-align: left; /* Keep left-aligned */
     }
     .hero-heading {
-        font-size: 4.5em; /* Scale down heading for tablets/larger phones */
+        font-size: 4.5em; /* Reduced by 5em from desktop 7em */
         margin-bottom: 20px;
     }
     .hero-description {
-        font-size: 1em;
+        font-size: 1.1em; /* Adjusted slightly */
         line-height: 1.6;
         max-width: 100%; /* Allow to take full width */
         margin-bottom: 40px; /* Reduced space before next section */
@@ -1042,30 +1087,20 @@ footer h2 {
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
-        /* Perspective is handled by .services-content-wrapper, so removed specific mobile override here */
-    }
-    /* Sticky heading and wrapper top are set by JS variables */
-    .services-heading {
-        font-size: 3.5em;
-        margin-bottom: 30px;
     }
     .services-content-wrapper {
         height: 250px; /* Adjusted fixed height for mobile */
     }
-    .service-item {
-        /* JS still handles transforms, these are defaults */
-        opacity: 0; 
-        transform: translateY(100px) rotateX(90deg); /* Maintained 3D transform for consistency */
-        padding: 10px;
+    .services-heading {
+        font-size: 3.5em;
+        margin-bottom: 30px;
     }
-    .service-item.active-content {
-        opacity: 1;
-        transform: translateY(0) rotateX(0deg); /* Maintained 3D transform for consistency */
+    .service-item {
+        padding: 10px;
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
         right: 40px; /* Adjusted for smaller screens */
-        transform: translateY(-50%); /* Removed translateX to keep it on screen */
     }
     .service-title {
         font-size: 1.6em;
@@ -1087,7 +1122,6 @@ footer h2 {
     }
     .tools-grid {
         display: grid;
-        /* Responsive 2-column grid: at least 250px wide, max 1fr */
         grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
         max-width: 100%; /* Allow to take full width */
@@ -1107,9 +1141,18 @@ footer h2 {
     .tool-category {
         font-size: 0.75em;
     }
+
+    /* Footer - Full width black background on mobile */
+    footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 @media (max-width: 480px) {
+    .main-layout-container {
+        padding: 0 15px; /* Tighter padding for very small screens */
+    }
     .section h2 {
         font-size: 2.8em;
         letter-spacing: 0.5px;
@@ -1123,78 +1166,105 @@ footer h2 {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 20px; /* Reduced gap */
-        max-width: 300px; /* Tighter max-width */
+        gap: 15px; /* Even tighter gap */
+        max-width: 320px; /* Tighter max-width for column layout */
         margin: 0 auto; /* Center buttons */
     }
     .contact-button {
         width: 100%; /* Ensure button takes full width of its container */
-        height: 85px;
-        font-size: 1em; /* Adjusted font size */
+        height: 80px; /* Slightly shorter */
+        font-size: 0.95em; /* Adjusted font size */
     }
     .contact-button i {
-        font-size: 1.8em; /* Adjusted icon size */
+        font-size: 1.6em; /* Adjusted icon size */
     }
     .contact-button .button-value {
-        font-size: 0.8em; /* Adjusted button value font size */
+        font-size: 0.75em; /* Adjusted button value font size */
     }
     .contact-button .copied-text {
-        font-size: 1em; /* Adjusted copied text font size */
+        font-size: 0.95em; /* Adjusted copied text font size */
     }
 
     /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 260px;
-        padding: 15px 10px;
+        max-width: 350px; /* Max width for phones */
+        padding: 25px 20px;
+        border-radius: 15px;
     }
     .profile-image-container {
         width: calc(100% + 30px);
-        max-width: 290px;
-        height: 130px;
-        margin-bottom: 15px;
-        border-radius: 10px;
+        max-width: 380px;
+        height: 160px;
+        margin-bottom: 25px;
+        border-radius: 12px;
     }
     .about-left-content h3 {
-        font-size: 2em;
-        margin-bottom: 10px;
+        font-size: 2.5em;
+        margin-bottom: 20px;
     }
     .fire-icon-with-line {
-        height: 30px;
-        margin-bottom: 15px;
+        height: 40px;
+        margin-bottom: 25px;
     }
     .fire-icon {
-        padding: 5px;
-        font-size: 0.8em;
+        padding: 8px;
+        font-size: 1.1em;
     }
     .fire-icon-with-line::before,
     .fire-icon-with-line::after {
-        width: calc(50% - 18px);
+        width: calc(50% - 25px);
     }
     .about-short-desc {
-        font-size: 0.75em;
-        margin-bottom: 10px;
-        padding: 0;
+        font-size: 0.9em;
+        margin-bottom: 25px;
+        padding: 0 5px;
+    }
+    .contact-info-list {
+        margin: 20px 0 30px;
+    }
+    .contact-info-list li {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    .contact-info-list li i {
+        margin-right: 15px;
+        font-size: 1.2em;
+        width: 20px;
+    }
+    .contact-info-list li span {
+        margin-right: 8px;
+    }
+    .about-social-icons {
+        gap: 15px;
+        padding-top: 10px;
     }
     .about-social-icons a {
-        font-size: 1.1em;
-        gap: 10px;
+        font-size: 1.4em;
+    }
+
+    .dashed-decoration {
+        border-width: 1.5px;
     }
     .top-left-curve, .bottom-right-curve {
-        width: 80px;
-        height: 80px;
-        top: -25px;
-        left: -25px;
-        bottom: -25px;
-        right: -25px;
+        width: 140px;
+        height: 140px;
+        top: -45px;
+        left: -45px;
+        bottom: -45px;
+        right: -45px;
     }
 
     /* Adjustments for hero content */
+    .right-column-scroll {
+        padding: 30px 15px; /* Reduced padding for very small screens */
+        padding-top: 40px; /* Reduced space from above section */
+    }
     .hero-heading {
-        font-size: 3.5em; /* Further scale down for small phones */
+        font-size: 3.5em; /* Further reduced for very small phones */
         margin-bottom: 15px;
     }
     .hero-description {
-        font-size: 0.9em;
+        font-size: 0.95em; /* Slightly adjusted */
         line-height: 1.5;
         margin-bottom: 30px; /* Further reduced space */
     }
@@ -1204,18 +1274,19 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
-    /* Sticky heading and wrapper top are set by JS variables */
+    .services-content-wrapper {
+        height: 200px; /* Further adjusted fixed height for very small mobile */
+    }
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
     }
-    .services-content-wrapper {
-        height: 200px; /* Further adjusted fixed height for very small mobile */
+    .service-item {
+        padding: 12px;
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
         right: 40px; /* Adjusted for smaller screens */
-        transform: translateY(-50%); /* Removed translateX to keep it on screen */
     }
     .service-title {
         font-size: 1.4em;
@@ -1235,7 +1306,6 @@ footer h2 {
     }
     .tools-grid {
         display: grid;
-        /* Responsive 2-column grid: at least 250px wide, max 1fr */
         grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
         max-width: 100%; /* Allow to take full width */
