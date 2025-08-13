@@ -118,7 +118,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%;
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
-    opacity: 0.1299375; /* Changed: Increased opacity by 10% from previous value */
+    opacity: 0.118125; /* Changed: Reduced opacity to 50% of current (0.23625 * 0.5) */
     
     /* The animated colorful gradient as the background that will be masked */
     background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
