@@ -305,7 +305,7 @@ body {
     position: absolute;
     border: 2px dashed var(--accent-primary-sawad);
     border-radius: 50%; /* Used for creating circular segments */
-    box-sizing: border-box;
+    box-sizing: border;
     pointer-events: none;
     z-index: 0; /* Behind all content */
 }
@@ -479,8 +479,8 @@ body {
     font-weight: 800;
     color: var(--services-bg-number-color); /* Darker gray, more visible */
     top: 50%;
-    right: -20px; /* Adjusted to ensure full number visibility, pulls it slightly left */
-    transform: translateY(-50%); /* Center vertically, no horizontal translation here */
+    right: 0px; /* Position it to the far right */
+    transform: translateY(-50%) translateX(20%); /* Center vertically and push slightly off-screen */
     line-height: 1;
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
@@ -862,6 +862,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em; /* Scale down background number */
+        right: -10px; /* Adjusted to keep visible */
+        transform: translateY(-50%) translateX(10%); /* Adjusted for smaller screens */
     }
     .service-title {
         font-size: 1.8em;
@@ -1026,7 +1028,6 @@ footer h2 {
         padding-bottom: 60px;
         perspective: none; /* Disable 3D perspective on mobile for simpler animation */
     }
-    /* Sticky heading and wrapper top are removed */
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
@@ -1047,6 +1048,7 @@ footer h2 {
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
         right: -10px; /* Adjust position */
+        transform: translateY(-50%) translateX(5%); /* Adjusted for smaller screens */
     }
     .service-title {
         font-size: 1.6em;
@@ -1168,7 +1170,6 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
-    /* Sticky heading and wrapper top are removed */
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
@@ -1178,6 +1179,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
+        right: -5px; /* Adjusted to keep visible */
+        transform: translateY(-50%) translateX(0%); /* Remove extra translation for small screens */
     }
     .service-title {
         font-size: 1.4em;

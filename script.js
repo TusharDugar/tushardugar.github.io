@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesSection = document.getElementById('services');
     const servicesContentWrapper = servicesSection ? servicesSection.querySelector('.services-content-wrapper') : null;
     const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
-    // serviceBgNumber is now inside each service-item, so we don't grab it globally anymore.
     
     // Critical check for existence
     if (!servicesSection || serviceItems.length === 0 || !servicesContentWrapper) {
@@ -90,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const adjustServicesLayout = () => {
         // Recalculate dynamic values on resize or initial load
         const contentWrapperHeight = servicesContentWrapper.offsetHeight; 
-        const servicesHeadingHeight = servicesSection.querySelector('.services-heading').offsetHeight;
         
         // The actual scroll distance for one item's animation is based on its visual height
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
@@ -158,14 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.opacity = opacity;
             item.style.zIndex = zIndex;
 
-            // Update the background number for the active slide
+            // Update the background number text content
             if (serviceBgNumber) {
                 const displayIndex = index + 1; // Service numbers are 1-based
                 serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
-                // Set opacity for the number based on the item's visibility
-                // It should be visible when the item is active, and fade out slightly.
-                serviceBgNumber.style.opacity = opacity > 0.1 ? 1 : 0; // Make number fully visible when its slide is somewhat active
-                // However, the CSS `color` property handles its base visibility.
+                // The CSS `color` property handles its base visibility.
             }
         });
 
