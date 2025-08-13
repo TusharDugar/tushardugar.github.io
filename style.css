@@ -1,5 +1,3 @@
-
-
 /* Basic Reset & Font */
 :root {
     /* Sawad-inspired Color Palette */
@@ -27,14 +25,18 @@
     /* New colors for Tool Cards */
     --bg-tool-card: #1A1A1A; /* Dark background for tool cards */
     --tool-icon-bg: #FFFFFF; /* White background for tool icons */
-    --tool-name-color: #FFFFFF; /* White for tool names - corrected this variable usage */
+    --tool-name-color: var(--text-light); /* White for tool names */
     --tool-category-color: var(--text-medium); /* Gray for categories */
 
     /* New colors for Services Section */
-    --services-bg-number-color: #333; /* Dark gray for background numbers */
+    --services-bg-number-color: rgba(51, 51, 51, 0.8); /* Dark gray, more visible */
     --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
     --services-description-color: var(--text-light); /* White for descriptions */
     --services-grid-line-color: rgba(255, 255, 255, 0.05); /* Very faint white for background grid */
+
+    /* CSS Variables for sticky services top offset (set by JS) */
+    --services-sticky-top-h2: 0px;
+    --services-sticky-top-wrapper: 0px;
 }
 
 body {
@@ -77,7 +79,7 @@ body {
     z-index: -1; /* Above video, below content */
 }
 
-/* Geometric Background Lines - Make brighter */
+/* Geometric Background Lines - This will be applied globally to achieve the look from the reference */
 .main-layout-container::before {
     content: '';
     position: absolute;
@@ -90,10 +92,10 @@ body {
         linear-gradient(to right, transparent 99%, var(--services-grid-line-color) 1%),
         linear-gradient(to bottom, transparent 99%, var(--services-grid-line-color) 1%);
     background-size: 100px 100px; /* Adjust grid size */
-    opacity: 1; /* Increased visibility */
+    opacity: 0.8; /* Subtle visibility */
 }
 
-/* Add diagonal lines for a more complex grid, similar to Framer.ai - Make brighter */
+/* Add diagonal lines for a more complex grid, similar to Framer.ai */
 .main-layout-container::after {
     content: '';
     position: absolute;
@@ -106,11 +108,11 @@ body {
         linear-gradient(45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%),
         linear-gradient(-45deg, transparent 75%, var(--services-grid-line-color) 75.5%, var(--services-grid-line-color) 76.5%, transparent 77%);
     background-size: 100px 100px; /* Adjust grid size, match to before */
-    opacity: 1; /* Increased visibility */
+    opacity: 0.8;
 }
 
 
-/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) - Make brighter */
+/* Subtle Background Glowing Elements (Mimicking Sawad's subtle ambient light) */
 .background-glows::before, .background-glows::after {
     content: '';
     position: fixed;
@@ -119,7 +121,7 @@ body {
     transform: translate(-50%, -50%);
     border-radius: 50%;
     filter: blur(200px); /* Very soft blur for large, subtle glows */
-    opacity: 0.3; /* Increased visibility */
+    opacity: 0.15; /* Very subtle */
     z-index: -1; /* Behind all content */
     pointer-events: none; /* Ensure no interaction with glows */
 }
@@ -128,19 +130,19 @@ body {
     width: 900px;
     height: 900px;
     background: radial-gradient(circle at center, var(--accent-primary-sawad) 0%, transparent 60%);
-    animation: glow1 20s infinite alternate ease-in-out; /* Slightly faster glow */
+    animation: glow1 25s infinite alternate ease-in-out;
 }
 
 @keyframes glow1 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
-    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Updated opacity */
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+    50% { transform: translate(-55%, -45%) scale(1.05); opacity: 0.2; }
+    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.15; }
 }
 
 @keyframes glow2 {
-    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; } /* Updated opacity */
-    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.4; } /* Updated opacity */
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.3; } /* Updated opacity */
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
+    50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.2; }
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.15; }
 }
 
 
@@ -253,10 +255,8 @@ body {
     line-height: 1.1; /* Tighter line height for single-line name */
 }
 
-/* Hidden: About Tagline (not present in Aabid Ahmed card visually) */
-.about-tagline {
-    display: none;
-}
+/* The .about-tagline rule has been completely removed */
+
 
 /* New: Fire Icon with connecting dashed lines */
 .fire-icon-with-line {
@@ -366,24 +366,25 @@ body {
 .right-column-scroll {
     flex-grow: 1; /* Take up remaining space */
     width: 65%; /* Adjust width as needed */
-    padding-left: 60px; /* Reduced padding for wider content */
-    padding-right: 50px; /* Reduced padding for wider content (10px more width from right) */
+    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
+    padding-right: 80px; /* Add right padding to prevent content from touching edge */
     padding-bottom: 100px; /* Ensure content can scroll past sticky element */
     box-sizing: border-box;
     min-height: 150vh; /* Example: make it 1.5 times the viewport height */
     
-    padding-top: 30px; /* Drastically reduced space from top for hero section */
-    text-align: left; /* Align text to the left as per the design */
+    padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
+    text-align: left; /* Always left-align content within this column */
 }
 
 /* Hero Right Content */
 .hero-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 6.8em; /* Reduced font size by approx 3px */
+    font-size: 7em; /* Very large font size for headings */
     line-height: 0.9;
     font-weight: 800; /* Extra bold */
     margin-bottom: 30px; /* Space below heading */
     text-transform: uppercase; /* Ensure all text is uppercase */
+    text-align: left; /* Ensure it's left-aligned */
 }
 
 .hero-heading .text-white {
@@ -401,56 +402,49 @@ body {
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
-    margin-bottom: 30px; /* Reduced space below hero description */
+    margin-bottom: 80px; /* Ample space before the next section (statistics) */
+    text-align: left; /* Ensure it's left-aligned */
 }
 
 
 /* NEW: Services Section Styles - Revised for 3D-like animation */
 .services-section {
-    padding-top: 0px; /* Reduced space from hero section to 0 */
-    padding-bottom: 0px; /* Reduced space before tools section to 0 */
+    padding-top: 80px; /* Space from hero section */
+    padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for spacer to take up space */
+    position: relative; /* Needed for sticky child */
     z-index: 1;
 }
 
-/* The new sticky container for the heading + animation content */
-#services-sticky-container {
-    position: sticky;
-    top: 80px; /* Adjusted sticky top to bring content more towards center */
-    /* No explicit height here, it will grow with its children */
-    z-index: 10; /* Ensure it stays above other content during scroll */
-    background: transparent; /* No background */
-}
-
+/* These elements are now directly sticky and their 'top' property is controlled by JS for centering */
 .services-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 7em; /* Matched hero heading size */
+    font-size: 5em; /* Match tools heading size */
     line-height: 0.9;
-    margin-bottom: 35px; /* Increased margin for more space below heading */
+    font-weight: 800;
+    margin-bottom: 50px;
     text-transform: uppercase;
+    text-align: left; /* Ensure heading is left-aligned */
+    position: sticky; /* Made sticky */
+    top: var(--services-sticky-top-h2); /* JS will set this variable */
+    will-change: top;
+    z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
 }
 
-.services-heading .text-white { /* "Our" will be white */
-    color: var(--text-light); 
-}
-
-.services-heading .text-gray { /* "Services" will be grey */
-    color: var(--text-medium);
-}
-
+/* Reusing text-white and text-gray for services-heading */
 
 .services-content-wrapper {
-    position: relative; /* Now relative to its new parent: #services-sticky-container */
-    height: 140px; /* Reduced height for compactness */
+    position: relative;
+    height: 450px; /* Fixed height to control content display window */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the window */
-    perspective: 1000px; /* Defines the depth for 3D transforms */
-    overflow: visible; /* CRITICAL: Allows background number to escape container */
-    background: transparent; /* Ensure no background interferes */
-    z-index: 1; /* Relative to its parent sticky container */
-    padding-right: 64px; /* 4rem: Extra breathing room for the number */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    position: sticky; /* Made sticky */
+    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
+    will-change: top;
+    z-index: 1; /* Ensure wrapper stays below heading when sticky */
 }
 
 .service-item {
@@ -458,83 +452,94 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100%; /* Take full height of the wrapper */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 8px 9px; /* Reduced vertical and horizontal padding for compactness and increased width */
+    justify-content: center; /* Center content vertically within the item */
+    align-items: flex-start; /* Align text left */
+    padding: 20px; /* Inner padding */
     box-sizing: border-box;
 
-    opacity: 0; /* Controlled by JS */
-    transform-origin: top center; /* Top center for outward rotation */
-    transition: opacity 0.3s ease-out; /* Only opacity transitions, transform is direct JS */
-    backface-visibility: hidden;
-    will-change: transform, opacity;
-    color: var(--text-light);
+    /* Initial state for parallax/3D effect */
+    opacity: 0; /* Fully transparent when inactive */
+    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
+    transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
+    transition: opacity 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
+    backface-visibility: hidden; /* Prevents back of element from being seen during flip */
+    will-change: opacity, transform; /* Performance hint */
+
+    /* Text styling */
+    color: var(--text-light); /* Default text color */
+}
+
+/* Active state for service content */
+.service-item.active-content {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
+    z-index: 1; /* Ensure active item is on top */
 }
 
 /* Styling for the large background number */
-.service-bg-number, #service-bg-number {
+.service-bg-number {
     position: absolute;
     font-family: 'Poppins', sans-serif;
-    font-size: 13.6em; /* Reduced size by 0.3em (approx 5px) */
+    font-size: 15em; /* Huge size */
     font-weight: 800;
-    color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
+    color: var(--services-bg-number-color); /* Darker gray, more visible */
     top: 50%;
-    right: -50px; /* Pushed further right to be fully visible and out of the way of text */
-    transform: translateY(-50%); /* Simplified, only vertical translation */
+    right: 0px; /* Position it to the far right */
+    transform: translateY(-50%) translateX(20%); /* Center vertically and push slightly off-screen */
     line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    z-index: 0; /* Behind content, now that overflow is visible */
-    transition: opacity 0.5s ease-out;
+    user-select: none; /* Prevent text selection */
+    pointer-events: none; /* Do not interfere with clicks */
+    z-index: -1; /* Behind other content */
 }
 
-/* Service Title - will be orange, no italics */
+/* Service Title - will be green as per Framer example's first line */
 .service-title {
-    font-size: 2em;
+    font-size: 2em; /* Title for the service */
     font-weight: 700;
-    color: var(--accent-primary-sawad); /* Changed to orange */
-    margin-bottom: 2px; /* Reduced to 2px */
+    color: var(--services-title-active-color); /* Green color */
+    margin-bottom: 10px; /* Reduced margin */
     line-height: 1.2;
-    font-style: normal; /* Removed italics */
-    padding-right: 56px; /* 3.5rem: Extra padding to avoid overlap with background number */
+    font-style: italic; /* Added italic as per reference */
 }
 
-/* Service Description - no italics */
+/* Service Description - will be white as per Framer example's second line */
 .service-description {
-    font-size: 1.2em;
-    color: var(--services-description-color);
-    max-width: 650px;
-    line-height: 1.6;
-    font-style: normal; /* Removed italics */
+    font-size: 1.2em; /* Description text size, slightly larger */
+    color: var(--services-description-color); /* White color */
+    max-width: 650px; /* Limit width for readability */
+    line-height: 1.6; /* Tighter line height */
+    font-style: italic; /* Added italic as per reference */
 }
 
-/* The element that creates the total scrollable height for the services section to allow sticky effect */
+/* Since service-items are absolute, we need to create virtual scroll space */
 .services-section-scroll-spacer {
-    display: block;
-    height: 0; /* JS will set this height */
-    /* No additional padding-top here; the height is handled by JS based on sticky container */
+    /* This element is added dynamically by JS to control scroll length */
+    /* Its height will be calculated by JS */
+    display: block; /* Added to make the ruleset non-empty and satisfy linters */
 }
 
 
 /* Premium Tools Section Styles */
 .tools-section {
-    padding-top: 0px; /* Reduced space from services section to 0 */
-    padding-bottom: 80px;
-    text-align: left;
+    padding-top: 80px; /* Space from services section */
+    padding-bottom: 80px; /* Space before footer */
+    text-align: left; /* Align title left */
+    /* This section already has reveal-item class from HTML */
 }
 
 .tools-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 5em;
+    font-size: 5em; /* Slightly smaller than hero heading */
     line-height: 0.9;
     font-weight: 800;
-    margin-bottom: 50px;
+    margin-bottom: 50px; /* Space below heading */
     text-transform: uppercase;
 }
 
+/* Reusing text-white and text-gray for tools-heading */
 .tools-heading .text-white {
     color: var(--text-light);
     display: block;
@@ -547,61 +552,69 @@ body {
 
 .tools-grid {
     display: grid;
+    /* Responsive 2-column grid: at least 250px wide, max 1fr */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
+    gap: 25px; /* Gap between cards */
 }
 
 .tool-card {
     background-color: var(--bg-tool-card);
-    border-radius: 15px;
+    border-radius: 15px; /* Rounded corners for cards */
     padding: 20px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 15px; /* Space between icon and text */
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
 }
 
 .tool-card:hover {
-    transform: translateY(-5px);
-    background-color: rgba(26, 26, 26, 0.9);
+    transform: translateY(-5px); /* Lift effect on hover */
+    background-color: rgba(26, 26, 26, 0.9); /* Slightly lighter on hover */
 }
 
 .tool-icon-wrapper {
-    width: 50px;
+    width: 50px; /* Size of the icon container */
     height: 50px;
-    background-color: var(--tool-icon-bg);
-    border-radius: 10px;
+    background-color: var(--tool-icon-bg); /* White background */
+    border-radius: 10px; /* Rounded square */
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Prevent shrinking */
     overflow: hidden;
 }
 
 .tool-logo {
-    max-width: 70%;
+    max-width: 70%; /* Adjust logo size within wrapper */
     max-height: 70%;
     object-fit: contain;
+    /* Apply a filter to ensure the logo appears dark/black against white background */
+    /* This works well if the original SVG is single-colored or has a dark primary color */
     filter: brightness(0.1); 
 }
 
+/* If a specific logo is colorful and needs to be grayscale/black on white,
+   you might need a more specific filter like invert(1) or a combination.
+   For Simple Icons, brightness(0.1) usually works fine for colored logos to turn them black.
+*/
+
 .tool-info {
-    flex-grow: 1;
+    flex-grow: 1; /* Allow text to take remaining space */
     text-align: left;
 }
 
 .tool-name {
-    font-size: 1.1em;
-    font-weight: 600;
+    font-size: 1.1em; /* Tool name font size */
+    font-weight: 600; /* Medium bold */
     color: var(--tool-name-color);
-    margin: 0 0 5px 0;
+    margin: 0 0 5px 0; /* Adjust margins */
     line-height: 1.2;
 }
 
 .tool-category {
-    font-size: 0.85em;
+    font-size: 0.85em; /* Category description font size */
     color: var(--tool-category-color);
     margin: 0;
     line-height: 1.2;
@@ -610,16 +623,16 @@ body {
 
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
-    background-color: var(--bg-main);
-    color: var(--text-light);
+    background-color: var(--bg-main); /* Match body background for seamless blend */
+    color: var(--text-light); /* White */
     text-align: center;
-    padding: 60px 5%;
+    padding: 60px 5%; /* Reduced padding for more compact footer */
     position: relative;
-    z-index: 1;
+    z-index: 1; /* Ensure footer stays above any potential background elements */
 }
 
 footer a {
-    color: var(--accent-secondary-sawad);
+    color: var(--accent-secondary-sawad); /* Green for footer links */
     text-decoration: none;
     transition: text-decoration 0.3s ease;
 }
@@ -633,7 +646,7 @@ footer h2 {
     text-align: center;
     margin-bottom: 25px;
     font-size: 3.2em;
-    color: var(--primary-heading-color);
+    color: var(--primary-heading-color); /* White */
     font-weight: 700;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
     letter-spacing: 1.5px;
@@ -641,13 +654,13 @@ footer h2 {
 
 .contact-tagline {
     font-size: 1.25em;
-    margin-bottom: 40px;
+    margin-bottom: 40px; /* Reduced margin below tagline */
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     opacity: 0.95;
     line-height: 1.8;
-    color: var(--text-light);
+    color: var(--text-light); /* White */
 }
 
 .contact-buttons {
@@ -659,18 +672,18 @@ footer h2 {
 }
 
 .contact-button {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-light);
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle background for buttons */
+    color: var(--text-light); /* White */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 0;
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 600; /* Medium bold */
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    width: 280px;
-    height: 130px;
+    width: 280px; /* Slightly wider buttons */
+    height: 130px; /* Slightly taller buttons */
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
     text-align: center;
 }
@@ -678,7 +691,7 @@ footer h2 {
 .contact-button:hover {
     transform: translateY(-8px);
     background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad);
+    box-shadow: 0 10px 25px var(--shadow-color-dark), 0 0 15px var(--accent-secondary-sawad); /* Green glow on hover */
 }
 
 .contact-button .button-content-main {
@@ -697,12 +710,12 @@ footer h2 {
 }
 
 .contact-button i {
-    font-size: 2.8em;
-    color: var(--accent-primary-sawad);
+    font-size: 2.8em; /* Larger icons in buttons */
+    color: var(--accent-primary-sawad); /* Accent color for icons */
 }
 
 .contact-button .button-value {
-    font-size: 15px;
+    font-size: 15px; /* Set to 15px */
     font-weight: bold;
     opacity: 1;
     white-space: nowrap;
@@ -710,8 +723,8 @@ footer h2 {
     text-overflow: ellipsis;
     padding: 0 5px;
     max-width: 90%;
-    color: var(--text-light);
-    margin-top: 5px;
+    color: var(--text-light); /* White */
+    margin-top: 5px; /* Space between icon and value */
 }
 
 .contact-button .copied-text {
@@ -725,7 +738,7 @@ footer h2 {
     align-items: center;
     background: var(--gradient-skills-front);
     color: var(--text-light);
-    font-size: 1.5em;
+    font-size: 1.5em; /* Larger "Copied!" text */
     font-weight: bold;
     border-radius: 12px;
     opacity: 0;
@@ -750,7 +763,7 @@ footer h2 {
     margin-top: 30px;
 }
 .social-links a {
-    color: var(--text-light);
+    color: var(--text-light); /* White */
     margin: 0 20px;
     transition: color 0.3s ease, transform 0.3s ease;
 }
@@ -761,34 +774,37 @@ footer h2 {
 
 
 /* Responsive Design */
+/* Separate media queries for better organization and cascading */
+
 @media (max-width: 1200px) {
     .main-layout-container {
         padding: 0 40px;
     }
     .left-column-sticky {
-        width: 100%;
-        padding-right: 0;
-        max-width: 400px;
-        margin: 0 auto;
+        width: 100%; /* On smaller desktops, expand to full width of container */
+        padding-right: 0; /* Remove right padding */
+        max-width: 400px; /* Keep max width to center content */
+        margin: 0 auto; /* Center it */
     }
     .right-column-scroll { 
-        flex-grow: 1;
-        width: 100%;
+        flex-grow: 1; /* Allow it to take up space */
+        width: 100%; /* Take full width of main container when stacked */
         padding-left: 40px; /* Adjusted padding */
-        padding-right: 30px; /* Reduced padding (10px more width from right) */
-        margin-top: 50px;
-        text-align: center;
+        padding-right: 40px; /* Adjusted padding */
+        margin-top: 50px; /* Add some space above when stacked below left column */
+        text-align: left; /* Keep left-aligned */
     }
-    .section h2 {
+    .section h2 { /* Global heading for sections (like footer) */
         font-size: 3.2em;
         margin-bottom: 40px;
     }
+    /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 300px;
+        max-width: 300px; /* Adjust for slightly smaller desktop */
         padding: 25px 20px;
     }
     .profile-image-container {
-        width: calc(100% + 40px);
+        width: calc(100% + 40px); /* Keep proportion */
         max-width: 340px;
         height: 160px;
         margin-bottom: 20px;
@@ -816,7 +832,7 @@ footer h2 {
     }
 
     .dashed-decoration {
-        border-width: 1.5px;
+        border-width: 1.5px; /* Thinner for smaller screens */
     }
     .top-left-curve, .bottom-right-curve {
         width: 120px;
@@ -827,53 +843,46 @@ footer h2 {
         right: -40px;
     }
 
+    /* Adjustments for hero content */
     .hero-heading {
-        font-size: 5.8em; /* Reduced font size */
+        font-size: 6em; /* Scale down heading */
         margin-bottom: 25px;
     }
     .hero-description {
         font-size: 1.1em;
-        margin-bottom: 30px; /* Reduced for tighter spacing */
+        margin-bottom: 60px;
     }
 
+    /* Adjustments for services section */
     .services-section {
-        padding-top: 0px; /* Reduced */
-        padding-bottom: 0px; /* Reduced */
+        padding-top: 60px; /* Adjusted spacing now that it's after hero */
+        padding-bottom: 80px; /* Space before tools section */
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
-        font-size: 6em; /* Matched hero heading size */
-        margin-bottom: 20px; /* Increased margin for more space below heading */
-    }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 60px; /* Adjusted sticky top to bring content more towards center */
+        font-size: 4.5em;
+        margin-bottom: 40px;
     }
     .services-content-wrapper {
-        height: 180px; /* Reduced height for compactness */
-        padding-right: 48px; /* 3rem (48px) for 1200px breakpoint */
+        height: 400px; /* Adjust height for smaller desktop */
     }
     .service-item {
-        padding: 10px 9px; /* Adjusted padding */
+        padding: 15px;
     }
     .service-bg-number {
-        font-size: 11.2em; /* Reduced size (approx 5px from last) */
-        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -100px; /* Adjusted based on new padding-right to be fully visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
+        font-size: 12em; /* Scale down background number */
     }
     .service-title {
         font-size: 1.8em;
-        padding-right: 40px; /* 2.5rem (40px) for 1200px breakpoint */
     }
     .service-description {
         font-size: 1em;
         max-width: 500px;
     }
-    /* spacer height calculation is in JS */
 
-
+    /* Adjustments for tools section */
     .tools-section {
-        padding-top: 0px; /* Reduced */
+        padding-top: 60px; /* Adjusted space now that it's after services */
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -881,11 +890,10 @@ footer h2 {
         margin-bottom: 40px;
     }
     .tools-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
         gap: 20px;
-        max-width: 500px;
-        margin: 0 auto;
+        max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
+        margin: 0 auto; /* Center the grid */
     }
     .tool-card {
         padding: 18px;
@@ -906,13 +914,13 @@ footer h2 {
 
 @media (max-width: 768px) {
     .main-layout-container {
-        flex-direction: column;
-        padding: 0 10px;
-        padding-top: 20px;
+        flex-direction: column; /* Stack columns vertically */
+        padding: 0 10px; /* Adjust padding for mobile */
+        padding-top: 20px; /* Space from top */
     }
     .left-column-sticky {
-        width: 100%;
-        position: relative;
+        width: 100%; /* Full width */
+        position: relative; /* Not sticky on mobile */
         top: 0;
         padding-right: 0;
         min-height: unset;
@@ -923,16 +931,18 @@ footer h2 {
         flex-direction: column;
         padding-top: 0;
     }
+    /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 280px;
+        max-width: 280px; /* Narrower for actual mobile */
         padding: 20px 15px;
         border-radius: 15px;
     }
     .profile-image-container {
-        width: calc(100% + 40px);
+        width: calc(100% + 40px); /* Adjust width for smaller screens */
         max-width: 320px;
         height: 150px;
         margin-bottom: 20px;
+        border-radius: 12px;
     }
     .about-left-content h3 {
         font-size: 2.2em;
@@ -970,8 +980,8 @@ footer h2 {
     .contact-buttons {
         flex-direction: column;
         gap: 20px;
-        max-width: 350px;
-        margin: 0 auto;
+        max-width: 350px; /* Set max-width for the flex container */
+        margin: 0 auto; /* Center the flex container itself */
     }
     .contact-button {
         width: 90%;
@@ -989,7 +999,7 @@ footer h2 {
         font-size: 1.1em;
     }
     .dashed-decoration {
-        border-width: 1px;
+        border-width: 1px; /* Even thinner */
     }
     .top-left-curve, .bottom-right-curve {
         width: 100px;
@@ -1000,61 +1010,65 @@ footer h2 {
         right: -30px;
     }
 
+    /* Adjustments for hero content */
     .right-column-scroll {
-        width: 100%;
-        padding: 40px 10px; /* Adjusted padding */
-        min-height: auto;
-        padding-top: 20px; /* Drastically reduced space from top for hero section */
+        width: 100%; /* Full width on mobile */
+        padding: 40px 20px; /* More generous padding for content */
+        min-height: auto; /* Allow height to shrink on mobile */
+        padding-top: 50px; /* Reduced space from above section */
+        text-align: left; /* Keep left-aligned */
     }
     .hero-heading {
-        font-size: 4.3em; /* Reduced font size */
+        font-size: 4.5em; /* Scale down heading for tablets/larger phones */
         margin-bottom: 20px;
     }
     .hero-description {
         font-size: 1em;
         line-height: 1.6;
-        max-width: 100%;
-        margin-bottom: 30px; /* Reduced */
+        max-width: 100%; /* Allow to take full width */
+        margin-bottom: 40px; /* Reduced space before next section */
     }
 
+    /* Services Section - mobile specific overrides */
     .services-section {
-        padding-top: 0px; /* Reduced */
-        padding-bottom: 0px; /* Reduced */
+        padding-top: 40px;
+        padding-bottom: 60px;
+        perspective: none; /* Disable 3D perspective on mobile for simpler animation */
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 3.5em;
-        margin-bottom: 25px; /* Increased margin */
-    }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 40px; /* Adjusted sticky top to bring content more towards center */
+        margin-bottom: 30px;
     }
     .services-content-wrapper {
-        height: 120px; /* Reduced height for compactness */
-        padding-right: 40px; /* 2.5rem (40px) for 768px breakpoint */
+        height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
-        padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
+        opacity: 0; /* Initial state for mobile will be simpler fade-in */
+        transform: translateY(50px); /* Simpler translateY */
+        /* Rotation is effectively ignored due to perspective: none; */
+        padding: 10px;
+    }
+    .service-item.active-content {
+        opacity: 1;
+        transform: translateY(0);
     }
     .service-bg-number {
-        font-size: 6.9em; /* Reduced size */
-        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -40px; /* Adjusted based on new padding-right to be fully visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
+        font-size: 8em; /* Smaller background number on mobile */
+        right: -10px; /* Adjust position */
     }
     .service-title {
         font-size: 1.6em;
-        padding-right: 32px; /* 2rem (32px) for 768px breakpoint */
+        margin-bottom: 10px;
     }
     .service-description {
         font-size: 0.9em;
         max-width: 100%;
     }
-    /* spacer height calculation is in JS */
 
-
+    /* Adjustments for tools section */
     .tools-section {
-        padding-top: 0px; /* Reduced */
+        padding-top: 40px;
         padding-bottom: 60px;
     }
     .tools-heading {
@@ -1062,9 +1076,9 @@ footer h2 {
         margin-bottom: 30px;
     }
     .tools-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
-        max-width: 100%;
+        max-width: 100%; /* Allow to take full width */
     }
     .tool-card {
         padding: 15px;
@@ -1084,9 +1098,6 @@ footer h2 {
 }
 
 @media (max-width: 480px) {
-    .main-layout-container {
-        padding: 0 5px; /* Even tighter padding */
-    }
     .section h2 {
         font-size: 2.8em;
         letter-spacing: 0.5px;
@@ -1097,13 +1108,14 @@ footer h2 {
         margin-bottom: 25px;
     }
     .contact-buttons {
-        width: 95%;
-        max-width: 300px;
+        width: 95%; /* Adjust width for very small screens */
+        max-width: 300px; /* Tighter max-width */
     }
     .contact-button {
-        width: 100%;
+        width: 100%; /* Ensure button takes full width of its container */
         height: 85px;
     }
+    /* Specific adjustments for profile card */
     .about-left-content {
         max-width: 260px;
         padding: 15px 10px;
@@ -1113,6 +1125,7 @@ footer h2 {
         max-width: 290px;
         height: 130px;
         margin-bottom: 15px;
+        border-radius: 10px;
     }
     .about-left-content h3 {
         font-size: 2em;
@@ -1148,52 +1161,43 @@ footer h2 {
         right: -25px;
     }
 
+    /* Adjustments for hero content */
     .hero-heading {
-        font-size: 3.3em; /* Reduced font size */
+        font-size: 3.5em; /* Further scale down for small phones */
         margin-bottom: 15px;
     }
     .hero-description {
         font-size: 0.9em;
         line-height: 1.5;
-        margin-bottom: 20px; /* Reduced */
+        margin-bottom: 30px; /* Further reduced space */
     }
 
+    /* Services Section - mobile specific overrides */
     .services-section {
-        padding-top: 15px; /* Reduced */
-        padding-bottom: 0px; /* Reduced */
+        padding-top: 30px;
+        padding-bottom: 50px;
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 2.8em;
-        margin-bottom: 15px; /* Reduced */
-    }
-    /* Sticky container for heading + content wrapper */
-    #services-sticky-container {
-        top: 20px; /* Adjusted sticky top for mobile */
+        margin-bottom: 25px;
     }
     .services-content-wrapper {
-        height: 100px; /* Reduced height for compactness */
-        padding-right: 24px; /* 1.5rem (24px) for 480px breakpoint */
-    }
-    .service-item {
-        padding: 8px 7px; /* Reduced vertical and horizontal padding for compactness and increased width */
+        height: 200px; /* Further adjusted fixed height for very small mobile */
     }
     .service-bg-number {
-        font-size: 5.2em; /* Reduced size */
-        color: rgba(51, 51, 51, 0.5); /* Grey color with 50% opacity */
-        right: -15px; /* Adjusted based on new padding-right to be fully visible */
-        transform: translateY(-50%); /* Simplified, only vertical translation */
+        font-size: 6em; /* Even smaller background number */
     }
     .service-title {
         font-size: 1.4em;
-        padding-right: 20px; /* 1.25rem (20px) for 480px breakpoint */
     }
     .service-description {
         font-size: 0.8em;
     }
-    /* spacer height calculation is in JS */
 
+    /* Adjustments for tools section */
     .tools-section {
-        padding-top: 0px; /* Reduced */
+        padding-top: 30px;
         padding-bottom: 50px;
     }
     .tools-heading {
