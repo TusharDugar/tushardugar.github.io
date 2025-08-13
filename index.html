@@ -3,142 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tushar Dugar - Digital Portfolio</title>
-    <!-- Google Fonts Import (Poppins for all text) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Main Stylesheet -->
+    <title>Tushar Dugar - Creative Developer</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="background-video-container">
         <video autoplay muted loop playsinline class="background-video">
-            <!-- Placeholder video: Replace with a high-quality, relevant video URL -->
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-flow-of-lines-moving-over-a-surface-4467-large.mp4" type="video/mp4">
+            <source src="background-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <div class="video-overlay"></div>
     </div>
-
-    <!-- Subtle Background Glows -->
     <div class="background-glows"></div>
 
-    <!-- The entire header/navbar section is now completely removed as per request -->
-    
-    <div class="main-layout-container"> <!-- Main container for the two columns -->
+    <div class="main-layout-container">
         <div class="left-column-sticky">
-            <section id="about" class="section about-left-content reveal-item">
-                <div class="profile-card-wrapper"> <!-- This will be the white card -->
-                    <!-- Decorative background dashed lines (from Aabid Ahmed card) -->
-                    <div class="dashed-decoration top-left-curve"></div>
-                    <div class="dashed-decoration bottom-right-curve"></div>
-
-                    <div class="profile-image-container">
-                        <!-- Placeholder image: A black silhouette on orange background to match Aabid Ahmed style -->
-                        <img src="https://via.placeholder.com/250x180/FF6B00/000000?text=" alt="Tushar Dugar Profile" class="profile-photo">
-                    </div>
-
-                    <!-- Name - changed to single line as per Aabid Ahmed -->
-                    <h3>Tushar Dugar</h3>
-                    <!-- The p.about-tagline element was removed from here. -->
-
-                    <div class="fire-icon-with-line"> <!-- Container for fire icon and its connecting lines -->
-                        <span class="fire-icon"><i class="fas fa-fire"></i></span>
-                    </div>
-                    
-                    <p class="about-short-desc">A Digital Marketing professional who transforms data into dynamic strategies and creates engaging visual content.</p>
-                    
-                    <div class="about-social-icons">
-                        <!-- Social icons for Aabid Ahmed's style -->
-                        <a href="https://dribbble.com/" target="_blank" title="Dribbble"><i class="fab fa-dribbble"></i></a>
-                        <a href="https://twitter.com/" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="mailto:imtushar4621@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-                    </div>
+            <div class="about-left-content reveal-item">
+                <div class="profile-image-container">
+                    <img src="profile-photo.jpg" alt="Tushar Dugar" class="profile-photo">
                 </div>
-            </section>
+                <h3>Tushar Dugar</h3>
+                <div class="fire-icon-with-line">
+                    <span class="fire-icon"><i class="fas fa-fire-alt"></i></span>
+                </div>
+                <p class="about-short-desc">A passionate creative developer dedicated to building impactful and engaging digital experiences.</p>
+                <div class="about-social-icons">
+                    <a href="https://github.com/tushardugar" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/tushardugar" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://twitter.com/tushardugar" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="dashed-decoration top-left-curve"></div>
+                <div class="dashed-decoration bottom-right-curve"></div>
+            </div>
         </div>
 
         <div class="right-column-scroll">
-            <!-- Hero/Introduction Section -->
-            <section id="hero-right" class="section hero-right-content reveal-item">
+            <section id="hero-right" class="section reveal-item">
                 <h1 class="hero-heading">
-                    <span class="text-white">DIGITAL</span>
-                    <span class="text-gray">MARKETER</span>
+                    <span class="text-white">Crafting</span>
+                    <span class="text-gray">Digital Experiences</span>
                 </h1>
-                <p class="hero-description">
-                    Passionate about creating intuitive and engaging user experiences. Specialize in transforming ideas into beautifully crafted products.
-                </p>
-                <!-- Statistics section will be added here in a future step -->
+                <p class="hero-description">I'm a creative developer who builds dynamic and user-centric web solutions. From intricate front-end designs to robust back-end systems, I transform ideas into powerful digital realities. My passion lies in blending design aesthetics with seamless functionality.</p>
+                <!-- Existing stats if you decide to add them back later -->
+                <!-- <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">5+</span>
+                        <span class="stat-label">Years of Experience</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Projects Completed</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Client Satisfaction</span>
+                    </div>
+                </div> -->
             </section>
 
-            <!-- New: Services Section - Now with background numbers and animation setup -->
-            <section id="services" class="section services-section">
-                <h2 class="services-heading">
-                    <span class="text-white">MY</span>
-                    <span class="text-gray">SERVICES</span>
-                </h2>
-
-                <div class="services-content-wrapper"> <!-- Added a wrapper for perspective and overflow -->
-                    <div class="service-item" id="service-0" data-service-index="0">
-                        <span class="service-bg-number">01</span>
-                        <h3 class="service-title">Web Design</h3>
-                        <p class="service-description">Crafting visually stunning and user-friendly websites tailored to your brand’s identity and goals.</p>
-                    </div>
-                    <div class="service-item" id="service-1" data-service-index="1">
-                        <span class="service-bg-number">02</span>
-                        <h3 class="service-title">SEO Optimization</h3>
-                        <p class="service-description">Enhancing your website’s visibility and ranking on search engines through strategic keyword integration and technical optimization.</p>
-                    </div>
-                    <div class="service-item" id="service-2" data-service-index="2">
-                        <span class="service-bg-number">03</span>
-                        <h3 class="service-title">UX/UI Design</h3>
-                        <p class="service-description">Creating intuitive and engaging user experiences and interfaces that prioritize user satisfaction and ease of use.</p>
-                    </div>
-                    <div class="service-item" id="service-3" data-service-index="3">
-                        <span class="service-bg-number">04</span>
-                        <h3 class="service-title">Graphic Design</h3>
-                        <p class="service-description">Designing compelling and creative visuals for print and digital media to communicate your message effectively.</p>
-                    </div>
-                    <div class="service-item" id="service-4" data-service-index="4">
-                        <span class="service-bg-number">05</span>
-                        <h3 class="service-title">E-commerce Solutions</h3>
-                        <p class="service-description">Developing robust and scalable online stores that drive sales and provide seamless shopping experiences for your customers.</p>
-                    </div>
-                    <div class="service-item" id="service-5" data-service-index="5">
-                        <span class="service-bg-number">06</span>
-                        <h3 class="service-title">Digital Marketing</h3>
-                        <p class="service-description">Strategizing and executing comprehensive digital marketing campaigns to boost your online presence and engagement.</p>
-                    </div>
-                    <div class="service-item" id="service-6" data-service-index="6">
-                        <span class="service-bg-number">07</span>
-                        <h3 class="service-title">Content Creation</h3>
-                        <p class="service-description">Crafting engaging and relevant content, including blogs, videos, and graphics, to connect with your audience and enhance your brand story.</p>
-                    </div>
-                    <div class="service-item" id="service-7" data-service-index="7">
-                        <span class="service-bg-number">08</span>
-                        <h3 class="service-title">Social Media Management</h3>
-                        <p class="service-description">Managing and growing your social media presence effectively to engage with your audience and build your brand.</p>
+            <section id="services" class="services-section reveal-item">
+                <div id="services-sticky-container">
+                    <h2 class="services-heading">
+                        <span class="text-white">Our</span><br>
+                        <span class="text-gray">Services</span>
+                    </h2>
+                    <div class="services-content-wrapper">
+                        <div class="service-bg-number" id="service-bg-number"></div> <!-- Dynamic background number -->
+                        <div class="service-item" data-service-index="0">
+                            <h3 class="service-title">Web Design</h3>
+                            <p class="service-description">Crafting visually stunning and user-friendly websites tailored to your brand’s identity and goals.</p>
+                        </div>
+                        <div class="service-item" data-service-index="1">
+                            <h3 class="service-title">SEO Optimization</h3>
+                            <p class="service-description">Enhancing your website’s visibility and ranking on search engines through strategic keyword integration and technical optimization.</p>
+                        </div>
+                        <div class="service-item" data-service-index="2">
+                            <h3 class="service-title">UX/UI Design</h3>
+                            <p class="service-description">Creating intuitive and engaging user experiences and interfaces that prioritize user satisfaction and ease of use.</p>
+                        </div>
+                        <div class="service-item" data-service-index="3">
+                            <h3 class="service-title">Graphic Design</h3>
+                            <p class="service-description">Designing compelling and creative visuals for print and digital media to communicate your message effectively.</p>
+                        </div>
+                        <div class="service-item" data-service-index="4">
+                            <h3 class="service-title">E-commerce Solutions</h3>
+                            <p class="service-description">Developing robust and scalable online stores that drive sales and provide seamless shopping experiences for your customers.</p>
+                        </div>
+                        <div class="service-item" data-service-index="5">
+                            <h3 class="service-title">Digital Marketing</h3>
+                            <p class="service-description">Strategizing and executing comprehensive digital marketing campaigns to boost your online presence and engagement.</p>
+                        </div>
+                        <div class="service-item" data-service-index="6">
+                            <h3 class="service-title">Content Creation</h3>
+                            <p class="service-description">Crafting engaging and relevant content, including blogs, videos, and graphics, to connect with your audience and enhance your brand story.</p>
+                        </div>
+                        <div class="service-item" data-service-index="7">
+                            <h3 class="service-title">Social Media Management</h3>
+                            <p class="service-description">Managing and growing your social media presence effectively to engage with your audience and build your brand.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="services-section-scroll-spacer"></div> <!-- Spacer must be outside content-wrapper for vertical scroll -->
+                <div class="services-section-scroll-spacer"></div>
             </section>
-
-            <!-- Premium Tools Section -->
-            <section id="tools" class="section tools-section reveal-item">
+            
+            <section id="tools" class="tools-section reveal-item">
                 <h2 class="tools-heading">
-                    <span class="text-white">PREMIUM</span>
-                    <span class="text-gray">TOOLS</span>
+                    <span class="text-white">Premium</span>
+                    <span class="text-gray">Tools</span>
                 </h2>
-
                 <div class="tools-grid">
                     <div class="tool-card">
                         <div class="tool-icon-wrapper">
-                            <!-- Using Simple Icons CDN for common brand logos -->
-                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/google.svg" alt="Google Gemini Logo" class="tool-logo">
+                            <img src="https://simpleicons.org/icons/photoshop.svg" alt="Photoshop Logo" class="tool-logo">
+                        </div>
+                        <div class="tool-info">
+                            <h4 class="tool-name">Photoshop</h4>
+                            <p class="tool-category">Image Editor</p>
+                        </div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon-wrapper">
+                            <img src="https://simpleicons.org/icons/canva.svg" alt="Canva Logo" class="tool-logo">
+                        </div>
+                        <div class="tool-info">
+                            <h4 class="tool-name">Canva</h4>
+                            <p class="tool-category">Design Tool</p>
+                        </div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon-wrapper">
+                            <img src="https://simpleicons.org/icons/googlegemini.svg" alt="Google Gemini Logo" class="tool-logo">
                         </div>
                         <div class="tool-info">
                             <h4 class="tool-name">Google Gemini</h4>
@@ -147,82 +144,53 @@
                     </div>
                     <div class="tool-card">
                         <div class="tool-icon-wrapper">
-                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg" alt="ChatGPT Logo" class="tool-logo">
+                            <img src="https://simpleicons.org/icons/chatgpt.svg" alt="ChatGPT Logo" class="tool-logo">
                         </div>
                         <div class="tool-info">
                             <h4 class="tool-name">ChatGPT</h4>
-                            <p class="tool-category">AI Assistant</p>
+                            <p class="tool-category">AI Chatbot</p>
                         </div>
                     </div>
                     <div class="tool-card">
                         <div class="tool-icon-wrapper">
-                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/figma.svg" alt="Figma Logo" class="tool-logo">
+                            <img src="https://simpleicons.org/icons/figma.svg" alt="Figma Logo" class="tool-logo">
                         </div>
                         <div class="tool-info">
                             <h4 class="tool-name">Figma</h4>
                             <p class="tool-category">Design Tool</p>
                         </div>
                     </div>
-                    <div class="tool-card">
-                        <div class="tool-icon-wrapper">
-                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/adobephotoshop.svg" alt="Photoshop Logo" class="tool-logo">
-                        </div>
-                        <div class="tool-info">
-                            <h4 class="tool-name">Adobe Photoshop</h4>
-                            <p class="tool-category">Image Editing</p>
-                        </div>
-                    </div>
-                    <div class="tool-card">
-                        <div class="tool-icon-wrapper">
-                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/googleanalytics.svg" alt="Google Analytics Logo" class="tool-logo">
-                        </div>
-                        <div class="tool-info">
-                            <h4 class="tool-name">Google Analytics</h4>
-                            <p class="tool-category">Web Analytics</p>
-                        </div>
-                    </div>
-                    <div class="tool-card">
-                        <div class="tool-icon-wrapper">
-                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/semrush.svg" alt="SEMrush Logo" class="tool-logo">
-                        </div>
-                        <div class="tool-info">
-                            <h4 class="tool-name">SEMrush</h4>
-                            <p class="tool-category">SEO & Content Marketing</p>
-                        </div>
-                    </div>
                 </div>
             </section>
-
         </div>
-    </div> <!-- End main-layout-container -->
+    </div>
 
-    <footer id="contact" class="section reveal-item">
-        <h2>Let’s Connect!</h2> <!-- Changed heading text -->
-        <p class="contact-tagline">
-            I am always open to discuss your project,<br>improve your online presence or help with your website.
-        </p>
+    <footer id="contact" class="reveal-item">
+        <h2>Let's connect!</h2>
+        <p class="contact-tagline">I'm always open to new opportunities and collaborations. Feel free to reach out, and let's create something amazing together.</p>
         <div class="contact-buttons">
-            <button class="contact-button" id="phone-button" data-contact="+919330077650">
+            <button class="contact-button" data-contact="tushardugar@example.com">
                 <div class="button-content-main">
-                    <i class="fas fa-phone-alt"></i> 
-                    <span class="button-value">+91 9330077650</span>
+                    <i class="fas fa-envelope"></i>
+                    <span class="button-value">tushardugar@example.com</span>
                 </div>
                 <span class="copied-text">Copied!</span>
             </button>
-            <button class="contact-button" id="email-button" data-contact="imtushar4621@gmail.com">
+            <button class="contact-button" data-contact="+1234567890">
                 <div class="button-content-main">
-                    <i class="fas fa-envelope"></i> 
-                    <span class="button-value">imtushar4621@gmail.com</span>
+                    <i class="fas fa-phone-alt"></i>
+                    <span class="button-value">+1234567890</span>
                 </div>
                 <span class="copied-text">Copied!</span>
             </button>
         </div>
         <div class="social-links">
-            <!-- No social links other than contact buttons as per request -->
+            <a href="https://github.com/tushardugar" target="_blank" aria-label="GitHub"><i class="fab fa-github fa-2x"></i></a>
+            <a href="https://linkedin.com/in/tushardugar" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin fa-2x"></i></a>
+            <a href="https://twitter.com/tushardugar" target="_blank" aria-label="Twitter"><i class="fab fa-twitter fa-2x"></i></a>
         </div>
     </footer>
 
-    <!-- Main JavaScript File -->
     <script src="script.js"></script>
 </body>
 </html>
