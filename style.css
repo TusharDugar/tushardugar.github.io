@@ -374,7 +374,8 @@ body {
     
     padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
     text-align: left; /* Always left-align content within this column */
-    /* REMOVED: overflow-y: scroll; and overflow-x: hidden; */
+    /* Crucial: Ensure NO overflow-x or overflow-y is set here! */
+    /* This section was the source of the previous issue and should be clear. */
 }
 
 /* Hero Right Content */
@@ -1219,6 +1220,6 @@ footer h2 {
         font-size: 0.9em;
     }
     .tool-category {
-        font-size: 0.7em;
+        font-size: 0.75em;
     }
 }
