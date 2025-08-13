@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await navigator.clipboard.writeText(contactValue);
                 console.log('Text copied to clipboard:', contactValue);
-
+                
                 button.classList.add('copied');
                 console.log('Class "copied" added to button.');
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Don't unobserve #services immediately, as its internal animation relies on visibility
                 // and we want its parent section to remain "revealed".
                 if (entry.target.id !== 'services') {
-                    observer.unobserve(entry.target);
+                    observer.unobserve(entry.target); 
                 }
             }
         });
@@ -62,12 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesContentWrapper = servicesSection ? servicesSection.querySelector('.services-content-wrapper') : null;
     const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
     const serviceBgNumber = servicesContentWrapper ? servicesContentWrapper.querySelector('.service-bg-number') : null;
-
+    
     // Critical check for existence
     if (!servicesSection || serviceItems.length === 0 || !servicesHeading || !servicesContentWrapper || !serviceBgNumber) {
         console.warn('Services section or required elements not found. Skipping services animation setup.');
         if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
-        return;
+        return; 
     }
 
     // Create the scroll spacer if it's not already there
@@ -95,47 +95,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const servicesHeadingHeight = servicesHeading.offsetHeight;
         const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
 
+        // Total visual height of the sticky block when it is stuck
+        const totalVisualStickyBlockHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
+
         // Calculate the ideal top offset for the heading to be visually centered
-        // It's (viewport height - total visible sticky content height) / 2
-        // Total visible sticky content is heading + gap + contentWrapper
-        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
-        let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
+        // It's (viewport height - total visual sticky block height) / 2
+        let stickyTopH2 = (window.innerHeight - totalVisualStickyBlockHeight) / 2;
         stickyTopH2 = Math.max(0, stickyTopH2); // Ensure it's not negative
 
-        // The wrapper's sticky top should be right below the heading + gap
+        // The wrapper's sticky top should be right below the heading + gap when both are sticky
         let stickyTopWrapper = stickyTopH2 + servicesHeadingHeight + gapBetweenHeadingAndWrapper;
 
         // Set CSS variables for sticky top offsets
         servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
-        // The actual scroll distance for one item's animation
-        // Using `contentWrapperHeight` directly for the scroll distance per item makes sense,
-        // as each item replaces the one before it in this same visual space.
+        // The actual scroll distance for one item's animation (1:1 scroll with wrapper height)
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
-
 
         // The total animation scroll range for all items:
         // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
         const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
-        // The spacer needs to provide enough height for:
-        // 1. Scrolling through the entire animation range (totalAnimationScrollRange) while elements are sticky.
-        // 2. A buffer at the end so the last animation can complete AND the sticky section can scroll out of view
-        //    before the next section takes its full place. `contentWrapperHeight` provides enough space
-        //    for the last item to fully transition out and ensure the sticky block un-sticks gracefully.
-        scrollSpacer.style.height = `${totalAnimationScrollRange + contentWrapperHeight}px`;
+        // CRUCIAL PART: The spacer needs to provide enough height for:
+        // 1. The full animation to play out (totalAnimationScrollRange).
+        // 2. An additional buffer equal to the sticky block's height (`totalVisualStickyBlockHeight`),
+        //    allowing the entire sticky block to scroll fully out of the viewport
+        //    after the animation completes, revealing the next section smoothly.
+        scrollSpacer.style.height = `${totalAnimationScrollRange + totalVisualStickyBlockHeight}px`;
 
-        console.log('--- Services Layout Adjusted ---');
+        console.log('--- Services Layout Adjusted (Revised) ---');
         console.log(`Viewport Height: ${window.innerHeight}px`);
         console.log(`Heading Height: ${servicesHeadingHeight}px, Wrapper Height: ${contentWrapperHeight}px`);
-        console.log(`Total Visible Sticky Height: ${totalVisibleStickyHeight}px`);
-        console.log(`Sticky Top H2: ${stickyTopH2}px, Sticky Top Wrapper: ${stickyTopWrapper}px`);
+        console.log(`Total Visual Sticky Block Height: ${totalVisualStickyBlockHeight}px`);
+        console.log(`Sticky Top H2 (CSS variable): ${stickyTopH2}px`);
+        console.log(`Sticky Top Wrapper (CSS variable): ${stickyTopWrapper}px`);
         console.log(`SCROLL_DISTANCE_PER_ITEM: ${SCROLL_DISTANCE_PER_ITEM}px`);
         console.log(`Total Animation Scroll Range: ${totalAnimationScrollRange}px`);
-        console.log(`Scroll Spacer Height: ${scrollSpacer.offsetHeight}px`);
+        console.log(`Calculated Scroll Spacer Height: ${scrollSpacer.offsetHeight}px`);
+        // For debugging overall section position:
         console.log(`servicesSection.offsetTop: ${servicesSection.offsetTop}px`);
-        console.log(`servicesSection.offsetHeight (total): ${servicesSection.offsetHeight}px`);
     };
 
     // This is the core animation logic, triggered by scroll
@@ -198,8 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.zIndex = zIndex;
         });
 
-        // Debugging logs for scroll progress
-        // console.log(`ScrollY: ${window.scrollY}, StartScroll: ${animationStartScroll}, Progress: ${scrollProgress.toFixed(2)}, CurrentIndex: ${currentIndex}, Fractional: ${fractionalProgress.toFixed(2)}`);
+        // Debugging logs for scroll progress (uncomment for verbose logging)
+        // console.log(`ScrollY: ${window.scrollY}, StartScroll: ${animationStartScroll.toFixed(2)}, Progress: ${scrollProgress.toFixed(2)}, CurrentIndex: ${currentIndex}, Fractional: ${fractionalProgress.toFixed(2)}`);
 
         rafId = null; // Reset requestAnimationFrame ID
     };
