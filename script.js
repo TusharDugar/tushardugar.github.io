@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (button.classList.contains('copied')) {
                 console.log('Button already showing "Copied!". Returning.');
-                return; 
+                return;
             }
 
             try {
                 await navigator.clipboard.writeText(contactValue);
                 console.log('Text copied to clipboard:', contactValue);
-                
+
                 button.classList.add('copied');
                 console.log('Class "copied" added to button.');
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Don't unobserve #services immediately, as its internal animation relies on visibility
                 // and we want its parent section to remain "revealed".
                 if (entry.target.id !== 'services') {
-                    observer.unobserve(entry.target); 
+                    observer.unobserve(entry.target);
                 }
             }
         });
@@ -62,12 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesContentWrapper = servicesSection ? servicesSection.querySelector('.services-content-wrapper') : null;
     const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
     const serviceBgNumber = servicesContentWrapper ? servicesContentWrapper.querySelector('.service-bg-number') : null;
-    
+
     // Critical check for existence
     if (!servicesSection || serviceItems.length === 0 || !servicesHeading || !servicesContentWrapper || !serviceBgNumber) {
         console.warn('Services section or required elements not found. Skipping services animation setup.');
         if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
-        return; 
+        return;
     }
 
     // Create the scroll spacer if it's not already there
@@ -79,7 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
-    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 0.9; 
+    // Changed to 1.0 for a cleaner 1:1 scroll-to-animation ratio.
+    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1.0; 
     let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
 
     let currentActiveIndex = 0; // Tracks the currently active slide index, initialized to 0
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // and the sticky container's top offset for centering
     const adjustServicesLayout = () => {
         // Recalculate dynamic values on resize or initial load
-        const contentWrapperHeight = servicesContentWrapper.offsetHeight; 
+        const contentWrapperHeight = servicesContentWrapper.offsetHeight;
         const servicesHeadingHeight = servicesHeading.offsetHeight;
         const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
 
@@ -109,22 +110,32 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
         // The actual scroll distance for one item's animation
+        // Using `contentWrapperHeight` directly for the scroll distance per item makes sense,
+        // as each item replaces the one before it in this same visual space.
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
+
 
         // The total animation scroll range for all items:
         // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
         const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
         // The spacer needs to provide enough height for:
-        // 1. Scrolling until the sticky elements hit their top position (stickyTopH2)
-        // 2. Scrolling through the entire animation range (totalAnimationScrollRange)
-        // 3. A buffer at the end so the last animation can complete before the section ends.
-        scrollSpacer.style.height = `${stickyTopH2 + totalAnimationScrollRange + (window.innerHeight * 0.5)}px`; // Add half viewport height as end buffer
+        // 1. Scrolling through the entire animation range (totalAnimationScrollRange) while elements are sticky.
+        // 2. A buffer at the end so the last animation can complete AND the sticky section can scroll out of view
+        //    before the next section takes its full place. `contentWrapperHeight` provides enough space
+        //    for the last item to fully transition out and ensure the sticky block un-sticks gracefully.
+        scrollSpacer.style.height = `${totalAnimationScrollRange + contentWrapperHeight}px`;
 
-        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items.`);
-        // console.log(`Heading Height: ${servicesHeadingHeight}, Wrapper Height: ${contentWrapperHeight}`);
-        // console.log(`Sticky Top H2: ${stickyTopH2}, Sticky Top Wrapper: ${stickyTopWrapper}`);
-        // console.log(`Scroll Distance Per Item: ${SCROLL_DISTANCE_PER_ITEM}`);
+        console.log('--- Services Layout Adjusted ---');
+        console.log(`Viewport Height: ${window.innerHeight}px`);
+        console.log(`Heading Height: ${servicesHeadingHeight}px, Wrapper Height: ${contentWrapperHeight}px`);
+        console.log(`Total Visible Sticky Height: ${totalVisibleStickyHeight}px`);
+        console.log(`Sticky Top H2: ${stickyTopH2}px, Sticky Top Wrapper: ${stickyTopWrapper}px`);
+        console.log(`SCROLL_DISTANCE_PER_ITEM: ${SCROLL_DISTANCE_PER_ITEM}px`);
+        console.log(`Total Animation Scroll Range: ${totalAnimationScrollRange}px`);
+        console.log(`Scroll Spacer Height: ${scrollSpacer.offsetHeight}px`);
+        console.log(`servicesSection.offsetTop: ${servicesSection.offsetTop}px`);
+        console.log(`servicesSection.offsetHeight (total): ${servicesSection.offsetHeight}px`);
     };
 
     // This is the core animation logic, triggered by scroll
@@ -187,6 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
             item.style.zIndex = zIndex;
         });
 
+        // Debugging logs for scroll progress
+        // console.log(`ScrollY: ${window.scrollY}, StartScroll: ${animationStartScroll}, Progress: ${scrollProgress.toFixed(2)}, CurrentIndex: ${currentIndex}, Fractional: ${fractionalProgress.toFixed(2)}`);
+
         rafId = null; // Reset requestAnimationFrame ID
     };
 
@@ -205,26 +219,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Set the initial height for the services section and the spacer
     // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
-    setTimeout(() => {
+    // Use requestAnimationFrame for the initial update of the animation after layout adjustment
+    const initializeServices = () => {
         adjustServicesLayout();
-        // 2. Trigger initial animation state on page load
-        requestAnimationFrame(updateServiceAnimation);
+        requestAnimationFrame(updateServiceAnimation); // Trigger initial animation state
         // Ensure first item is active on load
         if (serviceItems.length > 0) {
-            serviceItems[0].classList.add('active-content');
-            serviceBgNumber.textContent = '01';
+            serviceItems[0].classList.add('active-content'); // Ensure first item is visible initially
+            serviceBgNumber.textContent = '01'; // Set initial background number
         }
-    }, 200); // Increased delay for robust calculation
+    };
+
+    // Use a small delay with setTimeout, especially important for ensuring offsetTop is correct
+    // after browser layout rendering is complete.
+    setTimeout(initializeServices, 500); // Increased delay for more robust calculation after page render
 
     // 3. Recalculate height and re-render on window resize
     window.addEventListener('resize', () => {
-        adjustServicesLayout();
-        requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
+        // Debounce resize to prevent excessive calls
+        clearTimeout(window.resizeServicesTimeout);
+        window.resizeServicesTimeout = setTimeout(() => {
+            adjustServicesLayout();
+            requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
+        }, 100);
     });
 
     // 4. Attach the optimized scroll handler
     window.addEventListener('scroll', handleScrollEvent);
 
     // Ensure the services section itself gets the 'revealed' class
-    sectionObserver.observe(servicesSection); 
+    // This is for the overall section reveal, not the internal animation.
+    sectionObserver.observe(servicesSection);
 });
