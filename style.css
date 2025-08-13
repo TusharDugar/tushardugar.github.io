@@ -2,8 +2,7 @@
 :root {
     /* Sawad-inspired Color Palette */
     --bg-main: #000000; /* Solid black background from Sawad */
-    --bg-section-card: #141414; /* Background for cards/sections (if added back) */
-    --bg-profile-card: #FFFFFF; /* White background for the About Me card */
+    --bg-section-card: #FFFFFF; /* White background for the About Me card */
     --text-light: #F0F0F0; /* Light text for readability */
     --text-medium: #A0A0A0; /* Slightly darker light for secondary text */
     --text-dark-card: #000000; /* Black text for white card background */
@@ -196,7 +195,7 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Left Column (Sticky) - NO CHANGES TO THIS SECTION */
 .left-column-sticky {
     flex-shrink: 0; /* Prevent from shrinking */
-    width: 30%; /* Slightly narrower left column */
+    width: 30%; /* Original desktop width */
     padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
@@ -215,10 +214,10 @@ html::before { /* Re-using html::before to cover the whole page */
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 20px; /* More rectangular corners as in Aabid Ahmed */
-    padding: 35px 30px; /* ADJUSTED PADDING */
+    padding: 35px 30px; /* ADJUSTED PADDING for a larger card */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
-    max-width: 450px; /* INCREASED MAX WIDTH */
+    max-width: 450px; /* INCREASED MAX WIDTH on desktop */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
@@ -356,41 +355,7 @@ html::before { /* Re-using html::before to cover the whole page */
     max-width: 100%; /* Allow to take full width within card */
 }
 
-/* NEW: Contact Info List */
-.contact-info-list {
-    list-style: none; /* Remove default list bullets */
-    padding: 0;
-    margin: 25px 0 35px; /* Adjusted space above and below list */
-    width: 100%; /* Take full width of the card */
-    text-align: left; /* Align list items left */
-}
-
-.contact-info-list li {
-    display: flex; /* Use flexbox for icon and text alignment */
-    align-items: center;
-    margin-bottom: 18px; /* Adjusted space between list items */
-    font-size: 1em; /* Adjusted font size */
-    color: var(--text-medium-card);
-}
-
-.contact-info-list li:last-child {
-    margin-bottom: 0; /* No margin after the last item */
-}
-
-.contact-info-list li i {
-    color: var(--accent-primary-sawad); /* Icon color */
-    margin-right: 18px; /* Adjusted space between icon and text */
-    font-size: 1.3em; /* Adjusted icon size */
-    width: 25px; /* Fixed width for icons to align text */
-    text-align: center;
-}
-
-.contact-info-list li span {
-    font-weight: 600; /* Bold the category text */
-    color: var(--text-dark-card); /* Darker color for category */
-    margin-right: 10px; /* Adjusted space between category and value */
-    flex-shrink: 0; /* Prevent category from shrinking */
-}
+/* contact-info-list styles removed as element is removed from HTML */
 
 
 /* Updated: Social Icons */
@@ -463,11 +428,12 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for sticky child */
+    position: relative; /* Needed for sticky child to properly detach */
     z-index: 1;
 }
 
-/* These elements are now directly sticky and their 'top' property is controlled by JS for centering */
+/* Services Heading (now inside .services-content-wrapper for unified scrolling) */
+/* It will no longer be sticky independently, but scroll with its parent */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em; /* Match tools heading size */
@@ -476,28 +442,26 @@ html::before { /* Re-using html::before to cover the whole page */
     margin-bottom: 50px;
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    position: sticky; /* Make it sticky */
-    top: var(--services-sticky-top-h2); /* JS will set this variable */
-    will-change: top;
-    z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
+    /* Removed position: sticky, top, z-index from here */
 }
 
-/* Reusing text-white and text-gray for services-heading */
-
+/* Main sticky wrapper for services section content */
 .services-content-wrapper {
-    position: relative;
-    height: 450px; /* Fixed height to control content display window */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center content vertically within the window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
-    position: sticky; /* Made sticky */
+    position: sticky; /* Makes this entire container sticky */
     top: var(--services-sticky-top-wrapper); /* JS will set this variable */
     will-change: top;
-    z-index: 1; /* Ensure wrapper stays below heading when sticky */
+    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
+
+    height: 450px; /* Fixed height to control content display window for sticky effect */
+    display: flex; /* Use flexbox to align children */
+    flex-direction: column; /* Stack heading and service items vertically */
+    justify-content: center; /* Center content vertically within the sticky window */
+    align-items: flex-start; /* Align content to the left of the sticky window */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
 }
 
+/* Service Items */
 .service-item {
     position: absolute; /* Position items absolutely within the wrapper */
     top: 0;
@@ -513,9 +477,10 @@ html::before { /* Re-using html::before to cover the whole page */
 
     /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
+    transform: translateY(150px) rotateX(90deg); /* Adjusted translateY for better invisibility when off-screen */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
+    /* Refined transition for a cleaner fade-out and smoother movement */
+    transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Increased transition duration for slower speed */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
@@ -551,7 +516,7 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 2em; /* Title for the service */
     font-weight: 700;
     color: var(--accent-primary-sawad); /* Reverted to orange */
-    margin-bottom: 10px; /* Reduced margin */
+    margin-bottom: 5px; /* REDUCED GAP BETWEEN TEXTS */
     font-style: normal; /* Ensured no italics */
 }
 
@@ -560,7 +525,7 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 1.2em; /* Description text size, slightly larger */
     color: var(--services-description-color); /* White color */
     max-width: 650px; /* Limit width for readability */
-    line-height: 1.6; /* Tighter line height */
+    line-height: 1.4; /* REDUCED LINE HEIGHT FOR TIGHTER TEXT */
     font-style: normal; /* Ensured no italics */
 }
 
@@ -857,7 +822,7 @@ footer h2 {
         width: calc(100% + 50px); /* Keep proportion relative to new card size */
         max-width: 430px; /* Adjusted max-width */
         height: 180px; /* Adjusted height */
-        margin-bottom: 25px;
+        margin-bottom: 25px; /* Adjusted space below image */
     }
     .about-left-content h3 {
         font-size: 2.8em; /* Adjusted for larger card */
@@ -869,25 +834,19 @@ footer h2 {
         padding: 8px;
         font-size: 1.1em;
     }
+    .fire-icon-with-line::before,
+    .fire-icon-with-line::after {
+        width: calc(50% - 25px);
+    }
     .about-short-desc {
         font-size: 0.95em; /* Adjusted text size */
         margin-bottom: 25px;
         padding: 0 5px;
     }
-    .contact-info-list {
-        margin: 20px 0 30px; /* Adjusted spacing */
-    }
-    .contact-info-list li {
-        font-size: 0.95em;
-        margin-bottom: 15px;
-    }
-    .contact-info-list li i {
-        margin-right: 15px;
-        font-size: 1.2em;
-        width: 20px;
-    }
-    .contact-info-list li span {
-        margin-right: 8px;
+    /* contact-info-list styles removed */
+    .about-social-icons {
+        gap: 15px; /* Adjusted gap between icons */
+        padding-top: 10px; /* Adjusted small padding */
     }
     .about-social-icons a {
         font-size: 1.5em;
@@ -907,7 +866,7 @@ footer h2 {
 
     /* Adjustments for hero content */
     .hero-heading {
-        font-size: 6.5em; /* Adjusted from 7em - first reduction */
+        font-size: 6.5em; /* Adjusted to scale down */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -920,7 +879,6 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
-    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 4.8em; /* Adjusted */
         margin-bottom: 40px;
@@ -937,10 +895,12 @@ footer h2 {
     }
     .service-title {
         font-size: 1.9em; /* Adjusted */
+        margin-bottom: 5px; /* REDUCED GAP */
     }
     .service-description {
         font-size: 1.05em; /* Adjusted */
         max-width: 550px; /* Adjusted */
+        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
@@ -1029,21 +989,7 @@ footer h2 {
         padding: 0 10px; /* More padding */
         max-width: 100%; /* Allow full width in card */
     }
-    .contact-info-list {
-        margin: 25px 0 35px; /* More space */
-    }
-    .contact-info-list li {
-        font-size: 1em;
-        margin-bottom: 18px;
-    }
-    .contact-info-list li i {
-        margin-right: 18px;
-        font-size: 1.3em;
-        width: 25px;
-    }
-    .contact-info-list li span {
-        margin-right: 10px;
-    }
+    /* contact-info-list styles removed */
     .about-social-icons {
         gap: 20px; /* More space between icons */
         padding-top: 15px;
@@ -1073,7 +1019,7 @@ footer h2 {
         text-align: left; /* Keep left-aligned */
     }
     .hero-heading {
-        font-size: 4em; /* REDUCED BY 5em from desktop 7em */
+        font-size: 4em; /* Adjusted to scale down */
         margin-bottom: 20px;
     }
     .hero-description {
@@ -1088,12 +1034,12 @@ footer h2 {
         padding-top: 40px;
         padding-bottom: 60px;
     }
-    .services-content-wrapper {
-        height: 250px; /* Adjusted fixed height for mobile */
-    }
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
+    }
+    .services-content-wrapper {
+        height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
         padding: 10px;
@@ -1104,11 +1050,12 @@ footer h2 {
     }
     .service-title {
         font-size: 1.6em;
-        margin-bottom: 10px;
+        margin-bottom: 5px; /* REDUCED GAP */
     }
     .service-description {
         font-size: 0.9em;
         max-width: 100%;
+        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
@@ -1219,21 +1166,7 @@ footer h2 {
         margin-bottom: 25px;
         padding: 0 5px;
     }
-    .contact-info-list {
-        margin: 20px 0 30px;
-    }
-    .contact-info-list li {
-        font-size: 0.9em;
-        margin-bottom: 15px;
-    }
-    .contact-info-list li i {
-        margin-right: 15px;
-        font-size: 1.2em;
-        width: 20px;
-    }
-    .contact-info-list li span {
-        margin-right: 8px;
-    }
+    /* contact-info-list styles removed */
     .about-social-icons {
         gap: 15px;
         padding-top: 10px;
@@ -1260,7 +1193,7 @@ footer h2 {
         padding-top: 40px; /* Reduced space from above section */
     }
     .hero-heading {
-        font-size: 3em; /* REDUCED BY 5em from desktop 7em, then another 1em from 4em */
+        font-size: 3em; /* Adjusted to scale down */
         margin-bottom: 15px;
     }
     .hero-description {
@@ -1274,12 +1207,12 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
-    .services-content-wrapper {
-        height: 200px; /* Further adjusted fixed height for very small mobile */
-    }
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
+    }
+    .services-content-wrapper {
+        height: 200px; /* Further adjusted fixed height for very small mobile */
     }
     .service-item {
         padding: 12px;
@@ -1290,9 +1223,11 @@ footer h2 {
     }
     .service-title {
         font-size: 1.4em;
+        margin-bottom: 5px; /* REDUCED GAP */
     }
     .service-description {
         font-size: 0.8em;
+        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
