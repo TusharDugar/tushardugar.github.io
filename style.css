@@ -118,7 +118,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%;
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
-    opacity: 0.45; /* Changed: Increased transparency (reduced opacity) for less visibility */
+    opacity: 0.3375; /* Changed: Further reduced opacity for less visibility (0.45 * 0.75) */
     
     /* The animated colorful gradient as the background that will be masked */
     background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -596,7 +596,7 @@ html::before { /* Re-using html::before to cover the whole page */
     object-fit: contain;
     /* Apply a filter to ensure the logo appears dark/black against white background */
     /* This works well if the original SVG is single-colored or has a dark primary color */
-    filter: brightness(0.1); 
+    filter: brightness(0.01); /* Makes colors very dark/black while preserving shape */
 }
 
 /* If a specific logo is colorful and needs to be grayscale/black on white,
@@ -985,8 +985,10 @@ footer h2 {
         margin-bottom: 30px;
     }
     .contact-buttons {
-        flex-direction: column;
-        gap: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px; /* Reduced gap */
         max-width: 350px; /* Set max-width for the flex container */
         margin: 0 auto; /* Center the flex container itself */
     }
