@@ -1,8 +1,4 @@
 /* Basic Reset & Font */
-* {
-    box-sizing: border-box; /* Apply globally to prevent layout issues from padding/borders */
-}
-
 :root {
     /* Sawad-inspired Color Palette */
     --bg-main: #000000; /* Solid black background from Sawad */
@@ -59,7 +55,6 @@ html {
     margin: 0;
     padding: 0;
     position: relative; /* Needed for fixed children positioning in some browsers */
-    overflow-x: hidden; /* FIX: Ensure HTML also hides horizontal overflow */
 }
 
 /* Keyframes for the animated colorful gradient */
@@ -74,7 +69,7 @@ body {
     line-height: 1.6;
     color: var(--text-light);
     background-color: transparent; /* Make body transparent to show html background */
-    overflow-x: hidden; /* FIX: Crucial to prevent horizontal scroll showing background on the right */
+    overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
@@ -203,6 +198,7 @@ html::before { /* Re-using html::before to cover the whole page */
     flex-shrink: 0; /* Prevent from shrinking */
     width: 30%; /* Slightly narrower left column */
     padding-right: 80px; /* Increased space between columns */
+    box-sizing: border-box;
     position: sticky; /* Make it sticky */
     top: 50px; /* Stick from the very top (matching main-layout-container padding) */
     align-self: flex-start; /* Align to the top of its flex container */
@@ -224,6 +220,7 @@ html::before { /* Re-using html::before to cover the whole page */
     width: 100%; /* Take full width of sticky column */
     max-width: 400px; /* INCREASED MAX WIDTH */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
+    box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -239,15 +236,15 @@ html::before { /* Re-using html::before to cover the whole page */
     transform: translateY(0);
 }
 
-/* FIX: Profile Image Container - Further reduced width, and ensured central alignment */
+/* New: Profile Image Container */
 .profile-image-container {
-    width: 100%; /* Take full available width within parent's padding */
-    max-width: 250px; /* NEW: Even narrower max-width for all versions */
-    height: 250px; /* Made visibly longer (taller) */
-    margin: 0 auto 25px auto; /* Centered with auto margins within its flex parent */
+    width: calc(100% + 50px); /* Slightly wider than the card to mimic the image in the Aabid Ahmed example */
+    max-width: 450px; /* Adjusted max-width relative to card */
+    height: 180px; /* Fixed height for the image area */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
     overflow: hidden; /* Ensure image doesn't overflow */
+    margin-bottom: 25px; /* Space below image */
     position: relative; /* For the silhouette filter */
     transform: translateX(0); /* Ensure it's centered initially */
 }
@@ -451,9 +448,8 @@ html::before { /* Re-using html::before to cover the whole page */
     display: block; /* Force this span onto its own line */
 }
 
-/* FIX: Crafting Digital Experiences text size - REVERTED */
 .hero-description {
-    font-size: 1.2em; /* REVERTED: Back to original 1.2em for desktop */
+    font-size: 1.2em; /* Font size for the descriptive paragraph */
     line-height: 1.8; /* Good line height for readability */
     color: var(--text-medium); /* Medium gray text color */
     max-width: 600px; /* Limit width for readability, similar to reference image */
@@ -471,14 +467,14 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1;
 }
 
-/* FIX: Main sticky wrapper for services section - Increased height to prevent scrolling */
+/* Main sticky wrapper for services section */
 .services-content-wrapper {
     position: sticky; /* Makes this entire container sticky */
-    top: var(--services-sticky-top-wrapper); /* JS will set this variable, should aim for screen center */
+    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
     will-change: top;
     z-index: 1; /* Ensure wrapper stays below content it might scroll over */
 
-    height: 700px; /* FIX: Increased substantially from 600px to ensure entire content remains visible and centered */
+    height: 450px; /* Fixed height to control content display window for sticky effect */
     display: flex; /* Use flexbox to center its inner content */
     justify-content: center; /* Center content vertically within the sticky window */
     align-items: flex-start; /* Align content to the left of the sticky window */
@@ -493,7 +489,7 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%; /* Take full height of the wrapper */
     display: flex;
     flex-direction: column; /* Stack heading and items vertically */
-    justify-content: center; /* FIX: ALIGN ENTIRE SECTION (HEADING AND TEXT) VERTICALLY CENTERED */
+    justify-content: center; /* Center content vertically within this inner container */
     align-items: flex-start; /* Align text left */
     box-sizing: border-box; /* Include padding in dimensions */
 }
@@ -860,11 +856,11 @@ footer h2 {
         max-width: 350px; /* Adjusted for slightly larger card on mid-size screens */
         padding: 25px 20px;
     }
-    /* FIX: Profile Image Container - Adjusted for 1200px */
     .profile-image-container {
-        max-width: 230px; /* NEW: Narrower max-width */
-        height: 230px; /* Slightly shorter than desktop, still taller */
-        margin: 0 auto 20px auto; /* Centered */
+        width: calc(100% + 40px);
+        max-width: 390px; /* Adjusted max-width */
+        height: 170px; /* Slightly smaller height */
+        margin-bottom: 20px;
     }
     .about-left-content h3 {
         font-size: 2.6em; /* Adjusted for larger card */
@@ -914,19 +910,18 @@ footer h2 {
         font-size: 6em; /* Scale down heading */
         margin-bottom: 25px;
     }
-    /* FIX: Crafting Digital Experiences text size - REVERTED for 1200px */
     .hero-description {
-        font-size: 1.1em; /* REVERTED: Back to original 1.1em for 1200px */
+        font-size: 1.1em;
         margin-bottom: 60px;
     }
 
-    /* FIX: Services sticky wrapper - Increased height for 1200px */
+    /* Adjustments for services section */
     .services-section {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
     .services-content-wrapper {
-        height: 600px; /* FIX: Increased from 550px */
+        height: 400px; /* Adjust height for smaller desktop */
     }
     .services-heading {
         font-size: 4.5em;
@@ -1005,11 +1000,12 @@ footer h2 {
         padding: 30px 25px; /* More generous padding */
         border-radius: 18px; /* Slightly more rounded */
     }
-    /* FIX: Profile Image Container - Adjusted for 768px */
     .profile-image-container {
-        max-width: 220px; /* NEW: Narrower max-width */
-        height: 250px; /* Still longer */
-        margin: 0 auto 30px auto; /* Centered */
+        width: calc(100% + 50px);
+        max-width: 430px; /* Adjusted max-width */
+        height: 190px; /* Slightly taller */
+        margin-bottom: 30px; /* More space */
+        border-radius: 15px;
     }
     .about-left-content h3 {
         font-size: 2.8em; /* Back to larger size for tablet */
@@ -1080,21 +1076,20 @@ footer h2 {
         font-size: 4.5em; /* Reduced by 5em from desktop 7em */
         margin-bottom: 20px;
     }
-    /* FIX: Crafting Digital Experiences text size - REVERTED for 768px */
     .hero-description {
-        font-size: 1.1em; /* REVERTED: Back to original 1.1em for 768px */
+        font-size: 1.1em; /* Adjusted slightly */
         line-height: 1.6;
         max-width: 100%; /* Allow to take full width */
         margin-bottom: 40px; /* Reduced space before next section */
     }
 
-    /* FIX: Services sticky wrapper - Increased height for 768px */
+    /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
     }
     .services-content-wrapper {
-        height: 500px; /* FIX: Increased from 450px */
+        height: 250px; /* Adjusted fixed height for mobile */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1196,11 +1191,12 @@ footer h2 {
         padding: 25px 20px;
         border-radius: 15px;
     }
-    /* FIX: Profile Image Container - Adjusted for 480px */
     .profile-image-container {
-        max-width: 200px; /* NEW: Narrower max-width */
-        height: 250px; /* Still longer */
-        margin: 0 auto 25px auto; /* Centered */
+        width: calc(100% + 30px);
+        max-width: 380px;
+        height: 160px;
+        margin-bottom: 25px;
+        border-radius: 12px;
     }
     .about-left-content h3 {
         font-size: 2.5em;
@@ -1267,20 +1263,19 @@ footer h2 {
         font-size: 3.5em; /* Further reduced for very small phones */
         margin-bottom: 15px;
     }
-    /* FIX: Crafting Digital Experiences text size - REVERTED for 480px */
     .hero-description {
-        font-size: 0.95em; /* REVERTED: Back to original 0.95em for 480px */
+        font-size: 0.95em; /* Slightly adjusted */
         line-height: 1.5;
         margin-bottom: 30px; /* Further reduced space */
     }
 
-    /* FIX: Services sticky wrapper - Increased height for 480px */
+    /* Services Section - mobile specific overrides */
     .services-section {
         padding-top: 30px;
         padding-bottom: 50px;
     }
     .services-content-wrapper {
-        height: 450px; /* FIX: Increased from 400px */
+        height: 200px; /* Further adjusted fixed height for very small mobile */
     }
     .services-heading {
         font-size: 2.8em;
@@ -1329,10 +1324,5 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
-    }
-
-    /* FIX: Footer - Adjusted padding for very small screens to prevent overflow */
-    footer {
-        padding: 40px 15px; /* Reduced vertical padding, fixed horizontal padding */
     }
 }
