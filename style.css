@@ -2,7 +2,8 @@
 :root {
     /* Sawad-inspired Color Palette */
     --bg-main: #000000; /* Solid black background from Sawad */
-    --bg-section-card: #FFFFFF; /* White background for the About Me card */
+    --bg-section-card: #141414; /* Background for cards/sections (if added back) */
+    --bg-profile-card: #FFFFFF; /* White background for the About Me card */
     --text-light: #F0F0F0; /* Light text for readability */
     --text-medium: #A0A0A0; /* Slightly darker light for secondary text */
     --text-dark-card: #000000; /* Black text for white card background */
@@ -54,6 +55,8 @@ html {
     margin: 0;
     padding: 0;
     position: relative; /* Needed for fixed children positioning in some browsers */
+    width: 100%; /* Ensure html is 100% width */
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Keyframes for the animated colorful gradient */
@@ -68,10 +71,11 @@ body {
     line-height: 1.6;
     color: var(--text-light);
     background-color: transparent; /* Make body transparent to show html background */
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prevent horizontal scroll */
     position: relative;
     scroll-behavior: smooth;
     min-height: 100vh;
+    width: 100%; /* Ensure body is 100% width */
 }
 
 /* Layer 2: Subtle Background Glowing Elements (Over Black Background) */
@@ -192,10 +196,10 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 50px; /* Small space from the very top now that navbar is gone */
 }
 
-/* Left Column (Sticky) */
+/* Left Column (Sticky) - NO CHANGES TO THIS SECTION */
 .left-column-sticky {
     flex-shrink: 0; /* Prevent from shrinking */
-    width: 30%; /* Original desktop width */
+    width: 30%; /* Slightly narrower left column */
     padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
@@ -214,10 +218,10 @@ html::before { /* Re-using html::before to cover the whole page */
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 20px; /* More rectangular corners as in Aabid Ahmed */
-    padding: 35px 30px; /* ADJUSTED PADDING for a larger card */
+    padding: 30px 25px; /* Adjust padding to match the target image better */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
-    max-width: 450px; /* INCREASED MAX WIDTH on desktop */
+    max-width: 400px; /* INCREASED MAX WIDTH */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
@@ -237,13 +241,14 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* New: Profile Image Container */
 .profile-image-container {
-    width: calc(100% + 40px); /* Adjusted to make it less wide and overflow less */
-    max-width: 400px; /* Adjusted max-width relative to card for narrower image */
-    height: 220px; /* Increased height to make it "longer" */
+    /* REMOVED: width: calc(100% + 50px); - This was a potential source of overflow */
+    width: 100%; /* Set to 100% of parent for better control */
+    max-width: 400px; /* Profile image section narrower */
+    height: 220px; /* Profile image section longer */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
     overflow: hidden; /* Ensure image doesn't overflow */
-    margin-bottom: 30px; /* Adjusted space below image */
+    margin-bottom: 25px; /* Space below image */
     position: relative; /* For the silhouette filter */
     transform: translateX(0); /* Ensure it's centered initially */
 }
@@ -260,10 +265,10 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Updated: Main Name */
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 3em; /* Larger font size for name, adjusted for larger card */
+    font-size: 2.8em; /* Larger font size for name as in Aabid Ahmed */
     font-weight: 700; /* Bolder */
     color: var(--text-dark-card); /* Black text on white card */
-    margin-bottom: 25px; /* Adjusted space below name */
+    margin-bottom: 20px; /* Space below name before fire icon */
     line-height: 1.1; /* Tighter line height for single-line name */
 }
 
@@ -274,18 +279,18 @@ html::before { /* Re-using html::before to cover the whole page */
 .fire-icon-with-line {
     position: relative;
     width: 100%;
-    height: 45px; /* Adjusted height for fire icon and its line context */
+    height: 40px; /* Height for the fire icon and its line context */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px; /* Adjusted space below icon */
+    margin-bottom: 25px; /* Space before short description */
 }
 
 .fire-icon {
     background-color: var(--accent-primary-sawad);
     border-radius: 50%;
-    padding: 10px; /* Adjusted padding */
-    font-size: 1.3em; /* Adjusted icon size */
+    padding: 8px; /* Smaller padding as in Aabid Ahmed */
+    font-size: 1.1em; /* Smaller icon size */
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     z-index: 2; /* Ensure it's on top of pseudo-elements */
@@ -306,18 +311,18 @@ html::before { /* Re-using html::before to cover the whole page */
 
 .fire-icon-with-line::before { /* Left line */
     left: 0;
-    width: calc(50% - 30px); /* Adjusted width minus icon size */
+    width: calc(50% - 25px); /* Half width minus icon size */
 }
 
 .fire-icon-with-line::after { /* Right line */
     right: 0;
-    width: calc(50% - 30px); /* Adjusted width minus icon size */
+    width: calc(50% - 25px); /* Half width minus icon size */
 }
 
 /* New: Decorative background dashed lines (from original Aabid Ahmed card) */
 .dashed-decoration {
     position: absolute;
-    border: 2px dashed var(--accent-primary-sawad); /* Adjusted border thickness */
+    border: 2px dashed var(--accent-primary-sawad);
     border-radius: 50%; /* Used for creating circular segments */
     box-sizing: border-box;
     pointer-events: none;
@@ -325,20 +330,20 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 .top-left-curve {
-    width: 180px; /* Adjusted size for larger card */
-    height: 180px;
-    top: -60px; /* Adjusted position */
-    left: -60px;
+    width: 150px;
+    height: 150px;
+    top: -40px; /* Adjusted position to start from top-left of the card */
+    left: -40px;
     border-right-color: transparent; /* Hide parts of the circle border to make it an arc */
     border-bottom-color: transparent;
     transform: rotate(-10deg); /* Slight rotation for the angle */
 }
 
 .bottom-right-curve {
-    width: 180px; /* Adjusted size for larger card */
-    height: 180px;
-    bottom: -60px; /* Adjusted position */
-    right: -60px;
+    width: 150px;
+    height: 150px;
+    bottom: -40px; /* Adjusted position to start from bottom-right of the card */
+    right: -40px;
     border-left-color: transparent;
     border-top-color: transparent;
     transform: rotate(10deg); /* Slight rotation for the angle */
@@ -347,28 +352,62 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* Updated: Short Description */
 .about-short-desc {
-    font-size: 1em; /* Adjusted font size for readability */
+    font-size: 0.9em; /* Adjusted font size for readability */
     line-height: 1.6;
     color: var(--text-medium-card);
-    margin-bottom: 30px; /* Adjusted space below description */
-    padding: 0 10px; /* Adjusted horizontal padding */
-    max-width: 100%; /* Allow to take full width within card */
+    margin-bottom: 25px; /* Space before social icons */
+    padding: 0 5px; /* Added small horizontal padding to prevent awkward word wraps */
+    max-width: 90%; /* Keep text within reasonable bounds */
 }
 
-/* Removed contact-info-list styles as element is removed from HTML */
+/* NEW: Contact Info List */
+.contact-info-list {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 20px 0 30px; /* Space above and below list */
+    width: 100%; /* Take full width of the card */
+    text-align: left; /* Align list items left */
+}
+
+.contact-info-list li {
+    display: flex; /* Use flexbox for icon and text alignment */
+    align-items: center;
+    margin-bottom: 15px; /* Space between list items */
+    font-size: 0.95em;
+    color: var(--text-medium-card);
+}
+
+.contact-info-list li:last-child {
+    margin-bottom: 0; /* No margin after the last item */
+}
+
+.contact-info-list li i {
+    color: var(--accent-primary-sawad); /* Icon color */
+    margin-right: 15px; /* Space between icon and text */
+    font-size: 1.2em;
+    width: 20px; /* Fixed width for icons to align text */
+    text-align: center;
+}
+
+.contact-info-list li span {
+    font-weight: 600; /* Bold the category text */
+    color: var(--text-dark-card); /* Darker color for category */
+    margin-right: 8px; /* Space between category and value */
+    flex-shrink: 0; /* Prevent category from shrinking */
+}
 
 
 /* Updated: Social Icons */
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 20px; /* Adjusted gap between icons */
+    gap: 15px; /* Smaller gap between icons as in Aabid Ahmed */
     margin-top: auto; /* Pushes social icons to the bottom if card has auto height */
-    padding-top: 15px; /* Adjusted small padding */
+    padding-top: 10px; /* Small padding */
 }
 .about-social-icons a {
     color: var(--accent-primary-sawad); /* Orange icons as in Aabid Ahmed */
-    font-size: 1.6em; /* Adjusted icon size */
+    font-size: 1.5em; /* Icon size */
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
@@ -395,7 +434,7 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Hero Right Content */
 .hero-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 7em; /* Very large font size for headings */
+    font-size: 6.5em; /* REDUCED: 7em - 0.5em = 6.5em */
     line-height: 0.9;
     font-weight: 800; /* Extra bold */
     margin-bottom: 30px; /* Space below heading */
@@ -428,48 +467,62 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for sticky child */
+    position: relative; /* Needed for sticky child to properly detach */
     z-index: 1;
 }
 
-/* Services Heading (now sticky, to scroll with wrapper via JS coordination) */
+/* Services Heading (now a direct child of .services-section so it scrolls naturally) */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em; /* Match tools heading size */
     line-height: 0.9;
     font-weight: 800;
-    margin-bottom: 50px;
+    margin-bottom: 50px; /* Space below heading before the sticky wrapper */
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    position: sticky; /* Set to sticky */
-    top: var(--services-sticky-top-h2); /* JS will set this variable */
-    will-change: top;
-    z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
+    /* No sticky properties here, it scrolls with the page content */
 }
 
-/* Main sticky wrapper for services section content */
+/* Main sticky wrapper for services section content (excluding heading) */
 .services-content-wrapper {
     position: sticky; /* Makes this entire container sticky */
     top: var(--services-sticky-top-wrapper); /* JS will set this variable */
     will-change: top;
-    z-index: 1; /* Ensure wrapper stays below heading when sticky */
+    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
 
     height: 450px; /* Fixed height to control content display window for sticky effect */
-    display: flex; /* Use flexbox to align children */
-    flex-direction: column; /* Stack service items vertically */
+    display: flex; /* Use flexbox to center its inner content */
     justify-content: center; /* Center content vertically within the sticky window */
     align-items: flex-start; /* Align content to the left of the sticky window */
     perspective: 1000px; /* Defines the depth of 3D transforms */
     overflow: hidden; /* Crucial for clipping the "cuboid" effect */
 }
 
-/* Service Items */
+/* New inner container to hold service items for unified layout */
+.services-sticky-content-inner {
+    position: relative; /* Provides positioning context for absolute children */
+    width: 100%;
+    height: 100%; /* Take full height of the wrapper */
+    display: flex; /* Now only contains service-items */
+    flex-direction: column; 
+    justify-content: center; /* Center content vertically within this inner container */
+    align-items: flex-start; /* Align text left */
+    box-sizing: border-box; /* Include padding in dimensions */
+}
+
+/* Container for absolute service items */
+.services-items-container {
+    position: relative; /* Provides positioning context for .service-item */
+    width: 100%;
+    height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
+}
+
 .service-item {
-    position: absolute; /* Position items absolutely within the wrapper */
+    position: absolute; /* Position items absolutely within .services-items-container */
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; /* Take full height of the wrapper */
+    height: 100%; /* Take full height of the container */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically within the item */
@@ -479,10 +532,10 @@ html::before { /* Re-using html::before to cover the whole page */
 
     /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(150px) rotateX(90deg); /* Adjusted translateY for better invisibility when off-screen */
+    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    /* Refined transition for a cleaner fade-out and smoother movement */
-    transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Increased transition duration for slower speed */
+    /* Refined transition for a cleaner fade-out */
+    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
@@ -518,7 +571,7 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 2em; /* Title for the service */
     font-weight: 700;
     color: var(--accent-primary-sawad); /* Reverted to orange */
-    margin-bottom: 5px; /* REDUCED GAP BETWEEN TEXTS */
+    margin-bottom: 10px; /* Reduced margin */
     font-style: normal; /* Ensured no italics */
 }
 
@@ -527,7 +580,7 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 1.2em; /* Description text size, slightly larger */
     color: var(--services-description-color); /* White color */
     max-width: 650px; /* Limit width for readability */
-    line-height: 1.4; /* REDUCED LINE HEIGHT FOR TIGHTER TEXT */
+    line-height: 1.6; /* Tighter line height */
     font-style: normal; /* Ensured no italics */
 }
 
@@ -800,74 +853,66 @@ footer h2 {
     .left-column-sticky {
         width: 100%; /* On smaller desktops, expand to full width of container */
         padding-right: 0; /* Remove right padding */
-        max-width: 450px; /* Adjusted for mid-size screens */
+        max-width: 450px; /* Slightly wider on mid-size screens */
         margin: 0 auto; /* Center it */
     }
-    .right-column-scroll { 
-        flex-grow: 1; /* Allow it to take up space */
-        width: 100%; /* Take full width of main container when stacked */
-        padding-left: 40px; /* Adjusted padding */
-        padding-right: 40px; /* Adjusted padding */
-        margin-top: 50px; /* Add some space above when stacked below left column */
-        text-align: left; /* Keep left-aligned */
-    }
-    .section h2 { /* Global heading for sections (like footer) */
-        font-size: 3.2em;
-        margin-bottom: 40px;
-    }
-    /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 380px; /* Adjusted for slightly larger card on mid-size screens */
-        padding: 30px 25px; /* Adjusted padding */
+        max-width: 350px; /* Adjusted for slightly larger card on mid-size screens */
+        padding: 25px 20px;
     }
     .profile-image-container {
-        width: calc(100% + 40px); /* Keep proportion relative to new card size */
-        max-width: 420px; /* Adjusted max-width for narrower image */
-        height: 200px; /* Adjusted height */
-        margin-bottom: 25px; /* Adjusted space below image */
+        /* Adjusted width and height for "longer" and "narrower" */
+        width: 100%; 
+        max-width: 340px; /* Profile image section narrower (390px - 50px) */
+        height: 210px; /* Profile image section longer (170px + 40px) */
+        margin-bottom: 20px;
     }
     .about-left-content h3 {
-        font-size: 2.8em; /* Adjusted for larger card */
+        font-size: 2.6em; /* Adjusted for larger card */
     }
     .fire-icon-with-line {
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
     .fire-icon {
-        padding: 8px;
-        font-size: 1.1em;
-    }
-    .fire-icon-with-line::before,
-    .fire-icon-with-line::after {
-        width: calc(50% - 25px);
+        padding: 7px;
+        font-size: 1em;
     }
     .about-short-desc {
-        font-size: 0.95em; /* Adjusted text size */
-        margin-bottom: 25px;
-        padding: 0 5px;
+        font-size: 0.88em;
+        margin-bottom: 20px;
     }
-    .about-social-icons {
-        gap: 15px; /* Adjusted gap between icons */
-        padding-top: 10px; /* Adjusted small padding */
+    .contact-info-list {
+        margin: 15px 0 25px; /* Adjust spacing */
+    }
+    .contact-info-list li {
+        font-size: 0.9em;
+    }
+    .contact-info-list li i {
+        margin-right: 12px;
+        font-size: 1.1em;
+    }
+    .contact-info-list li span {
+        margin-right: 6px;
     }
     .about-social-icons a {
-        font-size: 1.5em;
+        font-size: 1.4em;
     }
 
     .dashed-decoration {
-        border-width: 1.8px; /* Slightly thinner for these sizes */
+        border-width: 1.5px; /* Thinner for smaller screens */
     }
     .top-left-curve, .bottom-right-curve {
-        width: 160px; /* Adjusted size */
-        height: 160px;
-        top: -55px;
-        left: -55px;
-        bottom: -55px;
-        right: -55px;
+        width: 130px; /* Slightly smaller */
+        height: 130px;
+        top: -35px; /* Adjusted */
+        left: -35px; /* Adjusted */
+        bottom: -35px; /* Adjusted */
+        right: -35px; /* Adjusted */
     }
 
     /* Adjustments for hero content */
     .hero-heading {
-        font-size: 6em; /* Adjusted: desktop 7em -> 6em (1em reduction) */
+        font-size: 5.5em; /* REDUCED: 6em - 0.5em = 5.5em */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -880,12 +925,12 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
+    .services-content-wrapper {
+        height: 400px; /* Adjust height for smaller desktop */
+    }
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 40px;
-    }
-    .services-content-wrapper {
-        height: 400px; /* Adjust height for smaller desktop */
     }
     .service-item {
         padding: 15px;
@@ -896,17 +941,15 @@ footer h2 {
     }
     .service-title {
         font-size: 1.8em;
-        margin-bottom: 5px; /* REDUCED GAP */
     }
     .service-description {
         font-size: 1em;
         max-width: 500px;
-        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
     .tools-section {
-        padding-top: 60px;
+        padding-top: 60px; /* Adjusted space now that it's after services */
         padding-bottom: 80px;
     }
     .tools-heading {
@@ -914,10 +957,11 @@ footer h2 {
         margin-bottom: 40px;
     }
     .tools-grid {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust min-width */
         gap: 20px;
-        max-width: 500px;
-        margin: 0 auto;
+        max-width: 500px; /* Constrain grid width to keep cards from getting too wide */
+        margin: 0 auto; /* Center the grid */
     }
     .tool-card {
         padding: 18px;
@@ -957,76 +1001,92 @@ footer h2 {
     }
     /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 350px; /* Adjusted for tablet/larger phone */
-        padding: 30px 25px;
-        border-radius: 18px;
+        max-width: 380px; /* Wider for tablet/larger phone */
+        padding: 30px 25px; /* More generous padding */
+        border-radius: 18px; /* Slightly more rounded */
     }
     .profile-image-container {
-        width: calc(100% + 40px); /* Adjusted */
-        max-width: 390px; /* Adjusted max-width */
-        height: 200px; /* Adjusted height */
-        margin-bottom: 25px; /* Adjusted space */
+        /* Adjusted width and height for "longer" and "narrower" */
+        width: 100%;
+        max-width: 380px; /* Profile image section narrower (430px - 50px) */
+        height: 230px; /* Profile image section longer (190px + 40px) */
+        margin-bottom: 30px; /* More space */
         border-radius: 15px;
     }
     .about-left-content h3 {
-        font-size: 2.5em; /* Adjusted */
-        margin-bottom: 20px;
-    }
-    .fire-icon-with-line {
-        height: 40px; /* Adjusted */
+        font-size: 2.8em; /* Back to larger size for tablet */
         margin-bottom: 25px;
     }
+    .fire-icon-with-line {
+        height: 45px; /* Taller icon area */
+        margin-bottom: 30px;
+    }
     .fire-icon {
-        padding: 8px; /* Adjusted */
-        font-size: 1.1em; /* Adjusted */
+        padding: 9px; /* Larger padding */
+        font-size: 1.2em; /* Larger icon */
     }
     .fire-icon-with-line::before,
     .fire-icon-with-line::after {
-        width: calc(50% - 25px); /* Adjusted */
+        width: calc(50% - 30px); /* Adjust line length */
     }
     .about-short-desc {
-        font-size: 0.9em; /* Adjusted */
-        margin-bottom: 25px;
-        padding: 0 5px;
-        max-width: 100%;
+        font-size: 1em; /* Slightly larger text */
+        margin-bottom: 30px;
+        padding: 0 10px; /* More padding */
+        max-width: 100%; /* Allow full width in card */
+    }
+    .contact-info-list {
+        margin: 25px 0 35px; /* More space */
+    }
+    .contact-info-list li {
+        font-size: 1em;
+        margin-bottom: 18px;
+    }
+    .contact-info-list li i {
+        margin-right: 18px;
+        font-size: 1.3em;
+        width: 25px;
+    }
+    .contact-info-list li span {
+        margin-right: 10px;
     }
     .about-social-icons {
-        gap: 15px; /* Adjusted */
-        padding-top: 10px; /* Adjusted */
+        gap: 20px; /* More space between icons */
+        padding-top: 15px;
     }
     .about-social-icons a {
-        font-size: 1.5em; /* Adjusted */
+        font-size: 1.6em;
     }
     
     .dashed-decoration {
-        border-width: 1.8px; /* Adjusted */
+        border-width: 2px; /* Standard thickness */
     }
     .top-left-curve, .bottom-right-curve {
-        width: 140px; /* Adjusted */
-        height: 140px;
-        top: -45px;
-        left: -45px;
-        bottom: -45px;
-        right: -45px;
+        width: 160px; /* Larger */
+        height: 160px;
+        top: -45px; /* Adjusted */
+        left: -45px; /* Adjusted */
+        bottom: -45px; /* Adjusted */
+        right: -45px; /* Adjusted */
     }
 
     /* Adjustments for hero content */
     .right-column-scroll {
-        width: 100%;
-        padding: 40px 20px;
-        min-height: auto;
-        padding-top: 50px;
-        text-align: left;
+        width: 100%; /* Full width on mobile */
+        padding: 40px 20px; /* More generous padding for content */
+        min-height: auto; /* Allow height to shrink on mobile */
+        padding-top: 50px; /* Reduced space from above section */
+        text-align: left; /* Keep left-aligned */
     }
     .hero-heading {
-        font-size: 4em; /* REDUCED by 0.5em from 4.5em */
+        font-size: 4em; /* REDUCED: 4.5em - 0.5em = 4em */
         margin-bottom: 20px;
     }
     .hero-description {
-        font-size: 1.05em; /* Slightly adjusted */
+        font-size: 1.1em; /* Adjusted slightly */
         line-height: 1.6;
-        max-width: 100%;
-        margin-bottom: 40px;
+        max-width: 100%; /* Allow to take full width */
+        margin-bottom: 40px; /* Reduced space before next section */
     }
 
     /* Services Section - mobile specific overrides */
@@ -1034,28 +1094,27 @@ footer h2 {
         padding-top: 40px;
         padding-bottom: 60px;
     }
+    .services-content-wrapper {
+        height: 250px; /* Adjusted fixed height for mobile */
+    }
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
-    }
-    .services-content-wrapper {
-        height: 250px;
     }
     .service-item {
         padding: 10px;
     }
     .service-bg-number {
-        font-size: 8em;
-        right: 40px;
+        font-size: 8em; /* Smaller background number on mobile */
+        right: 40px; /* Adjusted for smaller screens */
     }
     .service-title {
         font-size: 1.6em;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
     .service-description {
         font-size: 0.9em;
         max-width: 100%;
-        line-height: 1.4;
     }
 
     /* Adjustments for tools section */
@@ -1068,9 +1127,10 @@ footer h2 {
         margin-bottom: 30px;
     }
     .tools-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
-        max-width: 100%;
+        max-width: 100%; /* Allow to take full width */
     }
     .tool-card {
         padding: 15px;
@@ -1097,7 +1157,7 @@ footer h2 {
 
 @media (max-width: 480px) {
     .main-layout-container {
-        padding: 0 15px;
+        padding: 0 15px; /* Tighter padding for very small screens */
     }
     .section h2 {
         font-size: 2.8em;
@@ -1112,92 +1172,108 @@ footer h2 {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 15px;
-        max-width: 320px;
-        margin: 0 auto;
+        gap: 15px; /* Even tighter gap */
+        max-width: 320px; /* Tighter max-width for column layout */
+        margin: 0 auto; /* Center buttons */
     }
     .contact-button {
-        width: 100%;
-        height: 80px;
-        font-size: 0.95em;
+        width: 100%; /* Ensure button takes full width of its container */
+        height: 80px; /* Slightly shorter */
+        font-size: 0.95em; /* Adjusted font size */
     }
     .contact-button i {
-        font-size: 1.6em;
+        font-size: 1.6em; /* Adjusted icon size */
     }
     .contact-button .button-value {
-        font-size: 0.75em;
+        font-size: 0.75em; /* Adjusted button value font size */
     }
     .contact-button .copied-text {
-        font-size: 0.95em;
+        font-size: 0.95em; /* Adjusted copied text font size */
     }
 
     /* Specific adjustments for profile card */
     .about-left-content {
-        max-width: 320px; /* Adjusted max-width for very small mobile */
-        padding: 20px 15px;
+        max-width: 350px; /* Max width for phones */
+        padding: 25px 20px;
         border-radius: 15px;
     }
     .profile-image-container {
-        width: calc(100% + 30px); /* Adjusted */
-        max-width: 350px; /* Adjusted */
-        height: 180px; /* Adjusted */
-        margin-bottom: 20px; /* Adjusted */
+        /* Adjusted width and height for "longer" and "narrower" */
+        width: 100%;
+        max-width: 330px; /* Profile image section narrower (380px - 50px) */
+        height: 200px; /* Profile image section longer (160px + 40px) */
+        margin-bottom: 25px;
         border-radius: 12px;
     }
     .about-left-content h3 {
-        font-size: 2.2em; /* Adjusted */
-        margin-bottom: 15px;
-    }
-    .fire-icon-with-line {
-        height: 35px; /* Adjusted */
+        font-size: 2.5em;
         margin-bottom: 20px;
     }
+    .fire-icon-with-line {
+        height: 40px;
+        margin-bottom: 25px;
+    }
     .fire-icon {
-        padding: 6px; /* Adjusted */
-        font-size: 0.9em; /* Adjusted */
+        padding: 8px;
+        font-size: 1.1em;
     }
     .fire-icon-with-line::before,
     .fire-icon-with-line::after {
-        width: calc(50% - 20px); /* Adjusted */
+        width: calc(50% - 25px);
     }
     .about-short-desc {
-        font-size: 0.8em; /* Adjusted */
-        margin-bottom: 20px;
-        padding: 0 2px;
+        font-size: 0.9em;
+        margin-bottom: 25px;
+        padding: 0 5px;
+    }
+    .contact-info-list {
+        margin: 20px 0 30px;
+    }
+    .contact-info-list li {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    .contact-info-list li i {
+        margin-right: 15px;
+        font-size: 1.2em;
+        width: 20px;
+    }
+    .contact-info-list li span {
+        margin-right: 8px;
     }
     .about-social-icons {
-        gap: 12px; /* Adjusted */
+        gap: 15px;
         padding-top: 10px;
     }
     .about-social-icons a {
-        font-size: 1.3em; /* Adjusted */
+        font-size: 1.4em;
     }
 
     .dashed-decoration {
-        border-width: 1.2px; /* Adjusted */
+        border-width: 1.5px;
     }
     .top-left-curve, .bottom-right-curve {
-        width: 120px; /* Adjusted */
-        height: 120px;
-        top: -40px;
-        left: -40px;
-        bottom: -40px;
-        right: -40px;
+        width: 140px;
+        height: 140px;
+        top: -35px; /* Adjusted */
+        left: -35px; /* Adjusted */
+        bottom: -35px; /* Adjusted */
+        right: -35px; /* Adjusted */
     }
 
     /* Adjustments for hero content */
     .right-column-scroll {
-        padding: 30px 15px;
-        padding-top: 40px;
+        padding: 30px 15px; /* Reduced padding for very small screens */
+        padding-top: 40px; /* Reduced space from above section */
     }
     .hero-heading {
-        font-size: 3em; /* REDUCED by 0.5em from 3.5em */
+        font-size: 3em; /* REDUCED: 3.5em - 0.5em = 3em */
         margin-bottom: 15px;
     }
     .hero-description {
-        font-size: 0.9em; /* Adjusted */
+        font-size: 0.95em; /* Slightly adjusted */
         line-height: 1.5;
-        margin-bottom: 30px;
+        margin-bottom: 30px; /* Further reduced space */
     }
 
     /* Services Section - mobile specific overrides */
@@ -1205,27 +1281,25 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
+    .services-content-wrapper {
+        height: 200px; /* Further adjusted fixed height for very small mobile */
+    }
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
-    }
-    .services-content-wrapper {
-        height: 200px;
     }
     .service-item {
         padding: 12px;
     }
     .service-bg-number {
-        font-size: 6em;
-        right: 40px;
+        font-size: 6em; /* Even smaller background number */
+        right: 40px; /* Adjusted for smaller screens */
     }
     .service-title {
         font-size: 1.4em;
-        margin-bottom: 5px;
     }
     .service-description {
         font-size: 0.8em;
-        line-height: 1.4;
     }
 
     /* Adjustments for tools section */
@@ -1238,9 +1312,10 @@ footer h2 {
         margin-bottom: 25px;
     }
     .tools-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: 1fr; /* Single column on mobile */
         gap: 15px;
-        max-width: 100%;
+        max-width: 100%; /* Allow to take full width */
     }
     .tool-card {
         padding: 12px;
