@@ -2,7 +2,8 @@
 :root {
     /* Sawad-inspired Color Palette */
     --bg-main: #000000; /* Solid black background from Sawad */
-    --bg-section-card: #FFFFFF; /* White background for the About Me card */
+    --bg-section-card: #141414; /* Background for cards/sections (if added back) */
+    --bg-profile-card: #FFFFFF; /* White background for the About Me card */
     --text-light: #F0F0F0; /* Light text for readability */
     --text-medium: #A0A0A0; /* Slightly darker light for secondary text */
     --text-dark-card: #000000; /* Black text for white card background */
@@ -195,7 +196,7 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Left Column (Sticky) - NO CHANGES TO THIS SECTION */
 .left-column-sticky {
     flex-shrink: 0; /* Prevent from shrinking */
-    width: 30%; /* Original desktop width */
+    width: 30%; /* Slightly narrower left column */
     padding-right: 80px; /* Increased space between columns */
     box-sizing: border-box;
     position: sticky; /* Make it sticky */
@@ -214,10 +215,10 @@ html::before { /* Re-using html::before to cover the whole page */
     background-color: var(--bg-profile-card); /* White card background */
     color: var(--text-dark-card); /* Dark text for white card */
     border-radius: 20px; /* More rectangular corners as in Aabid Ahmed */
-    padding: 35px 30px; /* ADJUSTED PADDING for a larger card */
+    padding: 35px 30px; /* ADJUSTED PADDING */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
-    max-width: 450px; /* INCREASED MAX WIDTH on desktop */
+    max-width: 450px; /* INCREASED MAX WIDTH */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
@@ -462,11 +463,11 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for sticky child to properly detach */
+    position: relative; /* Needed for sticky child */
     z-index: 1;
 }
 
-/* Services Heading (sibling to content wrapper, both sticky) */
+/* These elements are now directly sticky and their 'top' property is controlled by JS for centering */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em; /* Match tools heading size */
@@ -481,23 +482,22 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 2; /* Ensure heading stays above the content wrapper when sticky */
 }
 
-/* Main sticky wrapper for services section content */
+/* Reusing text-white and text-gray for services-heading */
+
 .services-content-wrapper {
-    position: sticky; /* Makes this entire container sticky */
+    position: relative;
+    height: 450px; /* Fixed height to control content display window */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically within the window */
+    perspective: 1000px; /* Defines the depth of 3D transforms */
+    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    position: sticky; /* Made sticky */
     top: var(--services-sticky-top-wrapper); /* JS will set this variable */
     will-change: top;
     z-index: 1; /* Ensure wrapper stays below heading when sticky */
-
-    height: 450px; /* Fixed height to control content display window for sticky effect */
-    display: flex; /* Use flexbox to center its inner content */
-    flex-direction: column; /* Stack children vertically */
-    justify-content: center; /* Center content vertically within the sticky window */
-    align-items: flex-start; /* Align content to the left of the sticky window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
 }
 
-/* Service Items */
 .service-item {
     position: absolute; /* Position items absolutely within the wrapper */
     top: 0;
@@ -513,10 +513,9 @@ html::before { /* Re-using html::before to cover the whole page */
 
     /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(150px) rotateX(90deg); /* Adjusted translateY for better invisibility when off-screen */
+    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    /* Refined transition for a cleaner fade-out and smoother movement */
-    transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Increased transition duration for slower speed */
+    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother cubic-bezier transition */
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
@@ -552,7 +551,7 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 2em; /* Title for the service */
     font-weight: 700;
     color: var(--accent-primary-sawad); /* Reverted to orange */
-    margin-bottom: 5px; /* REDUCED GAP BETWEEN TEXTS */
+    margin-bottom: 10px; /* Reduced margin */
     font-style: normal; /* Ensured no italics */
 }
 
@@ -561,7 +560,7 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 1.2em; /* Description text size, slightly larger */
     color: var(--services-description-color); /* White color */
     max-width: 650px; /* Limit width for readability */
-    line-height: 1.4; /* REDUCED LINE HEIGHT FOR TIGHTER TEXT */
+    line-height: 1.6; /* Tighter line height */
     font-style: normal; /* Ensured no italics */
 }
 
@@ -858,7 +857,7 @@ footer h2 {
         width: calc(100% + 50px); /* Keep proportion relative to new card size */
         max-width: 430px; /* Adjusted max-width */
         height: 180px; /* Adjusted height */
-        margin-bottom: 25px; /* Adjusted space below image */
+        margin-bottom: 25px;
     }
     .about-left-content h3 {
         font-size: 2.8em; /* Adjusted for larger card */
@@ -869,10 +868,6 @@ footer h2 {
     .fire-icon {
         padding: 8px;
         font-size: 1.1em;
-    }
-    .fire-icon-with-line::before,
-    .fire-icon-with-line::after {
-        width: calc(50% - 25px);
     }
     .about-short-desc {
         font-size: 0.95em; /* Adjusted text size */
@@ -912,7 +907,7 @@ footer h2 {
 
     /* Adjustments for hero content */
     .hero-heading {
-        font-size: 6.5em; /* Adjusted to scale down */
+        font-size: 6.5em; /* Adjusted from 7em - first reduction */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -925,6 +920,7 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
+    /* Sticky heading and wrapper top are set by JS variables */
     .services-heading {
         font-size: 4.8em; /* Adjusted */
         margin-bottom: 40px;
@@ -941,12 +937,10 @@ footer h2 {
     }
     .service-title {
         font-size: 1.9em; /* Adjusted */
-        margin-bottom: 5px; /* REDUCED GAP */
     }
     .service-description {
         font-size: 1.05em; /* Adjusted */
         max-width: 550px; /* Adjusted */
-        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
@@ -1043,14 +1037,11 @@ footer h2 {
         margin-bottom: 18px;
     }
     .contact-info-list li i {
-        color: var(--accent-primary-sawad); /* Icon color */
         margin-right: 18px;
         font-size: 1.3em;
         width: 25px;
     }
     .contact-info-list li span {
-        font-weight: 600; /* Bold the category text */
-        color: var(--text-dark-card); /* Darker color for category */
         margin-right: 10px;
     }
     .about-social-icons {
@@ -1082,7 +1073,7 @@ footer h2 {
         text-align: left; /* Keep left-aligned */
     }
     .hero-heading {
-        font-size: 4em; /* REDUCED by 5 relative from desktop 7em */
+        font-size: 4em; /* REDUCED BY 5em from desktop 7em */
         margin-bottom: 20px;
     }
     .hero-description {
@@ -1097,12 +1088,12 @@ footer h2 {
         padding-top: 40px;
         padding-bottom: 60px;
     }
+    .services-content-wrapper {
+        height: 250px; /* Adjusted fixed height for mobile */
+    }
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px;
-    }
-    .services-content-wrapper {
-        height: 250px; /* Adjusted fixed height for mobile */
     }
     .service-item {
         padding: 10px;
@@ -1113,12 +1104,11 @@ footer h2 {
     }
     .service-title {
         font-size: 1.6em;
-        margin-bottom: 5px; /* REDUCED GAP */
+        margin-bottom: 10px;
     }
     .service-description {
         font-size: 0.9em;
         max-width: 100%;
-        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
@@ -1237,14 +1227,11 @@ footer h2 {
         margin-bottom: 15px;
     }
     .contact-info-list li i {
-        color: var(--accent-primary-sawad); /* Icon color */
         margin-right: 15px;
         font-size: 1.2em;
         width: 20px;
     }
     .contact-info-list li span {
-        font-weight: 600; /* Bold the category text */
-        color: var(--text-dark-card); /* Darker color for category */
         margin-right: 8px;
     }
     .about-social-icons {
@@ -1273,7 +1260,7 @@ footer h2 {
         padding-top: 40px; /* Reduced space from above section */
     }
     .hero-heading {
-        font-size: 3em; /* REDUCED by 5 relative from desktop 7em */
+        font-size: 3em; /* REDUCED BY 5em from desktop 7em, then another 1em from 4em */
         margin-bottom: 15px;
     }
     .hero-description {
@@ -1287,12 +1274,12 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
+    .services-content-wrapper {
+        height: 200px; /* Further adjusted fixed height for very small mobile */
+    }
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px;
-    }
-    .services-content-wrapper {
-        height: 200px; /* Further adjusted fixed height for very small mobile */
     }
     .service-item {
         padding: 12px;
@@ -1303,11 +1290,9 @@ footer h2 {
     }
     .service-title {
         font-size: 1.4em;
-        margin-bottom: 5px; /* REDUCED GAP */
     }
     .service-description {
         font-size: 0.8em;
-        line-height: 1.4; /* REDUCED LINE HEIGHT */
     }
 
     /* Adjustments for tools section */
