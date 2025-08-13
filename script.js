@@ -112,16 +112,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // The actual scroll distance for one item's animation (1:1 scroll with wrapper height)
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
 
-        // The total animation scroll range for all items:
-        // (Number of items - 1 transitions) * SCROLL_DISTANCE_PER_ITEM
-        const totalAnimationTransitionsRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
+        // The total scroll needed to complete all (N-1) transitions, making the last item (index N-1) fully active.
+        const scrollForTransitions = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
-        // *** CRUCIAL CORRECTION HERE ***
-        // The spacer needs to provide enough height for:
-        // 1. All (N-1) transitions to occur: `totalAnimationTransitionsRange`
-        // 2. The last item to be fully in view for its dedicated scroll time: `SCROLL_DISTANCE_PER_ITEM`
-        // 3. The entire sticky block to scroll out of view: `totalVisualStickyBlockHeight`
-        scrollSpacer.style.height = `${totalAnimationTransitionsRange + SCROLL_DISTANCE_PER_ITEM + totalVisualStickyBlockHeight}px`;
+        // The additional scroll needed to hold the last item in view before the section unsticks.
+        const scrollForLastItemHold = SCROLL_DISTANCE_PER_ITEM;
+
+        // The total height the spacer needs to be.
+        // It must cover:
+        // 1. All item transitions up to the last item being fully active.
+        // 2. The dedicated "hold" time for the last item.
+        // 3. The distance for the entire sticky block to scroll out of view.
+        scrollSpacer.style.height = `${scrollForTransitions + scrollForLastItemHold + totalVisualStickyBlockHeight}px`;
 
         console.log('--- Services Layout Adjusted (Final Revision) ---');
         console.log(`Viewport Height: ${window.innerHeight}px`);
@@ -130,7 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Sticky Top H2 (CSS variable): ${stickyTopH2}px`);
         console.log(`Sticky Top Wrapper (CSS variable): ${stickyTopWrapper}px`);
         console.log(`SCROLL_DISTANCE_PER_ITEM: ${SCROLL_DISTANCE_PER_ITEM}px`);
-        console.log(`Total Animation Transitions Range: ${totalAnimationTransitionsRange}px`);
+        console.log(`Scroll For Transitions: ${scrollForTransitions}px`);
+        console.log(`Scroll For Last Item Hold: ${scrollForLastItemHold}px`);
         console.log(`Calculated Scroll Spacer Height: ${scrollSpacer.offsetHeight}px`);
         console.log(`servicesSection.offsetTop: ${servicesSection.offsetTop}px`);
     };
@@ -143,20 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let scrollProgress = window.scrollY - animationStartScroll;
 
-        // Clamp the scroll progress to the valid range for our animation.
-        // The total range now includes the scroll for the last item to be focused.
-        const maxScrollableRangeForAnimation = serviceItems.length * SCROLL_DISTANCE_PER_ITEM; // N items * scroll per item
-        scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
+        // The total scroll needed to complete all (N-1) transitions, making the last item (index N-1) fully active.
+        const totalTransitionsScroll = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
 
-        // Determine which item should be active based on scroll progress
+        // Clamp scrollProgress to only cover the transition phase.
+        // Once scrollProgress hits `totalTransitionsScroll`, the last item should be fully active and hold.
+        scrollProgress = Math.max(0, Math.min(totalTransitionsScroll, scrollProgress));
+
         const normalizedProgress = scrollProgress / SCROLL_DISTANCE_PER_ITEM;
         
-        // This calculates the index of the item that should be "entering" or "exiting"
-        // When normalizedProgress is 0.0, currentIndex is 0, fractional is 0.0 (item 0 fully active)
-        // When normalizedProgress is 0.99, currentIndex is 0, fractional is 0.99 (item 0 nearly exited, item 1 nearly entered)
-        // When normalizedProgress is 1.0, currentIndex is 1, fractional is 0.0 (item 1 fully active)
         const currentIndex = Math.floor(normalizedProgress);
-        const fractionalProgress = normalizedProgress - currentIndex; // Progress within the current item's transition (0 to 1)
+        const fractionalProgress = normalizedProgress - currentIndex;
 
         // Update the background number for the active slide
         const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
@@ -177,14 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (index === currentIndex) {
                 // The current item: animating out (rotating outwards and fading)
-                // It rotates from 0deg (fully visible) to 90deg (exited)
                 rotateX = 90 * fractionalProgress; 
                 translateY = -contentWrapperHeight * fractionalProgress; 
                 opacity = 1 - fractionalProgress; 
                 zIndex = 2; // On top when exiting
             } else if (index === currentIndex + 1) {
                 // The next item: animating in (rotating into view from behind/below)
-                // It rotates from -90deg (behind) to 0deg (fully visible)
                 rotateX = -90 + (90 * fractionalProgress); 
                 translateY = contentWrapperHeight * (1 - fractionalProgress); 
                 opacity = fractionalProgress; 
@@ -248,4 +246,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ensure the services section itself gets the 'revealed' class
     sectionObserver.observe(servicesSection);
-})
+});
