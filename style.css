@@ -536,8 +536,8 @@ html::before { /* Re-using html::before to cover the whole page */
     /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
     /* CRITICAL MODIFICATION: Removed translateY from inactive state to eliminate unwanted vertical slide.
-       Now, it only rotates into/out of view. */
-    transform: rotateX(90deg); /* Start rotated, ready to flip in */
+       Increased rotateX angle to push it further out of sight more quickly. */
+    transform: rotateX(105deg); /* Start rotated, ready to flip in */
     transform-origin: bottom center; /* Rotation pivot point: from bottom edge, rotates upwards */
     
     /* CRITICAL MODIFICATION: Much faster opacity transition (0.01s) to ensure instant text fade-out/in. */
