@@ -98,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Define how much scroll distance is needed to fully transition one item.
-    const SCROLL_DISTANCE_MULTIPLIER = 1.0; // Adjusted for snappier animation
+    // This value is CRITICAL for controlling how much scroll input is needed per animation step.
+    const SCROLL_DISTANCE_MULTIPLIER = 2.0; // Increased to make animation slower and more detailed with quick scrolls
     let SCROLL_DISTANCE_PER_ITEM = 0; // Will be calculated dynamically
 
     let currentActiveIndex = 0;
@@ -120,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
         // The faceOffset is half the height of the contentWrapper for a perfect cube.
-        // This is used to calculate the translateZ distance.
         const faceOffset = contentWrapperHeight / 2;
 
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_MULTIPLIER;
