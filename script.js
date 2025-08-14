@@ -129,7 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // The total scroll range needed for all steps.
         // Each "step" now effectively corresponds to the fixed duration of 1.2s, not necessarily a large scroll multiplier.
         // We ensure enough scroll space for each service item + a buffer.
-        const totalVirtualScrollHeight = serviceItems.length * window.innerHeight; // Provide ample scroll space
+        // Increased multiplier for spacer height to make page longer and ensure services section can be scrolled through
+        const SCROLL_DISTANCE_MULTIPLIER = 2.0; // This controls the effective "scroll distance" needed per step
+        const totalVirtualScrollHeight = serviceItems.length * (window.innerHeight * SCROLL_DISTANCE_MULTIPLIER); // Provide ample scroll space
 
         scrollSpacer.style.height = `${totalVirtualScrollHeight}px`;
 
@@ -178,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // All other items are completely hidden and reset
                 if (index < startIndex) {
                     transformValue = `rotateX(${direction === 1 ? 90 : -90}deg) translateZ(0px)`; // Positioned as top or bottom, hidden
-                } else {
+                } else { // index > startIndex && index !== targetIndex
                     transformValue = `rotateX(${direction === 1 ? -90 : 90}deg) translateZ(0px)`; // Positioned as top or bottom, hidden
                 }
                 opacity = 0; // Fully transparent

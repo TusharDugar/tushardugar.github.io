@@ -557,7 +557,7 @@ html::before { /* Re-using html::before to cover the whole page */
     /* Transform is fully controlled by JS for precise 3D positioning */
     transform-origin: center center; /* Rotation occurs around the center, with JS handling translateZ for the "edge" effect */
 
-    /* CRITICAL: Opacity transition is extremely fast to prevent ghosting. Transform duration set to 1.2s fixed. */
+    /* CRITICAL: Opacity transition is extremely fast to prevent ghosting. Transform duration fixed to 1.2s. */
     transition: opacity 0.05s ease-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Duration 1.2s as requested */
 
     backface-visibility: hidden; /* Hide the back of each face when rotated */
