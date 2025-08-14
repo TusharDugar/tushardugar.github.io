@@ -38,9 +38,7 @@
     --services-sticky-top-h2: 0px;
     --services-sticky-top-wrapper: 0px;
 
-    /* NEW: Variable for the perceived depth/size of cube faces */
-    /* This should be half the height of the .services-content-wrapper */
-    --services-face-offset: 175px; /* Default for desktop: half of 350px height */
+    /* Removed: --services-face-offset as it's no longer a 3D cube */
 }
 
 /* Global utility text colors */
@@ -172,7 +170,7 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1; /* Ensure sections are above background elements */
 }
 
-/* Reveal Animation Base */
+/* Reveal Animation Base for general sections */
 .reveal-item {
     opacity: 0;
     transform: translateY(40px);
@@ -464,128 +462,111 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* NEW: Services Section Styles - REFINED 3D-LIKE ANIMATION (RESTORED) */
+/* NEW: Services Section Styles - REVISED FOR 2D LAYERED MOTION */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
     text-align: left;
-    position: relative; /* Needed for sticky child to properly detach */
+    position: relative; /* Needed for positioning background numbers */
     z-index: 1;
 }
 
-/* Main sticky wrapper for services section */
+/* Main content wrapper for services section - No longer fixed viewport or 3D properties */
 .services-content-wrapper {
-    position: sticky; /* Makes this entire container sticky */
-    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
-    will-change: top;
-    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
-
-    /* Height and perspective are critical for the 3D effect */
-    height: 350px; /* Adjusted to fit content better */
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-start; 
-    perspective: 500px; /* Aggressively reduced perspective for faster visual disappearance */
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    /* REMOVED: position: sticky; top; will-change; z-index; height; perspective; overflow; */
+    /* All 3D specific properties removed */
+    display: flex; /* Keep flex for stacking heading and items */
+    flex-direction: column; /* Stack them vertically */
+    min-height: 350px; /* Maintain minimum height for overall section feel */
 }
 
 /* New inner container to hold heading and service items for unified layout */
 .services-sticky-content-inner {
-    position: relative; 
+    position: relative; /* Provides positioning context for background numbers */
     width: 100%;
-    height: 100%; 
+    /* height: 100%; REMOVED: No longer fixed height, allow content to dictate */
     display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: flex-start; 
-    box-sizing: border-box; 
+    flex-direction: column; /* Stack heading and items vertically */
+    justify-content: flex-start; /* Align content to the top */
+    align-items: flex-start; /* Align text left */
+    box-sizing: border-box; /* Include padding in dimensions */
 }
 
 /* Services Heading (now inside .services-sticky-content-inner) */
 .services-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 5em; 
+    font-size: 5em; /* Match tools heading size */
     line-height: 0.9;
     font-weight: 800;
-    margin-bottom: 30px; 
+    margin-bottom: 30px; /* Adjusted to give space below text */
     text-transform: uppercase;
-    text-align: left; 
-    position: sticky; 
-    top: 0; 
-    z-index: 2; /* Stays above content scrolling underneath */
-    /* Background-color removed as requested previously */
-    padding-bottom: 20px; 
+    text-align: left; /* Ensure heading is left-aligned */
+    position: sticky; /* Make the heading sticky */
+    top: 0; /* Stick to the very top of its sticky parent's visible area */
+    z-index: 2; /* Ensure it stays above content scrolling underneath */
+    /* background-color: var(--bg-main); - this stays REMOVED as requested previously */
+    padding-bottom: 20px; /* Add padding to prevent content from immediately hitting it */
 }
 
-/* Container for absolute service items */
+/* Container for service items - now they flow naturally */
 .services-items-container {
-    position: relative; 
+    /* REMOVED: transform-style: preserve-3d; transform: translateZ(...) */
     width: 100%;
-    height: 100%; 
-    transform-style: preserve-3d; /* Enables children to participate in 3D space */
-    /* Pull the entire cube forward so its front face is aligned with the viewer's plane */
-    transform: translateZ(calc(-1 * var(--services-face-offset))); 
+    /* height: 100%; REMOVED: No longer covers 100% height of parent */
 }
 
 .service-item {
-    position: absolute; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; 
-    display: flex;
+    /* REMOVED: position: absolute; top: 0; left: 0; width: 100%; height: 100%; */
+    display: flex; /* Keep flex for inner content alignment */
     flex-direction: column;
-    justify-content: center; 
-    align-items: flex-start; 
-    padding: 20px; 
+    justify-content: center; /* Center content vertically within the item */
+    align-items: flex-start; /* Align text left */
+    padding: 20px 0; /* Inner vertical padding */
     box-sizing: border-box;
+    margin-bottom: 60px; /* Space between service items when stacked */
 
-    opacity: 0; /* Fully transparent when inactive */
-    /* Inactive state: positioned as if it's a rotated face within the cube */
-    transform: rotateX(90deg) translateZ(var(--services-face-offset)); 
-    transform-origin: center center; /* Pivot from the center of the element */
+    /* Layered motion: Fade in and subtle scale/slide up */
+    opacity: 0; 
+    transform: translateY(40px) scale(0.95); /* Start slightly down and smaller */
     
-    /* CRITICAL MODIFICATION: Extremely fast opacity transition (0.001s) for instant text fade-out/in.
-       Transform duration reduced to half (0.4s) for snappier cube motion. */
-    transition: opacity 0.001s ease-out, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    /* REVISED TRANSITION: Smooth 2D animation */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; 
     
-    backface-visibility: hidden; /* Prevents back of element from being seen during flip */
+    /* REMOVED: backface-visibility: hidden; transform-origin: center center; */
     will-change: opacity, transform; /* Performance hint */
 
     /* Text styling */
-    color: var(--text-light); 
+    color: var(--text-light); /* Default text color */
 }
 
-/* Active state for service content */
+/* Active state for service content (triggered by JS stagger) */
 .service-item.active-content {
     opacity: 1;
-    /* Active state: flat and pulled forward to the front of the conceptual cube */
-    transform: rotateX(0deg) translateZ(var(--services-face-offset)); 
-    z-index: 1; /* Ensures active item is on top */
+    transform: translateY(0) scale(1); /* Full size, in place */
+    z-index: 1; /* Ensure active item is on top */
 }
 
-/* Hover Interaction for Service Items (No longer relevant for a 3D effect in motion) */
-/* This rule will not interfere with the scroll animation but is left here for consistency */
+/* Hover Interaction for Service Items */
 .service-item:hover {
-    /* transform: translateY(-5px) scale(1.03); */ /* Not applicable for 3D faces */
-    /* transition: transform 0.3s ease-out; */
+    transform: translateY(-5px) scale(1.03); /* Slightly lift and scale up on hover */
+    transition: transform 0.3s ease-out; /* Smooth hover transition */
 }
 
 
 /* Styling for the large background number */
 .service-bg-number {
-    position: absolute;
+    position: absolute; /* Relative to .services-section */
     font-family: 'Poppins', sans-serif;
     font-size: 15em; 
     font-weight: 800;
     color: var(--services-bg-number-color); 
-    top: 50%;
-    right: 50px; 
-    transform: translateY(-50%); 
+    top: 50%; /* Center vertically within .services-section */
+    right: 50px; /* Adjusted to ensure numbers are fully visible */
+    transform: translateY(-50%); /* Center vertically */
     line-height: 1;
-    user-select: none; 
-    pointer-events: none; 
-    z-index: -1; 
+    user-select: none; /* Prevent text selection */
+    pointer-events: none; /* Do not interfere with clicks */
+    z-index: -1; /* Behind other content */
 }
 
 /* Service Title - Reverted to orange, no italics */
@@ -606,9 +587,9 @@ html::before { /* Re-using html::before to cover the whole page */
     font-style: normal; 
 }
 
-/* Since service-items are absolute, we need to create virtual scroll space */
+/* Since service-items are now naturally stacked, this spacer is less critical 
+   for fixed-height sections but can still be used for overall scroll length. */
 .services-section-scroll-spacer {
-    /* This element is added dynamically by JS to control scroll length */
     display: block; 
 }
 
@@ -938,17 +919,15 @@ footer h2 {
         padding-bottom: 80px; 
     }
     .services-content-wrapper {
-        height: 300px; 
-        perspective: 450px; 
-        /* Update --services-face-offset for this breakpoint */
-        --services-face-offset: 150px; /* Half of 300px height */
+        min-height: 300px; /* Adjusted min-height */
     }
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 30px; 
     }
     .service-item {
-        padding: 15px; 
+        padding: 15px 0; /* Inner vertical padding */
+        margin-bottom: 50px; /* Adjusted spacing */
     }
     .service-bg-number {
         font-size: 12em; 
@@ -961,7 +940,6 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
-    /* No empty rulesets here, as the variable definition is now inside .services-content-wrapper */
 
     /* Adjustments for tools section */
     .tools-section {
@@ -1112,17 +1090,15 @@ footer h2 {
         padding-bottom: 60px;
     }
     .services-content-wrapper {
-        height: 250px; 
-        perspective: 350px; 
-        /* Update --services-face-offset for this breakpoint */
-        --services-face-offset: 125px; /* Half of 250px height */
+        min-height: 250px; /* Adjusted min-height */
     }
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px; 
     }
     .service-item {
-        padding: 10px;
+        padding: 10px 0; /* Inner vertical padding */
+        margin-bottom: 40px; /* Adjusted spacing */
     }
     .service-bg-number {
         font-size: 8em; 
@@ -1136,7 +1112,6 @@ footer h2 {
         font-size: 0.9em;
         max-width: 100%;
     }
-    /* No empty rulesets here, as the variable definition is now inside .services-content-wrapper */
 
     /* Adjustments for tools section */
     .tools-section {
@@ -1304,17 +1279,15 @@ footer h2 {
         padding-bottom: 50px;
     }
     .services-content-wrapper {
-        height: 230px; 
-        perspective: 250px; 
-        /* Update --services-face-offset for this breakpoint */
-        --services-face-offset: 115px; /* Half of 230px height */
+        min-height: 230px; /* Adjusted min-height */
     }
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px; 
     }
     .service-item {
-        padding: 12px;
+        padding: 12px 0; /* Inner vertical padding */
+        margin-bottom: 30px; /* Adjusted spacing */
     }
     .service-bg-number {
         font-size: 6em; 
