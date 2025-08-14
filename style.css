@@ -460,7 +460,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* NEW: Services Section Styles - REVERTED FOR 3D-LIKE ANIMATION */
+/* NEW: Services Section Styles - REVERTED TO ORIGINAL 3D-LIKE ANIMATION */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
@@ -508,7 +508,7 @@ html::before { /* Re-using html::before to cover the whole page */
     position: sticky; /* Make the heading sticky */
     top: 0; /* Stick to the very top of its sticky parent's visible area */
     z-index: 2; /* Ensure it stays above content scrolling underneath */
-    /* REMOVED: background-color: var(--bg-main); as requested by previous turn */
+    /* REMOVED: background-color: var(--bg-main); - this stays removed as requested previously */
     padding-bottom: 20px; /* Add padding to prevent content from immediately hitting it */
 }
 
@@ -547,7 +547,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 /* Active state for service content */
-.service-item.active-content { /* Kept 'active-content' as per previous 3D version */
+.service-item.active-content { /* Kept 'active-content' as per original 3D version */
     opacity: 1;
     transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
     z-index: 1; /* Ensure active item is on top */
