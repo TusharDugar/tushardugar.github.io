@@ -538,8 +538,8 @@ html::before { /* Re-using html::before to cover the whole page */
     transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
     
-    /* MODIFIED: Faster opacity transition on exit (0.15s) compared to transform (0.8s) */
-    transition: opacity 0.15s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    /* CRITICAL MODIFICATION: Much faster opacity transition on exit (0.01s) */
+    transition: opacity 0.01s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
