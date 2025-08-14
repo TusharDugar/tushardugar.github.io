@@ -460,7 +460,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* NEW: Services Section Styles - REVERTED TO ORIGINAL 3D-LIKE ANIMATION */
+/* NEW: Services Section Styles - REVERTED TO ORIGINAL 3D-LIKE ANIMATION WITH FADE FIXES */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
@@ -537,8 +537,10 @@ html::before { /* Re-using html::before to cover the whole page */
     opacity: 0; /* Fully transparent when inactive */
     transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
     transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    /* Refined transition for a cleaner fade-out */
-    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    
+    /* MODIFIED: Faster opacity transition on exit (0.15s) compared to transform (0.8s) */
+    transition: opacity 0.15s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+    
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
     will-change: opacity, transform; /* Performance hint */
 
