@@ -50,10 +50,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }, sectionObserverOptions);
 
     // Observe all main sections with the general section observer
-    document.querySelectorAll('.about-left-content').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#contact').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#hero-right').forEach(el => sectionObserver.observe(el));
     document.querySelectorAll('#tools').forEach(el => sectionObserver.observe(el));
+
+
+    // --- About Section Staggered Reveal Logic (DesignCube-like) ---
+    const aboutSection = document.getElementById('about');
+    const revealStaggerParent = aboutSection ? aboutSection.querySelector('.reveal-stagger-parent') : null;
+    const revealStaggerChildren = revealStaggerParent ? revealStaggerParent.querySelectorAll('.reveal-stagger') : [];
+
+    if (revealStaggerParent && revealStaggerChildren.length > 0) {
+        const staggerObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    revealStaggerChildren.forEach((child, index) => {
+                        setTimeout(() => {
+                            child.classList.add('revealed');
+                        }, index * 200); // 0.2s stagger delay
+                    });
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the parent is visible
+
+        staggerObserver.observe(revealStaggerParent);
+    } else {
+        console.warn('About section stagger elements not found. Skipping staggered reveal setup.');
+        // Ensure about-left-content still reveals if stagger elements are missing
+        if (aboutSection) aboutSection.classList.add('revealed'); 
+    }
+    // Also observe the main about section with the general section observer for its own reveal-item class
+    if (aboutSection) sectionObserver.observe(aboutSection);
 
 
     // --- Services Section Animation Logic (3D Cube Scroll Effect) ---
@@ -112,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update the CSS variable for 3D face offset
         // This should be half the height of the contentWrapper
         const newFaceOffset = contentWrapperHeight / 2;
-        servicesSection.style.setProperty('--services-face-offset', `${newFaceOffset}px`);
+        servicesContentWrapper.style.setProperty('--services-face-offset', `${newFaceOffset}px`); // Set on contentWrapper itself
 
         // The actual scroll distance for one item's animation
         SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
@@ -164,7 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
         serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
 
         // Get the current value of --services-face-offset from CSS for consistent calculations
-        const faceOffset = parseFloat(getComputedStyle(servicesSection).getPropertyValue('--services-face-offset'));
+        // This is now retrieved from servicesContentWrapper.style
+        const faceOffset = parseFloat(getComputedStyle(servicesContentWrapper).getPropertyValue('--services-face-offset'));
         
         // Apply 3D transforms and opacity to each service item
         serviceItems.forEach((item, index) => {

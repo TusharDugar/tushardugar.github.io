@@ -580,11 +580,10 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1; /* Ensures active item is on top */
 }
 
-/* Hover Interaction for Service Items (No longer relevant for a 3D effect in motion) */
-/* This rule will not interfere with the scroll animation but is left here for consistency */
-.service-item:hover {
-    /* transform: translateY(-5px) scale(1.03); */ /* Not applicable for 3D faces */
-    /* transition: transform 0.3s ease-out; */
+/* Hover Interaction for Service Items (Applies ONLY to the active card) */
+.service-item.active-content:hover { /* Targeted to active content only */
+    transform: scale(1.03) rotateX(0deg) translateZ(var(--services-face-offset)); /* Scale up but maintain its flat, front-facing position */
+    transition: transform 0.3s ease-out; /* Smooth hover transition */
 }
 
 
