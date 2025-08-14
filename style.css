@@ -485,7 +485,8 @@ html::before { /* Re-using html::before to cover the whole page */
     display: flex; /* Use flexbox to center its inner content */
     justify-content: center; /* Center content vertically within the sticky window */
     align-items: flex-start; /* Align content to the left of the sticky window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
+    /* CRITICAL MODIFICATION: Aggressively reduced perspective for faster visual disappearance */
+    perspective: 600px; /* Adjusted from 1000px */
     overflow: hidden; /* Crucial for clipping the "cuboid" effect */
 }
 
@@ -523,7 +524,7 @@ html::before { /* Re-using html::before to cover the whole page */
     width: 100%;
     height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
     transform-style: preserve-3d; /* Crucial: enables children to participate in 3D space */
-    /* NEW: Pull the entire cube forward so its front face is aligned with the viewer's plane */
+    /* Pull the entire cube forward so its front face is aligned with the viewer's plane */
     transform: translateZ(calc(-1 * var(--services-face-offset))); 
 }
 
@@ -943,6 +944,8 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 300px; /* Adjusted from 400px */
+        /* CRITICAL MODIFICATION: Aggressively reduced perspective for faster visual disappearance */
+        perspective: 500px; /* Adjusted from 1000px */
     }
     .services-heading {
         font-size: 4.5em;
@@ -1117,6 +1120,8 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 250px; /* Adjusted fixed height for mobile */
+        /* CRITICAL MODIFICATION: Aggressively reduced perspective for faster visual disappearance */
+        perspective: 400px; /* Adjusted from 600px */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1309,6 +1314,8 @@ footer h2 {
     }
     .services-content-wrapper {
         height: 230px; /* Adjusted from 200px */
+        /* CRITICAL MODIFICATION: Aggressively reduced perspective for faster visual disappearance */
+        perspective: 300px; /* Adjusted from 400px */
     }
     .services-heading {
         font-size: 2.8em;
