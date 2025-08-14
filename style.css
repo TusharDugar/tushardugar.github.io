@@ -460,7 +460,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* NEW: Services Section Styles - REVERTED TO ORIGINAL 3D-LIKE ANIMATION WITH FADE FIXES */
+/* NEW: Services Section Styles - REFINED 3D-LIKE ANIMATION */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
@@ -535,10 +535,12 @@ html::before { /* Re-using html::before to cover the whole page */
 
     /* Initial state for parallax/3D effect */
     opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
-    transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
+    /* CRITICAL MODIFICATION: Removed translateY from inactive state to eliminate unwanted vertical slide.
+       Now, it only rotates into/out of view. */
+    transform: rotateX(90deg); /* Start rotated, ready to flip in */
+    transform-origin: bottom center; /* Rotation pivot point: from bottom edge, rotates upwards */
     
-    /* CRITICAL MODIFICATION: Much faster opacity transition on exit (0.01s) */
+    /* CRITICAL MODIFICATION: Much faster opacity transition (0.01s) to ensure instant text fade-out/in. */
     transition: opacity 0.01s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     
     backface-visibility: hidden; /* Prevents back of element from being seen during flip */
