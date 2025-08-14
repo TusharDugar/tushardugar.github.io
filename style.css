@@ -182,6 +182,23 @@ html::before { /* Re-using html::before to cover the whole page */
     transform: translateY(0);
 }
 
+/* Staggered reveal style for children within a parent */
+.reveal-stagger {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal-stagger.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Hover lift for tactile feel */
+.reveal-stagger:hover {
+    transform: translateY(0) scale(1.03);
+    transition: transform 0.3s ease-out;
+}
+
 
 /* Main Layout Container (now with left sticky and empty right scrollable area) */
 .main-layout-container {
@@ -225,7 +242,7 @@ html::before { /* Re-using html::before to cover the whole page */
     max-width: 370px; /* Adjusted from 400px - narrower */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
-    opacity: 0; /* Initial state for reveal */
+    opacity: 0; /* Initial state for reveal (controlled by reveal-item) */
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     display: flex; /* Use flexbox for main card content alignment */
@@ -565,10 +582,6 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* Hover Interaction for Service Items (No longer relevant for a 3D effect in motion) */
 /* This rule will not interfere with the scroll animation but is left here for consistency */
-.service-item:hover {
-    /* transform: translateY(-5px) scale(1.03); */ /* Not applicable for 3D faces */
-    /* transition: transform 0.3s ease-out; */
-}
 
 
 /* Styling for the large background number */
@@ -957,7 +970,7 @@ footer h2 {
         font-size: 1.8em;
     }
     .service-description {
-        font-size: 1em;
+        font-size: 1.1em; /* Adjusted to fit better */
         max-width: 500px;
     }
 
