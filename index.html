@@ -19,28 +19,26 @@
     <div class="main-layout-container"> <!-- Main container for the two columns -->
         <div class="left-column-sticky">
             <section id="about" class="section about-left-content reveal-item">
-                <div class="profile-card-wrapper reveal-stagger-parent"> <!-- Added reveal-stagger-parent -->
+                <div class="profile-card-wrapper reveal-stagger-parent">
                     <!-- Decorative background dashed lines (from Aabid Ahmed card) -->
                     <div class="dashed-decoration top-left-curve"></div>
                     <div class="dashed-decoration bottom-right-curve"></div>
 
-                    <div class="profile-image-container reveal-stagger"> <!-- Added reveal-stagger -->
+                    <div class="profile-image-container reveal-stagger">
                         <!-- Placeholder image: A black silhouette on orange background to match Aabid Ahmed style -->
                         <img src="https://via.placeholder.com/250x180/FF6B00/000000?text=" alt="Tushar Dugar Profile" class="profile-photo">
                     </div>
 
                     <!-- Name - changed to single line as per Aabid Ahmed -->
-                    <h3 class="reveal-stagger">Tushar Dugar</h3> <!-- Added reveal-stagger -->
-                    <!-- Removed .about-tagline as it's not present in Aabid Ahmed's card -->
-                    <!-- The p.about-tagline element was removed from here. -->
-
-                    <div class="fire-icon-with-line reveal-stagger"> <!-- Added reveal-stagger -->
+                    <h3 class="reveal-stagger">Tushar Dugar</h3>
+                    
+                    <div class="fire-icon-with-line reveal-stagger">
                         <span class="fire-icon"><i class="fas fa-fire"></i></span>
                     </div>
                     
-                    <p class="about-short-desc reveal-stagger">A Digital Marketing professional who transforms data into dynamic strategies and creates engaging visual content.</p> <!-- Added reveal-stagger -->
+                    <p class="about-short-desc reveal-stagger">A Digital Marketing professional who transforms data into dynamic strategies and creates engaging visual content.</p>
                     
-                    <div class="about-social-icons reveal-stagger"> <!-- Added reveal-stagger -->
+                    <div class="about-social-icons reveal-stagger">
                         <!-- Social icons for Aabid Ahmed's style -->
                         <a href="https://dribbble.com/" target="_blank" title="Dribbble"><i class="fab fa-dribbble"></i></a>
                         <a href="https://twitter.com/" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
@@ -61,7 +59,7 @@
                 <p class="hero-description">I'm a creative developer who builds dynamic and user-centric web solutions. From intricate front-end designs to robust back-end systems, I transform ideas into powerful digital realities. My passion lies in blending design aesthetics with seamless functionality.</p>
             </section>
 
-            <!-- New: Services Section - Now with background numbers and animation setup -->
+            <!-- Services Section - Now with background numbers and animation setup -->
             <section id="services" class="section services-section">
                 <h2 class="services-heading">
                     <span class="text-white">MY</span><br>
@@ -69,7 +67,7 @@
                 </h2>
 
                 <div class="services-content-wrapper">
-                    <!-- !!! IMPORTANT: ADDED THIS CONTAINER - This was the missing piece !!! -->
+                    <!-- !!! IMPORTANT: THIS IS THE MISSING CONTAINER - IT MUST BE HERE !!! -->
                     <div class="services-items-container">
                         <div class="service-item" id="service-0" data-service-index="0">
                             <span class="service-bg-number">01</span>
@@ -112,8 +110,11 @@
                             <p class="service-description">Managing and growing your social media presence effectively to engage with your audience and build your brand.</p>
                         </div>
                     </div>
-                    <!-- !!! END OF IMPORTANT ADDITION !!! -->
+                    <!-- !!! END OF MISSING CONTAINER !!! -->
                 </div>
+                <!-- The service-bg-number should be a direct child of #services, outside services-content-wrapper -->
+                <div class="service-bg-number">01</div> 
+                <!-- The services-section-scroll-spacer is dynamically added by JS -->
             </section>
 
             <!-- Premium Tools Section -->
@@ -186,7 +187,7 @@
     </div> <!-- End main-layout-container -->
 
     <footer id="contact" class="section reveal-item">
-        <h2>Let’s Connect!</h2> <!-- Changed heading text -->
+        <h2>Let’s Connect!</h2>
         <p class="contact-tagline">
             I am always open to discuss your project,<br>improve your online presence or help with your website.
         </p>
@@ -207,7 +208,7 @@
             </button>
         </div>
         <div class="social-links">
-            <!-- No social links other than contact buttons as per request -->
+            <!-- Social links removed as per earlier request -->
         </div>
     </footer>
 
