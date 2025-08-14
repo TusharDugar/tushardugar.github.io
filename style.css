@@ -460,7 +460,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* NEW: Services Section Styles - Revised for 3D-like animation */
+/* NEW: Services Section Styles - Revised to match Framer.ai About page */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
@@ -469,29 +469,25 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1;
 }
 
-/* Main sticky wrapper for services section */
+/* Main content wrapper for services section - NO LONGER A FIXED VIEPORT */
 .services-content-wrapper {
-    position: sticky; /* Makes this entire container sticky */
-    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
-    will-change: top;
-    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
-
-    height: 450px; /* Fixed height to control content display window for sticky effect */
-    display: flex; /* Use flexbox to center its inner content */
-    justify-content: center; /* Center content vertically within the sticky window */
-    align-items: flex-start; /* Align content to the left of the sticky window */
-    perspective: 1000px; /* Defines the depth of 3D transforms */
-    overflow: hidden; /* Crucial for clipping the "cuboid" effect */
+    /* Removed fixed height, overflow, and perspective for standard content flow */
+    display: flex; /* Keep flex for stacking heading and items */
+    flex-direction: column; /* Stack them vertically */
+    /* Removed position: sticky from here. The actual sticky behaviour is now just on the heading.
+       This wrapper will flow normally with the page. */
+    will-change: transform; /* Good practice for children animations */
+    z-index: 1; 
 }
 
 /* New inner container to hold heading and service items for unified layout */
 .services-sticky-content-inner {
-    position: relative; /* Provides positioning context for absolute children */
+    position: relative; /* Provides positioning context for absolute children (if any, not for service-item anymore) */
     width: 100%;
-    height: 100%; /* Take full height of the wrapper */
+    /* height: 100%; REMOVED: No longer fixed height */
     display: flex;
     flex-direction: column; /* Stack heading and items vertically */
-    justify-content: center; /* Center content vertically within this inner container */
+    justify-content: flex-start; /* Align content to the top */
     align-items: flex-start; /* Align text left */
     box-sizing: border-box; /* Include padding in dimensions */
 }
@@ -502,60 +498,53 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 5em; /* Match tools heading size */
     line-height: 0.9;
     font-weight: 800;
-    /* ISSUE 1: Heading getting scrolled again - adjusted margin and re-added sticky */
-    margin-bottom: 30px; /* Adjusted from 50px */
+    margin-bottom: 30px; /* Adjusted to give space below text */
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    position: sticky; /* RE-ADDED: Make the heading sticky */
-    top: 0; /* Stick to the very top of its sticky parent */
+    position: sticky; /* Make the heading sticky */
+    top: 0; /* Stick to the very top of its sticky parent's visible area */
     z-index: 2; /* Ensure it stays above content scrolling underneath */
     /* REMOVED: background-color: var(--bg-main); as requested */
     padding-bottom: 20px; /* Add padding to prevent content from immediately hitting it */
 }
 
-/* Container for absolute service items */
+/* Container for service items - now they flow naturally */
 .services-items-container {
-    position: relative; /* Provides positioning context for .service-item */
+    /* No longer relative for absolute positioning of service-item, they will stack normally */
     width: 100%;
-    height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
+    /* height: 100%; REMOVED: No longer covers 100% height of parent */
 }
 
 .service-item {
-    position: absolute; /* Position items absolutely within .services-items-container */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; /* Take full height of the container */
-    display: flex;
+    /* REMOVED: position: absolute; top: 0; left: 0; width: 100%; height: 100%; */
+    display: flex; /* Keep flex for inner content alignment */
     flex-direction: column;
     justify-content: center; /* Center content vertically within the item */
     align-items: flex-start; /* Align text left */
-    padding: 20px; /* Inner padding */
+    padding: 20px 0; /* Inner padding (vertical only, horizontal handled by container) */
     box-sizing: border-box;
+    margin-bottom: 60px; /* Space between service items when stacked */
 
-    /* Initial state for parallax/3D effect */
-    opacity: 0; /* Fully transparent when inactive */
-    transform: translateY(100px) rotateX(90deg); /* Start below and rotated */
-    transform-origin: bottom center; /* Rotation pivot point: from bottom, rotates upwards */
-    /* Refined transition for a cleaner fade-out */
-    transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-    backface-visibility: hidden; /* Prevents back of element from being seen during flip */
+    /* Animation to simply fade in and slide up */
+    opacity: 0; 
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Smoother transition */
     will-change: opacity, transform; /* Performance hint */
 
     /* Text styling */
     color: var(--text-light); /* Default text color */
 }
 
-/* Active state for service content */
-.service-item.active-content {
+/* Active state for service content (will likely be controlled by JS for scroll-reveal) */
+.service-item.revealed { /* Using 'revealed' to align with global reveal-item class */
     opacity: 1;
-    transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
+    transform: translateY(0);
     z-index: 1; /* Ensure active item is on top */
 }
 
 /* Styling for the large background number */
 .service-bg-number {
-    position: absolute;
+    position: absolute; /* Keep absolute relative to parent (.services-items-container) or .services-section */
     font-family: 'Poppins', sans-serif;
     font-size: 15em; /* Huge size */
     font-weight: 800;
@@ -567,6 +556,9 @@ html::before { /* Re-using html::before to cover the whole page */
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
+    /* NOTE: With items no longer absolute, these numbers will overlay all items from the start of the section.
+             If you need numbers per item, they should be inside each .service-item and positioned relative to it.
+             For now, keeping it global in the section. */
 }
 
 /* Service Title - Reverted to orange, no italics */
@@ -587,11 +579,12 @@ html::before { /* Re-using html::before to cover the whole page */
     font-style: normal; /* Ensured no italics */
 }
 
-/* Since service-items are absolute, we need to create virtual scroll space */
+/* Since service-items are no longer absolute, this spacer's CSS role changes or is removed */
 .services-section-scroll-spacer {
     /* This element is added dynamically by JS to control scroll length */
-    /* Its height will be calculated by JS */
-    display: block; /* Added to make the ruleset non-empty and satisfy linters */
+    /* Its height will be calculated by JS for previous 3D effect. 
+       Now, its explicit CSS rules might be redundant if items stack normally. */
+    display: block; 
 }
 
 
@@ -930,15 +923,14 @@ footer h2 {
         padding-top: 60px; /* Adjusted spacing now that it's after hero */
         padding-bottom: 80px; /* Space before tools section */
     }
-    .services-content-wrapper {
-        height: 400px; /* Adjust height for smaller desktop */
-    }
+    
     .services-heading {
         font-size: 4.5em;
         margin-bottom: 30px; /* Keep consistent after sticky padding */
     }
     .service-item {
-        padding: 15px;
+        padding: 15px 0;
+        margin-bottom: 50px; /* Adjusted spacing */
     }
     .service-bg-number {
         font-size: 12em; /* Scale down background number */
@@ -1100,15 +1092,14 @@ footer h2 {
         padding-top: 40px;
         padding-bottom: 60px;
     }
-    .services-content-wrapper {
-        height: 250px; /* Adjusted fixed height for mobile */
-    }
+    
     .services-heading {
         font-size: 3.5em;
         margin-bottom: 30px; /* Keep consistent after sticky padding */
     }
     .service-item {
-        padding: 10px;
+        padding: 10px 0;
+        margin-bottom: 40px; /* Adjusted spacing */
     }
     .service-bg-number {
         font-size: 8em; /* Smaller background number on mobile */
@@ -1288,15 +1279,14 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
-    .services-content-wrapper {
-        height: 200px; /* Further adjusted fixed height for very small mobile */
-    }
+    
     .services-heading {
         font-size: 2.8em;
         margin-bottom: 25px; /* Keep consistent after sticky padding */
     }
     .service-item {
-        padding: 12px;
+        padding: 12px 0;
+        margin-bottom: 30px; /* Adjusted spacing */
     }
     .service-bg-number {
         font-size: 6em; /* Even smaller background number */
