@@ -474,6 +474,7 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Main content wrapper for services section - No longer fixed viewport or 3D properties */
 .services-content-wrapper {
     /* REMOVED: position: sticky; top; will-change; z-index; height; perspective; overflow; */
+    /* All 3D specific properties removed */
     display: flex; /* Keep flex for stacking heading and items */
     flex-direction: column; /* Stack them vertically */
     min-height: 350px; /* Maintain minimum height for overall section feel */
@@ -538,8 +539,8 @@ html::before { /* Re-using html::before to cover the whole page */
     color: var(--text-light); /* Default text color */
 }
 
-/* Active state for service content */
-.service-item.active-content { /* Uses active-content as per JS toggling */
+/* Active state for service content (triggered by JS stagger) */
+.service-item.active-content {
     opacity: 1;
     transform: translateY(0) scale(1); /* Full size, in place */
     z-index: 1; /* Ensure active item is on top */

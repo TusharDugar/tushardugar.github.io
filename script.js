@@ -40,9 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('revealed');
-                // Don't unobserve #services immediately, as its internal animation relies on visibility
-                // and we want its parent section to remain "revealed".
-                if (entry.target.id !== 'services') {
+                // Unobserve for general sections to run animation once
+                if (!entry.target.classList.contains('services-section')) { // Do not unobserve services section parent immediately
                     observer.unobserve(entry.target); 
                 }
             }
@@ -56,174 +55,42 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('#tools').forEach(el => sectionObserver.observe(el));
 
 
-    // --- Services Section Animation Logic (Framer-like "cuboid" scroll effect) ---
+    // --- Services Section Animation Logic (2D Layered Staggered Reveal) ---
     const servicesSection = document.getElementById('services');
-    const servicesHeading = servicesSection ? servicesSection.querySelector('.services-heading') : null;
     const servicesContentWrapper = servicesSection ? servicesSection.querySelector('.services-content-wrapper') : null;
     const serviceItems = servicesContentWrapper ? servicesContentWrapper.querySelectorAll('.service-item') : [];
-    const serviceBgNumber = servicesContentWrapper ? servicesContentWrapper.querySelector('.service-bg-number') : null;
     
     // Critical check for existence
-    if (!servicesSection || serviceItems.length === 0 || !servicesHeading || !servicesContentWrapper || !serviceBgNumber) {
+    if (!servicesSection || !servicesContentWrapper || serviceItems.length === 0) {
         console.warn('Services section or required elements not found. Skipping services animation setup.');
-        if (servicesSection) servicesSection.classList.add('revealed'); // Ensure section itself still reveals
+        // Ensure section itself still reveals even if children animation is skipped
+        if (servicesSection) servicesSection.classList.add('revealed'); 
         return; 
     }
 
-    // Create the scroll spacer if it's not already there
-    let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
-    if (!scrollSpacer) {
-        scrollSpacer = document.createElement('div');
-        scrollSpacer.classList.add('services-section-scroll-spacer');
-        servicesSection.appendChild(scrollSpacer);
-    }
-
-    // Define how much scroll distance is needed to fully transition one item.
-    const SCROLL_DISTANCE_PER_ITEM_MULTIPLIER = 1; // Increased for more scroll per item
-    let SCROLL_DISTANCE_PER_ITEM; // Will be calculated based on servicesContentWrapper height
-
-    let currentActiveIndex = 0; // Tracks the currently active slide index, initialized to 0
-    let lastScrollY = window.scrollY; // For scroll direction detection
-    let rafId = null; // For requestAnimationFrame optimization
-
-    // Function to calculate and set the total scrollable height of the services section
-    // and the sticky container's top offset for centering
-    const adjustServicesLayout = () => {
-        // Recalculate dynamic values on resize or initial load
-        const contentWrapperHeight = servicesContentWrapper.offsetHeight; 
-        const servicesHeadingHeight = servicesHeading.offsetHeight;
-        const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
-
-        // Calculate the ideal top offset for the heading to be visually centered
-        // It's (viewport height - total visible sticky content height) / 2
-        // Total visible sticky content is heading + gap + contentWrapper
-        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
-        let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
-        stickyTopH2 = Math.max(0, stickyTopH2); // Ensure it's not negative
-
-        // The wrapper's sticky top should be right below the heading + gap
-        let stickyTopWrapper = stickyTopH2 + servicesHeadingHeight + gapBetweenHeadingAndWrapper;
-
-        // Set CSS variables for sticky top offsets
-        servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
-        servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
-
-        // The actual scroll distance for one item's animation
-        SCROLL_DISTANCE_PER_ITEM = contentWrapperHeight * SCROLL_DISTANCE_PER_ITEM_MULTIPLIER;
-
-        // The total animation scroll range for all items to transition
-        const totalAnimationScrollRange = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
-
-        // The spacer needs to provide enough height for:
-        // 1. Scrolling until the sticky elements hit their top position (stickyTopH2)
-        // 2. Scrolling through the entire animation range (totalAnimationScrollRange)
-        // 3. A buffer at the end so the last animation can complete before the section ends.
-        scrollSpacer.style.height = `${stickyTopH2 + totalAnimationScrollRange + (window.innerHeight * 0.8)}px`; // Increased end buffer
-
-        // console.log(`Spacer height set to: ${scrollSpacer.offsetHeight}px for ${serviceItems.length} items.`);
-        // console.log(`Heading Height: ${servicesHeadingHeight}, Wrapper Height: ${contentWrapperHeight}`);
-        // console.log(`Sticky Top H2: ${stickyTopH2}, Sticky Top Wrapper: ${stickyTopWrapper}`);
-        // console.log(`Scroll Distance Per Item: ${SCROLL_DISTANCE_PER_ITEM}`);
-    };
-
-    // This is the core animation logic, triggered by scroll
-    const updateServiceAnimation = () => {
-        // Calculate scroll progress relative to when the services section's heading starts sticking
-        // This makes the animation independent of the overall scroll position of the services section.
-        const stickyH2Top = parseFloat(getComputedStyle(servicesSection).getPropertyValue('--services-sticky-top-h2'));
-        const animationStartScroll = servicesSection.offsetTop + stickyH2Top;
-
-        let scrollProgress = window.scrollY - animationStartScroll;
-
-        // Clamp the scroll progress to the valid range for our animation.
-        const maxScrollableRangeForAnimation = (serviceItems.length - 1) * SCROLL_DISTANCE_PER_ITEM;
-        scrollProgress = Math.max(0, Math.min(maxScrollableRangeForAnimation, scrollProgress));
-
-        // Determine which item should be active based on scroll progress
-        const normalizedProgress = scrollProgress / SCROLL_DISTANCE_PER_ITEM;
-        const currentIndex = Math.floor(normalizedProgress);
-        const fractionalProgress = normalizedProgress - currentIndex; // Progress within the current item's transition (0 to 1)
-
-        // Update the background number for the active slide
-        const newActiveIndex = Math.max(0, Math.min(serviceItems.length - 1, currentIndex));
-        if (newActiveIndex !== currentActiveIndex) {
-            currentActiveIndex = newActiveIndex;
-        }
-        const displayIndex = currentActiveIndex + 1; // Service numbers are 1-based
-        serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
-
-        const contentWrapperHeight = servicesContentWrapper.offsetHeight; // Get current height
-
-        // Apply 3D transforms and opacity to each service item
-        serviceItems.forEach((item, index) => {
-            let translateY = 0;
-            let rotateX = 0;
-            let opacity = 0;
-            let zIndex = 0;
-
-            if (index === currentIndex) {
-                // The current item: animating out (rotating outwards and fading)
-                rotateX = 90 * fractionalProgress; // Rotates from 0deg to 90deg (forward/outwards)
-                translateY = -contentWrapperHeight * fractionalProgress; // Moves upwards
-                opacity = 1 - fractionalProgress; // Fades out
-                zIndex = 2; // Ensures it's on top when exiting
-            } else if (index === currentIndex + 1) {
-                // The next item: animating in (rotating into view from behind/below)
-                rotateX = -90 + (90 * fractionalProgress); 
-                translateY = contentWrapperHeight * (1 - fractionalProgress); // Moves downwards into place
-                opacity = fractionalProgress; // Fades in
-                zIndex = 1; // Appears just below the exiting item
-            } else {
-                // All other items are completely hidden and reset
-                opacity = 0;
-                translateY = 0;
-                rotateX = 0;
-                zIndex = 0;
+    // Intersection Observer for staggered service item reveal
+    const serviceItemsObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // When the content wrapper comes into view, trigger staggered animation for its children
+                serviceItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('active-content');
+                    }, index * 200); // Stagger each item by 200ms (0.2s)
+                });
+                observer.unobserve(entry.target); // Unobserve after triggering, so it runs only once
             }
-
-            item.style.transform = `translateY(${translateY}px) rotateX(${rotateX}deg)`;
-            item.style.opacity = opacity;
-            item.style.zIndex = zIndex;
         });
-
-        rafId = null; // Reset requestAnimationFrame ID
-    };
-
-    // Debounced scroll handler to optimize performance with requestAnimationFrame
-    const handleScrollEvent = () => {
-        if (window.scrollY !== lastScrollY) {
-            lastScrollY = window.scrollY;
-            if (rafId) {
-                cancelAnimationFrame(rafId);
-            }
-            rafId = requestAnimationFrame(updateServiceAnimation);
-        }
-    };
-
-    // --- Initialize animation and event listeners ---
-
-    // 1. Set the initial height for the services section and the spacer
-    // Call this inside a setTimeout to ensure all initial DOM rendering and calculations are complete
-    setTimeout(() => {
-        adjustServicesLayout();
-        // 2. Trigger initial animation state on page load
-        requestAnimationFrame(updateServiceAnimation);
-        // Ensure first item is active on load
-        if (serviceItems.length > 0) {
-            serviceItems[0].classList.add('active-content');
-            serviceBgNumber.textContent = '01';
-        }
-    }, 200); // Increased delay for robust calculation
-
-    // 3. Recalculate height and re-render on window resize
-    window.addEventListener('resize', () => {
-        adjustServicesLayout();
-        requestAnimationFrame(updateServiceAnimation); // Re-render immediately on resize
+    }, {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.2 // Trigger when 20% of the wrapper is visible
     });
 
-    // 4. Attach the optimized scroll handler
-    window.addEventListener('scroll', handleScrollEvent);
+    // Observe the services content wrapper to trigger its children's staggered animation
+    serviceItemsObserver.observe(servicesContentWrapper);
 
-    // Ensure the services section itself gets the 'revealed' class
-    sectionObserver.observe(servicesSection); 
+    // Initial setup to ensure the services section itself is marked as 'revealed'
+    // This is handled by the main sectionObserver already.
+    // We are no longer using the complex scroll calculations for the services section.
 });
