@@ -462,7 +462,7 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* NEW: Services Section Styles - REFINED 3D-LIKE ANIMATION (RESTORED) */
+/* NEW: Services Section Styles - REFINED 3D-LIKE ANIMATION */
 .services-section {
     padding-top: 80px; /* Space from hero section */
     padding-bottom: 100px; /* Space before tools section */
