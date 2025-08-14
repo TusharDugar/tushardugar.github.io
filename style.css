@@ -502,14 +502,14 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 5em; /* Match tools heading size */
     line-height: 0.9;
     font-weight: 800;
-    /* ISSUE 1: Heading getting scrolled again */
+    /* ISSUE 1: Heading getting scrolled again - adjusted margin and re-added sticky */
     margin-bottom: 30px; /* Adjusted from 50px */
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    position: sticky; /* RE-ADD: Make the heading sticky */
+    position: sticky; /* RE-ADDED: Make the heading sticky */
     top: 0; /* Stick to the very top of its sticky parent */
     z-index: 2; /* Ensure it stays above content scrolling underneath */
-    background-color: var(--bg-main); /* Add background to cover content when sticky */
+    /* REMOVED: background-color: var(--bg-main); as requested */
     padding-bottom: 20px; /* Add padding to prevent content from immediately hitting it */
 }
 
@@ -699,7 +699,7 @@ footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light); /* White */
     text-align: center;
-    /* ISSUE 2: Space on right side of lets connect section */
+    /* ISSUE 2: Space on right side of lets connect section - removed horizontal padding */
     padding: 60px 0; /* Changed from 60px 5% to remove horizontal padding */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
