@@ -283,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Initialize and Event Listeners ---
     // Initial layout adjustment and setting of first item's state
+    // Increased timeout for robustness against FOUC or late layout calculations
     setTimeout(() => {
         adjustServicesLayout(); // Calculate and set CSS variables, spacer height
 
