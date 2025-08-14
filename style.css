@@ -500,7 +500,7 @@ html::before { /* Re-using html::before to cover the whole page */
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    perspective: 1200px; /* Gives 3D depth, higher values are less distorted */
+    perspective: 1000px; /* Gives 3D depth, as requested */
     overflow: hidden; /* CRITICAL: Clips rotating items to maintain cube illusion */
 }
 
@@ -557,8 +557,8 @@ html::before { /* Re-using html::before to cover the whole page */
     /* Transform is fully controlled by JS for precise 3D positioning */
     transform-origin: center center; /* Rotation occurs around the center, with JS handling translateZ for the "edge" effect */
 
-    /* CRITICAL MODIFICATION: Opacity transition is now extremely fast to prevent ghosting. Transform duration DOUBLED for slower rotation. */
-    transition: opacity 0.05s ease-out, transform 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* TRANSFORM DURATION DOUBLED AGAIN */
+    /* CRITICAL: Opacity transition is extremely fast to prevent ghosting. Transform duration set to 1.2s fixed. */
+    transition: opacity 0.05s ease-out, transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Duration 1.2s as requested */
 
     backface-visibility: hidden; /* Hide the back of each face when rotated */
     will-change: transform, opacity; /* Performance hint */
