@@ -71,35 +71,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --------------------------
-    // Services Section 3D Cube Scroll Effect (REVISED FOR FIXED-STEP ANIMATION)
+    // Services Cube Animation (NEW LOGIC)
     // --------------------------
     const servicesSection = document.getElementById('services');
-    const servicesHeading = servicesSection?.querySelector('.services-heading');
-    const servicesContentWrapper = servicesSection?.querySelector('.services-content-wrapper');
-    const servicesItemsContainer = servicesContentWrapper?.querySelector('.services-items-container'); // Corrected selector to be child of servicesContentWrapper
-    const serviceItems = servicesItemsContainer?.querySelectorAll('.service-item') || []; // serviceItems must be children of servicesItemsContainer
-    const serviceBgNumber = servicesSection?.querySelector('.service-bg-number');
+    const wrapper = servicesSection?.querySelector('.services-content-wrapper');
+    const container = servicesSection?.querySelector('.services-items-container');
+    const items = Array.from(container?.querySelectorAll('.service-item') || []); // Ensure items are array-like
+    const bgNumber = servicesSection?.querySelector('.service-bg-number');
 
-    // DEBUG: Check if elements are found at script start
-    console.log('Services Section Found:', !!servicesSection);
-    console.log('Services Heading Found:', !!servicesHeading);
-    console.log('Services Content Wrapper Found:', !!servicesContentWrapper);
-    console.log('Services Items Container Found:', !!servicesItemsContainer); // This should now be true with HTML fix
-    console.log('Service Items Count:', serviceItems.length); // This should now be 8
-    if (serviceItems.length > 0) {
-        console.log('First Service Item:', serviceItems[0]);
-    }
-    console.log('Service Background Number Found:', !!serviceBgNumber);
-
-
-    // Critical check for existence of all required elements
-    if (!servicesSection || !serviceItems.length || !servicesHeading || !servicesContentWrapper || !servicesItemsContainer || !serviceBgNumber) {
-        console.warn('[Services Animation] Services section or required elements not found. Skipping services animation setup.');
+    // Basic existence check for core elements
+    if (!wrapper || !container || items.length === 0 || !bgNumber) {
+        console.warn("Services cube: required elements missing or no items found. Skipping animation setup.");
+        // Ensure section itself still reveals if animation is skipped
         if (servicesSection) servicesSection.classList.add('revealed');
-        return; // EXIT early if elements are missing
+        return;
     }
 
-    // Create the scroll spacer if it's not already there
+    let activeIndex = 0;
+    let isAnimating = false;
+
+    // Create the scroll spacer if it's not already there (used for overall page length)
     let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
     if (!scrollSpacer) {
         scrollSpacer = document.createElement('div');
@@ -107,252 +98,317 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.appendChild(scrollSpacer);
     }
 
-    let currentActiveIndex = 0; // Tracks the currently active slide index
-    let isAnimating = false; // Flag to prevent multiple animations at once
-    const scrollStepDuration = 1200; // Fixed duration for one full step in milliseconds (1.2s)
-    let animationStartTime = 0;
-    let startAnimationIndex = 0;
-    let targetAnimationIndex = 0;
-    let animationRafId = null;
+    // Function to set CSS variables based on layout
+    function adjustLayout() {
+        const wrapperHeight = wrapper.offsetHeight;
+        // console.log("Wrapper Height for faceZ:", wrapperHeight); // Debugging
 
-    // Easing function for smoother motion (cubic ease-in-out)
-    const easeInOutCubic = t => t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        if (wrapperHeight === 0) {
+             console.warn("services-content-wrapper has 0 height. Cannot calculate faceZ. Check CSS 'height' for .services-content-wrapper.");
+             return; // Exit if height is 0
+        }
+        const faceZ = -(wrapperHeight / 2);
+        servicesSection.style.setProperty('--faceZ', `${faceZ}px`);
 
-    // Function to calculate and set the total scrollable height of the services section
-    const adjustServicesLayout = () => {
-        const contentWrapperHeight = servicesContentWrapper.offsetHeight;
-        const servicesHeadingHeight = servicesHeading.offsetHeight;
+        // Adjust overall page scroll length based on number of items
+        const servicesHeadingHeight = servicesSection.querySelector('.services-heading')?.offsetHeight || 0;
         const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
-
-        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + contentWrapperHeight;
+        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + wrapperHeight;
         let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
         stickyTopH2 = Math.max(0, stickyTopH2);
-
         let stickyTopWrapper = stickyTopH2 + servicesHeadingHeight + gapBetweenHeadingAndWrapper;
 
         servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
-        // The faceOffset is half the height of the contentWrapper for a perfect cube.
-        const faceOffset = contentWrapperHeight / 2;
+        // Provide enough scroll space for the section
+        const estimatedScrollPerItem = window.innerHeight * 1.5; // More generous scroll per item
+        scrollSpacer.style.height = `${items.length * estimatedScrollPerItem}px`;
+    }
 
-        // The total scroll range needed for all steps.
-        const SCROLL_DISTANCE_MULTIPLIER = 2.0; // This controls the effective "scroll distance" needed per step
-        const totalVirtualScrollHeight = serviceItems.length * (window.innerHeight * SCROLL_DISTANCE_MULTIPLIER); // Provide ample scroll space
+    // Function to apply class names for parked states
+    function layoutFaces() {
+        items.forEach((item, index) => {
+            item.className = 'service-item'; // Reset all classes first
 
-        scrollSpacer.style.height = `${totalVirtualScrollHeight}px`;
+            if (index === activeIndex) {
+                item.classList.add('front');
+            } else if (index === (activeIndex + 1) % items.length) { // Below active (for scrolling down)
+                item.classList.add('below');
+            } else if (index === (activeIndex - 1 + items.length) % items.length) { // Above active (for scrolling up)
+                item.classList.add('above');
+            } else { // All other items
+                // Default hidden state for items that are not front, below, or above
+                // To prevent "popping" when moving multiple steps quickly,
+                // set them to the "above" or "below" hidden state directly.
+                if (index < activeIndex) {
+                    item.classList.add('above');
+                } else {
+                    item.classList.add('below');
+                }
+            }
+        });
+        updateBgNumber();
+    }
 
-        // DEBUG: Log calculated layout values
-        console.log("adjustServicesLayout run:");
-        console.log("  contentWrapperHeight:", contentWrapperHeight);
-        console.log("  faceOffset:", faceOffset);
-        console.log("  scrollSpacer.style.height:", scrollSpacer.style.height);
-    };
+    // Update the background number text
+    function updateBgNumber() {
+        const displayIndex = activeIndex + 1;
+        bgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
+    }
 
-    // Core animation logic for a single step
-    const animateCubeTransition = (startIndex, targetIndex, startTime) => {
-        const elapsedTime = performance.now() - startTime;
-        let progress = Math.min(1, elapsedTime / scrollStepDuration);
-        let easedProgress = easeInOutCubic(progress);
+    // Main function to initiate a transition between steps
+    function goToIndex(newIndex, directionName) { // directionName: 'up' (for next) or 'down' (for previous)
+        if (isAnimating || newIndex === activeIndex) return; // Ignore if animating or no change
+        isAnimating = true;
 
-        const faceOffset = servicesContentWrapper.offsetHeight / 2;
-        // Defensive check: if faceOffset is 0, something is wrong with CSS height or element visibility
-        if (faceOffset === 0) {
-            console.error("faceOffset is 0 during animation! servicesContentWrapper.offsetHeight:", servicesContentWrapper.offsetHeight);
-            isAnimating = false; // Stop animation to prevent errors
+        const current = items[activeIndex];
+        const next = items[newIndex];
+
+        // Apply animation classes
+        if (directionName === 'up') { // User scrolled down, next item comes from below
+            current.classList.add('exit-to-top'); // Current moves up and out
+            next.classList.add('enter-from-bottom'); // Next moves up and in
+        } else { // User scrolled up, previous item comes from above
+            current.classList.add('exit-to-bottom'); // Current moves down and out
+            next.classList.add('enter-from-top'); // Next moves down and in
+        }
+
+        // After animation duration, update activeIndex and reset classes
+        setTimeout(() => {
+            activeIndex = newIndex;
+            layoutFaces(); // This call will reset classes to 'front', 'above', 'below' based on new activeIndex
+            isAnimating = false;
+        }, 800); // This duration (800ms) must match the CSS 'transition' duration for transform/opacity on .service-item
+    }
+
+    // Generic step function to determine target index and direction
+    function step(direction) { // direction: 'up' (for next item, scrolling down) or 'down' (for previous item, scrolling up)
+        let newIndex;
+        if (direction === 'up') {
+            newIndex = (activeIndex + 1) % items.length;
+        } else { // direction === 'down'
+            newIndex = (activeIndex - 1 + items.length) % items.length; // Handles negative modulus
+        }
+
+        // Call goToIndex only if the index actually changes
+        if (newIndex !== activeIndex) {
+            goToIndex(newIndex, direction);
+            return true; // Signal that animation started, prevent default browser scroll
+        }
+        return false; // Signal that no animation started, allow default browser scroll
+    }
+
+    // --- Event Handlers for Navigation ---
+    let scrollAccum = 0; // Accumulate scroll delta for mouse wheel sensitivity
+    window.addEventListener('wheel', (e) => {
+        // Only trigger when the services section is substantially visible
+        const servicesRect = servicesSection.getBoundingClientRect();
+        const isServicesVisible = servicesRect.top < window.innerHeight && servicesRect.bottom > 0;
+
+        if (!isServicesVisible) return; // Don't interfere if section is out of view
+
+        // Prevent default scroll if we are going to try to animate or if an animation is in progress
+        e.preventDefault();
+
+        // Check if we are at the boundaries and should let the page scroll
+        const atStartBoundary = activeIndex === 0 && e.deltaY < 0; // At first item, scrolling up
+        const atEndBoundary = activeIndex === items.length - 1 && e.deltaY > 0; // At last item, scrolling down
+
+        if (isAnimating) {
+            // If animating, let preventDefault() keep working, but don't try to trigger new step
             return;
         }
 
-        const direction = targetIndex > startIndex ? 1 : -1; // 1 for scrolling down, -1 for scrolling up
+        if ((atStartBoundary && e.deltaY < 0) || (atEndBoundary && e.deltaY > 0)) {
+            // At boundary and trying to scroll past it, allow normal page scroll.
+            // Temporarily remove preventDefault for this specific scroll event.
+            // This is complex as preventDefault() is called earlier.
+            // A common pattern is to only call preventDefault() *if* step returns true.
+            // We'll revert to that pattern by adjusting this listener.
+            // For now, if we reach here and are at a boundary, we explicitly return
+            // without trying to 'step', letting the browser scroll if not prevented elsewhere.
+            // The logic below will handle the preventDefault correctly.
+        }
 
-        // Update background number only when the animation is near completion or at the start
-        const displayIndex = (direction === 1 && progress > 0.5) || (direction === -1 && progress < 0.5)
-            ? targetIndex + 1
-            : startIndex + 1;
-        serviceBgNumber.textContent = (displayIndex < 10 ? '0' : '') + displayIndex;
-
-
-        serviceItems.forEach((item, index) => {
-            let opacity, transformValue, zIndex;
-
-            if (index === startIndex) {
-                // Outgoing face (from front to top/bottom)
-                const rotation = direction * 90 * easedProgress; // +90 for down, -90 for up
-                const currentTranslateZ = -faceOffset * (1 - easedProgress); // From -faceOffset (front) to 0 (edge)
-
-                transformValue = `rotateX(${rotation}deg) translateZ(${currentTranslateZ}px)`;
-                // Fades out completely by 40% of the transition
-                opacity = 1 - Math.min(1, easedProgress * 2.5);
-                zIndex = 2; // Ensures it's on top when exiting
-            } else if (index === targetIndex) {
-                // Incoming face (from bottom/top to front)
-                const rotation = -direction * 90 * (1 - easedProgress); // -90 to 0 for down, +90 to 0 for up
-                const currentTranslateZ = -faceOffset * easedProgress; // From 0 (edge) to -faceOffset (front)
-
-                transformValue = `rotateX(${rotation}deg) translateZ(${currentTranslateZ}px)`;
-                // Fades in after a delay (starts at 60%, fully visible by 100%)
-                opacity = Math.max(0, (easedProgress - 0.6) * 2.5);
-                zIndex = 1; // Appears just below the exiting item
+        scrollAccum += e.deltaY;
+        if (scrollAccum > 50) { // Scroll down threshold
+            if (step('up')) { // Try to move to next item
+                scrollAccum = 0; // Reset accumulator only if step happened
             } else {
-                // All other items are completely hidden and reset
-                if (index < currentActiveIndex) { // Items before the current active (already scrolled past)
-                    transformValue = `rotateX(90deg) translateZ(0px)`;
-                } else { // Items after the current active (not yet scrolled to)
-                    transformValue = `rotateX(-90deg) translateZ(0px)`;
+                // If step didn't happen (e.g., at end of items), allow regular page scroll
+                // But only if we're at the very last item and trying to scroll down, or first and trying to scroll up
+                if (atEndBoundary) {
+                    window.removeEventListener('wheel', arguments.callee, { passive: false }); // Remove self to allow default
+                    window.requestAnimationFrame(() => { // Re-add self after a brief moment
+                        window.addEventListener('wheel', arguments.callee, { passive: false });
+                    });
                 }
-                opacity = 0; // Fully transparent
-                zIndex = 0; // Lowest z-index
             }
-
-            item.style.transform = transformValue;
-            item.style.opacity = opacity;
-            item.style.zIndex = zIndex;
-
-            // Manage active-content class for CSS hover rules
-            if (index === currentActiveIndex) {
-                item.classList.add('active-content');
+        } else if (scrollAccum < -50) { // Scroll up threshold
+            if (step('down')) { // Try to move to previous item
+                scrollAccum = 0; // Reset accumulator only if step happened
             } else {
-                item.classList.remove('active-content');
+                if (atStartBoundary) {
+                    window.removeEventListener('wheel', arguments.callee, { passive: false });
+                    window.requestAnimationFrame(() => {
+                        window.addEventListener('wheel', arguments.callee, { passive: false });
+                    });
+                }
             }
-        });
+        }
+    }, { passive: false });
 
-        if (progress < 1) {
-            animationRafId = requestAnimationFrame(() => animateCubeTransition(startIndex, targetIndex, startTime));
+
+    // Re-adjusting the wheel listener to be more precise for boundary conditions
+    // The previous implementation of wheel listener could lead to subtle issues with preventDefault.
+    // Let's use a simpler, more robust conditional preventDefault.
+    const handleWheelEvent = (e) => {
+        const servicesRect = servicesSection.getBoundingClientRect();
+        // Check if the services section is largely in view
+        const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
+
+        // Check for boundaries
+        const atStart = activeIndex === 0 && e.deltaY < 0; // Scrolling up at first item
+        const atEnd = activeIndex === items.length - 1 && e.deltaY > 0; // Scrolling down at last item
+
+        if (isAnimating) {
+            e.preventDefault(); // Always prevent default if an animation is in progress
+            return;
+        }
+
+        if (isServicesMainlyVisible) {
+            // If inside the services section and not at a boundary that allows external scroll
+            if (!(atStart || atEnd)) {
+                e.preventDefault(); // Prevent default to handle scroll internally
+            } else if (atStart && e.deltaY < 0) {
+                // At first item, scrolling up, let browser scroll
+                return;
+            } else if (atEnd && e.deltaY > 0) {
+                // At last item, scrolling down, let browser scroll
+                return;
+            }
         } else {
-            // Animation complete, ensure final state and correct active class
-            cancelAnimationFrame(animationRafId);
-            currentActiveIndex = targetIndex; // Officially update currentActiveIndex
+             // Not in services section, allow normal scroll
+            return;
+        }
 
-            // Ensure the background number is correct at end of animation
-            serviceBgNumber.textContent = (currentActiveIndex + 1 < 10 ? '0' : '') + (currentActiveIndex + 1);
 
-            // Set final state for all items to ensure consistency
-            const finalFaceOffset = servicesContentWrapper.offsetHeight / 2;
-            serviceItems.forEach((item, index) => {
-                if (index === currentActiveIndex) {
-                    item.style.transform = `rotateX(0deg) translateZ(${-finalFaceOffset}px)`;
-                    item.style.opacity = 1;
-                    item.classList.add('active-content');
-                } else {
-                    item.style.transform = `rotateX(${index < currentActiveIndex ? 90 : -90}deg) translateZ(0px)`;
-                    item.style.opacity = 0;
-                    item.classList.remove('active-content');
-                }
-            });
-            isAnimating = false; // Allow new animations
+        // Accumulate scroll for step triggering
+        scrollAccum += e.deltaY;
+        const scrollThreshold = 50; // Pixels needed to trigger a step
+
+        if (scrollAccum > scrollThreshold) {
+            if (step('up')) { // Try to move to next item
+                scrollAccum = 0;
+            } else {
+                // If step didn't occur (e.g., already animating or at very end), reset accum to prevent repeated attempts
+                scrollAccum = 0;
+            }
+        } else if (scrollAccum < -scrollThreshold) {
+            if (step('down')) { // Try to move to previous item
+                scrollAccum = 0;
+            } else {
+                scrollAccum = 0;
+            }
         }
     };
 
-    // Main scroll step handler
-    const handleScrollStep = (direction) => {
-        if (isAnimating) return true; // Keep preventing default if an animation is active
+    window.removeEventListener('wheel', window.handleWheelEvent || (() => {}), { passive: false }); // Remove old if it exists
+    window.addEventListener('wheel', handleWheelEvent, { passive: false });
+    window.handleWheelEvent = handleWheelEvent; // Store for potential removal if needed elsewhere
 
-        let newIndex = currentActiveIndex + direction;
 
-        // Check if we are trying to scroll past the boundaries
-        const atStartBoundary = currentActiveIndex === 0 && direction === -1;
-        const atEndBoundary = currentActiveIndex === serviceItems.length - 1 && direction === 1;
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+        const servicesRect = servicesSection.getBoundingClientRect();
+        const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
 
-        if (atStartBoundary || atEndBoundary) {
-            // If at a boundary and trying to scroll past it,
-            // allow default browser scroll behavior to take over.
-            return false; // Signal NOT to prevent default
+        if (!isServicesMainlyVisible) return; // Only trigger if section is visible
+
+        if (isAnimating) {
+            if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' '].includes(e.key)) {
+                e.preventDefault(); // Prevent default if animating and key is related to scroll
+            }
+            return;
         }
 
-        // Clamp the index for internal animation, even if we allowed overall page scroll
-        newIndex = Math.max(0, Math.min(serviceItems.length - 1, newIndex));
-
-        if (newIndex === currentActiveIndex) {
-            // No change in index, no animation needed.
-            // Still prevent default if we're inside the section and not at the very end
-            // This prevents accidental page scroll if user tries to scroll past max/min without going to next section
-            return true;
+        let handled = false;
+        if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+            if (activeIndex < items.length - 1) { // Only animate if not at the last item
+                step('up');
+                handled = true;
+            }
+        } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+            if (activeIndex > 0) { // Only animate if not at the first item
+                step('down');
+                handled = true;
+            }
         }
 
-        isAnimating = true; // Set flag to true
-        animationStartTime = performance.now();
-        startAnimationIndex = currentActiveIndex;
-        targetAnimationIndex = newIndex;
-
-        // Start the fixed-duration animation
-        animateCubeTransition(startAnimationIndex, targetAnimationIndex, animationStartTime);
-        return true; // Signal to prevent default, as an animation is starting
-    };
-
-    // --- Initialize and Event Listeners ---
-    // Initial layout adjustment and setting of first item's state
-    // Increased timeout for robustness against FOUC or late layout calculations
-    setTimeout(() => {
-        adjustServicesLayout(); // Calculate and set CSS variables, spacer height
-
-        const faceOffset = servicesContentWrapper.offsetHeight / 2;
-        console.log("Initial servicesContentWrapper.offsetHeight (from setTimeout):", servicesContentWrapper.offsetHeight); // DEBUG
-        console.log("Initial faceOffset (from setTimeout):", faceOffset); // DEBUG
-
-        // Set initial state of service items (first one active, others hidden)
-        serviceItems.forEach((item, index) => {
-            if (index === 0) {
-                item.style.transform = `rotateX(0deg) translateZ(${-faceOffset}px)`;
-                item.style.opacity = 1;
-                item.classList.add('active-content');
-                console.log("Service Item 0 final initial styles:", item.style.transform, item.style.opacity, item.classList.contains('active-content')); // DEBUG
-            } else {
-                item.style.transform = `rotateX(-90deg) translateZ(0px)`; // Assuming other items are initially "below" or hidden
-                item.style.opacity = 0;
-                item.classList.remove('active-content');
-            }
-        });
-        serviceBgNumber.textContent = '01'; // Ensure initial number is correct
-    }, 500); // Increased delay to 500ms
-
-    // Recalculate layout and reset state on window resize
-    window.addEventListener('resize', () => {
-        adjustServicesLayout();
-        // Reset animation state to ensure correct positioning on resize
-        isAnimating = false; // Allow animations after resize
-        cancelAnimationFrame(animationRafId); // Stop any ongoing animation
-
-        // Force re-render of current state after resize to adapt to new dimensions
-        const faceOffset = servicesContentWrapper.offsetHeight / 2;
-        serviceItems.forEach((item, index) => {
-            if (index === currentActiveIndex) {
-                item.style.transform = `rotateX(0deg) translateZ(${-faceOffset}px)`;
-                item.style.opacity = 1;
-                item.classList.add('active-content');
-            } else {
-                item.style.transform = `rotateX(${index < currentActiveIndex ? 90 : -90}deg) translateZ(0px)`;
-                item.style.opacity = 0;
-                item.classList.remove('active-content');
-            }
-        });
+        if (handled) {
+            e.preventDefault(); // Prevent default only if an animation was triggered
+        }
     });
 
-    // Touch support variables
-    let startY = 0;
-
-    // Attach scroll and touch handlers for step-by-step navigation
-    window.addEventListener('wheel', (e) => {
-        // Only prevent default if handleScrollStep signals that an internal animation should occur
-        if (handleScrollStep(e.deltaY > 0 ? 1 : -1)) { // 1 for down, -1 for up
-            e.preventDefault();
-        }
-    }, { passive: false }); // passive: false is critical for preventDefault()
+    // Touch swipe support
+    let touchStartY = null;
+    let touchMoved = false; // Flag to track if touch has moved significantly
 
     window.addEventListener('touchstart', (e) => {
-        startY = e.touches[0].clientY;
+        // Only capture touch if it starts within the Services section or if the section is close
+        const servicesRect = servicesSection.getBoundingClientRect();
+        if (e.touches.length === 1 && servicesRect.top < window.innerHeight && servicesRect.bottom > 0) {
+            touchStartY = e.touches[0].clientY;
+            touchMoved = false;
+        } else {
+            touchStartY = null;
+        }
+    }, { passive: false }); // Needs passive: false to potentially preventDefault in touchmove/touchend
+
+    window.addEventListener('touchmove', (e) => {
+        if (touchStartY === null || e.touches.length !== 1) return;
+
+        const currentY = e.touches[0].clientY;
+        const deltaY = currentY - touchStartY;
+        const scrollThreshold = 10; // Smaller threshold to detect "movement" for preventing default
+
+        // If moved significantly and we are potentially in a stepped scroll area
+        if (Math.abs(deltaY) > scrollThreshold && !isAnimating) {
+            const servicesRect = servicesSection.getBoundingClientRect();
+            const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
+
+            if (isServicesMainlyVisible) {
+                // If we are about to trigger a step or are within bounds, prevent default to avoid page scroll.
+                // This makes the touch feel more dedicated to the cube.
+                if (!( (activeIndex === 0 && deltaY > 0) || (activeIndex === items.length - 1 && deltaY < 0) )) {
+                    e.preventDefault();
+                    touchMoved = true; // Mark as moved for handling in touchend
+                }
+            }
+        }
     }, { passive: false });
 
     window.addEventListener('touchend', (e) => {
-        let deltaY = e.changedTouches[0].clientY - startY;
-        if (Math.abs(deltaY) > 30) { // Threshold for a meaningful swipe (e.g., 30 pixels)
-            // Only prevent default if handleScrollStep signals that an internal animation should occur
-            if (handleScrollStep(deltaY < 0 ? 1 : -1)) { // 1 for swipe up (negative deltaY), -1 for swipe down (positive deltaY)
-                e.preventDefault();
+        if (touchStartY === null) return;
+        const diff = touchStartY - e.changedTouches[0].clientY; // Positive for swipe up, negative for swipe down
+        const swipeThreshold = 40; // Pixels needed for a significant swipe
+
+        if (Math.abs(diff) > swipeThreshold) {
+            // Determine direction for step function
+            const direction = diff > 0 ? 'up' : 'down'; // 'up' means user swiped up, want next item
+
+            // Attempt to step; step() returns true if animation initiated, false if at boundary/no change
+            if (step(direction)) {
+                // Animation started, great. No further action needed as preventDefault was likely done in touchmove.
+            } else {
+                // If step didn't happen (e.g., at boundary), ensure page can scroll.
+                // This is implicitly handled by not calling preventDefault if step() returns false.
             }
         }
-    }, { passive: false });
+        touchStartY = null; // Reset
+        touchMoved = false; // Reset
+    });
 
     // The services section itself should still be revealed by the general observer.
     sectionObserver.observe(servicesSection);
