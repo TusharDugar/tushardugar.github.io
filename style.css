@@ -37,6 +37,10 @@
     /* CSS Variables for sticky services top offset (set by JS) */
     --services-sticky-top-h2: 0px;
     --services-sticky-top-wrapper: 0px;
+
+    /* New: Variable for the perceived depth/size of cube faces */
+    /* This should be roughly half the height of the .services-content-wrapper */
+    --services-face-offset: 175px; /* Half of the 350px height set below for desktop */
 }
 
 /* Global utility text colors */
@@ -518,6 +522,8 @@ html::before { /* Re-using html::before to cover the whole page */
     position: relative; /* Provides positioning context for .service-item */
     width: 100%;
     height: 100%; /* Occupy remaining space if flex item, or cover if absolute */
+    /* IMPORTANT: transform-style: preserve-3d enables children to participate in 3D space */
+    transform-style: preserve-3d;
 }
 
 .service-item {
@@ -533,12 +539,12 @@ html::before { /* Re-using html::before to cover the whole page */
     padding: 20px; /* Inner padding */
     box-sizing: border-box;
 
-    /* Initial state for parallax/3D effect */
+    /* CRITICAL MODIFICATION: Transform-origin and default inactive transform for cube feel */
+    /* Pivot point is behind the element, by half the height of the container, simulating cube center */
+    transform-origin: center center var(--services-face-offset);
     opacity: 0; /* Fully transparent when inactive */
-    /* CRITICAL MODIFICATION: Removed translateY from inactive state to eliminate unwanted vertical slide.
-       Increased rotateX angle to push it further out of sight more quickly. */
-    transform: rotateX(105deg); /* Start rotated, ready to flip in */
-    transform-origin: bottom center; /* Rotation pivot point: from bottom edge, rotates upwards */
+    /* Inactive position: Rotated 90deg, so it's 'above' or 'below' the active face */
+    transform: rotateX(90deg); 
     
     /* CRITICAL MODIFICATION: Much faster opacity transition (0.01s) to ensure instant text fade-out/in. */
     transition: opacity 0.01s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
@@ -553,7 +559,8 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Active state for service content */
 .service-item.active-content {
     opacity: 1;
-    transform: translateY(0) rotateX(0deg); /* Bring to front and un-rotate */
+    /* Active position: Flat, pulled forward to align with the front of the cube */
+    transform: rotateX(0deg) translateZ(calc(-1 * var(--services-face-offset))); 
     z-index: 1; /* Ensure active item is on top */
 }
 
@@ -955,6 +962,10 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
+    /* Update --services-face-offset for this breakpoint */
+    :root {
+        --services-face-offset: 150px; /* Half of 300px height */
+    }
 
     /* Adjustments for tools section */
     .tools-section {
@@ -1125,6 +1136,10 @@ footer h2 {
     .service-description {
         font-size: 0.9em;
         max-width: 100%;
+    }
+    /* Update --services-face-offset for this breakpoint */
+    :root {
+        --services-face-offset: 125px; /* Half of 250px height */
     }
 
     /* Adjustments for tools section */
@@ -1311,6 +1326,10 @@ footer h2 {
     }
     .service-description {
         font-size: 0.8em;
+    }
+    /* Update --services-face-offset for this breakpoint */
+    :root {
+        --services-face-offset: 115px; /* Half of 230px height */
     }
 
     /* Adjustments for tools section */
