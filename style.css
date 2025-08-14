@@ -140,7 +140,7 @@ html::before { /* Re-using html::before to cover the whole page */
         linear-gradient(to right, transparent 99%, white 1%), /* Vertical grid lines */
         linear-gradient(to bottom, transparent 99%, white 1%), /* Horizontal grid lines */
         linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%), /* Diagonal grid 1 */
-        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%); /* Diagonal grid 2 */
+        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
     
     /* Vendor prefix for better compatibility of mask-image */
     -webkit-mask-image: 
@@ -218,7 +218,8 @@ html::before { /* Re-using html::before to cover the whole page */
     padding: 30px 25px; /* Adjust padding to match the target image better */
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%; /* Take full width of sticky column */
-    max-width: 400px; /* INCREASED MAX WIDTH */
+    /* ISSUE 4: Profile image section longer by reducing width */
+    max-width: 370px; /* Adjusted from 400px - narrower */
     height: auto; /* Allow height to adjust to content on desktop and mobile */
     box-sizing: border-box;
     opacity: 0; /* Initial state for reveal */
@@ -239,8 +240,9 @@ html::before { /* Re-using html::before to cover the whole page */
 /* New: Profile Image Container */
 .profile-image-container {
     width: calc(100% + 50px); /* Slightly wider than the card to mimic the image in the Aabid Ahmed example */
-    max-width: 450px; /* Adjusted max-width relative to card */
-    height: 180px; /* Fixed height for the image area */
+    /* ISSUE 4: Profile image section longer by reducing width */
+    max-width: 420px; /* Adjusted from 450px - narrower */
+    height: 200px; /* Adjusted from 180px - longer */
     background-color: var(--accent-primary-sawad); /* Orange background */
     border-radius: 15px; /* Rounded corners for the image container */
     overflow: hidden; /* Ensure image doesn't overflow */
@@ -500,10 +502,15 @@ html::before { /* Re-using html::before to cover the whole page */
     font-size: 5em; /* Match tools heading size */
     line-height: 0.9;
     font-weight: 800;
-    margin-bottom: 50px;
+    /* ISSUE 1: Heading getting scrolled again */
+    margin-bottom: 30px; /* Adjusted from 50px */
     text-transform: uppercase;
     text-align: left; /* Ensure heading is left-aligned */
-    /* Removed position: sticky and top from here - handled by .services-content-wrapper */
+    position: sticky; /* RE-ADD: Make the heading sticky */
+    top: 0; /* Stick to the very top of its sticky parent */
+    z-index: 2; /* Ensure it stays above content scrolling underneath */
+    background-color: var(--bg-main); /* Add background to cover content when sticky */
+    padding-bottom: 20px; /* Add padding to prevent content from immediately hitting it */
 }
 
 /* Container for absolute service items */
@@ -692,7 +699,8 @@ footer {
     background-color: var(--bg-main); /* Match body background for seamless blend */
     color: var(--text-light); /* White */
     text-align: center;
-    padding: 60px 5%; /* Reduced padding for more compact footer */
+    /* ISSUE 2: Space on right side of lets connect section */
+    padding: 60px 0; /* Changed from 60px 5% to remove horizontal padding */
     position: relative;
     z-index: 1; /* Ensure footer stays above any potential background elements */
 }
@@ -852,14 +860,15 @@ footer h2 {
         max-width: 450px; /* Slightly wider on mid-size screens */
         margin: 0 auto; /* Center it */
     }
+    /* ISSUE 4: Profile image section longer by reducing width */
     .about-left-content {
-        max-width: 350px; /* Adjusted for slightly larger card on mid-size screens */
+        max-width: 320px; /* Adjusted from 350px - narrower */
         padding: 25px 20px;
     }
     .profile-image-container {
         width: calc(100% + 40px);
-        max-width: 390px; /* Adjusted max-width */
-        height: 170px; /* Slightly smaller height */
+        max-width: 360px; /* Adjusted from 390px - narrower */
+        height: 190px; /* Adjusted from 170px - longer */
         margin-bottom: 20px;
     }
     .about-left-content h3 {
@@ -906,8 +915,9 @@ footer h2 {
     }
 
     /* Adjustments for hero content */
+    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
     .hero-heading {
-        font-size: 6em; /* Scale down heading */
+        font-size: 5.5em; /* Adjusted from 6em */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -925,7 +935,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 4.5em;
-        margin-bottom: 40px;
+        margin-bottom: 30px; /* Keep consistent after sticky padding */
     }
     .service-item {
         padding: 15px;
@@ -995,15 +1005,16 @@ footer h2 {
         padding-top: 0;
     }
     /* Specific adjustments for profile card */
+    /* ISSUE 4: Profile image section longer by reducing width */
     .about-left-content {
-        max-width: 380px; /* Wider for tablet/larger phone */
+        max-width: 350px; /* Adjusted from 380px - narrower */
         padding: 30px 25px; /* More generous padding */
         border-radius: 18px; /* Slightly more rounded */
     }
     .profile-image-container {
         width: calc(100% + 50px);
-        max-width: 430px; /* Adjusted max-width */
-        height: 190px; /* Slightly taller */
+        max-width: 400px; /* Adjusted from 430px - narrower */
+        height: 210px; /* Adjusted from 190px - longer */
         margin-bottom: 30px; /* More space */
         border-radius: 15px;
     }
@@ -1072,8 +1083,9 @@ footer h2 {
         padding-top: 50px; /* Reduced space from above section */
         text-align: left; /* Keep left-aligned */
     }
+    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
     .hero-heading {
-        font-size: 4.5em; /* Reduced by 5em from desktop 7em */
+        font-size: 4em; /* Adjusted from 4.5em */
         margin-bottom: 20px;
     }
     .hero-description {
@@ -1093,7 +1105,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 3.5em;
-        margin-bottom: 30px;
+        margin-bottom: 30px; /* Keep consistent after sticky padding */
     }
     .service-item {
         padding: 10px;
@@ -1186,15 +1198,16 @@ footer h2 {
     }
 
     /* Specific adjustments for profile card */
+    /* ISSUE 4: Profile image section longer by reducing width */
     .about-left-content {
-        max-width: 350px; /* Max width for phones */
+        max-width: 320px; /* Adjusted from 350px - narrower */
         padding: 25px 20px;
         border-radius: 15px;
     }
     .profile-image-container {
         width: calc(100% + 30px);
-        max-width: 380px;
-        height: 160px;
+        max-width: 350px; /* Adjusted from 380px - narrower */
+        height: 180px; /* Adjusted from 160px - longer */
         margin-bottom: 25px;
         border-radius: 12px;
     }
@@ -1259,8 +1272,9 @@ footer h2 {
         padding: 30px 15px; /* Reduced padding for very small screens */
         padding-top: 40px; /* Reduced space from above section */
     }
+    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
     .hero-heading {
-        font-size: 3.5em; /* Further reduced for very small phones */
+        font-size: 3em; /* Adjusted from 3.5em */
         margin-bottom: 15px;
     }
     .hero-description {
@@ -1279,7 +1293,7 @@ footer h2 {
     }
     .services-heading {
         font-size: 2.8em;
-        margin-bottom: 25px;
+        margin-bottom: 25px; /* Keep consistent after sticky padding */
     }
     .service-item {
         padding: 12px;
