@@ -76,15 +76,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesSection = document.getElementById('services');
     const servicesHeading = servicesSection?.querySelector('.services-heading');
     const servicesContentWrapper = servicesSection?.querySelector('.services-content-wrapper');
-    const servicesItemsContainer = servicesSection?.querySelector('.services-items-container'); // Added reference
-    const serviceItems = servicesItemsContainer?.querySelectorAll('.service-item') || []; // Changed parent
+    const servicesItemsContainer = servicesSection?.querySelector('.services-items-container');
+    const serviceItems = servicesItemsContainer?.querySelectorAll('.service-item') || [];
     const serviceBgNumber = servicesSection?.querySelector('.service-bg-number');
+
+    // DEBUG: Check if elements are found at script start
+    console.log('Services Section Found:', !!servicesSection);
+    console.log('Services Content Wrapper Found:', !!servicesContentWrapper);
+    console.log('Services Items Container Found:', !!servicesItemsContainer);
+    console.log('Service Items Count:', serviceItems.length);
+    console.log('Service Background Number Found:', !!serviceBgNumber);
+
 
     // Critical check for existence of all required elements
     if (!servicesSection || !serviceItems.length || !servicesHeading || !servicesContentWrapper || !servicesItemsContainer || !serviceBgNumber) {
         console.warn('[Services Animation] Services section or required elements not found. Skipping services animation setup.');
         if (servicesSection) servicesSection.classList.add('revealed');
-        return;
+        return; // EXIT early if elements are missing
     }
 
     // Create the scroll spacer if it's not already there
@@ -129,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // The total scroll range needed for all steps.
         // Each "step" now effectively corresponds to the fixed duration of 1.2s, not necessarily a large scroll multiplier.
         // We ensure enough scroll space for each service item + a buffer.
-        // Increased multiplier for spacer height to make page longer and ensure services section can be scrolled through
         const SCROLL_DISTANCE_MULTIPLIER = 2.0; // This controls the effective "scroll distance" needed per step
         const totalVirtualScrollHeight = serviceItems.length * (window.innerHeight * SCROLL_DISTANCE_MULTIPLIER); // Provide ample scroll space
 
@@ -137,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // We explicitly set the scroll position to target the services section for the animation start
         // This is a rough estimation of where the services section should "activate"
-        const servicesSectionStart = servicesSection.offsetTop + stickyTopH2;
+        const servicesSectionStart = servicesSection.offsetTop + stickyTopH2; // This is informational; the new scroll logic does not rely on window.scrollY relative to this.
     };
 
     // Core animation logic for a single step
@@ -150,8 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const direction = targetIndex > startIndex ? 1 : -1; // 1 for scrolling down, -1 for scrolling up
 
         // Update background number only when the animation is near completion or at the start
-        const displayIndex = direction === 1 ? startIndex + 1 : targetIndex + 1; // Show current index when scrolling down, next when scrolling up
-        serviceBgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
+        // This ensures the number changes as the active slide changes
+        const displayIndex = (direction === 1 && progress > 0.5) || (direction === -1 && progress < 0.5)
+            ? targetIndex + 1
+            : startIndex + 1;
+        serviceBgNumber.textContent = (displayIndex < 10 ? '0' : '') + displayIndex;
+
 
         serviceItems.forEach((item, index) => {
             let opacity, transformValue, zIndex;
@@ -160,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Outgoing face (from front to top/bottom)
                 // Rotates from 0deg to 90deg (downwards/away if scrolling up, upwards/away if scrolling down)
                 const rotation = direction * 90 * easedProgress; // +90 for down, -90 for up
-                const currentTranslateZ = -faceOffset * (1 - easedProgress); // From -faceOffset to 0
+                const currentTranslateZ = -faceOffset * (1 - easedProgress); // From -faceOffset (front) to 0 (edge)
 
                 transformValue = `rotateX(${rotation}deg) translateZ(${currentTranslateZ}px)`;
                 // Fades out completely by 40% of the transition
@@ -170,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Incoming face (from bottom/top to front)
                 // Rotates from -90deg to 0deg (upwards/inwards if scrolling down, downwards/inwards if scrolling up)
                 const rotation = -direction * 90 * (1 - easedProgress); // -90 to 0 for down, +90 to 0 for up
-                const currentTranslateZ = -faceOffset * easedProgress; // From 0 to -faceOffset
+                const currentTranslateZ = -faceOffset * easedProgress; // From 0 (edge) to -faceOffset (front)
 
                 transformValue = `rotateX(${rotation}deg) translateZ(${currentTranslateZ}px)`;
                 // Fades in after a delay (starts at 60%, fully visible by 100%)
@@ -178,10 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 zIndex = 1; // Appears just below the exiting item
             } else {
                 // All other items are completely hidden and reset
-                if (index < startIndex) {
-                    transformValue = `rotateX(${direction === 1 ? 90 : -90}deg) translateZ(0px)`; // Positioned as top or bottom, hidden
-                } else { // index > startIndex && index !== targetIndex
-                    transformValue = `rotateX(${direction === 1 ? -90 : 90}deg) translateZ(0px)`; // Positioned as top or bottom, hidden
+                // Position them at the top (90deg) or bottom (-90deg) and fully transparent
+                if (index < currentActiveIndex) { // Items before the current active (already scrolled past)
+                    transformValue = `rotateX(90deg) translateZ(0px)`;
+                } else { // Items after the current active (not yet scrolled to)
+                    transformValue = `rotateX(-90deg) translateZ(0px)`;
                 }
                 opacity = 0; // Fully transparent
                 zIndex = 0; // Lowest z-index
@@ -204,13 +216,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Animation complete, ensure final state and correct active class
             cancelAnimationFrame(animationRafId);
-            currentActiveIndex = targetIndex;
-            isAnimating = false;
+            currentActiveIndex = targetIndex; // Officially update currentActiveIndex
 
-            // Set final state for active item to ensure consistency
+            // Ensure the background number is correct at end of animation
+            serviceBgNumber.textContent = (currentActiveIndex + 1 < 10 ? '0' : '') + (currentActiveIndex + 1);
+
+            // Set final state for all items to ensure consistency
+            const finalFaceOffset = servicesContentWrapper.offsetHeight / 2;
             serviceItems.forEach((item, index) => {
                 if (index === currentActiveIndex) {
-                    item.style.transform = `rotateX(0deg) translateZ(${-faceOffset}px)`;
+                    item.style.transform = `rotateX(0deg) translateZ(${-finalFaceOffset}px)`;
                     item.style.opacity = 1;
                     item.classList.add('active-content');
                 } else {
@@ -219,58 +234,66 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.classList.remove('active-content');
                 }
             });
-
-            serviceBgNumber.textContent = (currentActiveIndex + 1 < 10 ? '0' : '') + (currentActiveIndex + 1);
+            isAnimating = false; // Allow new animations
         }
     };
 
     // Main scroll step handler
     const handleScrollStep = (direction) => {
-        if (isAnimating) return;
+        if (isAnimating) return; // Ignore if an animation is already running
 
         let newIndex = currentActiveIndex + direction;
-        newIndex = Math.max(0, Math.min(serviceItems.length - 1, newIndex)); // Clamp index
+        newIndex = Math.max(0, Math.min(serviceItems.length - 1, newIndex)); // Clamp index to valid range
 
         if (newIndex === currentActiveIndex) {
             // No change in index, no animation needed
             return;
         }
 
-        isAnimating = true;
+        isAnimating = true; // Set flag to true
         animationStartTime = performance.now();
         startAnimationIndex = currentActiveIndex;
         targetAnimationIndex = newIndex;
 
+        // Start the fixed-duration animation
         animateCubeTransition(startAnimationIndex, targetAnimationIndex, animationStartTime);
     };
 
     // --- Initialize and Event Listeners ---
-    // Initial layout adjustment
+    // Initial layout adjustment and setting of first item's state
+    // Increased timeout for robustness against FOUC or late layout calculations
     setTimeout(() => {
-        adjustServicesLayout();
-        // Set initial state of service items (first one active, others hidden)
+        adjustServicesLayout(); // Calculate and set CSS variables, spacer height
+
+        // Get faceOffset again, as adjustServicesLayout's faceOffset is local
         const faceOffset = servicesContentWrapper.offsetHeight / 2;
+        console.log("Initial servicesContentWrapper.offsetHeight (from setTimeout):", servicesContentWrapper.offsetHeight); // DEBUG
+        console.log("Initial faceOffset (from setTimeout):", faceOffset); // DEBUG
+
+        // Set initial state of service items (first one active, others hidden)
         serviceItems.forEach((item, index) => {
             if (index === 0) {
                 item.style.transform = `rotateX(0deg) translateZ(${-faceOffset}px)`;
                 item.style.opacity = 1;
                 item.classList.add('active-content');
+                console.log("Service Item 0 final initial styles:", item.style.transform, item.style.opacity, item.classList.contains('active-content')); // DEBUG
             } else {
-                item.style.transform = `rotateX(-90deg) translateZ(0px)`; // Assuming first hidden is below
+                item.style.transform = `rotateX(-90deg) translateZ(0px)`; // Assuming other items are initially "below" or hidden
                 item.style.opacity = 0;
                 item.classList.remove('active-content');
             }
         });
         serviceBgNumber.textContent = '01'; // Ensure initial number is correct
-    }, 200);
+    }, 500); // Increased delay to 500ms
 
-    // Recalculate layout on resize
+    // Recalculate layout and reset state on window resize
     window.addEventListener('resize', () => {
         adjustServicesLayout();
         // Reset animation state to ensure correct positioning on resize
-        isAnimating = false;
-        cancelAnimationFrame(animationRafId);
-        // Force re-render of current state after resize
+        isAnimating = false; // Allow animations after resize
+        cancelAnimationFrame(animationRafId); // Stop any ongoing animation
+
+        // Force re-render of current state after resize to adapt to new dimensions
         const faceOffset = servicesContentWrapper.offsetHeight / 2;
         serviceItems.forEach((item, index) => {
             if (index === currentActiveIndex) {
@@ -292,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('wheel', (e) => {
         // Prevent default scroll behavior to control scrolling entirely
         e.preventDefault();
-        handleScrollStep(e.deltaY > 0 ? 1 : -1);
+        handleScrollStep(e.deltaY > 0 ? 1 : -1); // 1 for down, -1 for up
     }, { passive: false }); // passive: false is critical for preventDefault()
 
     window.addEventListener('touchstart', (e) => {
@@ -301,8 +324,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('touchend', (e) => {
         let deltaY = e.changedTouches[0].clientY - startY;
-        if (Math.abs(deltaY) > 30) { // Threshold for a meaningful swipe
-            handleScrollStep(deltaY < 0 ? 1 : -1);
+        if (Math.abs(deltaY) > 30) { // Threshold for a meaningful swipe (e.g., 30 pixels)
+            handleScrollStep(deltaY < 0 ? 1 : -1); // 1 for swipe up (negative deltaY), -1 for swipe down (positive deltaY)
         }
     }, { passive: false });
 
