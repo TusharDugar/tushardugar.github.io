@@ -173,6 +173,7 @@ html::before { /* Re-using html::before to cover the whole page */
     opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: transform, opacity; /* Performance hint for reveal animations */
 }
 .reveal-item.revealed {
     opacity: 1;
@@ -184,6 +185,7 @@ html::before { /* Re-using html::before to cover the whole page */
     opacity: 0;
     transform: translateY(40px) scale(0.95);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: transform, opacity; /* Performance hint for stagger animations */
 }
 .reveal-stagger.revealed {
     opacity: 1;
@@ -1352,5 +1354,27 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
+    }
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    /* General reveal items */
+    .reveal-item,
+    .reveal-stagger {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    /* Services cube animation items */
+    .service-item {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+    /* Reset current active state (first item always visible) */
+    .service-item:not(:first-child) {
+        opacity: 0 !important; /* Hide all but the first item if motion is reduced */
     }
 }
