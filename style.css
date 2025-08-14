@@ -582,6 +582,10 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* Hover Interaction for Service Items (No longer relevant for a 3D effect in motion) */
 /* This rule will not interfere with the scroll animation but is left here for consistency */
+.service-item:hover {
+    /* transform: translateY(-5px) scale(1.03); */ /* Not applicable for 3D faces */
+    /* transition: transform 0.3s ease-out; */
+}
 
 
 /* Styling for the large background number */
