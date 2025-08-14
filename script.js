@@ -76,15 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesSection = document.getElementById('services');
     const servicesHeading = servicesSection?.querySelector('.services-heading');
     const servicesContentWrapper = servicesSection?.querySelector('.services-content-wrapper');
-    const servicesItemsContainer = servicesSection?.querySelector('.services-items-container');
-    const serviceItems = servicesItemsContainer?.querySelectorAll('.service-item') || [];
+    const servicesItemsContainer = servicesContentWrapper?.querySelector('.services-items-container'); // Corrected selector to be child of servicesContentWrapper
+    const serviceItems = servicesItemsContainer?.querySelectorAll('.service-item') || []; // serviceItems must be children of servicesItemsContainer
     const serviceBgNumber = servicesSection?.querySelector('.service-bg-number');
 
     // DEBUG: Check if elements are found at script start
     console.log('Services Section Found:', !!servicesSection);
+    console.log('Services Heading Found:', !!servicesHeading);
     console.log('Services Content Wrapper Found:', !!servicesContentWrapper);
-    console.log('Services Items Container Found:', !!servicesItemsContainer);
-    console.log('Service Items Count:', serviceItems.length);
+    console.log('Services Items Container Found:', !!servicesItemsContainer); // This should now be true with HTML fix
+    console.log('Service Items Count:', serviceItems.length); // This should now be 8
+    if (serviceItems.length > 0) {
+        console.log('First Service Item:', serviceItems[0]);
+    }
     console.log('Service Background Number Found:', !!serviceBgNumber);
 
 
@@ -135,16 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const faceOffset = contentWrapperHeight / 2;
 
         // The total scroll range needed for all steps.
-        // Each "step" now effectively corresponds to the fixed duration of 1.2s, not necessarily a large scroll multiplier.
-        // We ensure enough scroll space for each service item + a buffer.
         const SCROLL_DISTANCE_MULTIPLIER = 2.0; // This controls the effective "scroll distance" needed per step
         const totalVirtualScrollHeight = serviceItems.length * (window.innerHeight * SCROLL_DISTANCE_MULTIPLIER); // Provide ample scroll space
 
         scrollSpacer.style.height = `${totalVirtualScrollHeight}px`;
 
-        // We explicitly set the scroll position to target the services section for the animation start
-        // This is a rough estimation of where the services section should "activate"
-        const servicesSectionStart = servicesSection.offsetTop + stickyTopH2; // This is informational; the new scroll logic does not rely on window.scrollY relative to this.
+        // DEBUG: Log calculated layout values
+        console.log("adjustServicesLayout run:");
+        console.log("  contentWrapperHeight:", contentWrapperHeight);
+        console.log("  faceOffset:", faceOffset);
+        console.log("  scrollSpacer.style.height:", scrollSpacer.style.height);
     };
 
     // Core animation logic for a single step
@@ -154,10 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let easedProgress = easeInOutCubic(progress);
 
         const faceOffset = servicesContentWrapper.offsetHeight / 2;
+        // Defensive check: if faceOffset is 0, something is wrong with CSS height or element visibility
+        if (faceOffset === 0) {
+            console.error("faceOffset is 0 during animation! servicesContentWrapper.offsetHeight:", servicesContentWrapper.offsetHeight);
+            isAnimating = false; // Stop animation to prevent errors
+            return;
+        }
+
         const direction = targetIndex > startIndex ? 1 : -1; // 1 for scrolling down, -1 for scrolling up
 
         // Update background number only when the animation is near completion or at the start
-        // This ensures the number changes as the active slide changes
         const displayIndex = (direction === 1 && progress > 0.5) || (direction === -1 && progress < 0.5)
             ? targetIndex + 1
             : startIndex + 1;
@@ -169,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (index === startIndex) {
                 // Outgoing face (from front to top/bottom)
-                // Rotates from 0deg to 90deg (downwards/away if scrolling up, upwards/away if scrolling down)
                 const rotation = direction * 90 * easedProgress; // +90 for down, -90 for up
                 const currentTranslateZ = -faceOffset * (1 - easedProgress); // From -faceOffset (front) to 0 (edge)
 
@@ -179,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 zIndex = 2; // Ensures it's on top when exiting
             } else if (index === targetIndex) {
                 // Incoming face (from bottom/top to front)
-                // Rotates from -90deg to 0deg (upwards/inwards if scrolling down, downwards/inwards if scrolling up)
                 const rotation = -direction * 90 * (1 - easedProgress); // -90 to 0 for down, +90 to 0 for up
                 const currentTranslateZ = -faceOffset * easedProgress; // From 0 (edge) to -faceOffset (front)
 
@@ -189,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 zIndex = 1; // Appears just below the exiting item
             } else {
                 // All other items are completely hidden and reset
-                // Position them at the top (90deg) or bottom (-90deg) and fully transparent
                 if (index < currentActiveIndex) { // Items before the current active (already scrolled past)
                     transformValue = `rotateX(90deg) translateZ(0px)`;
                 } else { // Items after the current active (not yet scrolled to)

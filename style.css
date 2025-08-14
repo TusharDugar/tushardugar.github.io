@@ -502,6 +502,8 @@ html::before { /* Re-using html::before to cover the whole page */
     align-items: flex-start;
     perspective: 1000px; /* Gives 3D depth, as requested */
     overflow: hidden; /* CRITICAL: Clips rotating items to maintain cube illusion */
+    /* Added flex for consistent vertical centering */
+    align-items: center; /* Center content vertically within its fixed height */
 }
 
 /* Inner container to hold heading and service items */
@@ -947,6 +949,7 @@ footer h2 {
     .services-content-wrapper {
         height: 300px;
         perspective: 1000px; /* Adjusted for this breakpoint */
+        align-items: center; /* Center content vertically within its fixed height */
     }
     .services-heading {
         font-size: 4.5em;
@@ -1118,6 +1121,7 @@ footer h2 {
     .services-content-wrapper {
         height: 250px;
         perspective: 800px; /* Adjusted for this breakpoint */
+        align-items: center; /* Center content vertically within its fixed height */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1306,6 +1310,7 @@ footer h2 {
     .services-content-wrapper {
         height: 230px;
         perspective: 700px; /* Adjusted for this breakpoint */
+        align-items: center; /* Center content vertically within its fixed height */
     }
     .services-heading {
         font-size: 2.8em;
