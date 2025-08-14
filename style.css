@@ -115,7 +115,7 @@ body::after {
 @keyframes glow2 {
     0% { transform: translate(-50%, -50%) scale(1); opacity: 0.15; }
     50% { transform: translate(-45%, -55%) scale(1.03); opacity: 0.2; }
-    100% { transform: translate(-45%, -55%) scale(1); opacity: 0.15; }
+    100% { transform: translate(-55%, -45%) scale(1); opacity: 0.15; }
 }
 
 
@@ -471,17 +471,11 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1;
 }
 
-/* Main content wrapper for services section - No longer a fixed 3D viewport */
+/* Main content wrapper for services section - No longer fixed viewport or 3D properties */
 .services-content-wrapper {
-    position: sticky; /* Still sticky to keep content in view while scrolling */
-    top: var(--services-sticky-top-wrapper); /* JS will set this variable */
-    will-change: top;
-    z-index: 1; /* Ensure wrapper stays below content it might scroll over */
-    
-    /* Removed: height, perspective, overflow: hidden */
+    /* REMOVED: position: sticky; top; will-change; z-index; height; perspective; overflow; */
     display: flex; /* Keep flex for stacking heading and items */
     flex-direction: column; /* Stack them vertically */
-    /* min-height can be used if content is too short */
     min-height: 350px; /* Maintain minimum height for overall section feel */
 }
 
@@ -551,9 +545,16 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: 1; /* Ensure active item is on top */
 }
 
+/* Hover Interaction for Service Items */
+.service-item:hover {
+    transform: translateY(-5px) scale(1.03); /* Slightly lift and scale up on hover */
+    transition: transform 0.3s ease-out; /* Smooth hover transition */
+}
+
+
 /* Styling for the large background number */
 .service-bg-number {
-    position: absolute; /* Relative to .services-section or .services-sticky-content-inner */
+    position: absolute; /* Relative to .services-section */
     font-family: 'Poppins', sans-serif;
     font-size: 15em; /* Huge size */
     font-weight: 800;
@@ -565,9 +566,6 @@ html::before { /* Re-using html::before to cover the whole page */
     user-select: none; /* Prevent text selection */
     pointer-events: none; /* Do not interfere with clicks */
     z-index: -1; /* Behind other content */
-    /* Adjust based on where you want it relative to the overall section. 
-       If it needs to be fixed to the viewer's viewport and not scroll with the section, 
-       then it should be 'position: fixed' relative to html/body. */
 }
 
 /* Service Title - Reverted to orange, no italics */
@@ -932,7 +930,6 @@ footer h2 {
     }
     .services-content-wrapper {
         min-height: 300px; /* Adjusted min-height */
-        /* Removed: perspective */
     }
     .services-heading {
         font-size: 4.5em;
@@ -953,7 +950,6 @@ footer h2 {
         font-size: 1em;
         max-width: 500px;
     }
-    /* Removed: --services-face-offset */
 
     /* Adjustments for tools section */
     .tools-section {
@@ -1105,7 +1101,6 @@ footer h2 {
     }
     .services-content-wrapper {
         min-height: 250px; /* Adjusted min-height */
-        /* Removed: perspective */
     }
     .services-heading {
         font-size: 3.5em;
@@ -1127,7 +1122,6 @@ footer h2 {
         font-size: 0.9em;
         max-width: 100%;
     }
-    /* Removed: --services-face-offset */
 
     /* Adjustments for tools section */
     .tools-section {
@@ -1296,7 +1290,6 @@ footer h2 {
     }
     .services-content-wrapper {
         min-height: 230px; /* Adjusted min-height */
-        /* Removed: perspective */
     }
     .services-heading {
         font-size: 2.8em;
@@ -1316,7 +1309,6 @@ footer h2 {
     .service-description {
         font-size: 0.8em;
     }
-    /* Removed: --services-face-offset */
     
     /* Adjustments for tools section */
     .tools-section {
