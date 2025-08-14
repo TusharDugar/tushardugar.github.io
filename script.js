@@ -247,14 +247,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Main scroll step handler
     const handleScrollStep = (direction) => {
-        if (isAnimating) return; // Ignore if an animation is already running
+        if (isAnimating) return true; // Keep preventing default if an animation is active
 
         let newIndex = currentActiveIndex + direction;
-        newIndex = Math.max(0, Math.min(serviceItems.length - 1, newIndex)); // Clamp index to valid range
+
+        // Check if we are trying to scroll past the boundaries
+        const atStartBoundary = currentActiveIndex === 0 && direction === -1;
+        const atEndBoundary = currentActiveIndex === serviceItems.length - 1 && direction === 1;
+
+        if (atStartBoundary || atEndBoundary) {
+            // If at a boundary and trying to scroll past it,
+            // allow default browser scroll behavior to take over.
+            return false; // Signal NOT to prevent default
+        }
+
+        // Clamp the index for internal animation, even if we allowed overall page scroll
+        newIndex = Math.max(0, Math.min(serviceItems.length - 1, newIndex));
 
         if (newIndex === currentActiveIndex) {
-            // No change in index, no animation needed
-            return;
+            // No change in index, no animation needed.
+            // Still prevent default if we're inside the section and not at the very end
+            // This prevents accidental page scroll if user tries to scroll past max/min without going to next section
+            return true;
         }
 
         isAnimating = true; // Set flag to true
@@ -264,15 +278,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Start the fixed-duration animation
         animateCubeTransition(startAnimationIndex, targetAnimationIndex, animationStartTime);
+        return true; // Signal to prevent default, as an animation is starting
     };
 
     // --- Initialize and Event Listeners ---
     // Initial layout adjustment and setting of first item's state
-    // Increased timeout for robustness against FOUC or late layout calculations
     setTimeout(() => {
         adjustServicesLayout(); // Calculate and set CSS variables, spacer height
 
-        // Get faceOffset again, as adjustServicesLayout's faceOffset is local
         const faceOffset = servicesContentWrapper.offsetHeight / 2;
         console.log("Initial servicesContentWrapper.offsetHeight (from setTimeout):", servicesContentWrapper.offsetHeight); // DEBUG
         console.log("Initial faceOffset (from setTimeout):", faceOffset); // DEBUG
@@ -320,9 +333,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attach scroll and touch handlers for step-by-step navigation
     window.addEventListener('wheel', (e) => {
-        // Prevent default scroll behavior to control scrolling entirely
-        e.preventDefault();
-        handleScrollStep(e.deltaY > 0 ? 1 : -1); // 1 for down, -1 for up
+        // Only prevent default if handleScrollStep signals that an internal animation should occur
+        if (handleScrollStep(e.deltaY > 0 ? 1 : -1)) { // 1 for down, -1 for up
+            e.preventDefault();
+        }
     }, { passive: false }); // passive: false is critical for preventDefault()
 
     window.addEventListener('touchstart', (e) => {
@@ -332,7 +346,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('touchend', (e) => {
         let deltaY = e.changedTouches[0].clientY - startY;
         if (Math.abs(deltaY) > 30) { // Threshold for a meaningful swipe (e.g., 30 pixels)
-            handleScrollStep(deltaY < 0 ? 1 : -1); // 1 for swipe up (negative deltaY), -1 for swipe down (positive deltaY)
+            // Only prevent default if handleScrollStep signals that an internal animation should occur
+            if (handleScrollStep(deltaY < 0 ? 1 : -1)) { // 1 for swipe up (negative deltaY), -1 for swipe down (positive deltaY)
+                e.preventDefault();
+            }
         }
     }, { passive: false });
 
