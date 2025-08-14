@@ -38,7 +38,8 @@
     --services-sticky-top-h2: 0px;
     --services-sticky-top-wrapper: 0px;
 
-    /* NEW: Variable for the perceived depth/size of cube faces (set in .services-content-wrapper) */
+    /* NEW: Variable for the perceived depth/size of cube faces (set dynamically in .services-content-wrapper) */
+    /* Default value will be set by JS on .services-content-wrapper itself */
 }
 
 /* Global utility text colors */
