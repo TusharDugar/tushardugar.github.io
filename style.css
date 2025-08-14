@@ -213,7 +213,7 @@ html::before { /* Re-using html::before to cover the whole page */
     padding-top: 50px; /* Small space from the very top now that navbar is gone */
 }
 
-/* Left Column (Sticky) - NO CHANGES TO THIS SECTION */
+/* Left Column (Sticky) */
 .left-column-sticky {
     flex-shrink: 0; /* Prevent from shrinking */
     width: 30%; /* Slightly narrower left column */
