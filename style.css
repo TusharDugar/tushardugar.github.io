@@ -33,6 +33,10 @@
     --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
     --services-description-color: var(--text-light); /* White for descriptions */
     --services-grid-line-color: rgba(255, 255, 255, 0.05); /* Very faint white for background grid */
+    
+    /* NEW: Color for the background pattern lines */
+    --pattern-line-color: #1e3b3e; /* Dark teal/greenish, very subtle */
+
 
     /* CSS Variables for sticky services top offset (set by JS) */
     --services-sticky-top-h2: 0px;
@@ -57,11 +61,8 @@ html {
     position: relative; /* Needed for fixed children positioning in some browsers */
 }
 
-/* Keyframes for the animated colorful gradient */
-@keyframes gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
+/* Keyframes for the animated colorful gradient (REMOVED) */
+/* @keyframes gradient { ... } */
 
 body {
     margin: 0;
@@ -117,7 +118,7 @@ body::after {
 }
 
 
-/* Layer 3: Geometric Grid Pattern with Animated Gradient (Over Glows) */
+/* Layer 3: Geometric Grid Pattern (Over Glows) */
 html::before { /* Re-using html::before to cover the whole page */
     content: '';
     position: fixed; /* Crucial for making it cover the whole viewport and appear as a "single block" */
@@ -127,35 +128,33 @@ html::before { /* Re-using html::before to cover the whole page */
     height: 100%;
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
-    opacity: 0.1299375; /* Current opacity for the pattern */
+    /* Adjust overall opacity to make pattern more or less visible */
+    opacity: 0.3; /* Adjusted for subtle but visible effect as in image */
 
-    /* The animated colorful gradient as the background that will be masked */
-    background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
+    /* NEW BACKGROUND IMAGES: Grid lines + Chevron pattern (replacing old animated mask) */
+    background-image:
+        /* Horizontal Grid Lines (1px line every 100px) */
+        repeating-linear-gradient(to bottom, transparent, transparent 99px, var(--pattern-line-color) 99px, var(--pattern-line-color) 100px),
+        /* Vertical Grid Lines (1px line every 100px) */
+        repeating-linear-gradient(to right, transparent, transparent 99px, var(--pattern-line-color) 99px, var(--pattern-line-color) 100px),
+        /* Chevron pattern (SVG data URL) - Creates alternating V and ^ pattern */
+        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C/svg%3E");
 
-    /* Masking to only show the background through the "lines" */
-    /* All grid patterns drawn in solid white (opaque) against a transparent background */
-    mask-image:
-        linear-gradient(to right, transparent 99%, white 1%), /* Vertical grid lines */
-        linear-gradient(to bottom, transparent 99%, white 1%), /* Horizontal grid lines */
-        linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%), /* Diagonal grid 1 */
-        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
+    background-size:
+        100px 100px, /* Size for horizontal lines */
+        100px 100px, /* Size for vertical lines */
+        200px 200px; /* Size for chevron pattern */
 
-    /* Vendor prefix for better compatibility of mask-image */
-    -webkit-mask-image:
-        linear-gradient(to right, transparent 99%, white 1%),
-        linear-gradient(to bottom, transparent 99%, white 1%),
-        linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%),
-        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
+    background-repeat: repeat; /* All layers repeat */
+    background-position: 0 0; /* Align to top-left */
 
-    /* Sizes for each mask layer (match original background-size for grid spacing) */
-    mask-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
-    -webkit-mask-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
-
-    /* Repeat masks over the whole area */
-    mask-repeat: repeat;
-    -webkit-mask-repeat: repeat;
+    /* REMOVED: old mask-image properties and @keyframes gradient animation */
+    /* mask-image: ... */
+    /* -webkit-mask-image: ... */
+    /* mask-size: ... */
+    /* -webkit-mask-size: ... */
+    /* mask-repeat: ... */
+    /* -webkit-mask-repeat: ... */
 }
 
 
