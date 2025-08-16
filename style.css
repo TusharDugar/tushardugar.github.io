@@ -462,7 +462,7 @@ html::before {
     padding-top: 100px;
     text-align: left;
     position: relative; /* CRITICAL: Establishes a stacking context for its children */
-    z-index: 0; /* NEW: Sets this stacking context below higher elements */
+    z-index: 0; /* Ensures this whole column's content sits below the fixed side column and main background layers */
 }
 
 /* --- SERVICES SECTION (GSAP 3D CUBE ANIMATION) --- */
@@ -473,8 +473,8 @@ html::before {
   padding-top: 80px;
   padding-bottom: 100px;
   text-align: left;
-  z-index: 2; /* NEW: Ensure services section stays on top when pinned within right-column-scroll */
-  background-color: transparent; /* Ensure no section background */
+  z-index: 2; /* Ensures services section stays on top of 'tools' section when pinned */
+  background-color: var(--bg-main); /* FIX: Added solid background to prevent overlap show-through */
 }
 
 /* Services Heading (for the 3D cube section) */
@@ -532,7 +532,7 @@ html::before {
   height: 100%;
   padding: 20px;
   /* CRITICAL: Solid background color to prevent content bleed-through */
-  background-color: var(--bg-main); /* MODIFIED: Use main background color for solid faces */
+  background-color: var(--bg-main); /* Ensure faces have solid background */
   backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
   opacity: 1; /* All faces initially opaque for this GSAP setup */
   transform-origin: center center; /* Rotation occurs around the center */
@@ -585,7 +585,7 @@ html::before {
     padding-bottom: 80px;
     text-align: left;
     background: none; /* Ensure no section background */
-    z-index: 1; /* NEW: Ensure tools section is below the pinned services section */
+    z-index: 1; /* Ensures tools section is below the pinned services section */
 }
 
 .tools-heading {
@@ -677,7 +677,7 @@ footer {
     text-align: center;
     padding: 60px 0;
     position: relative;
-    z-index: 1; /* NEW: Ensure footer is above general background elements, but below pinned section */
+    z-index: 1; /* Ensures footer is above general background elements, but below pinned section */
 }
 
 footer a {
