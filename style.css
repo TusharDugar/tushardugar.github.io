@@ -140,12 +140,11 @@ html::before { /* Re-using html::before to cover the whole page */
     animation: gradient 15s ease infinite; /* For the animated gradient */
 
     /* NEW MASKING: Only show the background through the "lines" using mask-image */
+    /* Chevron pattern (SVG data URL) - Creates alternating V and ^ pattern */
+    /* Note: SVG stroke color is WHITE (#FFF) for masking to work, as white parts of mask reveal background */
     mask-image:
-        /* Horizontal Grid Lines (1px line every 100px) */
-        linear-gradient(to bottom, transparent 99%, white 1%),
-        /* Vertical Grid Lines (1px line every 100px) */
-        linear-gradient(to right, transparent 99%, white 1%),
-        /* Chevron pattern (SVG data URL) - Creates alternating V and ^ pattern */
+        linear-gradient(to bottom, transparent 99%, white 1%), /* Horizontal Grid Lines (1px white line every 100px) */
+        linear-gradient(to right, transparent 99%, white 1%), /* Vertical Grid Lines (1px white line every 100px) */
         url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C/svg%3E");
     
     /* Vendor prefixes for better compatibility of mask-image */
@@ -161,9 +160,6 @@ html::before { /* Re-using html::before to cover the whole page */
     /* Mask layers repeat over the whole area */
     mask-repeat: repeat;
     -webkit-mask-repeat: repeat;
-
-    /* Important: SVG stroke color inside data URL should be white for masking effect */
-    /* The browser will only show parts of background-image where mask-image is opaque (white) */
 }
 
 
@@ -509,7 +505,7 @@ html::before { /* Re-using html::before to cover the whole page */
   justify-content: center; /* Horizontally center */
   align-items: center; /* Vertically center content inside fixed height wrapper */
   /* Ensures that the element itself acts as the 3D space's pivot. */
-  /* When perspective is on the parent, this translateZ will place the cube's origin correctly */
+  /* This transform will move the entire cube group forward so it's visible relative to the perspective */
   transform: translateZ(calc(var(--faceZ) * -1)); /* Counter-translate to bring content to front */
 }
 
@@ -526,6 +522,8 @@ html::before { /* Re-using html::before to cover the whole page */
   width: 100%;
   height: 100%;
   padding: 20px;
+  /* ADDED: Solid background color to prevent content bleed-through */
+  background-color: var(--bg-main); /* Use main background color for solid faces */
   backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
   opacity: 0; /* Default hidden state for all items */
   transform-origin: center center; /* Rotation occurs around the center */
@@ -535,15 +533,14 @@ html::before { /* Re-using html::before to cover the whole page */
   display: flex; /* For content within the item */
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-start; /* Aligns content to the left of the item */
   box-sizing: border-box; /* Include padding in width/height */
   will-change: transform, opacity; /* Performance hint */
 }
 
 /* State Classes controlled by JavaScript */
 /* --faceZ variable defined in JS is negative (e.g., -150px) */
-/* This means translateZ(var(--faceZ)) will move the element 'back' into 3D space */
-/* And -1 * var(--faceZ) will move it 'forward' */
+/* This means translateZ(var(--faceZ)) will push the element 'back' into 3D space from the cube's origin */
 
 .service-item.front {
   transform: rotateX(0deg) translateZ(var(--faceZ)); /* Positioned at the 'front' of the cube */

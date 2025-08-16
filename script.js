@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapperHeight = wrapper.offsetHeight;
         if (wrapperHeight === 0) {
              console.warn("services-content-wrapper has 0 height. Cannot calculate faceZ. Check CSS 'height' for .services-content-wrapper.");
-             // Attempt to set a default for --faceZ to prevent CSS errors, though animation won't work well
+             // Set a default for --faceZ to prevent CSS errors, animation won't work well without height
              servicesSection.style.setProperty('--faceZ', `-150px`);
              return;
         }
@@ -130,9 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function layoutFaces() {
         items.forEach((item, index) => {
             item.className = 'service-item'; // Reset all classes first
+            item.classList.remove('active-content'); // Remove active-content class
 
             if (index === activeIndex) {
-                item.classList.add('front');
+                item.classList.add('front', 'active-content'); // Add active-content to the front item
             } else if (index === (activeIndex + 1) % items.length) { // Below active (for scrolling down)
                 item.classList.add('below');
             } else if (index === (activeIndex - 1 + items.length) % items.length) { // Above active (for scrolling up)
@@ -183,9 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Returns true if animation starts, false if at boundary and should allow page scroll
     function step(direction) { // direction: 'up' (for next item, scrolling down) or 'down' (for previous item, scrolling up)
         let newIndex;
-        if (direction === 'up') { // User scrolls down
+        if (direction === 'up') { // User scrolls down (moves to next index)
             newIndex = activeIndex + 1;
-        } else { // direction === 'down', User scrolls up
+        } else { // direction === 'down', User scrolls up (moves to previous index)
             newIndex = activeIndex - 1;
         }
 
@@ -234,29 +235,45 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('wheel', (e) => {
         // Only engage if the services section is substantially visible on screen
         const servicesRect = servicesSection.getBoundingClientRect();
-        const isServicesMainlyVisible = servicesRect.top < window.innerHeight && servicesRect.bottom > 0;
+        const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
 
-        if (!isServicesMainlyVisible) return; // Don't interfere with scroll if section is not in view
+        if (!isServicesMainlyVisible) {
+            return; // Don't interfere with scroll if section is largely out of view
+        }
+
+        // If an animation is active, prevent default and do nothing else.
+        if (isAnimating) {
+            e.preventDefault();
+            return;
+        }
 
         // Accumulate scroll delta
         scrollAccum += e.deltaY;
         const scrollThreshold = 50; // Pixels needed to trigger a step
 
-        let direction = 0; // 1 for down, -1 for up
+        let directionToStep = 0; // 1 for down, -1 for up
         if (scrollAccum > scrollThreshold) {
-            direction = 1;
+            directionToStep = 1; // User scrolled down
             scrollAccum = 0; // Reset accumulator
         } else if (scrollAccum < -scrollThreshold) {
-            direction = -1;
+            directionToStep = -1; // User scrolled up
             scrollAccum = 0; // Reset accumulator
         }
 
-        if (direction !== 0) {
-            if (step(direction === 1 ? 'up' : 'down')) { // 'up' for next item, 'down' for previous
-                e.preventDefault(); // Prevent default if animation was triggered
+        if (directionToStep !== 0) {
+            // Attempt to step. If step() returns true, it means an internal animation will occur.
+            if (step(directionToStep === 1 ? 'up' : 'down')) { // 'up' for next item, 'down' for previous
+                e.preventDefault(); // Prevent default browser scroll as we're handling it
             }
-        } else if (isAnimating) { // If not enough scroll for a step, but an animation is still playing
-            e.preventDefault(); // Prevent default to maintain smooth cube experience
+        } else {
+             // Not enough scroll for a step, and not animating.
+             // Here, we decide if we still want to prevent default for minor wheel movements
+             // or let them contribute to overall page scroll if we're near the edges.
+             const atStartBoundary = activeIndex === 0 && e.deltaY < 0;
+             const atEndBoundary = activeIndex === items.length - 1 && e.deltaY > 0;
+             if (!(atStartBoundary || atEndBoundary)) {
+                 e.preventDefault(); // Prevent default if we're inside the section and not at a main exit boundary
+             }
         }
     }, { passive: false }); // passive: false is critical for preventDefault()
 
@@ -272,6 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: false });
 
+    // Touchmove can potentially prevent default, but touchend usually triggers the step.
+    // PreventDefault in touchmove for stepped scrolling can make the page feel "stuck" if not enough swipe occurs.
+    // It's safer to let touchend decide.
+    // Removed touchmove preventDefault unless a very specific pattern is required.
+
     window.addEventListener('touchend', (e) => {
         if (touchStartY === null || isAnimating) return; // If no touch started or animating, ignore
 
@@ -280,8 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (Math.abs(diff) > swipeThreshold) {
             const direction = diff > 0 ? 'up' : 'down'; // 'up' for next item, 'down' for previous
+
+            // Attempt to step; step() returns true if animation initiated, false if at boundary/no change
             if (step(direction)) {
-                e.preventDefault(); // Prevent default if animation was triggered
+                e.preventDefault(); // Prevent default only if an animation was triggered
             }
         }
         touchStartY = null; // Reset for next swipe
