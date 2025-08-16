@@ -554,18 +554,6 @@ body::after {
   will-change: auto; /* Reset performance hint */
 }
 
-/* Remove all animation/state classes if they were set by JS (they won't be applied now) */
-.service-item.active,
-.service-item.front,
-.service-item.above,
-.service-item.below,
-.service-item.exit-to-top,
-.service-item.exit-to-bottom,
-.service-item.enter-from-bottom,
-.service-item.enter-from-top {
-    /* These classes should effectively have no visual effect in this static setup */
-}
-
 /* Large background number: visible and static */
 .service-bg-number {
   position: absolute; /* Keep absolute relative to #services */
