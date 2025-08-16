@@ -69,5 +69,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (aboutSection) sectionObserver.observe(aboutSection);
 
+    // --------------------------
+    // Minimal, reusable staggered reveal for .reveal-parent and .reveal-child
+    // --------------------------
+    document.querySelectorAll('.reveal-parent').forEach(parent => {
+        const children = parent.querySelectorAll('.reveal-child');
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    children.forEach((child, idx) => {
+                        setTimeout(() => {
+                            child.classList.add('revealed');
+                        }, idx * 200);
+                    });
+                    obs.unobserve(parent);
+                }
+            });
+        }, { threshold: 0.2 });
+        observer.observe(parent);
+    });
 
 });
