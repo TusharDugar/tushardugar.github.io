@@ -110,16 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const faceOffset = getFaceOffset();
             serviceItems.forEach((item, i) => {
                 item.classList.remove('active', 'cube-out', 'cube-in');
-                item.style.opacity = '0';
-                item.style.transform = `rotateX(90deg) translateZ(${faceOffset}px)`;
-                item.style.zIndex = '1';
+                item.style.opacity = i === 0 ? '1' : '0';
+                item.style.transform = i === 0
+                    ? `rotateX(0deg) translateZ(${faceOffset}px)`
+                    : `rotateX(90deg) translateZ(${faceOffset}px)`;
+                item.style.zIndex = i === 0 ? '2' : '1';
+                item.style.transition = '';
             });
-            if (serviceItems[0]) {
-                serviceItems[0].classList.add('active');
-                serviceItems[0].style.opacity = '1';
-                serviceItems[0].style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
-                serviceItems[0].style.zIndex = '2';
-            }
             if (bgNumber) bgNumber.textContent = '01';
             currentIndex = 0;
             isAnimating = false;
@@ -176,18 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
             void outgoing.offsetWidth;
 
             // Animate
-            // Outgoing rotates away and fades out by 40%
             outgoing.style.transform = `rotateX(${direction > 0 ? -90 : 90}deg) translateZ(${faceOffset}px)`;
             outgoing.style.opacity = '0';
 
-            // Incoming rotates in and fades in from 60%
             setTimeout(() => {
                 incoming.style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
-            }, 10);
-
-            setTimeout(() => {
                 incoming.style.opacity = '1';
-            }, duration * 0.6);
+            }, 20); // Small delay to ensure transition triggers
 
             // After animation, cleanup and set new active
             setTimeout(() => {
@@ -244,9 +236,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Mouse wheel and keyboard ---
         if (servicesSection) {
-            // Prevent multiple listeners
-            servicesSection.removeEventListener('wheel', handleCubeScroll);
-            servicesSection.removeEventListener('keydown', handleCubeScroll);
+            // Remove previous listeners to avoid stacking
+            servicesSection.onwheel = null;
+            servicesSection.onkeydown = null;
             servicesSection.addEventListener('wheel', handleCubeScroll, { passive: false });
             servicesSection.addEventListener('keydown', handleCubeScroll);
             servicesSection.tabIndex = 0; // Make focusable for keyboard
@@ -279,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { passive: false });
         }
 
-        // Optional: update bg number on resize (if needed)
+        // Optional: update bg number and reset cube on resize
         window.addEventListener('resize', () => {
             setInitialCubeState();
             updateBgNumber(currentIndex);
