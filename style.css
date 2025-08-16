@@ -235,7 +235,7 @@ html::before {
     padding: 0 80px; /* Overall padding for the container */
     min-height: 100vh;
     position: relative;
-    z-index: 1;
+    z-index: 1; /* Keep main container above background elements */
     padding-top: 50px;
     gap: 80px; /* NEW: Defines the gap between the flex items (columns) */
 }
@@ -243,8 +243,8 @@ html::before {
 /* Left Column (Sticky) */
 .left-column-sticky {
     flex-shrink: 0;
-    flex-basis: 370px; /* NEW: Fixed width for the sticky column, matching max-width of the card */
-    padding-right: 0; /* REMOVED: No internal padding right, gap is handled by parent */
+    flex-basis: 370px; /* Fixed width for the sticky column, matching max-width of the card */
+    padding-right: 0;
     box-sizing: border-box;
     position: sticky;
     top: 50px;
@@ -252,7 +252,6 @@ html::before {
     height: calc(100vh - 50px);
     display: flex;
     flex-direction: column;
-    /* Removed justify-content: center; to align content to the top */
     align-items: center;
     text-align: center;
 }
@@ -455,45 +454,16 @@ html::before {
 /* Right Column (Scrolling) */
 .right-column-scroll {
     flex-grow: 1;
-    padding-left: 0; /* REMOVED: Gap handled by parent's 'gap' property */
+    padding-left: 0;
     padding-right: 80px; /* Keep this for padding on the right edge of the content */
     padding-bottom: 100px;
     box-sizing: border-box;
     min-height: 150vh;
     padding-top: 100px;
     text-align: left;
+    position: relative; /* CRITICAL: Establishes a stacking context for its children */
+    z-index: 0; /* NEW: Sets this stacking context below higher elements */
 }
-
-/* Hero Right Content */
-.hero-heading {
-    font-family: 'Poppins', sans-serif;
-    font-size: 7em;
-    line-height: 0.9;
-    font-weight: 800;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    text-align: left;
-}
-
-.hero-heading .text-white {
-    color: var(--text-light);
-    display: block;
-}
-
-.hero-heading .text-gray {
-    color: var(--text-medium);
-    display: block;
-}
-
-.hero-description {
-    font-size: 1.2em;
-    line-height: 1.8;
-    color: var(--text-medium);
-    max-width: 600px;
-    margin-bottom: 80px;
-    text-align: left;
-}
-
 
 /* --- SERVICES SECTION (GSAP 3D CUBE ANIMATION) --- */
 .services-section {
@@ -503,8 +473,8 @@ html::before {
   padding-top: 80px;
   padding-bottom: 100px;
   text-align: left;
-  z-index: 2; /* NEW: Ensure services section stays on top when pinned */
-  background: none; /* Ensure no section background */
+  z-index: 2; /* NEW: Ensure services section stays on top when pinned within right-column-scroll */
+  background-color: transparent; /* Ensure no section background */
 }
 
 /* Services Heading (for the 3D cube section) */
@@ -518,7 +488,7 @@ html::before {
     text-align: left;
     position: sticky; /* Keep heading sticky */
     top: 0;
-    z-index: 2; /* Above the cube */
+    z-index: 2; /* Above the cube (if cube is z-index 1 within this section) */
     padding-bottom: 20px;
 }
 /* Span colors for MY SERVICES heading */
@@ -543,6 +513,7 @@ html::before {
   display: flex; /* For centering the inner container */
   justify-content: center; /* Horizontally center */
   align-items: center; /* Vertically center content inside fixed height wrapper */
+  z-index: 3; /* NEW: Explicitly give the cube a higher z-index than sibling content */
   /* transform is handled by GSAP.set for initial position and then GSAP.to for rotation */
 }
 
@@ -561,13 +532,13 @@ html::before {
   height: 100%;
   padding: 20px;
   /* CRITICAL: Solid background color to prevent content bleed-through */
-  background-color: var(--bg-main); /* Use main background color for solid faces */
+  background-color: var(--bg-main); /* MODIFIED: Use main background color for solid faces */
   backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
   opacity: 1; /* All faces initially opaque for this GSAP setup */
   transform-origin: center center; /* Rotation occurs around the center */
   /* Transitions are handled by GSAP, removed CSS transitions to prevent conflicts */
   transition: none; /* REMOVED: opacity 0.3s ease; */
-  z-index: 1; /* Default z-index for faces */
+  z-index: 1; /* Default z-index for faces within their container */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -608,13 +579,13 @@ html::before {
 }
 
 
-/* Premium Tools Section Styles (UNCHANGED) */
+/* Premium Tools Section Styles */
 .tools-section {
     padding-top: 80px;
     padding-bottom: 80px;
     text-align: left;
     background: none; /* Ensure no section background */
-    z-index: 1; /* Ensure tools section is below the pinned services section */
+    z-index: 1; /* NEW: Ensure tools section is below the pinned services section */
 }
 
 .tools-heading {
@@ -706,7 +677,7 @@ footer {
     text-align: center;
     padding: 60px 0;
     position: relative;
-    z-index: 1;
+    z-index: 1; /* NEW: Ensure footer is above general background elements, but below pinned section */
 }
 
 footer a {
@@ -979,7 +950,7 @@ footer h2 {
         flex-direction: column;
         padding: 0 20px;
         padding-top: 20px;
-        gap: 0; /* NEW: No gap in column layout, use padding on sections */
+        gap: 0; /* No gap in column layout, use padding on sections */
     }
     .left-column-sticky {
         width: 100%; /* Take full width in column mode */
@@ -993,7 +964,7 @@ footer h2 {
         align-items: center;
         flex-direction: column;
         padding-top: 0;
-        flex-basis: auto; /* NEW: Allow it to take natural height when stacking */
+        flex-basis: auto; /* Allow it to take natural height when stacking */
     }
     .about-left-content {
         max-width: 350px;
