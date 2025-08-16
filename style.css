@@ -510,7 +510,7 @@ body::after {
 }
 
 
-/* === SERVICES SECTION (STATIC, VISIBLE CARDS, NO ANIMATION) === */
+/* === SERVICES SECTION (STATIC, NO CARD BACKGROUND, ORANGE HEADINGS) === */
 .services-section {
   position: relative;
   padding-top: 80px;
@@ -519,17 +519,6 @@ body::after {
   z-index: 1;
   background: none !important;
   background-color: transparent !important;
-}
-
-.services-content-wrapper {
-  position: relative;
-  top: auto;
-  height: auto;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
 }
 
 .services-items-container {
@@ -541,7 +530,11 @@ body::after {
   position: relative;
 }
 
+/* Remove card background from service items */
 .service-item {
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -551,34 +544,18 @@ body::after {
   min-height: 1px;
   padding: 20px 24px;
   margin: 0;
-  background: var(--bg-tool-card);
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.18);
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
   z-index: auto !important;
   /* Remove any animation/3D classes effect */
 }
-.service-item.front,
-.service-item.above,
-.service-item.below,
-.service-item.exit-to-top,
-.service-item.exit-to-bottom,
-.service-item.enter-from-bottom,
-.service-item.enter-from-top,
-.service-item.active-content {
-  /* No effect in static mode */
-  transform: none !important;
-  opacity: 1 !important;
-  z-index: auto !important;
-}
 
-/* Service Title and Description: match Premium Tools style */
+/* Make service titles orange */
 .service-title {
+  color: var(--accent-primary-sawad) !important;
   font-size: 1.1em !important;
   font-weight: 600 !important;
-  color: var(--tool-name-color) !important;
   margin: 0 0 5px 0 !important;
   line-height: 1.2 !important;
   font-style: normal !important;
