@@ -35,9 +35,9 @@
     
 
     /* CSS Variables for sticky services top offset (set by JS) */
-    --services-sticky-top-h2: 0px;
-    --services-sticky-top-wrapper: 0px;
-    --faceZ: 0px; /* Default, will be set by JS */
+    --services-sticky-top-h2: 0px; /* Unused in this GSAP setup */
+    --services-sticky-top-wrapper: 0px; /* Unused in this GSAP setup */
+    --faceZ: 0px; /* Will be set by JS (negative half of wrapper height) */
 }
 
 /* Global utility text colors */
@@ -119,38 +119,41 @@ body::after {
 
 
 /* Layer 3: Animated Background Grid Pattern */
-#mosaic-background { /* This div is new in HTML */
-  position: fixed;
-  inset: 0;
-  z-index: -1; /* Behind all content but above body glows */
-  pointer-events: none; /* Purely decorative */
-  opacity: 0.9; /* Subtle overlay as per prompt */
+/* This now goes on html::before to mask an animated background */
+html::before {
+    content: '';
+    position: fixed;
+    inset: 0; /* Shorthand for top:0; right:0; bottom:0; left:0; */
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.1299375; /* Default subtle opacity */
 
-  background-color: #0d0d0d; /* deep matte base as per prompt */
-  
-  /* The animated grid lines themselves */
-  background-image: 
-    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px), /* Vertical Lines */
-    linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px); /* Horizontal Lines */
-  background-size: 40px 40px; /* Grid size */
-  background-repeat: repeat; /* Repeat the grid pattern */
+    /* Animated colorful gradient as the base background */
+    background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
 
-  /* Animation for the line colors */
-  animation: glowShift 15s ease infinite; /* As per prompt */
-}
+    /* Masking to show background through lines */
+    mask-image:
+        linear-gradient(to right, transparent 99%, white 1%), /* Vertical grid lines */
+        linear-gradient(to bottom, transparent 99%, white 1%), /* Horizontal grid lines */
+        linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%), /* Diagonal grid 1 */
+        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
 
-/* Keyframes for the grid line glowing animation */
-@keyframes glowShift {
-  0%, 100% {
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-  }
-  50% {
-    background-image:
-      linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
-  }
+    /* Vendor prefixes for mask-image */
+    -webkit-mask-image:
+        linear-gradient(to right, transparent 99%, white 1%),
+        linear-gradient(to bottom, transparent 99%, white 1%),
+        linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%),
+        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
+
+    /* Mask sizes */
+    mask-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
+    -webkit-mask-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
+
+    /* Mask repeats */
+    mask-repeat: repeat;
+    -webkit-mask-repeat: repeat;
 }
 
 
@@ -487,16 +490,16 @@ body::after {
 }
 
 
-/* --- SERVICES CUBE ANIMATION (RESTORED) --- */
+/* --- SERVICES SECTION (GSAP 3D CUBE ANIMATION) --- */
 .services-section {
   position: relative;
-  /* Perspective on services-section as the 3D stage */
-  perspective: 1200px; /* Given in prompt */
-  padding-top: 80px; /* Standard section padding */
-  padding-bottom: 100px; /* Standard section padding */
-  text-align: left; /* Ensure heading aligns left */
+  padding-top: 80px;
+  padding-bottom: 100px;
+  text-align: left;
   z-index: 1;
   background: none; /* Ensure no section background */
+  /* Perspective moved to .services-content-wrapper */
+  perspective: none;
 }
 
 /* Services Heading (for the 3D cube section) */
@@ -512,12 +515,8 @@ body::after {
     top: 0;
     z-index: 2; /* Above the cube */
     padding-bottom: 20px;
-    /* Ensure the spans work correctly as two lines or one, depending on design intent */
-    /* If you want "MY SERVICES" all on one line, remove `display: block` from `.text-white` and `.text-gray` spans */
 }
-
 /* Span colors for MY SERVICES heading */
-/* Keeping display: block to maintain consistency if the intent is to have split-line headings */
 .services-heading .text-white {
   color: var(--text-light);
   display: block;
@@ -531,23 +530,22 @@ body::after {
 
 .services-content-wrapper {
   position: sticky; /* Sticky positioning for the main cube viewport */
-  top: var(--services-sticky-top-wrapper); /* Set dynamically by JS */
-  will-change: top;
-  height: 350px; /* Fixed height for the viewport of the cube */
+  top: 0; /* Sticky to top of the viewport once it starts */
+  height: 250px; /* Fixed height for the viewport of the cube, matches example */
   overflow: hidden; /* CRITICAL: Clips rotating items to maintain cube illusion */
-  transform-style: preserve-3d; /* CRITICAL: Allows children to participate in 3D space */
+  perspective: 1000px; /* NEW: Perspective applied here as in DesignCube example */
+  transform-style: preserve-3d; /* CRITICAL for children to be 3D */
   display: flex; /* For centering the inner container */
   justify-content: center; /* Horizontally center */
   align-items: center; /* Vertically center content inside fixed height wrapper */
-  /* This transform will move the entire cube group forward so it's visible relative to the perspective */
-  transform: translateZ(calc(var(--faceZ) * -1)); /* Counter-translate to bring content to front */
+  /* transform is handled by GSAP.set for initial position and then GSAP.to for rotation */
 }
 
 .services-items-container {
   position: relative;
-  width: 100%;
+  width: var(--cube-width); /* Will be set dynamically by JS */
   height: 100%;
-  /* No transform-style: preserve-3d here; it's on the wrapper */
+  transform-style: preserve-3d; /* This container *rotates*, so it needs preserve-3d */
 }
 
 .service-item {
@@ -560,91 +558,48 @@ body::after {
   /* CRITICAL: Solid background color to prevent content bleed-through */
   background-color: var(--bg-main); /* Use main background color for solid faces */
   backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
-  opacity: 0; /* Default hidden state for all items */
+  opacity: 1; /* All faces initially opaque for this GSAP setup */
   transform-origin: center center; /* Rotation occurs around the center */
-  /* Transition duration set to 0.8s as per requirement */
-  transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out; /* Opacity is very fast */
-  z-index: 0; /* Default low z-index */
-  display: flex; /* For content within the item */
+  /* Transitions are handled by GSAP, removed CSS transitions to prevent conflicts */
+  transition: none; /* Removed: opacity 0.3s ease; */
+  z-index: 1; /* Default z-index for faces */
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start; /* Aligns content to the left of the item */
-  box-sizing: border-box; /* Include padding in width/height */
-  will-change: transform, opacity; /* Performance hint */
+  box-sizing: border-box;
+  will-change: transform; /* Performance hint for GSAP */
 }
 
-/* State Classes controlled by JavaScript */
-/* --faceZ variable defined in JS is negative (e.g., -150px) */
-/* This means translateZ(var(--faceZ)) will push the element 'back' into 3D space from the cube's origin */
-
-.service-item.front {
-  transform: rotateX(0deg) translateZ(var(--faceZ)); /* Positioned at the 'front' of the cube */
-  opacity: 1; /* Fully visible */
-  z-index: 2; /* Active item on top */
+/* Service item children styling, including background number */
+.service-item .service-title {
+    color: var(--accent-primary-sawad); /* Orange color for titles */
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+    font-style: normal;
+    text-transform: none;
 }
-
-.service-item.above {
-  transform: rotateX(90deg) translateZ(var(--faceZ)); /* Rotated 90deg 'up' from front */
-  opacity: 0; /* Hidden */
-  z-index: 0; /* Below active items */
+.service-item .service-description {
+    font-size: 1em;
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.6;
+    font-style: normal;
 }
-
-.service-item.below {
-  transform: rotateX(-90deg) translateZ(var(--faceZ)); /* Rotated 90deg 'down' from front */
-  opacity: 0; /* Hidden */
-  z-index: 0; /* Below active items */
-}
-
-/* Animation Classes controlled by JavaScript - these override parked states during transition */
-/* These classes are applied TEMPORARILY. The final state is set by layoutFaces(). */
-
-/* When current item exits to top (scrolling down), moves from front to above position */
-.service-item.exit-to-top {
-  transform: rotateX(90deg) translateZ(var(--faceZ));
-  opacity: 0; /* Must fade out rapidly */
-  z-index: 2; /* Stays on top during exit */
-}
-
-/* When current item exits to bottom (scrolling up), moves from front to below position */
-.service-item.exit-to-bottom {
-  transform: rotateX(-90deg) translateZ(var(--faceZ));
-  opacity: 0; /* Must fade out rapidly */
-  z-index: 2; /* Stays on top during exit */
-}
-
-/* When next item enters from bottom (scrolling down), moves from below to front position */
-.service-item.enter-from-bottom {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1; /* Must fade in rapidly */
-  z-index: 1; /* Appears just below exiting item */
-}
-
-/* When previous item enters from top (scrolling up), moves from above to front position */
-.service-item.enter-from-top {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1; /* Must fade in rapidly */
-  z-index: 1; /* Appears just below exiting item */
-}
-
-/* Service Background Number (is a direct child of #services, outside services-content-wrapper) */
-.service-bg-number {
-  position: absolute; /* Positioned relative to #services */
-  top: 50%; /* Center vertically within the section */
-  right: 50px; /* Position from right */
-  transform: translateY(-50%); /* Fine-tune vertical centering */
-  font-size: 15em; /* Large size */
+.service-item .service-bg-number {
+  position: absolute; /* Absolute relative to .service-item */
+  top: 50%;
+  right: 20px; /* Position inside the item */
+  transform: translateY(-50%);
+  font-size: 8em; /* Adjusted size for being inside the item */
   font-weight: 800;
   color: var(--services-bg-number-color);
-  z-index: 1; /* Behind content, but visible */
-  pointer-events: none; /* Don't block clicks */
-  line-height: 1; /* Prevent extra space */
-  user-select: none; /* Don't allow text selection */
-}
-
-/* Scroll spacer (for adding scrollable height) */
-.services-section-scroll-spacer {
-    display: block; 
-    /* Height is set by JS */
+  z-index: 0; /* Behind content but in front of item's background */
+  pointer-events: none;
+  line-height: 1;
+  user-select: none;
 }
 
 
@@ -1344,8 +1299,7 @@ footer h2 {
         opacity: 1 !important;
     }
 
-    /* Services cube animation items - these rules are less impactful now as the section is static */
-    /* Restore preferred-motion rules to directly affect these if the 3D cube is enabled */
+    /* Services cube animation items */
     .service-item {
         transition: none !important;
         transform: none !important;
@@ -1355,23 +1309,4 @@ footer h2 {
     .service-item:not(:first-child) {
         opacity: 0 !important;
     }
-}
-
-/* Specific styling for the Services section titles and descriptions */
-.service-title {
-    color: var(--accent-primary-sawad); /* Orange color for titles */
-    font-size: 1.5em; /* Adjusted size for prominence, consistent with card titles if they existed */
-    font-weight: 700; /* Bolder */
-    margin: 0 0 8px 0; /* Adjust margin for more separation from description */
-    line-height: 1.2;
-    font-style: normal;
-    text-transform: none;
-}
-
-.service-description {
-    font-size: 1em; /* Adjusted size for readability */
-    color: var(--text-medium); /* Use a medium gray for descriptions for subtlety */
-    margin: 0;
-    line-height: 1.6; /* More comfortable line height */
-    font-style: normal;
 }
