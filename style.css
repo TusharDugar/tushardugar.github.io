@@ -266,8 +266,6 @@ body::after {
     background-color: var(--accent-primary-sawad) !important;
 }
 
-/* ...existing code... */
-
 /* Updated: Main Name */
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
@@ -638,6 +636,12 @@ body::after {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
+}
+
+/* Restore dark card background for premium tools section */
+.tool-card {
+    background-color: var(--bg-tool-card) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
 }
 
 .tool-card:hover {
