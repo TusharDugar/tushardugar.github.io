@@ -76,20 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const servicesSection = document.getElementById('services');
     const wrapper = servicesSection?.querySelector('.services-content-wrapper');
     const container = servicesSection?.querySelector('.services-items-container');
-    const items = Array.from(container?.querySelectorAll('.service-item') || []);
+    const items = Array.from(container?.querySelectorAll('.service-item') || []); // Ensure items are array-like
     const bgNumber = servicesSection?.querySelector('.service-bg-number');
 
+    // Basic existence check for core elements
     if (!wrapper || !container || items.length === 0 || !bgNumber) {
         console.warn("Services cube: required elements missing or no items found. Skipping animation setup.");
+        // Ensure section itself still reveals if animation is skipped
         if (servicesSection) servicesSection.classList.add('revealed');
         return;
     }
 
     let activeIndex = 0;
     let isAnimating = false;
-    let scrollQueue = [];
 
-    // Create the scroll spacer if it's not already there
+    // Create the scroll spacer if it's not already there (used for overall page length)
     let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
     if (!scrollSpacer) {
         scrollSpacer = document.createElement('div');
@@ -97,14 +98,21 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.appendChild(scrollSpacer);
     }
 
+    // Function to set CSS variables based on layout
     function adjustLayout() {
         const wrapperHeight = wrapper.offsetHeight;
-        if (wrapperHeight === 0) return;
+        if (wrapperHeight === 0) {
+             console.warn("services-content-wrapper has 0 height. Cannot calculate faceZ. Check CSS 'height' for .services-content-wrapper.");
+             // Attempt to set a default for --faceZ to prevent CSS errors, though animation won't work well
+             servicesSection.style.setProperty('--faceZ', `-150px`);
+             return;
+        }
         const faceZ = -(wrapperHeight / 2);
         servicesSection.style.setProperty('--faceZ', `${faceZ}px`);
 
+        // Adjust overall page scroll length based on number of items
         const servicesHeadingHeight = servicesSection.querySelector('.services-heading')?.offsetHeight || 0;
-        const gapBetweenHeadingAndWrapper = 50;
+        const gapBetweenHeadingAndWrapper = 50; // Based on margin-bottom on heading in CSS
         const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + wrapperHeight;
         let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
         stickyTopH2 = Math.max(0, stickyTopH2);
@@ -113,204 +121,200 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
-        // --- Fix: Only add enough scroll space for (items.length - 1) transitions ---
-        // This ensures after the last face, the section ends without extra blank space.
-        const estimatedScrollPerItem = window.innerHeight * 1.5;
-        // Only (items.length - 1) transitions are needed for N items
-        scrollSpacer.style.height = `${(items.length - 1) * estimatedScrollPerItem}px`;
+        // Provide enough scroll space for the section to be fully interactable
+        const estimatedScrollPerItem = window.innerHeight * 1.5; // More generous scroll per item
+        scrollSpacer.style.height = `${items.length * estimatedScrollPerItem}px`;
     }
 
+    // Function to apply class names for parked states
     function layoutFaces() {
         items.forEach((item, index) => {
-            item.className = 'service-item';
+            item.className = 'service-item'; // Reset all classes first
+
             if (index === activeIndex) {
                 item.classList.add('front');
-            } else if (index === (activeIndex + 1) % items.length) {
+            } else if (index === (activeIndex + 1) % items.length) { // Below active (for scrolling down)
                 item.classList.add('below');
-            } else if (index === (activeIndex - 1 + items.length) % items.length) {
+            } else if (index === (activeIndex - 1 + items.length) % items.length) { // Above active (for scrolling up)
                 item.classList.add('above');
-            } else {
-                if (index < activeIndex) {
+            } else { // All other items, set to a hidden state (either above or below depending on index)
+                if (index < activeIndex) { // Item is before activeIndex
                     item.classList.add('above');
-                } else {
+                } else { // Item is after activeIndex
                     item.classList.add('below');
                 }
             }
         });
+        updateBgNumber(); // Update number after classes are set
     }
 
+    // Update the background number text
     function updateBgNumber() {
         const displayIndex = activeIndex + 1;
         bgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
     }
 
-    // Animation queue logic
-    function processScrollQueue() {
-        if (isAnimating || scrollQueue.length === 0) return;
-        const direction = scrollQueue.shift();
-        let newIndex;
-        if (direction === 'up') {
-            newIndex = (activeIndex + 1) % items.length;
-        } else {
-            newIndex = (activeIndex - 1 + items.length) % items.length;
-        }
-        if (newIndex === activeIndex) {
-            // At boundary, skip and process next in queue
-            processScrollQueue();
-            return;
-        }
+    // Main function to initiate a transition between steps
+    function goToIndex(newIndex, directionName) { // directionName: 'up' (for next) or 'down' (for previous)
+        if (isAnimating || newIndex === activeIndex) return; // Ignore if animating or no change
         isAnimating = true;
+
         const current = items[activeIndex];
         const next = items[newIndex];
 
-        // Remove all animation classes first
-        items.forEach(item => {
-            item.classList.remove('exit-to-top', 'exit-to-bottom', 'enter-from-bottom', 'enter-from-top');
-        });
-
-        // Only two faces visible during animation
-        items.forEach((item, idx) => {
-            if (item !== current && item !== next) {
-                item.style.opacity = '0';
-            } else {
-                item.style.opacity = '';
-            }
-        });
-
-        if (direction === 'up') {
-            current.classList.add('exit-to-top');
-            next.classList.add('enter-from-bottom');
-        } else {
-            current.classList.add('exit-to-bottom');
-            next.classList.add('enter-from-top');
+        // Apply animation classes
+        if (directionName === 'up') { // User scrolled down, next item comes from below
+            current.classList.replace('front', 'exit-to-top'); // Current moves up and out
+            next.classList.replace('below', 'enter-from-bottom'); // Next moves up and in
+        } else { // User scrolled up, previous item comes from above
+            current.classList.replace('front', 'exit-to-bottom'); // Current moves down and out
+            next.classList.replace('above', 'enter-from-top'); // Next moves down and in
         }
 
+        // After animation duration, update activeIndex and reset classes
         setTimeout(() => {
             activeIndex = newIndex;
-            layoutFaces();
-            updateBgNumber();
+            layoutFaces(); // This call will reset classes to 'front', 'above', 'below' based on new activeIndex
             isAnimating = false;
-            processScrollQueue();
-        }, 800);
+        }, 800); // This duration (800ms) must match the CSS 'transition' duration for transform/opacity on .service-item
     }
 
-    // Step function queues scrolls
-    function step(direction) {
-        // At boundaries, do not queue further scrolls
-        if ((direction === 'up' && activeIndex === items.length - 1) ||
-            (direction === 'down' && activeIndex === 0)) {
-            return false;
+    // Generic step function to determine target index and direction
+    // Returns true if animation starts, false if at boundary and should allow page scroll
+    function step(direction) { // direction: 'up' (for next item, scrolling down) or 'down' (for previous item, scrolling up)
+        let newIndex;
+        if (direction === 'up') { // User scrolls down
+            newIndex = activeIndex + 1;
+        } else { // direction === 'down', User scrolls up
+            newIndex = activeIndex - 1;
         }
-        scrollQueue.push(direction);
-        processScrollQueue();
-        return true;
+
+        // Check if attempting to scroll past the actual boundaries of the items array
+        const atStartBoundary = activeIndex === 0 && direction === 'down';
+        const atEndBoundary = activeIndex === items.length - 1 && direction === 'up';
+
+        if (atStartBoundary || atEndBoundary) {
+            return false; // Signal to allow default browser scroll
+        }
+
+        // Clamp index to valid range (should ideally not be needed if boundary check is correct)
+        newIndex = Math.max(0, Math.min(items.length - 1, newIndex));
+
+        // If index hasn't actually changed after clamping (e.g., trying to scroll past end of items, but not section boundary)
+        if (newIndex === activeIndex) {
+            return true; // Still prevent default, as we're not allowing page scroll yet
+        }
+
+        goToIndex(newIndex, direction);
+        return true; // Signal that animation started, prevent default browser scroll
     }
 
-    // Initial layout and number
-    layoutFaces();
-    updateBgNumber();
-    adjustLayout();
-    window.addEventListener('resize', adjustLayout);
+    // --- Event Handlers for Navigation ---
+    let scrollAccum = 0; // Accumulate scroll delta for mouse wheel sensitivity
+    let touchStartY = null; // For touch swipe detection
 
-    // Scroll handling (mouse/trackpad)
-    let scrollAccum = 0;
-    const handleWheelEvent = (e) => {
-        const servicesRect = servicesSection.getBoundingClientRect();
-        const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
-        const atStart = activeIndex === 0 && e.deltaY < 0;
-        const atEnd = activeIndex === items.length - 1 && e.deltaY > 0;
+    // Initial setup logic
+    setTimeout(() => {
+        adjustLayout(); // Calculate and set CSS variables, spacer height
+        layoutFaces(); // Set initial class states for all items
+        // Ensure the services section itself gets the 'revealed' class for its general observer.
+        sectionObserver.observe(servicesSection);
+    }, 500); // Increased delay to 500ms for robust layout calculation
 
-        if (isAnimating) {
-            e.preventDefault();
-            return;
-        }
-        if (isServicesMainlyVisible) {
-            if (!(atStart || atEnd)) {
-                e.preventDefault();
-            } else {
-                return;
-            }
-        } else {
-            return;
-        }
-
-        scrollAccum += e.deltaY;
-        const scrollThreshold = 50;
-        if (scrollAccum > scrollThreshold) {
-            if (step('up')) scrollAccum = 0;
-            else scrollAccum = 0;
-        } else if (scrollAccum < -scrollThreshold) {
-            if (step('down')) scrollAccum = 0;
-            else scrollAccum = 0;
-        }
-    };
-    window.removeEventListener('wheel', window.handleWheelEvent || (() => {}), { passive: false });
-    window.addEventListener('wheel', handleWheelEvent, { passive: false });
-    window.handleWheelEvent = handleWheelEvent;
-
-    // Keyboard support
-    window.addEventListener('keydown', (e) => {
-        const servicesRect = servicesSection.getBoundingClientRect();
-        const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
-        if (!isServicesMainlyVisible) return;
-        if (isAnimating) {
-            if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' '].includes(e.key)) {
-                e.preventDefault();
-            }
-            return;
-        }
-        let handled = false;
-        if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
-            if (activeIndex < items.length - 1) {
-                step('up');
-                handled = true;
-            }
-        } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
-            if (activeIndex > 0) {
-                step('down');
-                handled = true;
-            }
-        }
-        if (handled) e.preventDefault();
+    // Recalculate layout and reset state on window resize
+    window.addEventListener('resize', () => {
+        adjustLayout();
+        // Reset animation state to ensure correct positioning on resize
+        isAnimating = false; // Allow animations after resize
+        // Re-apply classes to ensure correct visual state based on new dimensions
+        layoutFaces();
     });
 
-    // Touch swipe support
-    let touchStartY = null;
+    // Wheel event listener for desktop scrolling
+    window.addEventListener('wheel', (e) => {
+        // Only engage if the services section is substantially visible on screen
+        const servicesRect = servicesSection.getBoundingClientRect();
+        const isServicesMainlyVisible = servicesRect.top < window.innerHeight && servicesRect.bottom > 0;
+
+        if (!isServicesMainlyVisible) return; // Don't interfere with scroll if section is not in view
+
+        // Accumulate scroll delta
+        scrollAccum += e.deltaY;
+        const scrollThreshold = 50; // Pixels needed to trigger a step
+
+        let direction = 0; // 1 for down, -1 for up
+        if (scrollAccum > scrollThreshold) {
+            direction = 1;
+            scrollAccum = 0; // Reset accumulator
+        } else if (scrollAccum < -scrollThreshold) {
+            direction = -1;
+            scrollAccum = 0; // Reset accumulator
+        }
+
+        if (direction !== 0) {
+            if (step(direction === 1 ? 'up' : 'down')) { // 'up' for next item, 'down' for previous
+                e.preventDefault(); // Prevent default if animation was triggered
+            }
+        } else if (isAnimating) { // If not enough scroll for a step, but an animation is still playing
+            e.preventDefault(); // Prevent default to maintain smooth cube experience
+        }
+    }, { passive: false }); // passive: false is critical for preventDefault()
+
+
+    // Touch event listeners for mobile swipe
     window.addEventListener('touchstart', (e) => {
         const servicesRect = servicesSection.getBoundingClientRect();
+        // Only start tracking touch if it's potentially within the services section's interactive area
         if (e.touches.length === 1 && servicesRect.top < window.innerHeight && servicesRect.bottom > 0) {
             touchStartY = e.touches[0].clientY;
         } else {
-            touchStartY = null;
-        }
-    }, { passive: false });
-
-    window.addEventListener('touchmove', (e) => {
-        if (touchStartY === null || e.touches.length !== 1) return;
-        const currentY = e.touches[0].clientY;
-        const deltaY = currentY - touchStartY;
-        const scrollThreshold = 10;
-        if (Math.abs(deltaY) > scrollThreshold && !isAnimating) {
-            const servicesRect = servicesSection.getBoundingClientRect();
-            const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
-            if (isServicesMainlyVisible) {
-                if (!((activeIndex === 0 && deltaY > 0) || (activeIndex === items.length - 1 && deltaY < 0))) {
-                    e.preventDefault();
-                }
-            }
+            touchStartY = null; // Ignore multi-touch or touches outside section
         }
     }, { passive: false });
 
     window.addEventListener('touchend', (e) => {
-        if (touchStartY === null) return;
-        const diff = touchStartY - e.changedTouches[0].clientY;
-        const swipeThreshold = 40;
+        if (touchStartY === null || isAnimating) return; // If no touch started or animating, ignore
+
+        const diff = touchStartY - e.changedTouches[0].clientY; // Positive if swiped up (for next item), negative if swiped down (for previous)
+        const swipeThreshold = 40; // Pixels needed for a meaningful swipe
+
         if (Math.abs(diff) > swipeThreshold) {
-            const direction = diff > 0 ? 'up' : 'down';
-            step(direction);
+            const direction = diff > 0 ? 'up' : 'down'; // 'up' for next item, 'down' for previous
+            if (step(direction)) {
+                e.preventDefault(); // Prevent default if animation was triggered
+            }
         }
-        touchStartY = null;
+        touchStartY = null; // Reset for next swipe
+    }, { passive: false });
+
+    // Keyboard support for navigation (for testing/accessibility)
+    window.addEventListener('keydown', (e) => {
+        const servicesRect = servicesSection.getBoundingClientRect();
+        const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
+
+        if (!isServicesMainlyVisible) return; // Only trigger if section is visible
+
+        if (isAnimating) {
+            if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' '].includes(e.key)) {
+                e.preventDefault(); // Prevent default if animating and key is related to scroll
+            }
+            return;
+        }
+
+        let handled = false;
+        if (['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+            if (step('up')) { // Try to move to next item
+                handled = true;
+            }
+        } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+            if (step('down')) { // Try to move to previous item
+                handled = true;
+            }
+        }
+
+        if (handled) {
+            e.preventDefault(); // Prevent default only if an animation was triggered
+        }
     });
 
-    sectionObserver.observe(servicesSection);
 });

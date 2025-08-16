@@ -32,7 +32,6 @@
     --services-bg-number-color: rgba(51, 51, 51, 0.8); /* Dark gray, more visible */
     --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
     --services-description-color: var(--text-light); /* White for descriptions */
-    --services-grid-line-color: rgba(255, 255, 255, 0.05); /* Very faint white for background grid */
     
     /* NEW: Color for the background pattern lines */
     --pattern-line-color: #1e3b3e; /* Dark teal/greenish, very subtle */
@@ -60,6 +59,12 @@ html {
     margin: 0;
     padding: 0;
     position: relative; /* Needed for fixed children positioning in some browsers */
+}
+
+/* Keyframes for the animated colorful gradient (RESTORED) */
+@keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 body {
@@ -116,7 +121,7 @@ body::after {
 }
 
 
-/* Layer 3: Geometric Grid Pattern (Over Glows) */
+/* Layer 3: Geometric Grid Pattern with Animated Gradient (RESTORED) */
 html::before { /* Re-using html::before to cover the whole page */
     content: '';
     position: fixed; /* Crucial for making it cover the whole viewport and appear as a "single block" */
@@ -127,24 +132,38 @@ html::before { /* Re-using html::before to cover the whole page */
     z-index: -1; /* Above body pseudo-elements, below content */
     pointer-events: none; /* Ensure it doesn't block interactions */
     /* Adjust overall opacity to make pattern more or less visible */
-    opacity: 0.3; /* Adjusted for subtle but visible effect as in image */
+    opacity: 0.1299375; /* Restored original subtle opacity for animated background */
+    
+    /* RESTORED: Animated colorful gradient as the base background */
+    background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%; /* For the animated gradient */
+    animation: gradient 15s ease infinite; /* For the animated gradient */
 
-    /* NEW BACKGROUND IMAGES: Grid lines + Chevron pattern (replacing old animated mask) */
-    background-image:
+    /* NEW MASKING: Only show the background through the "lines" using mask-image */
+    mask-image:
         /* Horizontal Grid Lines (1px line every 100px) */
-        repeating-linear-gradient(to bottom, transparent, transparent 99px, var(--pattern-line-color) 99px, var(--pattern-line-color) 100px),
+        linear-gradient(to bottom, transparent 99%, white 1%),
         /* Vertical Grid Lines (1px line every 100px) */
-        repeating-linear-gradient(to right, transparent, transparent 99px, var(--pattern-line-color) 99px, var(--pattern-line-color) 100px),
+        linear-gradient(to right, transparent 99%, white 1%),
         /* Chevron pattern (SVG data URL) - Creates alternating V and ^ pattern */
-        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%231e3b3e' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+    
+    /* Vendor prefixes for better compatibility of mask-image */
+    -webkit-mask-image:
+        linear-gradient(to bottom, transparent 99%, white 1%),
+        linear-gradient(to right, transparent 99%, white 1%),
+        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C/svg%3E");
 
-    background-size:
-        100px 100px, /* Size for horizontal lines */
-        100px 100px, /* Size for vertical lines */
-        200px 200px; /* Size for chevron pattern */
+    /* Mask sizes: match grid spacing, chevron is 200x200 tile */
+    mask-size: 100px 100px, 100px 100px, 200px 200px;
+    -webkit-mask-size: 100px 100px, 100px 100px, 200px 200px;
 
-    background-repeat: repeat; /* All layers repeat */
-    background-position: 0 0; /* Align to top-left */
+    /* Mask layers repeat over the whole area */
+    mask-repeat: repeat;
+    -webkit-mask-repeat: repeat;
+
+    /* Important: SVG stroke color inside data URL should be white for masking effect */
+    /* The browser will only show parts of background-image where mask-image is opaque (white) */
 }
 
 
@@ -468,20 +487,129 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* --- SERVICES SECTION CUBE ANIMATION --- */
+/* === SERVICES CUBE ANIMATION (REPLACED) === */
 .services-section {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Vertical center */
-    align-items: center;     /* Horizontal center */
-    position: relative;
-    perspective: 1200px;
-    padding: 0;
-    text-align: center;
-    z-index: 1;
+  position: relative;
+  /* Perspective on services-section as the 3D stage */
+  perspective: 1200px; /* Given in prompt */
+  padding-top: 80px; /* Standard section padding */
+  padding-bottom: 100px; /* Standard section padding */
+  text-align: left; /* Ensure heading aligns left */
+  z-index: 1;
 }
 
+.services-content-wrapper {
+  position: sticky;
+  top: var(--services-sticky-top-wrapper); /* Set dynamically by JS */
+  will-change: top;
+  height: 350px; /* Fixed height for the viewport of the cube */
+  overflow: hidden; /* CRITICAL: Clips rotating items to maintain cube illusion */
+  transform-style: preserve-3d; /* CRITICAL: Allows children to participate in 3D space */
+  display: flex; /* For centering the inner container */
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center content inside fixed height wrapper */
+  /* Ensures that the element itself acts as the 3D space's pivot. */
+  /* When perspective is on the parent, this translateZ will place the cube's origin correctly */
+  transform: translateZ(calc(var(--faceZ) * -1)); /* Counter-translate to bring content to front */
+}
+
+.services-items-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* No transform-style: preserve-3d here, it's on the wrapper */
+  /* This container does not rotate, it just holds the faces */
+}
+
+.service-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
+  opacity: 0; /* Default hidden state for all items */
+  transform-origin: center center; /* Rotation occurs around the center */
+  /* Adjusted transition as per requirement: 0.8s for transform, 0.05s for opacity */
+  transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out;
+  z-index: 0; /* Default low z-index */
+  display: flex; /* For content within the item */
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box; /* Include padding in width/height */
+  will-change: transform, opacity; /* Performance hint */
+}
+
+/* State Classes controlled by JavaScript */
+/* --faceZ variable defined in JS is negative (e.g., -150px) */
+/* This means translateZ(var(--faceZ)) will move the element 'back' into 3D space */
+/* And -1 * var(--faceZ) will move it 'forward' */
+
+.service-item.front {
+  transform: rotateX(0deg) translateZ(var(--faceZ)); /* Positioned at the 'front' of the cube */
+  opacity: 1; /* Fully visible */
+  z-index: 2; /* Active item on top */
+}
+
+.service-item.above {
+  transform: rotateX(90deg) translateZ(var(--faceZ)); /* Rotated 90deg 'up' from front */
+  opacity: 0; /* Hidden */
+  z-index: 0; /* Below active items */
+}
+
+.service-item.below {
+  transform: rotateX(-90deg) translateZ(var(--faceZ)); /* Rotated 90deg 'down' from front */
+  opacity: 0; /* Hidden */
+  z-index: 0; /* Below active items */
+}
+
+/* Animation Classes controlled by JavaScript - these override parked states during transition */
+/* These classes are applied TEMPORARILY. The final state is set by layoutFaces(). */
+
+/* When current item exits to top (scrolling down), moves from front to above position */
+.service-item.exit-to-top {
+  transform: rotateX(90deg) translateZ(var(--faceZ));
+  opacity: 0; /* Must fade out rapidly */
+  z-index: 2; /* Stays on top during exit */
+}
+
+/* When current item exits to bottom (scrolling up), moves from front to below position */
+.service-item.exit-to-bottom {
+  transform: rotateX(-90deg) translateZ(var(--faceZ));
+  opacity: 0; /* Must fade out rapidly */
+  z-index: 2; /* Stays on top during exit */
+}
+
+/* When next item enters from bottom (scrolling down), moves from below to front position */
+.service-item.enter-from-bottom {
+  transform: rotateX(0deg) translateZ(var(--faceZ));
+  opacity: 1; /* Must fade in rapidly */
+  z-index: 1; /* Appears just below exiting item */
+}
+
+/* When previous item enters from top (scrolling up), moves from above to front position */
+.service-item.enter-from-top {
+  transform: rotateX(0deg) translateZ(var(--faceZ));
+  opacity: 1; /* Must fade in rapidly */
+  z-index: 1; /* Appears just below exiting item */
+}
+
+
+.service-bg-number {
+  position: absolute; /* Changed from sticky to absolute for consistent positioning */
+  top: 50%; /* Center vertically within the section */
+  right: 50px;
+  transform: translateY(-50%);
+  font-size: 15em; /* Larger as in your previous implementation for aesthetic */
+  font-weight: 800;
+  color: var(--services-bg-number-color);
+  z-index: 1; /* Ensure it's above background elements but behind text */
+  pointer-events: none;
+  line-height: 1; /* Prevent extra space */
+  user-select: none;
+}
+
+/* Standard Heading for Services Section */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em;
@@ -489,187 +617,35 @@ html::before { /* Re-using html::before to cover the whole page */
     font-weight: 800;
     margin-bottom: 30px;
     text-transform: uppercase;
-    text-align: center;
-    width: 100%;
-    position: static; /* Remove sticky for true centering */
-    z-index: 2;
+    text-align: left;
+    position: sticky; /* Keep heading sticky */
+    top: 0;
+    z-index: 2; /* Above the cube */
     padding-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-.services-content-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 700px;
-    height: 350px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1200px;
-    overflow: visible;
-    margin: 0 auto;
-    transform-style: preserve-3d;
+/* Service Title - Reverted to orange, no italics */
+.service-title {
+    font-size: 2em; 
+    font-weight: 700;
+    color: var(--accent-primary-sawad); 
+    margin-bottom: 10px; 
+    font-style: normal; 
 }
 
-.services-items-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-style: preserve-3d;
+/* Service Description - Reverted to normal (no italics) */
+.service-description {
+    font-size: 1.2em; 
+    color: var(--services-description-color); 
+    max-width: 650px; 
+    line-height: 1.6; 
+    font-style: normal; 
 }
 
-.service-item {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    backface-visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 0;
-    transform-origin: center center;
-    transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out;
-    z-index: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; /* Center text horizontally */
-    box-sizing: border-box;
-    text-align: center;
-}
-
-/* Only the two animating faces are visible and interactive */
-.service-item.front,
-.service-item.exit-to-top,
-.service-item.exit-to-bottom,
-.service-item.enter-from-bottom,
-.service-item.enter-from-top {
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 2;
-}
-
-/* Above/below faces are always hidden (never visible) */
-.service-item.above,
-.service-item.below {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    z-index: 0 !important;
-}
-
-/* Cube face states */
-.service-item.front {
-    transform: rotateX(0deg) translateZ(var(--faceZ));
-    opacity: 1;
-    z-index: 2;
-}
-.service-item.above {
-    transform: rotateX(90deg) translateZ(var(--faceZ));
-    opacity: 0;
-    z-index: 0;
-}
-.service-item.below {
-    transform: rotateX(-90deg) translateZ(var(--faceZ));
-    opacity: 0;
-    z-index: 0;
-}
-.service-item.exit-to-top {
-    transform: rotateX(90deg) translateZ(var(--faceZ));
-    opacity: 0;
-    z-index: 2;
-}
-.service-item.exit-to-bottom {
-    transform: rotateX(-90deg) translateZ(var(--faceZ));
-    opacity: 0;
-    z-index: 2;
-}
-.service-item.enter-from-bottom {
-    transform: rotateX(0deg) translateZ(var(--faceZ));
-    opacity: 1;
-    z-index: 1;
-}
-.service-item.enter-from-top {
-    transform: rotateX(0deg) translateZ(var(--faceZ));
-    opacity: 1;
-    z-index: 1;
-}
-
-/* When flipping up (scrolling down): anchor at bottom edge */
-.service-item.exit-to-top,
-.service-item.enter-from-bottom,
-.service-item.below {
-    transform-origin: center bottom !important;
-}
-
-/* When flipping down (scrolling up): anchor at top edge */
-.service-item.exit-to-bottom,
-.service-item.enter-from-top,
-.service-item.above {
-    transform-origin: center top !important;
-}
-
-/* --- BACKGROUND NUMBER --- */
-.service-bg-number {
-    position: absolute;
-    top: 50%;
-    right: 2vw;
-    transform: translateY(-50%);
-    font-size: 15em;
-    font-weight: 800;
-    color: var(--services-bg-number-color);
-    z-index: 0;
-    pointer-events: none;
-    line-height: 1;
-    user-select: none;
-    text-align: right;
-}
-
-/* --- RESPONSIVE ADJUSTMENTS --- */
-@media (max-width: 1200px) {
-    .services-section {
-        min-height: 100vh;
-        padding: 0;
-    }
-    .services-content-wrapper {
-        max-width: 500px;
-        height: 300px;
-    }
-    .service-bg-number {
-        font-size: 12em;
-        right: 1vw;
-    }
-}
-@media (max-width: 768px) {
-    .services-section {
-        min-height: 100vh;
-        padding: 0;
-    }
-    .services-content-wrapper {
-        max-width: 350px;
-        height: 220px;
-    }
-    .service-bg-number {
-        font-size: 8em;
-        right: 1vw;
-    }
-}
-@media (max-width: 480px) {
-    .services-section {
-        min-height: 100vh;
-        padding: 0;
-    }
-    .services-content-wrapper {
-        max-width: 95vw;
-        height: 140px;
-    }
-    .service-bg-number {
-        font-size: 5em;
-        right: 1vw;
-    }
+/* Scroll spacer to provide scrollable height for the animation */
+.services-section-scroll-spacer {
+    display: block; 
+    /* Height is set by JS */
 }
 
 
@@ -1011,8 +987,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em;
-        right: 3vw; /* Responsive right shift */
-        z-index: 0;
+        right: 40px;
     }
     .service-title {
         font-size: 1.8em;
@@ -1184,8 +1159,7 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em;
-        right: 2vw;
-        z-index: 0;
+        right: 40px;
     }
     .service-title {
         font-size: 1.6em;
@@ -1222,6 +1196,193 @@ footer h2 {
     }
     .tool-name {
         font-size: 0.95em;
+    }
+    .tool-category {
+        font-size: 0.75em;
+    }
+
+    /* Footer - Full width black background on mobile */
+    footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-layout-container {
+        padding: 0 15px;
+    }
+    .section h2 {
+        font-size: 2.8em;
+        letter-spacing: 0.5px;
+        margin-bottom: 30px;
+    }
+    .contact-tagline {
+        font-size: 1em;
+        margin-bottom: 25px;
+    }
+    .contact-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    .contact-button {
+        width: 100%;
+        height: 80px;
+        font-size: 0.95em;
+    }
+    .contact-button i {
+        font-size: 1.6em;
+    }
+    .contact-button .button-value {
+        font-size: 0.75em;
+    }
+    .contact-button .copied-text {
+        font-size: 0.95em;
+    }
+
+    /* Specific adjustments for profile card */
+    /* ISSUE 4: Profile image section longer by reducing width */
+    .about-left-content {
+        max-width: 320px;
+        padding: 25px 20px;
+    }
+    .profile-image-container {
+        width: calc(100% + 30px);
+        max-width: 350px;
+        height: 180px;
+        margin-bottom: 25px;
+        border-radius: 12px;
+    }
+    .about-left-content h3 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+    .fire-icon-with-line {
+        height: 40px;
+        margin-bottom: 25px;
+    }
+    .fire-icon {
+        padding: 8px;
+        font-size: 1.1em;
+    }
+    .fire-icon-with-line::before,
+    .fire-icon-with-line::after {
+        width: calc(50% - 25px);
+    }
+    .about-short-desc {
+        font-size: 0.9em;
+        margin-bottom: 25px;
+        padding: 0 5px;
+    }
+    .contact-info-list {
+        margin: 20px 0 30px;
+    }
+    .contact-info-list li {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    .contact-info-list li i {
+        margin-right: 15px;
+        font-size: 1.2em;
+        width: 20px;
+    }
+    .contact-info-list li span {
+        margin-right: 8px;
+    }
+    .about-social-icons {
+        gap: 15px;
+        padding-top: 10px;
+    }
+    .about-social-icons a {
+        font-size: 1.4em;
+    }
+
+    .dashed-decoration {
+        border-width: 1.5px;
+    }
+    .top-left-curve, .bottom-right-curve {
+        width: 140px;
+        height: 140px;
+        top: -45px;
+        left: -45px;
+        bottom: -45px;
+        right: -45px;
+    }
+
+    /* Adjustments for hero content */
+    .right-column-scroll {
+        padding: 30px 15px;
+        padding-top: 40px;
+    }
+    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
+    .hero-heading {
+        font-size: 3em;
+        margin-bottom: 15px;
+    }
+    .hero-description {
+        font-size: 0.95em;
+        line-height: 1.5;
+        margin-bottom: 30px;
+    }
+
+    /* Services Section - mobile specific overrides */
+    .services-section {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    .services-content-wrapper {
+        height: 230px;
+        perspective: 700px; /* Adjusted for this breakpoint */
+        align-items: center; /* Center content vertically within its fixed height */
+    }
+    .services-heading {
+        font-size: 2.8em;
+        margin-bottom: 25px;
+    }
+    .service-item {
+        padding: 12px;
+    }
+    .service-bg-number {
+        font-size: 6em;
+        right: 40px;
+    }
+    .service-title {
+        font-size: 1.4em;
+    }
+    .service-description {
+        font-size: 0.8em;
+    }
+
+    /* Adjustments for tools section */
+    .tools-section {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    .tools-heading {
+        font-size: 2.8em;
+        margin-bottom: 25px;
+    }
+    .tools-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 100%;
+    }
+    .tool-card {
+        padding: 12px;
+        gap: 8px;
+    }
+    .tool-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        border-radius: 6px;
+    }
+    .tool-name {
+        font-size: 0.9em;
     }
     .tool-category {
         font-size: 0.75em;
