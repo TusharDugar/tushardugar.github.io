@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(parent);
     });
 
-    // --- Cube Flip Animation for Services Section (X-axis, scroll-based) ---
+    // --- Cube Flip Animation for Services Section (X-axis, scroll-based, corrected) ---
     document.addEventListener('DOMContentLoaded', () => {
         // Cube flip logic for services
         const servicesSection = document.getElementById('services');
@@ -98,49 +98,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const bgNumber = servicesSection?.querySelector('.service-bg-number');
         let currentIndex = 0;
         let isAnimating = false;
+        const duration = 1200; // ms, matches CSS
 
-        // Helper: set cube face classes (ensure only 2 faces visible)
-        function setCubeClasses(idx, direction) {
+        // --- INITIAL STATE: Ensure first face is visible and active ---
+        function setInitialCubeState() {
             serviceItems.forEach((item, i) => {
-                item.classList.remove(
-                    'cube-current', 'cube-next', 'cube-prev', 'cube-flip-up', 'cube-flip-down'
-                );
-                // Always show all items for cube animation, but only current/next/prev are visible via opacity
-                item.style.visibility = 'visible';
-                if (i === idx) {
-                    item.classList.add('cube-current');
-                    item.style.opacity = '1';
-                    item.style.pointerEvents = 'auto';
-                } else if (i === idx + 1 && direction === 1) {
-                    item.classList.add('cube-next');
-                    item.style.opacity = '1';
-                    item.style.pointerEvents = 'auto';
-                } else if (i === idx - 1 && direction === -1) {
-                    item.classList.add('cube-prev');
-                    item.style.opacity = '1';
-                    item.style.pointerEvents = 'auto';
-                } else {
-                    item.style.opacity = '';
-                    item.style.pointerEvents = '';
-                }
+                item.classList.remove('active', 'cube-out', 'cube-in');
+                item.style.opacity = '0';
+                item.style.transform = 'rotateX(90deg)';
             });
+            if (serviceItems[0]) {
+                serviceItems[0].classList.add('active');
+                serviceItems[0].style.opacity = '1';
+                serviceItems[0].style.transform = 'rotateX(0deg)';
+            }
+            if (bgNumber) bgNumber.textContent = '01';
         }
+        setInitialCubeState();
 
-        // Helper: update background number
+        // --- Helper: update background number ---
         function updateBgNumber(idx) {
             if (bgNumber) {
                 bgNumber.textContent = (idx + 1).toString().padStart(2, '0');
             }
         }
 
-        // Initial state
-        if (serviceItems.length) {
-            setCubeClasses(currentIndex, 0);
-            updateBgNumber(currentIndex);
-            if (bgNumber) bgNumber.style.opacity = '1';
-        }
-
-        // Flip animation
+        // --- Flip Animation ---
         function flipCube(direction) {
             if (isAnimating) return;
             const prevIndex = currentIndex;
@@ -150,54 +133,105 @@ document.addEventListener('DOMContentLoaded', () => {
             isAnimating = true;
 
             // Outgoing face
-            serviceItems[prevIndex].classList.add(direction > 0 ? 'cube-flip-up' : 'cube-flip-down');
+            const outgoing = serviceItems[prevIndex];
             // Incoming face
-            serviceItems[nextIndex].classList.add(direction > 0 ? 'cube-next' : 'cube-prev');
-            // Remove current
-            serviceItems[prevIndex].classList.remove('cube-current');
+            const incoming = serviceItems[nextIndex];
 
-            // Fade timing: outgoing opacity 0 by 40%, incoming starts fade at 60%
-            serviceItems[prevIndex].style.animation = 'cubeFadeOut 0.8s linear forwards';
-            serviceItems[nextIndex].style.animation = 'cubeFadeIn 0.8s linear forwards';
+            // Remove all classes
+            serviceItems.forEach(item => {
+                item.classList.remove('active', 'cube-out', 'cube-in');
+                item.style.transition = '';
+            });
 
-            // Both faces must be visible for the duration of the animation
-            serviceItems[prevIndex].style.visibility = 'visible';
-            serviceItems[nextIndex].style.visibility = 'visible';
+            // Set up outgoing
+            outgoing.classList.add('cube-out');
+            outgoing.style.opacity = '1';
+            outgoing.style.transform = 'rotateX(0deg)';
+            outgoing.style.transition = `transform ${duration}ms cubic-bezier(0.77,0,0.175,1), opacity ${duration}ms ease-in-out`;
 
+            // Set up incoming
+            incoming.classList.add('cube-in');
+            incoming.style.opacity = '0';
+            incoming.style.transform = `rotateX(${direction > 0 ? 90 : -90}deg)`;
+            incoming.style.transition = `transform ${duration}ms cubic-bezier(0.77,0,0.175,1), opacity ${duration}ms ease-in-out`;
+
+            // Force reflow for transition
+            void outgoing.offsetWidth;
+
+            // Animate
             setTimeout(() => {
-                // Clean up
-                serviceItems[prevIndex].classList.remove('cube-flip-up', 'cube-flip-down');
-                serviceItems[prevIndex].style.animation = '';
-                serviceItems[nextIndex].classList.remove('cube-next', 'cube-prev');
-                serviceItems[nextIndex].style.animation = '';
+                // Outgoing rotates away and fades out by 40%
+                outgoing.style.transform = `rotateX(${direction > 0 ? -90 : 90}deg)`;
+                outgoing.style.opacity = '0';
+
+                // Incoming rotates in and fades in from 60%
+                incoming.style.transform = 'rotateX(0deg)';
+                // Fade in starts at 60% of duration
+                setTimeout(() => {
+                    incoming.style.opacity = '1';
+                }, duration * 0.6);
+
+            }, 10);
+
+            // After animation, cleanup and set new active
+            setTimeout(() => {
+                serviceItems.forEach((item, i) => {
+                    item.classList.remove('active', 'cube-out', 'cube-in');
+                    item.style.transition = '';
+                    if (i === nextIndex) {
+                        item.classList.add('active');
+                        item.style.opacity = '1';
+                        item.style.transform = 'rotateX(0deg)';
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'rotateX(90deg)';
+                    }
+                });
                 currentIndex = nextIndex;
-                setCubeClasses(currentIndex, 0);
                 updateBgNumber(currentIndex);
                 isAnimating = false;
-            }, 800);
+            }, duration);
         }
 
-        // Section boundary scroll helpers
-        function scrollToPrevSection() {
-            // Scroll to About or Hero section
-            const about = document.getElementById('about');
-            if (about) about.scrollIntoView({ behavior: 'smooth' });
-        }
-        function scrollToNextSection() {
-            // Scroll to Tools section
-            const tools = document.getElementById('tools');
-            if (tools) tools.scrollIntoView({ behavior: 'smooth' });
+        // --- Scroll Handler ---
+        function handleCubeScroll(e) {
+            if (isAnimating || !serviceItems.length) return;
+
+            let delta = 0;
+            if (e.type === 'wheel') {
+                delta = e.deltaY;
+            } else if (e.type === 'keydown') {
+                if (e.key === 'ArrowDown' || e.key === 'PageDown') delta = 1;
+                if (e.key === 'ArrowUp' || e.key === 'PageUp') delta = -1;
+            }
+
+            if (delta > 0 && currentIndex < serviceItems.length - 1) {
+                flipCube(1);
+                e.preventDefault();
+            } else if (delta < 0 && currentIndex > 0) {
+                flipCube(-1);
+                e.preventDefault();
+            } else if (delta < 0 && currentIndex === 0) {
+                // At first, scroll up: exit to previous section
+                const about = document.getElementById('about');
+                if (about) about.scrollIntoView({ behavior: 'smooth' });
+                e.preventDefault();
+            } else if (delta > 0 && currentIndex === serviceItems.length - 1) {
+                // At last, scroll down: exit to next section
+                const tools = document.getElementById('tools');
+                if (tools) tools.scrollIntoView({ behavior: 'smooth' });
+                e.preventDefault();
+            }
         }
 
-        // Mouse wheel
+        // --- Mouse wheel and keyboard ---
         if (servicesSection) {
             servicesSection.addEventListener('wheel', handleCubeScroll, { passive: false });
-            // Keyboard navigation
             servicesSection.addEventListener('keydown', handleCubeScroll);
             servicesSection.tabIndex = 0; // Make focusable for keyboard
         }
 
-        // Touch swipe support
+        // --- Touch swipe support ---
         let touchStartY = null;
         if (servicesSection) {
             servicesSection.addEventListener('touchstart', e => {
@@ -213,9 +247,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else if (deltaY < 0 && currentIndex > 0) {
                         flipCube(-1);
                     } else if (deltaY < 0 && currentIndex === 0) {
-                        scrollToPrevSection();
+                        const about = document.getElementById('about');
+                        if (about) about.scrollIntoView({ behavior: 'smooth' });
                     } else if (deltaY > 0 && currentIndex === serviceItems.length - 1) {
-                        scrollToNextSection();
+                        const tools = document.getElementById('tools');
+                        if (tools) tools.scrollIntoView({ behavior: 'smooth' });
                     }
                 }
                 touchStartY = null;

@@ -504,38 +504,31 @@ body::after {
 
 
 .services-content-wrapper {
-  position: relative; /* Changed from sticky */
-  top: auto; /* Removed sticky top positioning */
-  height: auto; /* Allow height to adjust to content */
-  overflow: visible; /* Show all content, no clipping */
-  transform-style: flat; /* Reset to default */
-  transform: none; /* Reset any previous transforms */
-  display: flex; /* Still use flex to arrange inner items */
-  flex-direction: column; /* Stack items vertically */
-  justify-content: flex-start; /* Align to top */
-  align-items: flex-start; /* Align to left */
-  /* No perspective applied here now */
+  perspective: 1000px;
+  overflow: hidden;
+  position: relative;
+  height: 260px; /* Adjust as needed for your design */
 }
 
 .services-items-container {
+  transform-style: preserve-3d;
   position: relative;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
 }
 
 /* Remove card background from service items, ensure visible */
 .service-item {
   position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
-  left: 0; top: 0;
   backface-visibility: hidden;
   opacity: 0;
-  pointer-events: none;
+  transform: rotateX(90deg);
   transition:
-    transform 0.8s cubic-bezier(0.42,0,0.58,1),
-    opacity 0.8s cubic-bezier(0.42,0,0.58,1);
+    transform 1.2s cubic-bezier(0.77,0,0.175,1),
+    opacity 1.2s ease-in-out;
   z-index: 1;
   display: flex;
   flex-direction: column;
@@ -546,53 +539,16 @@ body::after {
   box-shadow: none;
 }
 
-/* Active/current face */
-.service-item.cube-current {
+/* The active face */
+.service-item.active {
   opacity: 1;
-  pointer-events: auto;
-  transform: rotateX(0deg) translateZ(0);
+  transform: rotateX(0deg);
   z-index: 2;
 }
 
-/* Next face (flipping in from below) */
-.service-item.cube-next {
-  opacity: 1;
-  pointer-events: auto;
-  transform: rotateX(90deg) translateZ(0);
-  z-index: 2;
-}
-
-/* Previous face (flipping in from above) */
-.service-item.cube-prev {
-  opacity: 1;
-  pointer-events: auto;
-  transform: rotateX(-90deg) translateZ(0);
-  z-index: 2;
-}
-
-/* Outgoing face (flipping up) */
-.service-item.cube-flip-up {
-  opacity: 0;
-  pointer-events: none;
-  transform: rotateX(-90deg) translateZ(0);
-  z-index: 1;
-}
-
-/* Outgoing face (flipping down) */
-.service-item.cube-flip-down {
-  opacity: 0;
-  pointer-events: none;
-  transform: rotateX(90deg) translateZ(0);
-  z-index: 1;
-}
-
-/* Only 2 faces visible at once, all others hidden */
-.service-item:not(.cube-current):not(.cube-next):not(.cube-prev):not(.cube-flip-up):not(.cube-flip-down) {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-  transform: rotateX(0deg) translateZ(0);
-}
+/* Outgoing/incoming faces for animation (JS will add/remove these) */
+.service-item.cube-out { z-index: 3; }
+.service-item.cube-in { z-index: 3; }
 
 /* Fade timing for cube faces (out by 40%, in from 60%) */
 @keyframes cubeFadeOut {
