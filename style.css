@@ -529,6 +529,8 @@ html::before { /* Re-using html::before to cover the whole page */
     padding: 20px;
     backface-visibility: hidden;
     opacity: 0;
+    pointer-events: none;
+    z-index: 0;
     transform-origin: center center;
     transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out;
     z-index: 0;
@@ -538,6 +540,25 @@ html::before { /* Re-using html::before to cover the whole page */
     align-items: center; /* Center text horizontally */
     box-sizing: border-box;
     text-align: center;
+}
+
+/* Only the two animating faces are visible and interactive */
+.service-item.front,
+.service-item.exit-to-top,
+.service-item.exit-to-bottom,
+.service-item.enter-from-bottom,
+.service-item.enter-from-top {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+/* Above/below faces are always hidden (never visible) */
+.service-item.above,
+.service-item.below {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
 }
 
 /* Cube face states */
@@ -575,6 +596,20 @@ html::before { /* Re-using html::before to cover the whole page */
     transform: rotateX(0deg) translateZ(var(--faceZ));
     opacity: 1;
     z-index: 1;
+}
+
+/* When flipping up (scrolling down): anchor at bottom edge */
+.service-item.exit-to-top,
+.service-item.enter-from-bottom,
+.service-item.below {
+    transform-origin: center bottom !important;
+}
+
+/* When flipping down (scrolling up): anchor at top edge */
+.service-item.exit-to-bottom,
+.service-item.enter-from-top,
+.service-item.above {
+    transform-origin: center top !important;
 }
 
 /* --- BACKGROUND NUMBER --- */

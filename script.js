@@ -113,8 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
         servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
         servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
 
+        // --- Fix: Only add enough scroll space for (items.length - 1) transitions ---
+        // This ensures after the last face, the section ends without extra blank space.
         const estimatedScrollPerItem = window.innerHeight * 1.5;
-        scrollSpacer.style.height = `${items.length * estimatedScrollPerItem}px`;
+        // Only (items.length - 1) transitions are needed for N items
+        scrollSpacer.style.height = `${(items.length - 1) * estimatedScrollPerItem}px`;
     }
 
     function layoutFaces() {
