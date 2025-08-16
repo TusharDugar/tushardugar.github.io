@@ -37,7 +37,7 @@
     /* CSS Variables for sticky services top offset (set by JS) */
     --services-sticky-top-h2: 0px;
     --services-sticky-top-wrapper: 0px;
-    --faceZ: 0px; /* Default, will be set by JS */
+    --faceZ: 0px; /* Default, will be set by JS */ /* This variable is effectively unused now */
 }
 
 /* Global utility text colors */
@@ -119,8 +119,38 @@ body::after {
 
 
 /* Layer 3: Animated Background Grid Pattern */
-#mosaic-background { /* This div is new in HTML */
-  display: none !important; /* Hide this div as it's not being used */
+#mosaic-background { /* This div is now the main animated background */
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* Behind all content but above body glows */
+  pointer-events: none; /* Purely decorative */
+  opacity: 0.9; /* Subtle overlay as per prompt */
+
+  background-color: #0d0d0d; /* deep matte base as per prompt */
+  
+  /* The animated grid lines themselves */
+  background-image: 
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px), /* Vertical Lines */
+    linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px); /* Horizontal Lines */
+  background-size: 40px 40px; /* Grid size */
+  background-repeat: repeat; /* Repeat the grid pattern */
+
+  /* Animation for the line colors */
+  animation: glowShift 15s ease infinite; /* As per prompt */
+}
+
+/* Keyframes for the grid line glowing animation */
+@keyframes glowShift {
+  0%, 100% {
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  }
+  50% {
+    background-image:
+      linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
+  }
 }
 
 
@@ -146,7 +176,7 @@ body::after {
 }
 
 /* Staggered reveal style for children within a parent */
-.reveal-stagger {
+.reveal-stagger { /* Note: This class is applied in JS via revealStaggerChildren */
     opacity: 0;
     transform: translateY(40px) scale(0.95);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -228,7 +258,7 @@ body::after {
     color: var(--text-dark-card);
     border-radius: 20px;
     padding: 30px 25px;
-    box-shadow: 0 10px 30px var(--shadow-color-card-white); /* Kept original shadow */
+    box-shadow: 0 10px 30px var(--shadow-color-card-white);
     width: 100%;
     max-width: 370px;
     height: auto;
@@ -242,7 +272,7 @@ body::after {
     text-align: center;
     position: relative;
     overflow: hidden;
-    background-color: var(--bg-profile-card); /* Restore white card background */
+    background-color: var(--bg-profile-card);
 }
 .about-left-content.revealed {
     opacity: 1;
@@ -259,7 +289,7 @@ body::after {
     margin-bottom: 25px;
     position: relative;
     transform: translateX(0);
-    background-color: var(--accent-primary-sawad); /* Restore orange background */
+    background-color: var(--accent-primary-sawad);
 }
 
 /* Updated: Main Name */
@@ -465,6 +495,8 @@ body::after {
   text-align: left;
   z-index: 1;
   background: none; /* Ensure no section background */
+  /* Remove perspective here, as this is no longer a 3D stage */
+  perspective: none;
 }
 
 /* Header for Services section (MY SERVICES title) */
@@ -514,6 +546,7 @@ body::after {
   top: auto;
   height: auto;
   overflow: visible;
+  /* Removed 3D transforms for static section */
   transform-style: flat;
   transform: none;
   display: flex;
@@ -529,6 +562,8 @@ body::after {
   display: flex;
   flex-direction: column;
   gap: 32px; /* Space between service items */
+  /* Removed transform-style as its parent is flat now */
+  transform-style: flat; /* Ensure flat */
 }
 
 /* Remove card background from service items, make them transparent */
@@ -547,8 +582,9 @@ body::after {
   padding: 20px 24px; /* Standard padding for content inside item */
   margin: 0;
   opacity: 1; /* Ensure visible */
-  transform: none; /* Remove any transforms */
-  transition: none; /* Remove any transitions */
+  /* Remove any 3D transforms or transitions */
+  transform: none;
+  transition: none;
   backface-visibility: visible; /* Reset to default */
   z-index: auto; /* Reset z-index */
   will-change: auto; /* Reset performance hint */
@@ -1292,13 +1328,7 @@ footer h2 {
         opacity: 1 !important;
     }
 
-    /* Services cube animation items - these rules are less impactful now as the section is static */
-    .service-item {
-        transition: none !important;
-        transform: none !important;
-        opacity: 1 !important;
-    }
-    /* No need for complex :not(:first-child) rules for a static list */
+    /* Services section is static, so these styles were redundant and now removed */
 }
 
 /* Specific styling for the Services section titles and descriptions */
