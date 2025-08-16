@@ -492,11 +492,12 @@ html::before {
     font-size: 5em;
     line-height: 0.9;
     font-weight: 800;
-    margin-bottom: 30px;
+    /* MODIFIED: Reduced margin-bottom to bring heading closer to cube */
+    margin-bottom: 15px; 
     text-transform: uppercase;
     text-align: left;
-    /* FIX: Removed position: sticky; and top: 0; as its parent (services-section) is pinned by GSAP.
-            This prevents the heading from disappearing. It will now scroll normally within the pinned section. */
+    /* FIX: Removed position: sticky and top: 0; as its parent (services-section) is pinned by GSAP.
+            This prevents the heading from disappearing and ensures consistent spacing. */
     position: relative; /* Default position for normal flow within the section */
     z-index: 4; /* Higher than cube wrapper to ensure it's on top of cube faces */
     padding-bottom: 20px;
@@ -555,9 +556,8 @@ html::before {
   justify-content: center;
   align-items: flex-start; /* Aligns content to the left of the item */
   box-sizing: border-box;
-  will-change: transform; /* Performance hint for GSAP */
-
-  padding-right: 120px; /* NEW: Added padding to prevent text/number overlap */
+  /* MODIFIED: Increased padding to prevent text/number overlap */
+  padding-right: 150px; 
 }
 
 /* Service item children styling, including background number */
@@ -937,14 +937,12 @@ footer h2 {
     .tools-heading {
         font-size: 4.5em;
         margin-bottom: 40px;
+        /* NEW: Consistent alignment for tools section at this breakpoint */
+        text-align: center; /* Center the heading to match grid */
     }
-    /* NEW: Consistent alignment for tools section at this breakpoint */
     .tools-grid {
         margin: 0 auto; /* Center the grid */
         max-width: 500px; /* Constrain width when centered */
-    }
-    .tools-heading {
-        text-align: center; /* Center the heading to match grid */
     }
     /* END NEW */
     .tool-card {
