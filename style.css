@@ -475,18 +475,29 @@ body::after {
 
 .services-section-header .services-heading {
   font-family: 'Poppins', sans-serif;
-  font-size: 3.2em; /* Smaller than previous 5em for a subtitle look */
+  font-size: 5em;
+  line-height: 0.9;
   font-weight: 800;
+  margin-bottom: 0.25em;
   text-transform: uppercase;
+  text-align: left;
   letter-spacing: 0.04em;
-  line-height: 1.1;
-  color: var(--text-light); /* White for the heading */
-  /* Resetting any sticky or absolute positioning from previous 3D cube logic */
+  color: inherit;
   position: static;
   padding-bottom: 0;
   z-index: auto;
-  margin-top: 0; /* Remove default h2 margin-top */
-  margin-bottom: 0.25em; /* Small space below heading */
+  margin-top: 0;
+  display: block;
+}
+
+.services-section-header .services-heading .text-white {
+  color: var(--text-light);
+  display: block;
+}
+
+.services-section-header .services-heading .text-gray {
+  color: var(--text-medium);
+  display: block;
 }
 
 .services-section-header .services-divider {
