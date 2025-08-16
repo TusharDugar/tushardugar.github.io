@@ -37,7 +37,6 @@
     /* CSS Variables for sticky services top offset (set by JS) */
     --services-sticky-top-h2: 0px; /* Unused in this GSAP setup */
     --services-sticky-top-wrapper: 0px; /* Unused in this GSAP setup */
-    /* REMOVED: --faceZ: 0px; This variable is not used in CSS. */
 }
 
 /* Global utility text colors */
@@ -474,6 +473,32 @@ html::before {
   margin-right: 0;
 }
 
+/* HERO TEXT FIX: Applied to .hero-heading */
+.hero-heading {
+    font-family: 'Poppins', sans-serif;
+    /* MODIFIED: Restored hero emphasis styles */
+    font-size: 5em; 
+    line-height: 1.1;
+    font-weight: 900; /* Bolder weight */
+    margin-bottom: 40px; /* Consistent spacing */
+    text-transform: uppercase;
+    text-align: left;
+    /* NEW: Gradient text effect */
+    background: var(--gradient-hero-text);
+    -webkit-background-clip: text;
+    background-clip: text; /* FIX: Added standard property for compatibility */
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* FIX: Use standard `color: transparent` */
+}
+/* Ensure inner spans don't override transparency */
+.hero-heading .text-white,
+.hero-heading .text-gray {
+    color: unset; /* Remove explicit color so gradient can show through */
+    -webkit-text-fill-color: unset; /* Ensure gradient works */
+    /* REMOVED: text-fill-color: unset; as it's an unknown property */
+}
+
+
 /* --- SERVICES SECTION (GSAP 3D CUBE ANIMATION) --- */
 .services-section {
   position: relative;
@@ -483,7 +508,9 @@ html::before {
   padding-bottom: 100px;
   text-align: left;
   z-index: 2; /* Ensures services section stays on top of 'tools' section when pinned */
-  background-color: var(--bg-main); /* FIX: Added solid background to prevent overlap show-through */
+  /* FIX: Background removed as per user instruction.
+          WARNING: This will cause overlap of content below when pinned. */
+  background: none; 
 }
 
 /* Services Heading (for the 3D cube section) */
@@ -496,7 +523,7 @@ html::before {
     margin-bottom: 15px; 
     text-transform: uppercase;
     text-align: left;
-    /* FIX: Removed position: sticky and top: 0; as its parent (services-section) is pinned by GSAP.
+    /* FIX: Removed position: sticky; and top: 0; as its parent (services-section) is pinned by GSAP.
             This prevents the heading from disappearing and ensures consistent spacing. */
     position: relative; /* Default position for normal flow within the section */
     z-index: 4; /* Higher than cube wrapper to ensure it's on top of cube faces */
@@ -514,6 +541,7 @@ html::before {
 }
 
 
+/* SERVICES SECTION WIDTH FIX: Applied to .services-content-wrapper */
 .services-content-wrapper {
   position: sticky; /* Sticky positioning for the main cube viewport */
   top: 0; /* Sticky to top of the viewport once it starts */
@@ -525,6 +553,10 @@ html::before {
   justify-content: center; /* Horizontally center */
   align-items: center; /* Vertically center content inside fixed height wrapper */
   z-index: 3; /* Lower than heading, higher than default content */
+  /* MODIFIED: Ensure it takes full width and center it */
+  width: 100%;
+  max-width: 1200px; 
+  margin: 0 auto;
   /* transform is handled by GSAP.set for initial position and then GSAP.to for rotation */
 }
 
@@ -535,17 +567,20 @@ html::before {
   transform-style: preserve-3d; /* This container *rotates*, so it needs preserve-3d */
 }
 
+/* SERVICE ITEMS FIX: Applied to .service-item */
 .service-item {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  /* MODIFIED: Consistent spacing as per prompt */
+  padding: 40px 60px; 
+  
   /* FIX: Removed redundant CSS transition here, as GSAP controls transformations */
   /* transition: opacity 0.3s ease; */ 
   
-  /* CRITICAL: Solid background color to prevent content bleed-through */
+  /* CRITICAL: Solid background color to prevent content bleed-through within the cube faces themselves */
   background-color: var(--bg-main); /* Ensure faces have solid background */
   backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
   opacity: 1; /* All faces initially opaque for this GSAP setup */
@@ -556,8 +591,7 @@ html::before {
   justify-content: center;
   align-items: flex-start; /* Aligns content to the left of the item */
   box-sizing: border-box;
-  /* MODIFIED: Increased padding to prevent text/number overlap */
-  padding-right: 150px; 
+  will-change: transform; /* Performance hint for GSAP */
 }
 
 /* Service item children styling, including background number */
@@ -576,20 +610,23 @@ html::before {
     margin: 0;
     line-height: 1.6;
     font-style: normal;
-    word-break: break-word; /* NEW: Helps break long words to fit better */
+    word-break: break-word; /* Helps break long words to fit better */
 }
+/* SERVICE ITEM BACKGROUND NUMBER FIX */
 .service-item .service-bg-number {
   position: absolute; /* Absolute relative to .service-item */
   top: 50%;
   right: 20px; /* Position inside the item */
   transform: translateY(-50%);
-  font-size: 8em; /* Adjusted size for being inside the item */
+  /* MODIFIED: More subtle size and opacity */
+  font-size: 7em; 
   font-weight: 800;
   color: var(--services-bg-number-color);
   z-index: 0; /* Behind content but in front of item's background */
   pointer-events: none;
   line-height: 1;
   user-select: none;
+  opacity: 0.25; /* More subtle opacity */
 }
 
 
@@ -598,7 +635,9 @@ html::before {
     padding-top: 80px;
     padding-bottom: 80px;
     text-align: left;
-    background: none; /* Ensure no section background */
+    /* FIX: Background is none as per prompt */
+    background: none; 
+    position: relative; /* Ensure z-index works correctly */
     z-index: 1; /* Ensures tools section is below the pinned services section */
 }
 
@@ -621,6 +660,7 @@ html::before {
     display: block;
 }
 
+/* TOOLS GRID FIX: Conditional centering for alignment consistency */
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -905,7 +945,7 @@ footer h2 {
         padding-right: 40px; /* Adjusted padding */
     }
     .hero-heading {
-        font-size: 5.5em;
+        font-size: 4.5em; /* Adjusted hero heading font size */
         margin-bottom: 25px;
     }
     .hero-description {
@@ -935,7 +975,7 @@ footer h2 {
         z-index: 1; /* Maintain z-index */
     }
     .tools-heading {
-        font-size: 4.5em;
+        font-size: 5em; /* Kept original size for tools heading */
         margin-bottom: 40px;
         /* NEW: Consistent alignment for tools section at this breakpoint */
         text-align: center; /* Center the heading to match grid */
@@ -1060,7 +1100,7 @@ footer h2 {
         text-align: left;
     }
     .hero-heading {
-        font-size: 4em;
+        font-size: 3.5em; /* Adjusted hero heading font size */
         margin-bottom: 20px;
     }
     .hero-description {
