@@ -37,7 +37,7 @@
     /* CSS Variables for sticky services top offset (set by JS) */
     --services-sticky-top-h2: 0px; /* Unused in this GSAP setup */
     --services-sticky-top-wrapper: 0px; /* Unused in this GSAP setup */
-    --faceZ: 0px; /* Will be set by JS (negative half of wrapper height) */
+    /* --faceZ: 0px; This is only set dynamically by JS, no need for default in CSS. */
 }
 
 /* Global utility text colors */
@@ -126,7 +126,7 @@ html::before {
     inset: 0; /* Shorthand for top:0; right:0; bottom:0; left:0; */
     z-index: -1;
     pointer-events: none;
-    opacity: 0.1299375; /* Default subtle opacity */
+    opacity: 0.1799375; /* Increased opacity by 5% as requested */
 
     /* Animated colorful gradient as the base background */
     background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -247,11 +247,11 @@ html::before {
     box-sizing: border-box;
     position: sticky;
     top: 50px;
-    align-self: flex-start;
+    align-self: flex-start; /* Ensures content sticks to the top within the flex container */
     height: calc(100vh - 50px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* Removed justify-content: center; to align content to the top */
     align-items: center;
     text-align: center;
 }
@@ -493,13 +493,13 @@ html::before {
 /* --- SERVICES SECTION (GSAP 3D CUBE ANIMATION) --- */
 .services-section {
   position: relative;
+  /* Perspective is now on .services-content-wrapper for more direct control of 3D children */
+  perspective: none; /* Removed from here */
   padding-top: 80px;
   padding-bottom: 100px;
   text-align: left;
   z-index: 1;
   background: none; /* Ensure no section background */
-  /* Perspective moved to .services-content-wrapper */
-  perspective: none;
 }
 
 /* Services Heading (for the 3D cube section) */
@@ -561,7 +561,7 @@ html::before {
   opacity: 1; /* All faces initially opaque for this GSAP setup */
   transform-origin: center center; /* Rotation occurs around the center */
   /* Transitions are handled by GSAP, removed CSS transitions to prevent conflicts */
-  transition: none; /* Removed: opacity 0.3s ease; */
+  transition: none; /* REMOVED: opacity 0.3s ease; */
   z-index: 1; /* Default z-index for faces */
   display: flex;
   flex-direction: column;
@@ -978,7 +978,7 @@ footer h2 {
         min-height: unset;
         padding-bottom: 50px;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start; /* Aligned to top */
         align-items: center;
         flex-direction: column;
         padding-top: 0;
@@ -1265,7 +1265,6 @@ footer h2 {
         display: grid;
         grid-template-columns: 1fr;
         gap: 15px;
-        max-width: 100%;
     }
     .tool-card {
         padding: 15px;

@@ -77,26 +77,24 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.registerPlugin(ScrollTrigger);
 
     const servicesSection = document.getElementById('services');
-    const servicesHeading = servicesSection?.querySelector('.services-heading'); // Used for initial Y animation
     const servicesContentWrapper = servicesSection?.querySelector('.services-content-wrapper'); // The sticky perspective container
     const servicesItemsContainer = servicesContentWrapper?.querySelector('.services-items-container'); // The element that rotates
     const serviceItems = servicesItemsContainer ? Array.from(servicesItemsContainer.querySelectorAll('.service-item')) : [];
-
+    
     // Check for core elements
     if (!servicesSection || !servicesContentWrapper || !servicesItemsContainer || serviceItems.length === 0) {
-        console.warn("GSAP Services Cube: One or more required elements missing (#services, .services-content-wrapper, .services-items-container, .service-item). Skipping animation setup.");
+        console.warn("GSAP Services Cube: One or more required elements missing. Skipping animation setup.");
         // Ensure the section still reveals itself normally if animation fails
         if(servicesSection) servicesSection.classList.add('revealed');
         return;
     }
 
-    const cubeHeight = 250; // Fixed height of each face as per example
+    const cubeHeight = 250; // Fixed height of each face as per example (from original About.tsx example)
     const faceOffset = cubeHeight / 2; // Half of cubeHeight
-
-    let cubeWidth = 0; // Will be set dynamically by JS
 
     // Function to update cube dimensions and initial transforms
     function updateCubeDimensions() {
+        let cubeWidth = 0; // Local variable for calculated width
         const width = window.innerWidth;
         if (width >= 1024) cubeWidth = 900;
         else if (width >= 768) cubeWidth = 640;
@@ -128,26 +126,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', updateCubeDimensions);
     updateCubeDimensions(); // Initial call to set dimensions and initial transforms
 
-    // GSAP Animation Timeline
-    const masterTimeline = gsap.timeline({
+    // Main Cube Rotation Animation
+    gsap.timeline({
         scrollTrigger: {
             trigger: servicesSection,
             start: "top top", // Pin the section when its top hits viewport top
             end: "bottom top", // Unpin when section's bottom hits viewport top
             scrub: true, // Smoothly link animation to scroll
             pin: true, // Keep the section pinned while animating
-            pinSpacing: false, // Prevent ScrollTrigger from adding extra spacing due to pin if not desired
+            pinSpacing: false, // Prevents ScrollTrigger from adding extra spacing due to pin if not desired
         }
-    });
-
-    // Main cube rotation animation: rotate the container through all items
-    masterTimeline.to(servicesItemsContainer, {
+    })
+    .to(servicesItemsContainer, {
         rotateX: serviceItems.length * 90, // Total rotation for all 8 items (8 * 90 = 720 degrees)
         ease: "none" // Linear easing for scrubbing
     });
 
 
-    // Update background number based on scroll progress (inside Services section)
+    // Update background number opacity based on scroll progress (inside Services section)
     ScrollTrigger.create({
         trigger: servicesSection,
         start: "top top",
@@ -155,28 +151,24 @@ document.addEventListener('DOMContentLoaded', () => {
         scrub: true,
         onUpdate: self => {
             // Get current rotation value (0 to 720 degrees) mapped to progress (0-1)
-            const totalRotationDegrees = serviceItems.length * 90;
+            const totalRotationDegrees = serviceItems.length * 90; 
             const currentRotationDegrees = self.progress * totalRotationDegrees;
             
             // Determine which face is currently "active"
             // Divide by 90 (degrees per face step) and round to get the nearest index
-            let activeFaceIndex = Math.round(currentRotationDegrees / 90);
-            activeFaceIndex = Math.max(0, Math.min(serviceItems.length - 1, activeFaceIndex)); // Clamp to valid index range
+            let activeItemIndex = Math.round(currentRotationDegrees / 90);
+            activeItemIndex = Math.max(0, Math.min(serviceItems.length - 1, activeItemIndex)); // Clamp to valid index range
 
-            // Update the background number for the active item
-            const currentBgNumberElement = serviceItems[activeFaceIndex]?.querySelector('.service-bg-number');
-            if (currentBgNumberElement) {
-                // Hide all numbers except the active one (GSAP handles visibility more smoothly)
-                serviceItems.forEach(item => {
-                    const itemBgNumber = item.querySelector('.service-bg-number');
-                    if (itemBgNumber) {
-                        gsap.to(itemBgNumber, {
-                            opacity: (item === serviceItems[activeFaceIndex]) ? 1 : 0,
-                            duration: 0.1 // Small fade for the number
-                        });
-                    }
-                });
-            }
+            // Iterate through all items to control their background number opacity
+            serviceItems.forEach((item, i) => {
+                const itemBgNumber = item.querySelector('.service-bg-number');
+                if (itemBgNumber) {
+                    gsap.to(itemBgNumber, {
+                        opacity: (i === activeItemIndex) ? 1 : 0, // Only active item's number is visible
+                        duration: 0.1 // Small fade for the number visibility
+                    });
+                }
+            });
         }
     });
 });
