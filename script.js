@@ -121,6 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 serviceItems[0].style.zIndex = '2';
             }
             if (bgNumber) bgNumber.textContent = '01';
+            currentIndex = 0;
+            isAnimating = false;
         }
 
         // On load and on resize, set initial state
@@ -174,19 +176,18 @@ document.addEventListener('DOMContentLoaded', () => {
             void outgoing.offsetWidth;
 
             // Animate
+            // Outgoing rotates away and fades out by 40%
+            outgoing.style.transform = `rotateX(${direction > 0 ? -90 : 90}deg) translateZ(${faceOffset}px)`;
+            outgoing.style.opacity = '0';
+
+            // Incoming rotates in and fades in from 60%
             setTimeout(() => {
-                // Outgoing rotates away and fades out by 40%
-                outgoing.style.transform = `rotateX(${direction > 0 ? -90 : 90}deg) translateZ(${faceOffset}px)`;
-                outgoing.style.opacity = '0';
-
-                // Incoming rotates in and fades in from 60%
                 incoming.style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
-                // Fade in starts at 60% of duration
-                setTimeout(() => {
-                    incoming.style.opacity = '1';
-                }, duration * 0.6);
-
             }, 10);
+
+            setTimeout(() => {
+                incoming.style.opacity = '1';
+            }, duration * 0.6);
 
             // After animation, cleanup and set new active
             setTimeout(() => {
@@ -243,6 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Mouse wheel and keyboard ---
         if (servicesSection) {
+            // Prevent multiple listeners
+            servicesSection.removeEventListener('wheel', handleCubeScroll);
+            servicesSection.removeEventListener('keydown', handleCubeScroll);
             servicesSection.addEventListener('wheel', handleCubeScroll, { passive: false });
             servicesSection.addEventListener('keydown', handleCubeScroll);
             servicesSection.tabIndex = 0; // Make focusable for keyboard
