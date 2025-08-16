@@ -114,37 +114,7 @@ body::after {
 
 /* Layer 3: Animated Background Grid Pattern */
 #mosaic-background { /* This div is new in HTML */
-  position: fixed;
-  inset: 0;
-  z-index: -1; /* Behind all content but above body glows */
-  pointer-events: none; /* Purely decorative */
-  opacity: 0.9; /* Subtle overlay as per prompt */
-
-  background-color: #0d0d0d; /* deep matte base as per prompt */
-  
-  /* The animated grid lines themselves */
-  background-image: 
-    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px), /* Vertical Lines */
-    linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px); /* Horizontal Lines */
-  background-size: 40px 40px; /* Grid size */
-  background-repeat: repeat; /* Repeat the grid pattern */
-
-  /* Animation for the line colors */
-  animation: glowShift 15s ease infinite; /* As per prompt */
-}
-
-/* Keyframes for the grid line glowing animation */
-@keyframes glowShift {
-  0%, 100% {
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-  }
-  50% {
-    background-image:
-      linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
-  }
+  display: none !important;
 }
 
 
@@ -468,9 +438,9 @@ body::after {
 .services-section-header {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center horizontally */
+  align-items: flex-start; /* Align left, like tools-heading */
   margin-bottom: 48px;
-  text-align: center; /* Center text within the header */
+  text-align: left; /* Align text left */
 }
 
 .services-section-header .services-heading {
