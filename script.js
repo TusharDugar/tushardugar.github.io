@@ -30,22 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('revealed');
                 // Unobserve for general sections to run animation once
-                // Services section is now static, so its general reveal is handled normally
-                observer.unobserve(entry.target); 
+                // Services section is handled by its own scroll logic, so don't unobserve with general.
+                if (entry.target.id !== 'services') {
+                    observer.unobserve(entry.target);
+                }
             }
         });
     }, { threshold: 0.1 });
 
     // Observe all main sections with the general section observer
-    document.querySelectorAll('#contact, #hero-right, #tools, #services').forEach(el => sectionObserver.observe(el));
+    document.querySelectorAll('#contact, #hero-right, #tools').forEach(el => sectionObserver.observe(el));
 
 
     // --------------------------
     // About Section Stagger Reveal (DesignCube-like) (UNCHANGED)
     // --------------------------
     const aboutSection = document.getElementById('about');
-    const revealStaggerParent = aboutSection ? aboutSection.querySelector('.profile-card-wrapper.reveal-stagger-parent') : null;
-    const revealStaggerChildren = revealStaggerParent ? revealStaggerParent.querySelectorAll('.reveal-stagger') : [];
+    const revealStaggerParent = aboutSection ? aboutSection.querySelector('.profile-card-wrapper.reveal-parent') : null; // Corrected to .reveal-parent
+    const revealStaggerChildren = revealStaggerParent ? revealStaggerParent.querySelectorAll('.reveal-child') : []; // Corrected to .reveal-child
 
     if (revealStaggerParent && revealStaggerChildren.length > 0) {
         const staggerObserver = new IntersectionObserver((entries, observer) => {
@@ -63,158 +65,241 @@ document.addEventListener('DOMContentLoaded', () => {
 
         staggerObserver.observe(revealStaggerParent);
     } else {
-        if (aboutSection) aboutSection.classList.add('revealed');
+        // If stagger elements are not found, ensure the parent section still reveals
+        if (aboutSection) sectionObserver.observe(aboutSection); // Observe with general if no stagger children found
     }
-    // No longer explicitly observing aboutSection here with sectionObserver, as it's part of its own stagger logic.
 
 
     // --------------------------
-    // Services Cube Animation (COMMENTED OUT - NO LONGER ACTIVE)
+    // Services Cube Animation (RESTORED & REFINED)
     // --------------------------
-    // All JavaScript logic for the 3D cube animation is now commented out
-    // as the Services section is intended to be static.
-    /*
-    const servicesSection = document.getElementById('services');
-    const wrapper = servicesSection?.querySelector('.services-content-wrapper');
-    const container = servicesSection?.querySelector('.services-items-container');
-    const items = Array.from(container?.querySelectorAll('.service-item') || []);
-    const bgNumber = servicesSection?.querySelector('.service-bg-number'); // This element is removed in HTML
-
-    if (!wrapper || !container || items.length === 0) { // Removed bgNumber from check as it's gone
-        console.warn("Services cube: required elements missing or no items found. Skipping animation setup.");
-        if (servicesSection) servicesSection.classList.add('revealed');
-        return;
-    }
-
-    let activeIndex = 0;
-    let isAnimating = false;
-
-    let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
-    if (!scrollSpacer) {
-        scrollSpacer = document.createElement('div');
-        scrollSpacer.classList.add('services-section-scroll-spacer');
-        servicesSection.appendChild(scrollSpacer);
-    }
-
-    function adjustLayout() {
-        const wrapperHeight = wrapper.offsetHeight;
-        if (wrapperHeight === 0) {
-             console.warn("services-content-wrapper has 0 height. Cannot calculate faceZ. Check CSS 'height' for .services-content-wrapper.");
-             servicesSection.style.setProperty('--faceZ', `-150px`);
-             return;
+    (() => {
+        const servicesSection = document.getElementById('services');
+        // Critical: Services section must be found and its ID must be correct.
+        if (!servicesSection) {
+            console.warn("Services Cube Animation: #services section not found. Skipping setup.");
+            return;
         }
-        const faceZ = -(wrapperHeight / 2);
-        servicesSection.style.setProperty('--faceZ', `${faceZ}px`);
 
-        const servicesHeadingHeight = servicesSection.querySelector('.services-heading')?.offsetHeight || 0;
-        const gapBetweenHeadingAndWrapper = 50;
-        const totalVisibleStickyHeight = servicesHeadingHeight + gapBetweenHeadingAndWrapper + wrapperHeight;
-        let stickyTopH2 = (window.innerHeight - totalVisibleStickyHeight) / 2;
-        stickyTopH2 = Math.max(0, stickyTopH2);
-        let stickyTopWrapper = stickyTopH2 + servicesHeadingHeight + gapBetweenHeadingAndWrapper;
+        const wrapper = servicesSection.querySelector('.services-content-wrapper');
+        const container = servicesSection.querySelector('.services-items-container');
+        const serviceItems = container ? Array.from(container.querySelectorAll('.service-item')) : [];
+        const bgNumber = servicesSection.querySelector('.service-bg-number'); // Corrected selector for bgNumber
 
-        servicesSection.style.setProperty('--services-sticky-top-h2', `${stickyTopH2}px`);
-        servicesSection.style.setProperty('--services-sticky-top-wrapper', `${stickyTopWrapper}px`);
+        // Debugging initial element checks
+        console.log("Services Section (for cube):", servicesSection ? 'found' : 'not found');
+        console.log("Wrapper (services-content-wrapper):", wrapper ? 'found' : 'not found');
+        console.log("Container (services-items-container):", container ? 'found' : 'not found');
+        console.log("Service Items count:", serviceItems.length);
+        console.log("Background Number:", bgNumber ? 'found' : 'not found');
 
-        const estimatedScrollPerItem = window.innerHeight * 1.5;
-        scrollSpacer.style.height = `${items.length * estimatedScrollPerItem}px`;
-    }
+        if (!wrapper || !container || serviceItems.length < 2 || !bgNumber) {
+            console.error("Services Cube Animation: Missing crucial elements. Check HTML structure for #services, .services-content-wrapper, .services-items-container, .service-item (at least 2), and .service-bg-number.");
+            // Ensure section still gets revealed if cube animation fails
+            if (servicesSection) servicesSection.classList.add('revealed');
+            return;
+        }
 
-    function layoutFaces() {
-        items.forEach((item, index) => {
-            item.className = 'service-item';
-            item.classList.remove('active-content');
+        let currentIndex = 0;
+        let isAnimating = false;
+        const duration = 800; // ms, matches CSS transition duration for transform/opacity
 
-            if (index === activeIndex) {
-                item.classList.add('front', 'active-content');
-            } else if (index === (activeIndex + 1) % items.length) {
-                item.classList.add('below');
-            } else if (index === (activeIndex - 1 + items.length) % items.length) {
-                item.classList.add('above');
-            } else {
-                if (index < activeIndex) {
-                    item.classList.add('above');
+        // Create the scroll spacer if it's not already there
+        let scrollSpacer = servicesSection.querySelector('.services-section-scroll-spacer');
+        if (!scrollSpacer) {
+            scrollSpacer = document.createElement('div');
+            scrollSpacer.classList.add('services-section-scroll-spacer');
+            servicesSection.appendChild(scrollSpacer);
+        }
+
+        // Calculate faceOffset for translateZ (half the container height)
+        function getFaceOffset() {
+            const currentWrapperHeight = wrapper.offsetHeight;
+            if (currentWrapperHeight === 0) {
+                console.warn("services-content-wrapper has 0 height during getFaceOffset. Check its CSS height. Defaulting to 150px.");
+                return 150; // Fallback value
+            }
+            return currentWrapperHeight / 2;
+        }
+
+        // --- INITIAL STATE: Ensure first face is visible and active ---
+        function setInitialCubeState() {
+            const faceOffset = getFaceOffset();
+            servicesSection.style.setProperty('--faceZ', `${-faceOffset}px`); // Set CSS variable for cube depth
+
+            serviceItems.forEach((item, i) => {
+                item.className = 'service-item'; // Reset all classes
+                item.style.transition = ''; // Remove transition during initial setup
+
+                if (i === 0) {
+                    item.classList.add('active', 'front');
+                } else if (i === 1) { // The item immediately after the first one
+                    item.classList.add('below'); // Position it ready to enter from below
                 } else {
-                    item.classList.add('below');
+                    item.classList.add('above'); // Park other items in hidden "above" state by default
+                }
+                // Apply transforms based on initial parked state classes
+                // CSS will define the transform for 'front', 'below', 'above'
+                // Opacity is also managed by CSS classes for parked states.
+            });
+
+            if (bgNumber) bgNumber.textContent = '01'; // Ensure initial number is correct
+            currentIndex = 0;
+            isAnimating = false;
+            // console.log("Initial Cube State Set. Active Index:", currentIndex); // Debugging
+        }
+
+        // --- Helper: update background number ---
+        function updateBgNumberDisplay(idx) {
+            if (bgNumber) {
+                bgNumber.textContent = (idx + 1).toString().padStart(2, '0');
+            }
+        }
+
+        // --- Flip Animation ---
+        function flipCube(direction) { // direction: 1 for down, -1 for up
+            if (isAnimating) return;
+            const prevIndex = currentIndex;
+            const nextIndex = currentIndex + direction;
+
+            // Check if we are trying to go out of bounds of the actual items
+            const atFirstItem = currentIndex === 0 && direction === -1;
+            const atLastItem = currentIndex === serviceItems.length - 1 && direction === 1;
+
+            if (atFirstItem || atLastItem) {
+                // We're at a boundary where cube animation stops and normal page scroll should take over.
+                // This function should return early, signaling the event listener NOT to prevent default.
+                return false; // Signifies that no cube flip occurred
+            }
+
+            isAnimating = true;
+            const outgoingItem = serviceItems[prevIndex];
+            const incomingItem = serviceItems[nextIndex];
+
+            // Apply animation classes
+            if (direction === 1) { // Scrolling down (next item comes from below)
+                outgoingItem.classList.replace('front', 'exit-to-top');
+                incomingItem.classList.replace('below', 'enter-from-bottom');
+            } else { // Scrolling up (previous item comes from above)
+                outgoingItem.classList.replace('front', 'exit-to-bottom');
+                incomingItem.classList.replace('above', 'enter-from-top');
+            }
+
+            // After animation duration, update activeIndex and reset classes
+            setTimeout(() => {
+                currentIndex = nextIndex; // Update the index
+                layoutFaces(); // Re-layout all faces to their new parked states
+                isAnimating = false;
+                // console.log("Flip Complete. New Active Index:", currentIndex); // Debugging
+            }, duration); // Match this duration to CSS transition
+
+            return true; // Signifies that a cube flip *is* occurring
+        }
+
+        // --- Main Scroll/Input Handler ---
+        let scrollAccum = 0; // For mouse wheel debounce
+        let touchStartY = null; // For touch swipe detection
+
+        function handleInput(e, direction) { // direction: 1 for down/swipe-up, -1 for up/swipe-down
+            // Only engage if the services section is substantially visible on screen
+            const servicesRect = servicesSection.getBoundingClientRect();
+            const isServicesMainlyVisible = servicesRect.top < window.innerHeight * 0.75 && servicesRect.bottom > window.innerHeight * 0.25;
+
+            if (!isServicesMainlyVisible) {
+                // Not in services section, allow normal scroll. Don't prevent default.
+                return false;
+            }
+
+            if (isAnimating) {
+                // An animation is already active, prevent default but do nothing else.
+                return true;
+            }
+
+            // Attempt to flip the cube. flipCube returns true if it starts an animation, false if at boundary.
+            if (flipCube(direction)) {
+                // Animation started, so prevent default browser scroll.
+                return true;
+            } else {
+                // Animation did NOT start (meaning we're at a boundary), so allow default browser scroll.
+                return false;
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Initial setup on load (with slight delay for layout computation)
+        setTimeout(() => {
+            adjustLayout(); // Calculate --faceZ and spacer height
+            setInitialCubeState(); // Set initial positions and active class
+            sectionObserver.observe(servicesSection); // Start observing services section for general reveal
+        }, 500); // 500ms delay for safety
+
+        // Update layout on resize
+        window.addEventListener('resize', () => {
+            adjustLayout();
+            // After resize, reset position of all items to current active state
+            // and re-set classes correctly based on potentially new faceOffset
+            setInitialCubeState(); // Re-initialize to current active item to avoid visual glitches on resize
+            updateBgNumberDisplay(currentIndex); // Ensure number is correct
+        });
+
+        // Wheel event listener for desktop scrolling
+        window.addEventListener('wheel', (e) => {
+            scrollAccum += e.deltaY;
+            const scrollThreshold = 50; // Pixels needed to trigger a step
+
+            if (scrollAccum > scrollThreshold) {
+                if (handleInput(e, 1)) { // User scrolled down (direction +1)
+                    e.preventDefault(); // Prevent default if internal animation occurs
+                }
+                scrollAccum = 0; // Reset accumulator
+            } else if (scrollAccum < -scrollThreshold) {
+                if (handleInput(e, -1)) { // User scrolled up (direction -1)
+                    e.preventDefault(); // Prevent default if internal animation occurs
+                }
+                scrollAccum = 0; // Reset accumulator
+            } else if (isAnimating) {
+                e.preventDefault(); // If animating, consume minor wheel movements
+            }
+            // If not enough scroll, and not animating, and not handled by cube, default browser scroll is allowed.
+        }, { passive: false });
+
+        // Touch swipe support (touchstart & touchend)
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                touchStartY = e.touches[0].clientY;
+            }
+        }, { passive: false }); // Needs passive: false for potential preventDefault in touchend
+
+        window.addEventListener('touchend', (e) => {
+            if (touchStartY === null) return;
+
+            const deltaY = touchStartY - e.changedTouches[0].clientY; // Positive if swiped up, negative if swiped down
+            const swipeThreshold = 40; // Pixels for a significant swipe
+
+            if (Math.abs(deltaY) > swipeThreshold) {
+                const direction = deltaY > 0 ? 1 : -1; // 1 for swipe up, -1 for swipe down
+                if (handleInput(e, direction)) {
+                    e.preventDefault(); // Prevent default only if an internal animation was triggered
+                }
+            }
+            touchStartY = null; // Reset for next swipe
+        }, { passive: false });
+
+        // Keyboard support (for accessibility/testing)
+        window.addEventListener('keydown', (e) => {
+            let direction = 0;
+            if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+                direction = 1; // Downward keys
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                direction = -1; // Upward keys
+            }
+
+            if (direction !== 0) {
+                if (handleInput(e, direction)) {
+                    e.preventDefault(); // Prevent default only if internal animation triggers
                 }
             }
         });
-        if(bgNumber) updateBgNumber(); // Conditional check for bgNumber
-    }
-
-    function updateBgNumber() {
-        if(bgNumber) { // Defensive check
-            const displayIndex = activeIndex + 1;
-            bgNumber.textContent = displayIndex < 10 ? `0${displayIndex}` : `${displayIndex}`;
-        }
-    }
-
-    function goToIndex(newIndex, directionName) {
-        if (isAnimating || newIndex === activeIndex) return;
-        isAnimating = true;
-
-        const current = items[activeIndex];
-        const next = items[newIndex];
-
-        if (directionName === 'up') {
-            current.classList.replace('front', 'exit-to-top');
-            next.classList.replace('below', 'enter-from-bottom');
-        } else {
-            current.classList.replace('front', 'exit-to-bottom');
-            next.classList.replace('above', 'enter-from-top');
-        }
-
-        setTimeout(() => {
-            activeIndex = newIndex;
-            layoutFaces();
-            isAnimating = false;
-        }, 800);
-    }
-
-    function step(direction) {
-        let newIndex;
-        if (direction === 'up') {
-            newIndex = activeIndex + 1;
-        } else {
-            newIndex = activeIndex - 1;
-        }
-
-        const atStartBoundary = activeIndex === 0 && direction === 'down';
-        const atEndBoundary = activeIndex === items.length - 1 && direction === 'up';
-
-        if (atStartBoundary || atEndBoundary) {
-            return false;
-        }
-
-        newIndex = Math.max(0, Math.min(items.length - 1, newIndex));
-
-        if (newIndex === activeIndex) {
-            return true;
-        }
-
-        goToIndex(newIndex, direction);
-        return true;
-    }
-
-    let scrollAccum = 0;
-    let touchStartY = null;
-
-    setTimeout(() => {
-        adjustLayout();
-        layoutFaces();
-        sectionObserver.observe(servicesSection); // Still observe for general reveal
-    }, 500);
-
-    window.removeEventListener('wheel', window.handleWheelEvent || (() => {}), { passive: false }); // Clean up old listeners
-    window.removeEventListener('keydown', window.handleKeydownEvent || (() => {}), { passive: false });
-    window.removeEventListener('touchstart', window.handleTouchstartEvent || (() => {}), { passive: false });
-    window.removeEventListener('touchend', window.handleTouchendEvent || (() => {}), { passive: false });
-
-    // New event listeners for static page scroll. Removed from current version.
-    // wheel, keydown, touchstart, touchend event listeners were here.
-    // They are now removed because Services section is static.
-    // If other sections need these, they would need their own specific handlers.
-
-    */
-    // END OF COMMENTED OUT SERVICES CUBE ANIMATION JAVASCRIPT
+    })(); // End of Services Cube Animation IIFE
 });

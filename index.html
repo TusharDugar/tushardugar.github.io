@@ -14,13 +14,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- NEW: Background div for the animated mosaic grid -->
-    <div id="mosaic-background" aria-hidden="true"></div>
+    <!-- The background is now purely CSS on the html and body elements -->
     
     <div class="main-layout-container"> <!-- Main container for the two columns -->
         <div class="left-column-sticky">
             <section id="about" class="section about-left-content reveal-item">
-                <div class="profile-card-wrapper reveal-parent">
+                <div class="profile-card-wrapper reveal-stagger-parent">
                     <!-- Decorative background dashed lines (from Aabid Ahmed card) -->
                     <div class="dashed-decoration top-left-curve"></div>
                     <div class="dashed-decoration bottom-right-curve"></div>
@@ -60,51 +59,52 @@
                 <p class="hero-description">I'm a creative developer who builds dynamic and user-centric web solutions. From intricate front-end designs to robust back-end systems, I transform ideas into powerful digital realities. My passion lies in blending design aesthetics with seamless functionality.</p>
             </section>
 
-            <!-- Services Section - Now with background numbers and animation setup -->
+            <!-- Services Section - RESTORED FOR 3D CUBE ANIMATION -->
             <section id="services" class="section services-section">
-                <div class="services-section-header">
-                    <h2 class="services-heading">
-                        <span class="text-white">MY</span>
-                        <span class="text-gray">SERVICES</span>
-                    </h2>
-                </div>
+                <h2 class="services-heading">
+                    <span class="text-white">MY</span><br>
+                    <span class="text-gray">SERVICES</span>
+                </h2>
+
                 <div class="services-content-wrapper">
                     <div class="services-items-container">
-                        <div class="service-item active" id="service-0">
+                        <div class="service-item" id="service-0" data-service-index="0">
                             <h3 class="service-title">Web Design</h3>
                             <p class="service-description">Crafting visually stunning and user-friendly websites tailored to your brand’s identity and goals.</p>
                         </div>
-                        <div class="service-item" id="service-1">
+                        <div class="service-item" id="service-1" data-service-index="1">
                             <h3 class="service-title">SEO Optimization</h3>
                             <p class="service-description">Enhancing your website’s visibility and ranking on search engines through strategic keyword integration and technical optimization.</p>
                         </div>
-                        <div class="service-item" id="service-2">
+                        <div class="service-item" id="service-2" data-service-index="2">
                             <h3 class="service-title">UX/UI Design</h3>
                             <p class="service-description">Creating intuitive and engaging user experiences and interfaces that prioritize user satisfaction and ease of use.</p>
                         </div>
-                        <div class="service-item" id="service-3">
+                        <div class="service-item" id="service-3" data-service-index="3">
                             <h3 class="service-title">Graphic Design</h3>
                             <p class="service-description">Designing compelling and creative visuals for print and digital media to communicate your message effectively.</p>
                         </div>
-                        <div class="service-item" id="service-4">
+                        <div class="service-item" id="service-4" data-service-index="4">
                             <h3 class="service-title">E-commerce Solutions</h3>
                             <p class="service-description">Developing robust and scalable online stores that drive sales and provide seamless shopping experiences for your customers.</p>
                         </div>
-                        <div class="service-item" id="service-5">
+                        <div class="service-item" id="service-5" data-service-index="5">
                             <h3 class="service-title">Digital Marketing</h3>
                             <p class="service-description">Strategizing and executing comprehensive digital marketing campaigns to boost your online presence and engagement.</p>
                         </div>
-                        <div class="service-item" id="service-6">
+                        <div class="service-item" id="service-6" data-service-index="6">
                             <h3 class="service-title">Content Creation</h3>
                             <p class="service-description">Crafting engaging and relevant content, including blogs, videos, and graphics, to connect with your audience and enhance your brand story.</p>
                         </div>
-                        <div class="service-item" id="service-7">
+                        <div class="service-item" id="service-7" data-service-index="7">
                             <h3 class="service-title">Social Media Management</h3>
                             <p class="service-description">Managing and growing your social media presence effectively to engage with your audience and build your brand.</p>
                         </div>
                     </div>
-                    <div class="service-bg-number">01</div>
                 </div>
+                <!-- service-bg-number and scroll spacer MUST be direct children of #services for the 3D animation logic -->
+                <div class="service-bg-number">01</div> 
+                <div class="services-section-scroll-spacer"></div>
             </section>
 
             <!-- Premium Tools Section -->
