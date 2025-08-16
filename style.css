@@ -546,19 +546,6 @@ body::after {
   will-change: auto; /* Reset performance hint */
 }
 
-/* Remove all state classes, as they are not used in static mode */
-.service-item.front,
-.service-item.above,
-.service-item.below,
-.service-item.exit-to-top,
-.service-item.exit-to-bottom,
-.service-item.enter-from-bottom,
-.service-item.enter-from-top,
-.service-item.active-content {
-    /* These classes should effectively have no effect in a static setup */
-    /* They are included here just in case they were left in JS, but will be ignored */
-}
-
 /* Remove the large background number if it's no longer in HTML */
 .service-bg-number {
   display: none !important; /* Hide the number entirely if it's still in HTML for some reason */
@@ -1105,11 +1092,6 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
-    }
-
-    footer {
-        padding-left: 0;
-        padding-right: 0;
     }
 }
 
