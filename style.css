@@ -226,11 +226,11 @@ body::after {
 
 /* Updated: About Left Content (White Card) - Based on Aabid Ahmed design */
 .about-left-content {
-    background-color: var(--bg-profile-card);
     color: var(--text-dark-card);
     border-radius: 20px;
     padding: 30px 25px;
-    box-shadow: 0 10px 30px var(--shadow-color-card-white);
+    /* Remove box-shadow for a clean look */
+    box-shadow: none !important;
     width: 100%;
     max-width: 370px;
     height: auto;
@@ -244,6 +244,8 @@ body::after {
     text-align: center;
     position: relative;
     overflow: hidden;
+    /* Remove background from about-left-content (white card) */
+    background-color: transparent !important;
 }
 .about-left-content.revealed {
     opacity: 1;
@@ -255,12 +257,13 @@ body::after {
     width: calc(100% + 50px);
     max-width: 420px;
     height: 200px;
-    background-color: var(--accent-primary-sawad);
     border-radius: 15px;
     overflow: hidden;
     margin-bottom: 25px;
     position: relative;
     transform: translateX(0);
+    /* Remove background from .profile-image-container if needed */
+    background-color: transparent !important;
 }
 
 .profile-photo {
@@ -472,6 +475,10 @@ body::after {
   flex-direction: column;
   align-items: center;
   margin-bottom: 48px;
+  /* Center only the services-section-header (DesignCube style) */
+  text-align: center !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .services-section-header .services-heading {
@@ -520,6 +527,9 @@ body::after {
   padding-bottom: 100px; /* Standard section padding */
   text-align: left; /* Ensure heading aligns left */
   z-index: 1;
+  /* Remove background from services-section and tools-section */
+  background: none !important;
+  background-color: transparent !important;
 }
 
 .services-content-wrapper {
@@ -677,6 +687,9 @@ body::after {
     padding-top: 80px;
     padding-bottom: 80px;
     text-align: left;
+    /* Remove background from services-section and tools-section */
+    background: none !important;
+    background-color: transparent !important;
 }
 
 .tools-heading {
@@ -706,13 +719,14 @@ body::after {
 }
 
 .tool-card {
-    background-color: var(--bg-tool-card);
+    /* Remove background from .tool-card */
+    background-color: transparent !important;
     border-radius: 15px;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: none !important;
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
 }
@@ -764,7 +778,7 @@ body::after {
 
 /* Footer (Contact Section - Full Width, adjusted for smaller height) */
 footer {
-    background-color: var(--bg-main);
+    background-color: var(--bg-main) !important;
     color: var(--text-light);
     text-align: center;
     padding: 60px 0;
@@ -1222,12 +1236,6 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
-    }
-
-    /* Footer - Full width black background on mobile */
-    footer {
-        padding-left: 0;
-        padding-right: 0;
     }
 }
 
