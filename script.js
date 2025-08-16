@@ -89,9 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(parent);
     });
 
-    // --- Cube Flip Animation for Services Section (X-axis, scroll-based, corrected) ---
+    // --- Cube Flip Animation for Services Section (X-axis, scroll-based, with translateZ for real 3D cube effect) ---
     (() => {
-        // Cube flip logic for services
         const servicesSection = document.getElementById('services');
         const itemsContainer = servicesSection?.querySelector('.services-items-container');
         const serviceItems = itemsContainer ? Array.from(itemsContainer.querySelectorAll('.service-item')) : [];
@@ -100,23 +99,33 @@ document.addEventListener('DOMContentLoaded', () => {
         let isAnimating = false;
         const duration = 1200; // ms, matches CSS
 
+        // Calculate faceOffset for translateZ (half the container height)
+        function getFaceOffset() {
+            if (!itemsContainer) return 0;
+            return itemsContainer.offsetHeight / 2;
+        }
+
         // --- INITIAL STATE: Ensure first face is visible and active ---
         function setInitialCubeState() {
+            const faceOffset = getFaceOffset();
             serviceItems.forEach((item, i) => {
                 item.classList.remove('active', 'cube-out', 'cube-in');
                 item.style.opacity = '0';
-                item.style.transform = 'rotateX(90deg)';
+                item.style.transform = `rotateX(90deg) translateZ(${faceOffset}px)`;
                 item.style.zIndex = '1';
             });
             if (serviceItems[0]) {
                 serviceItems[0].classList.add('active');
                 serviceItems[0].style.opacity = '1';
-                serviceItems[0].style.transform = 'rotateX(0deg)';
+                serviceItems[0].style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
                 serviceItems[0].style.zIndex = '2';
             }
             if (bgNumber) bgNumber.textContent = '01';
         }
+
+        // On load and on resize, set initial state
         setInitialCubeState();
+        window.addEventListener('resize', setInitialCubeState);
 
         // --- Helper: update background number ---
         function updateBgNumber(idx) {
@@ -133,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nextIndex < 0 || nextIndex >= serviceItems.length) return;
 
             isAnimating = true;
+            const faceOffset = getFaceOffset();
 
             // Outgoing face
             const outgoing = serviceItems[prevIndex];
@@ -149,14 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Set up outgoing
             outgoing.classList.add('cube-out');
             outgoing.style.opacity = '1';
-            outgoing.style.transform = 'rotateX(0deg)';
+            outgoing.style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
             outgoing.style.transition = `transform ${duration}ms cubic-bezier(0.77,0,0.175,1), opacity ${duration}ms ease-in-out`;
             outgoing.style.zIndex = '3';
 
             // Set up incoming
             incoming.classList.add('cube-in');
             incoming.style.opacity = '0';
-            incoming.style.transform = `rotateX(${direction > 0 ? 90 : -90}deg)`;
+            incoming.style.transform = `rotateX(${direction > 0 ? 90 : -90}deg) translateZ(${faceOffset}px)`;
             incoming.style.transition = `transform ${duration}ms cubic-bezier(0.77,0,0.175,1), opacity ${duration}ms ease-in-out`;
             incoming.style.zIndex = '3';
 
@@ -166,11 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Animate
             setTimeout(() => {
                 // Outgoing rotates away and fades out by 40%
-                outgoing.style.transform = `rotateX(${direction > 0 ? -90 : 90}deg)`;
+                outgoing.style.transform = `rotateX(${direction > 0 ? -90 : 90}deg) translateZ(${faceOffset}px)`;
                 outgoing.style.opacity = '0';
 
                 // Incoming rotates in and fades in from 60%
-                incoming.style.transform = 'rotateX(0deg)';
+                incoming.style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
                 // Fade in starts at 60% of duration
                 setTimeout(() => {
                     incoming.style.opacity = '1';
@@ -187,11 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (i === nextIndex) {
                         item.classList.add('active');
                         item.style.opacity = '1';
-                        item.style.transform = 'rotateX(0deg)';
+                        item.style.transform = `rotateX(0deg) translateZ(${faceOffset}px)`;
                         item.style.zIndex = '2';
                     } else {
                         item.style.opacity = '0';
-                        item.style.transform = 'rotateX(90deg)';
+                        item.style.transform = `rotateX(90deg) translateZ(${faceOffset}px)`;
                     }
                 });
                 currentIndex = nextIndex;
@@ -266,6 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Optional: update bg number on resize (if needed)
-        window.addEventListener('resize', () => updateBgNumber(currentIndex));
+        window.addEventListener('resize', () => {
+            setInitialCubeState();
+            updateBgNumber(currentIndex);
+        });
     });
 });
