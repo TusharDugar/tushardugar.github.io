@@ -520,64 +520,107 @@ body::after {
 .services-items-container {
   position: relative;
   width: 100%;
-  height: auto; /* Allow height to adjust to content */
-  display: flex; /* Use flexbox for items */
-  flex-direction: column; /* Stack items vertically */
-  gap: 32px; /* Add space between service items */
-  /* Removed transform-style as its parent is flat now */
+  height: 100%;
+  transform-style: preserve-3d;
 }
 
 /* Remove card background from service items, ensure visible */
 .service-item {
-  background: none; /* Make background transparent */
-  background-color: transparent; /* Ensure transparency */
-  box-shadow: none; /* Remove any box shadows */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0; top: 0;
+  backface-visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.8s cubic-bezier(0.42,0,0.58,1),
+    opacity 0.8s cubic-bezier(0.42,0,0.58,1);
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
-  position: relative; /* Changed from absolute to relative */
-  width: 100%;
-  height: auto; /* Allow height to adjust to content */
-  min-height: 1px; /* Ensure it's not completely collapsed */
-  padding: 20px 24px; /* Standard padding for content inside item */
-  margin: 0; /* No external margins */
-  opacity: 1; /* Make all items fully visible */
-  transform: none; /* Reset any previous transforms */
-  transition: none; /* No animation transitions */
-  backface-visibility: visible; /* Reset to default */
-  z-index: auto; /* Reset z-index */
-  will-change: auto; /* Reset performance hint */
+  justify-content: center;
+  padding: 20px 24px;
+  background: none;
+  box-shadow: none;
 }
 
-/* Remove the large background number if it's no longer in HTML */
+/* Active/current face */
+.service-item.cube-current {
+  opacity: 1;
+  pointer-events: auto;
+  transform: rotateX(0deg) translateZ(0);
+  z-index: 2;
+}
+
+/* Next face (flipping in from below) */
+.service-item.cube-next {
+  opacity: 1;
+  pointer-events: auto;
+  transform: rotateX(90deg) translateZ(0);
+  z-index: 2;
+}
+
+/* Previous face (flipping in from above) */
+.service-item.cube-prev {
+  opacity: 1;
+  pointer-events: auto;
+  transform: rotateX(-90deg) translateZ(0);
+  z-index: 2;
+}
+
+/* Outgoing face (flipping up) */
+.service-item.cube-flip-up {
+  opacity: 0;
+  pointer-events: none;
+  transform: rotateX(-90deg) translateZ(0);
+  z-index: 1;
+}
+
+/* Outgoing face (flipping down) */
+.service-item.cube-flip-down {
+  opacity: 0;
+  pointer-events: none;
+  transform: rotateX(90deg) translateZ(0);
+  z-index: 1;
+}
+
+/* Only 2 faces visible at once, all others hidden */
+.service-item:not(.cube-current):not(.cube-next):not(.cube-prev):not(.cube-flip-up):not(.cube-flip-down) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  transform: rotateX(0deg) translateZ(0);
+}
+
+/* Fade timing for cube faces (out by 40%, in from 60%) */
+@keyframes cubeFadeOut {
+  0% { opacity: 1; }
+  40% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes cubeFadeIn {
+  0% { opacity: 0; }
+  60% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Background number styling */
 .service-bg-number {
-  display: none !important; /* Hide the number entirely if it's still in HTML for some reason */
-}
-
-/* Remove scroll spacer if present */
-.services-section-scroll-spacer {
-  display: none !important;
-}
-
-/* Make service titles orange */
-.service-title {
-  color: var(--accent-primary-sawad) !important; /* Force orange color */
-  font-size: 1.1em; /* Adjust font size */
-  font-weight: 600;
-  margin: 0 0 5px 0;
-  line-height: 1.2;
-  font-style: normal;
-  text-transform: none;
-}
-
-/* Services description can reuse a text-color if desired, here using tool-category-color */
-.service-description {
-  font-size: 0.85em;
-  color: var(--tool-category-color); /* A slightly lighter gray for description */
-  margin: 0;
-  line-height: 1.2;
-  font-style: normal;
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  font-size: 8em;
+  font-weight: 800;
+  color: var(--services-bg-number-color);
+  z-index: 0;
+  pointer-events: none;
+  line-height: 1;
+  user-select: none;
+  display: block;
+  transition: opacity 0.5s;
 }
 
 
