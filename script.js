@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.classList.remove(
                     'cube-current', 'cube-next', 'cube-prev', 'cube-flip-up', 'cube-flip-down'
                 );
+                // Always show all items for cube animation, but only current/next/prev are visible via opacity
+                item.style.visibility = 'visible';
                 if (i === idx) {
                     item.classList.add('cube-current');
                     item.style.opacity = '1';
@@ -131,22 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Helper: update visible service points (titles/descriptions)
-        function updateServicePoints(idx) {
-            serviceItems.forEach((item, i) => {
-                if (i === idx) {
-                    item.style.visibility = 'visible';
-                } else {
-                    item.style.visibility = 'hidden';
-                }
-            });
-        }
-
         // Initial state
         if (serviceItems.length) {
             setCubeClasses(currentIndex, 0);
             updateBgNumber(currentIndex);
-            updateServicePoints(currentIndex);
             if (bgNumber) bgNumber.style.opacity = '1';
         }
 
@@ -170,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             serviceItems[prevIndex].style.animation = 'cubeFadeOut 0.8s linear forwards';
             serviceItems[nextIndex].style.animation = 'cubeFadeIn 0.8s linear forwards';
 
-            // Make both faces visible for the duration of the animation
+            // Both faces must be visible for the duration of the animation
             serviceItems[prevIndex].style.visibility = 'visible';
             serviceItems[nextIndex].style.visibility = 'visible';
 
@@ -183,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentIndex = nextIndex;
                 setCubeClasses(currentIndex, 0);
                 updateBgNumber(currentIndex);
-                updateServicePoints(currentIndex);
                 isAnimating = false;
             }, 800);
         }
