@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Cube Flip Animation for Services Section (X-axis, scroll-based, corrected) ---
-    document.addEventListener('DOMContentLoaded', () => {
+    (() => {
         // Cube flip logic for services
         const servicesSection = document.getElementById('services');
         const itemsContainer = servicesSection?.querySelector('.services-items-container');
@@ -106,11 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.classList.remove('active', 'cube-out', 'cube-in');
                 item.style.opacity = '0';
                 item.style.transform = 'rotateX(90deg)';
+                item.style.zIndex = '1';
             });
             if (serviceItems[0]) {
                 serviceItems[0].classList.add('active');
                 serviceItems[0].style.opacity = '1';
                 serviceItems[0].style.transform = 'rotateX(0deg)';
+                serviceItems[0].style.zIndex = '2';
             }
             if (bgNumber) bgNumber.textContent = '01';
         }
@@ -137,10 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Incoming face
             const incoming = serviceItems[nextIndex];
 
-            // Remove all classes
-            serviceItems.forEach(item => {
+            // Remove all classes and reset z-index
+            serviceItems.forEach((item, i) => {
                 item.classList.remove('active', 'cube-out', 'cube-in');
                 item.style.transition = '';
+                item.style.zIndex = '1';
             });
 
             // Set up outgoing
@@ -148,12 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
             outgoing.style.opacity = '1';
             outgoing.style.transform = 'rotateX(0deg)';
             outgoing.style.transition = `transform ${duration}ms cubic-bezier(0.77,0,0.175,1), opacity ${duration}ms ease-in-out`;
+            outgoing.style.zIndex = '3';
 
             // Set up incoming
             incoming.classList.add('cube-in');
             incoming.style.opacity = '0';
             incoming.style.transform = `rotateX(${direction > 0 ? 90 : -90}deg)`;
             incoming.style.transition = `transform ${duration}ms cubic-bezier(0.77,0,0.175,1), opacity ${duration}ms ease-in-out`;
+            incoming.style.zIndex = '3';
 
             // Force reflow for transition
             void outgoing.offsetWidth;
@@ -178,10 +183,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 serviceItems.forEach((item, i) => {
                     item.classList.remove('active', 'cube-out', 'cube-in');
                     item.style.transition = '';
+                    item.style.zIndex = '1';
                     if (i === nextIndex) {
                         item.classList.add('active');
                         item.style.opacity = '1';
                         item.style.transform = 'rotateX(0deg)';
+                        item.style.zIndex = '2';
                     } else {
                         item.style.opacity = '0';
                         item.style.transform = 'rotateX(90deg)';
