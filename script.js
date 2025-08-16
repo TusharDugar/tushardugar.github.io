@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const wrapper = servicesSection?.querySelector('.services-content-wrapper');
     const container = servicesSection?.querySelector('.services-items-container');
     const items = Array.from(container?.querySelectorAll('.service-item') || []); // Ensure items are array-like
-    const bgNumber = servicesSection?.querySelector('.service-bg-number');
+    const bgNumber = servicesSection?.querySelector('.service-bg-number'); // Corrected selector for bgNumber
 
     // Basic existence check for core elements
     if (!wrapper || !container || items.length === 0 || !bgNumber) {
