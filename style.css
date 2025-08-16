@@ -230,7 +230,7 @@ body::after {
     border-radius: 20px;
     padding: 30px 25px;
     /* Remove box-shadow for a clean look */
-    box-shadow: none !important;
+    box-shadow: 0 10px 30px var(--shadow-color-card-white) !important;
     width: 100%;
     max-width: 370px;
     height: auto;
@@ -244,8 +244,8 @@ body::after {
     text-align: center;
     position: relative;
     overflow: hidden;
-    /* Remove background from about-left-content (white card) */
-    background-color: transparent !important;
+    /* Restore white card for about-left-content */
+    background-color: var(--bg-profile-card) !important;
 }
 .about-left-content.revealed {
     opacity: 1;
@@ -262,17 +262,11 @@ body::after {
     margin-bottom: 25px;
     position: relative;
     transform: translateX(0);
-    /* Remove background from .profile-image-container if needed */
-    background-color: transparent !important;
+    /* Restore orange background for profile-image-container */
+    background-color: var(--accent-primary-sawad) !important;
 }
 
-.profile-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    filter: brightness(0.01);
-}
+/* ...existing code... */
 
 /* Updated: Main Name */
 .about-left-content h3 {
@@ -641,7 +635,7 @@ body::after {
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: none !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
 }
@@ -1355,4 +1349,24 @@ footer h2 {
     .service-item:not(:first-child) {
         opacity: 0 !important; /* Hide all but the first item if motion is reduced */
     }
+}
+
+/* Match service titles to tool-name */
+.service-title {
+    font-size: 1.1em !important;
+    font-weight: 600 !important;
+    color: var(--tool-name-color) !important;
+    margin: 0 0 5px 0 !important;
+    line-height: 1.2 !important;
+    font-style: normal !important;
+    text-transform: none !important;
+}
+
+/* Match service descriptions to tool-category */
+.service-description {
+    font-size: 0.85em !important;
+    color: var(--tool-category-color) !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+    font-style: normal !important;
 }
