@@ -1407,3 +1407,53 @@ footer h2 {
         opacity: 0 !important; /* Hide all but the first item if motion is reduced */
     }
 }
+
+/* ===== Mosaic Background (fixed, behind everything) ===== */
+#mosaic-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.6;  /* 60% so gradient subtly shows */
+  background: #000;
+}
+
+/* Optional: very subtle vignette to match “luxury” feel */
+.mosaic-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% 50%,
+      rgba(255,255,255,0.03) 0%,
+      rgba(255,255,255,0.00) 35%,
+      rgba(0,0,0,0.25) 100%);
+  mix-blend-mode: soft-light;
+}
+
+/* Gradient Glow Layer - behind mosaic */
+#gradient-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -2; /* stays behind the mosaic canvas */
+  background: linear-gradient(-45deg,
+    #ee7752,
+    #e73c7e,
+    #23a6d5,
+    #23d5ab,
+    #ff7f50,
+    #E0F882
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}

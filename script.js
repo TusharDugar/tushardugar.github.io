@@ -342,3 +342,204 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+// ===== Mosaic Background Drawing =====
+(() => {
+  const canvas = document.getElementById('mosaic-bg');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+
+  const SETTINGS = {
+    targetStonesPerMP: 420,
+    minStone: 16,
+    maxStone: 40,
+    groutWidth: 2.2,
+    groutColor: 'rgba(18,18,18,0.95)',
+    baseDarkA: '#0a0a0a',
+    baseDarkB: '#181818',
+    accentChance: 0.18,
+    accentTints: [
+      [8, 16, 22],
+      [18, 12, 22],
+      [10, 20, 16],
+      [20, 16, 10],
+    ],
+    highlightOpacity: 0.18,
+    highlightSize: 0.65,
+    polygonMinSides: 6,
+    polygonMaxSides: 10,
+    jitter: 0.24,
+    overlapAttempts: 24,
+    noiseOpacity: 0.035,
+  };
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const randint = (a, b) => Math.floor(rand(a, b + 1));
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  const px = v => v * devicePixelRatio;
+
+  function resizeCanvas() {
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const w = Math.round(window.innerWidth);
+    const h = Math.round(window.innerHeight);
+
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function generateStones(width, height) {
+    const areaMP = (width * height) / 1_000_000;
+    const targetCount = Math.round(areaMP * SETTINGS.targetStonesPerMP);
+    const stones = [];
+    let guard = targetCount * 30;
+
+    while (stones.length < targetCount && guard-- > 0) {
+      const r = rand(SETTINGS.minStone, SETTINGS.maxStone);
+      const x = rand(r + 8, width - r - 8);
+      const y = rand(r + 8, height - r - 8);
+
+      let ok = true;
+      for (let i = 0; i < stones.length; i++) {
+        const s = stones[i];
+        const dx = x - s.x;
+        const dy = y - s.y;
+        const d2 = dx * dx + dy * dy;
+        const minDist = (r + s.r) * 0.9;
+        if (d2 < minDist * minDist) { ok = false; break; }
+      }
+      if (!ok) continue;
+
+      stones.push({ x, y, r, sides: randint(SETTINGS.polygonMinSides, SETTINGS.polygonMaxSides) });
+    }
+    return stones;
+  }
+
+  function stonePath(ctx, cx, cy, baseR, sides) {
+    const angleStep = (Math.PI * 2) / sides;
+    const pts = [];
+    for (let i = 0; i < sides; i++) {
+      const a = i * angleStep + rand(-0.08, 0.08);
+      const jitter = 1 + rand(-SETTINGS.jitter, SETTINGS.jitter);
+      const r = baseR * jitter * lerp(0.88, 1.06, Math.random());
+      pts.push({ x: cx + Math.cos(a) * r, y: cy + Math.sin(a) * r });
+    }
+
+    const radius = Math.max(2, baseR * 0.18);
+    ctx.beginPath();
+    for (let i = 0; i < pts.length; i++) {
+      const p0 = pts[(i - 1 + pts.length) % pts.length];
+      const p1 = pts[i];
+      const p2 = pts[(i + 1) % pts.length];
+
+      const v01x = p1.x - p0.x, v01y = p1.y - p0.y;
+      const v12x = p2.x - p1.x, v12y = p2.y - p1.y;
+      const len01 = Math.hypot(v01x, v01y);
+      const len12 = Math.hypot(v12x, v12y);
+      const nx1 = p1.x - (v01x / len01) * radius;
+      const ny1 = p1.y - (v01y / len01) * radius;
+      const nx2 = p1.x + (v12x / len12) * radius;
+      const ny2 = p1.y + (v12y / len12) * radius;
+
+      if (i === 0) ctx.moveTo(nx1, ny1);
+      else ctx.lineTo(nx1, ny1);
+      ctx.quadraticCurveTo(p1.x, p1.y, nx2, ny2);
+    }
+    ctx.closePath();
+  }
+
+  function fillStone(ctx, cx, cy, r) {
+    const angle = rand(-Math.PI, Math.PI);
+    const dx = Math.cos(angle) * r * 1.2;
+    const dy = Math.sin(angle) * r * 1.2;
+
+    const grad = ctx.createLinearGradient(cx - dx, cy - dy, cx + dx, cy + dy);
+    grad.addColorStop(0, SETTINGS.baseDarkA);
+    grad.addColorStop(1, SETTINGS.baseDarkB);
+
+    ctx.save();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    if (Math.random() < SETTINGS.accentChance) {
+      const [tr, tg, tb] = SETTINGS.accentTints[Math.floor(Math.random() * SETTINGS.accentTints.length)];
+      ctx.globalCompositeOperation = 'overlay';
+      ctx.globalAlpha = 0.18;
+      ctx.fillStyle = `rgb(${tr},${tg},${tb})`;
+      ctx.fill();
+    }
+
+    ctx.globalCompositeOperation = 'screen';
+    ctx.globalAlpha = SETTINGS.highlightOpacity;
+    const h = ctx.createRadialGradient(cx - dx * 0.25, cy - dy * 0.25, 0, cx, cy, r * SETTINGS.highlightSize);
+    h.addColorStop(0.0, 'rgba(255,255,255,0.7)');
+    h.addColorStop(0.4, 'rgba(255,255,255,0.08)');
+    h.addColorStop(1.0, 'rgba(255,255,255,0.0)');
+    ctx.fillStyle = h;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawNoise(ctx, w, h) {
+    const density = Math.round((w * h) / 700);
+    ctx.save();
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.globalAlpha = SETTINGS.noiseOpacity;
+    for (let i = 0; i < density; i++) {
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const s = Math.random() * 1.5 + 0.2;
+      ctx.fillStyle = `rgba(${rand(200,255)},${rand(200,255)},${rand(200,255)},${rand(0.02,0.06)})`;
+      ctx.fillRect(x, y, s, s);
+    }
+    ctx.restore();
+  }
+
+  function render() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+    bgGrad.addColorStop(0, '#000');
+    bgGrad.addColorStop(1, '#050505');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, w, h);
+
+    const stones = generateStones(w, h);
+
+    ctx.lineWidth = SETTINGS.groutWidth;
+    ctx.strokeStyle = SETTINGS.groutColor;
+
+    for (const s of stones) {
+      stonePath(ctx, s.x, s.y, s.r, s.sides);
+      fillStone(ctx, s.x, s.y, s.r);
+      ctx.stroke();
+    }
+
+    drawNoise(ctx, w, h);
+  }
+
+  let resizeRAF = null;
+  function onResize() {
+    if (resizeRAF) cancelAnimationFrame(resizeRAF);
+    resizeRAF = requestAnimationFrame(() => {
+      resizeCanvas();
+      render();
+      resizeRAF = null;
+    });
+  }
+
+  resizeCanvas();
+  render();
+  window.addEventListener('resize', onResize, { passive: true });
+
+  window.__mosaic = {
+    redraw() { render(); },
+    settings: SETTINGS
+  };
+})();
