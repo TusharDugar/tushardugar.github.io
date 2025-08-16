@@ -32,12 +32,6 @@
     --services-bg-number-color: rgba(51, 51, 51, 0.8); /* Dark gray, more visible */
     --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
     --services-description-color: var(--text-light); /* White for descriptions */
-    
-
-    /* CSS Variables for sticky services top offset (set by JS) */
-    --services-sticky-top-h2: 0px;
-    --services-sticky-top-wrapper: 0px;
-    --faceZ: 0px; /* Default, will be set by JS */
 }
 
 /* Global utility text colors */
@@ -229,8 +223,7 @@ body::after {
     color: var(--text-dark-card);
     border-radius: 20px;
     padding: 30px 25px;
-    /* Remove box-shadow for a clean look */
-    box-shadow: 0 10px 30px var(--shadow-color-card-white) !important;
+    box-shadow: 0 10px 30px var(--shadow-color-card-white); /* Kept original shadow */
     width: 100%;
     max-width: 370px;
     height: auto;
@@ -244,8 +237,7 @@ body::after {
     text-align: center;
     position: relative;
     overflow: hidden;
-    /* Restore white card for about-left-content */
-    background-color: var(--bg-profile-card) !important;
+    background-color: var(--bg-profile-card); /* Restore white card background */
 }
 .about-left-content.revealed {
     opacity: 1;
@@ -262,8 +254,7 @@ body::after {
     margin-bottom: 25px;
     position: relative;
     transform: translateX(0);
-    /* Restore orange background for profile-image-container */
-    background-color: var(--accent-primary-sawad) !important;
+    background-color: var(--accent-primary-sawad); /* Restore orange background */
 }
 
 /* Updated: Main Name */
@@ -461,127 +452,116 @@ body::after {
 }
 
 
-/* --- Services Section Header (DesignCube About style) --- */
-.services-section-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 48px;
-  /* Center only the services-section-header (DesignCube style) */
-  text-align: center !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.services-section-header .services-heading {
-  font-family: 'Poppins', sans-serif;
-  font-size: 3.2em;
-  font-weight: 800;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.25em;
-  line-height: 1.1;
-  color: var(--text-light);
-  position: static;
-  padding-bottom: 0;
-  z-index: 1;
-  /* Remove sticky and left-align for this section */
-}
-
-.services-section-header .services-divider {
-  width: 56px;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #00FFC2 0%, #FF6B00 100%);
-  margin: 0 auto 0.5em auto;
-  opacity: 0.85;
-}
-
-/* Responsive adjustments for the header */
-@media (max-width: 900px) {
-  .services-section-header .services-heading {
-    font-size: 2.2em;
-  }
-  .services-section-header .services-divider {
-    width: 36px;
-    height: 3px;
-  }
-}
-
-
-/* === SERVICES SECTION (STATIC, NO CARD BACKGROUND, ORANGE HEADINGS) === */
+/* --- SERVICES SECTION (STATIC, NO CARD BACKGROUND, ORANGE HEADINGS) --- */
 .services-section {
   position: relative;
   padding-top: 80px;
   padding-bottom: 100px;
   text-align: left;
   z-index: 1;
-  background: none !important;
-  background-color: transparent !important;
+  /* Removed perspective, as it's not a 3D stage anymore */
+  /* Remove any background color from the section itself if it was there for 3D */
+  background: none;
+}
+
+/* Header for Services section (MY SERVICES title) */
+.services-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  margin-bottom: 48px;
+  text-align: center; /* Center text within the header */
+}
+
+.services-section-header .services-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.2em; /* Smaller than previous 5em for a subtitle look */
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: var(--text-light); /* White for the heading */
+  /* Resetting any sticky or absolute positioning from previous 3D cube logic */
+  position: static;
+  padding-bottom: 0;
+  z-index: auto;
+  margin-top: 0; /* Remove default h2 margin-top */
+  margin-bottom: 0.25em; /* Small space below heading */
+}
+
+.services-section-header .services-divider {
+  width: 56px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent-secondary-sawad) 0%, var(--accent-primary-sawad) 100%); /* Green to Orange gradient */
+  margin: 0 auto; /* Center the divider */
+  opacity: 0.85;
+}
+
+
+.services-content-wrapper {
+  position: relative; /* Changed from sticky */
+  top: auto; /* Removed sticky top positioning */
+  height: auto; /* Allow height to adjust to content */
+  overflow: visible; /* Show all content, no clipping */
+  transform-style: flat; /* Reset to default */
+  transform: none; /* Reset any previous transforms */
+  display: flex; /* Still use flex to arrange inner items */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: flex-start; /* Align to top */
+  align-items: flex-start; /* Align to left */
+  /* No perspective applied here now */
 }
 
 .services-items-container {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  width: 100%;
-  height: auto;
   position: relative;
+  width: 100%;
+  height: auto; /* Allow height to adjust to content */
+  display: flex; /* Use flexbox for items */
+  flex-direction: column; /* Stack items vertically */
+  gap: 32px; /* Add space between service items */
+  /* Removed transform-style as its parent is flat now */
 }
 
-/* Remove card background from service items */
+/* Remove card background from service items, ensure visible */
 .service-item {
-  background: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
+  background: none; /* Make background transparent */
+  background-color: transparent; /* Ensure transparency */
+  box-shadow: none; /* Remove any box shadows */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  position: relative;
+  position: relative; /* Changed from absolute to relative */
   width: 100%;
-  min-height: 1px;
-  padding: 20px 24px;
-  margin: 0;
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
-  z-index: auto !important;
-  /* Remove any animation/3D classes effect */
+  height: auto; /* Allow height to adjust to content */
+  min-height: 1px; /* Ensure it's not completely collapsed */
+  padding: 20px 24px; /* Standard padding for content inside item */
+  margin: 0; /* No external margins */
+  opacity: 1; /* Make all items fully visible */
+  transform: none; /* Reset any previous transforms */
+  transition: none; /* No animation transitions */
+  backface-visibility: visible; /* Reset to default */
+  z-index: auto; /* Reset z-index */
+  will-change: auto; /* Reset performance hint */
 }
 
-/* Make service titles orange */
-.service-title {
-  color: var(--accent-primary-sawad) !important;
-  font-size: 1.1em !important;
-  font-weight: 600 !important;
-  margin: 0 0 5px 0 !important;
-  line-height: 1.2 !important;
-  font-style: normal !important;
-  text-transform: none !important;
-}
-.service-description {
-  font-size: 0.85em !important;
-  color: var(--tool-category-color) !important;
-  margin: 0 !important;
-  line-height: 1.2 !important;
-  font-style: normal !important;
+/* Remove all state classes, as they are not used in static mode */
+.service-item.front,
+.service-item.above,
+.service-item.below,
+.service-item.exit-to-top,
+.service-item.exit-to-bottom,
+.service-item.enter-from-bottom,
+.service-item.enter-from-top,
+.service-item.active-content {
+    /* These classes should effectively have no effect in a static setup */
+    /* They are included here just in case they were left in JS, but will be ignored */
 }
 
-/* Large background number: visible and static */
+/* Remove the large background number if it's no longer in HTML */
 .service-bg-number {
-  position: absolute;
-  top: 150px;
-  right: 50px;
-  font-size: 15em;
-  font-weight: 800;
-  color: var(--services-bg-number-color);
-  z-index: 0;
-  pointer-events: none;
-  line-height: 1;
-  user-select: none;
-  display: block !important;
+  display: none !important; /* Hide the number entirely if it's still in HTML for some reason */
 }
 
 /* Remove scroll spacer if present */
@@ -589,15 +569,34 @@ body::after {
   display: none !important;
 }
 
+/* Make service titles orange */
+.service-title {
+  color: var(--accent-primary-sawad) !important; /* Force orange color */
+  font-size: 1.1em; /* Adjust font size */
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  line-height: 1.2;
+  font-style: normal;
+  text-transform: none;
+}
 
-/* Premium Tools Section Styles */
+/* Services description can reuse a text-color if desired, here using tool-category-color */
+.service-description {
+  font-size: 0.85em;
+  color: var(--tool-category-color); /* A slightly lighter gray for description */
+  margin: 0;
+  line-height: 1.2;
+  font-style: normal;
+}
+
+
+/* Premium Tools Section Styles (UNCHANGED, except specific background restores) */
 .tools-section {
     padding-top: 80px;
     padding-bottom: 80px;
     text-align: left;
-    /* Remove background from services-section and tools-section */
-    background: none !important;
-    background-color: transparent !important;
+    /* Ensure it has no background color from previous general changes */
+    background: none;
 }
 
 .tools-heading {
@@ -609,7 +608,6 @@ body::after {
     text-transform: uppercase;
 }
 
-/* Reusing text-white and text-gray for tools-heading */
 .tools-heading .text-white {
     color: var(--text-light);
     display: block;
@@ -627,22 +625,15 @@ body::after {
 }
 
 .tool-card {
-    /* Remove background from .tool-card */
-    background-color: transparent !important;
+    background-color: var(--bg-tool-card); /* Restore dark background for tool cards */
     border-radius: 15px;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Restore shadow */
     transition: transform 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
-}
-
-/* Restore dark card background for premium tools section */
-.tool-card {
-    background-color: var(--bg-tool-card) !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
 }
 
 .tool-card:hover {
@@ -690,9 +681,9 @@ body::after {
 }
 
 
-/* Footer (Contact Section - Full Width, adjusted for smaller height) */
+/* Footer (Contact Section - Full Width, adjusted for smaller height) (UNCHANGED) */
 footer {
-    background-color: var(--bg-main) !important;
+    background-color: var(--bg-main); /* Restore solid black background for footer */
     color: var(--text-light);
     text-align: center;
     padding: 60px 0;
@@ -841,8 +832,7 @@ footer h2 {
 }
 
 
-/* Responsive Design */
-/* Separate media queries for better organization and cascading */
+/* Responsive Design (UNCHANGED, except Services section adjustments) */
 
 @media (max-width: 1200px) {
     .main-layout-container {
@@ -852,9 +842,7 @@ footer h2 {
         width: 100%;
         padding-right: 0;
         max-width: 450px;
-        margin: 0 auto;
     }
-    /* ISSUE 4: Profile image section longer by reducing width */
     .about-left-content {
         max-width: 320px;
         padding: 25px 20px;
@@ -908,8 +896,6 @@ footer h2 {
         right: -45px;
     }
 
-    /* Adjustments for hero content */
-    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
     .hero-heading {
         font-size: 5.5em;
         margin-bottom: 25px;
@@ -919,36 +905,25 @@ footer h2 {
         margin-bottom: 60px;
     }
 
-    /* Adjustments for services section */
+    /* Services section adjustments for responsiveness */
     .services-section {
         padding-top: 60px;
         padding-bottom: 80px;
     }
-    .services-content-wrapper {
-        height: 300px;
-        perspective: 1000px; /* Adjusted for this breakpoint */
-        align-items: center; /* Center content vertically within its fixed height */
+    .services-section-header .services-heading {
+        font-size: 2.2em;
     }
-    .services-heading {
-        font-size: 4.5em;
-        margin-bottom: 30px;
+    .services-section-header .services-divider {
+        width: 36px;
+        height: 3px;
+    }
+    .services-content-wrapper {
+        height: auto; /* Allow height to adjust */
     }
     .service-item {
         padding: 15px;
     }
-    .service-bg-number {
-        font-size: 12em;
-        right: 40px;
-    }
-    .service-title {
-        font-size: 1.8em;
-    }
-    .service-description {
-        font-size: 1.1em; /* Adjusted to fit better */
-        max-width: 500px;
-    }
 
-    /* Adjustments for tools section */
     .tools-section {
         padding-top: 60px;
         padding-bottom: 80px;
@@ -1000,8 +975,6 @@ footer h2 {
         flex-direction: column;
         padding-top: 0;
     }
-    /* Specific adjustments for profile card */
-    /* ISSUE 4: Profile image section longer by reducing width */
     .about-left-content {
         max-width: 350px;
         padding: 30px 25px;
@@ -1071,7 +1044,6 @@ footer h2 {
         right: -55px;
     }
 
-    /* Adjustments for hero content */
     .right-column-scroll {
         width: 100%;
         padding: 40px 20px;
@@ -1079,7 +1051,6 @@ footer h2 {
         padding-top: 50px;
         text-align: left;
     }
-    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
     .hero-heading {
         font-size: 4em;
         margin-bottom: 20px;
@@ -1091,37 +1062,21 @@ footer h2 {
         margin-bottom: 40px;
     }
 
-    /* Adjustments for services section */
+    /* Services section adjustments for responsiveness */
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
     }
-    .services-content-wrapper {
-        height: 250px;
-        perspective: 800px; /* Adjusted for this breakpoint */
-        align-items: center; /* Center content vertically within its fixed height */
+    .services-section-header .services-heading {
+        font-size: 2.8em;
     }
-    .services-heading {
-        font-size: 3.5em;
-        margin-bottom: 30px;
+    .services-content-wrapper {
+        height: auto; /* Allow height to adjust */
     }
     .service-item {
         padding: 10px;
     }
-    .service-bg-number {
-        font-size: 8em;
-        right: 40px;
-    }
-    .service-title {
-        font-size: 1.6em;
-        margin-bottom: 10px;
-    }
-    .service-description {
-        font-size: 0.9em;
-        max-width: 100%;
-    }
 
-    /* Adjustments for tools section */
     .tools-section {
         padding-top: 40px;
         padding-bottom: 60px;
@@ -1150,6 +1105,11 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
+    }
+
+    footer {
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
@@ -1189,8 +1149,6 @@ footer h2 {
         font-size: 0.95em;
     }
 
-    /* Specific adjustments for profile card */
-    /* ISSUE 4: Profile image section longer by reducing width */
     .about-left-content {
         max-width: 320px;
         padding: 25px 20px;
@@ -1258,12 +1216,10 @@ footer h2 {
         right: -45px;
     }
 
-    /* Adjustments for hero content */
     .right-column-scroll {
         padding: 30px 15px;
         padding-top: 40px;
     }
-    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
     .hero-heading {
         font-size: 3em;
         margin-bottom: 15px;
@@ -1274,35 +1230,18 @@ footer h2 {
         margin-bottom: 30px;
     }
 
-    /* Services Section - mobile specific overrides */
+    /* Services section adjustments for responsiveness */
     .services-section {
         padding-top: 30px;
         padding-bottom: 50px;
     }
     .services-content-wrapper {
-        height: 230px;
-        perspective: 700px; /* Adjusted for this breakpoint */
-        align-items: center; /* Center content vertically within its fixed height */
-    }
-    .services-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
+        height: auto; /* Allow height to adjust */
     }
     .service-item {
         padding: 12px;
     }
-    .service-bg-number {
-        font-size: 6em;
-        right: 40px;
-    }
-    .service-title {
-        font-size: 1.4em;
-    }
-    .service-description {
-        font-size: 0.8em;
-    }
 
-    /* Adjustments for tools section */
     .tools-section {
         padding-top: 30px;
         padding-bottom: 50px;
@@ -1318,7 +1257,7 @@ footer h2 {
         max-width: 100%;
     }
     .tool-card {
-        padding: 12px;
+        padding: 15px;
         gap: 8px;
     }
     .tool-icon-wrapper {
@@ -1332,6 +1271,11 @@ footer h2 {
     .tool-category {
         font-size: 0.75em;
     }
+
+    footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 /* Accessibility: Reduce motion for users who prefer it */
@@ -1344,34 +1288,30 @@ footer h2 {
         opacity: 1 !important;
     }
 
-    /* Services cube animation items */
+    /* Services cube animation items - these rules are less impactful now as the section is static */
     .service-item {
         transition: none !important;
         transform: none !important;
         opacity: 1 !important;
     }
-    /* Reset current active state (first item always visible) */
-    .service-item:not(:first-child) {
-        opacity: 0 !important; /* Hide all but the first item if motion is reduced */
-    }
+    /* No need for complex :not(:first-child) rules for a static list */
 }
 
-/* Match service titles to tool-name */
+/* Specific styling for the Services section titles and descriptions */
 .service-title {
-    font-size: 1.1em !important;
-    font-weight: 600 !important;
-    color: var(--tool-name-color) !important;
-    margin: 0 0 5px 0 !important;
-    line-height: 1.2 !important;
-    font-style: normal !important;
-    text-transform: none !important;
+    color: var(--accent-primary-sawad); /* Orange color for titles */
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+    font-style: normal;
+    text-transform: none;
 }
 
-/* Match service descriptions to tool-category */
 .service-description {
-    font-size: 0.85em !important;
-    color: var(--tool-category-color) !important;
-    margin: 0 !important;
-    line-height: 1.2 !important;
-    font-style: normal !important;
+    font-size: 0.85em;
+    color: var(--text-medium); /* Use a medium gray for descriptions for subtlety */
+    margin: 0;
+    line-height: 1.2;
+    font-style: normal;
 }
