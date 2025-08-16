@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let cubeWidth = 0; // Local variable for calculated width
         const width = window.innerWidth;
         if (width >= 1024) cubeWidth = 900;
-        else if (width >= 768) cubeWidth = 700; // MODIFIED: Increased for tablets
-        else cubeWidth = 400; // MODIFIED: Increased for mobiles
+        else if (width >= 768) cubeWidth = 700; // MODIFIED: Increased for tablets (was 640)
+        else cubeWidth = 400; // MODIFIED: Increased for mobiles (was 300)
 
         // Apply width to the servicesItemsContainer (the cube itself)
         gsap.set(servicesItemsContainer, { width: cubeWidth });
