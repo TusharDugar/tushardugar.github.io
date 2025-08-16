@@ -568,16 +568,17 @@ html::before { /* Re-using html::before to cover the whole page */
 
 
 .service-bg-number {
-  position: absolute; /* Changed from sticky to absolute for consistent positioning */
-  top: 50%; /* Center vertically within the section */
-  right: 50px;
+  position: absolute;
+  top: 50%;
+  /* Shift further right to avoid overlap with text */
+  right: 5vw; /* Use viewport width for better responsiveness */
   transform: translateY(-50%);
-  font-size: 15em; /* Larger as in your previous implementation for aesthetic */
+  font-size: 15em;
   font-weight: 800;
   color: var(--services-bg-number-color);
-  z-index: 1; /* Ensure it's above background elements but behind text */
+  z-index: 0; /* Lower than text, so it's always behind */
   pointer-events: none;
-  line-height: 1; /* Prevent extra space */
+  line-height: 1;
   user-select: none;
 }
 
@@ -959,7 +960,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 12em;
-        right: 40px;
+        right: 3vw; /* Responsive right shift */
+        z-index: 0;
     }
     .service-title {
         font-size: 1.8em;
@@ -1131,7 +1133,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 8em;
-        right: 40px;
+        right: 2vw;
+        z-index: 0;
     }
     .service-title {
         font-size: 1.6em;
@@ -1320,7 +1323,8 @@ footer h2 {
     }
     .service-bg-number {
         font-size: 6em;
-        right: 40px;
+        right: 2vw;
+        z-index: 0;
     }
     .service-title {
         font-size: 1.4em;
