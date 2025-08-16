@@ -145,7 +145,6 @@ html::before {
         linear-gradient(to right, transparent 99%, white 1%),
         linear-gradient(to bottom, transparent 99%, white 1%),
         linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%),
-        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%),
         linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
 
     /* Mask sizes */
@@ -245,7 +244,6 @@ html::before {
 .left-column-sticky {
     flex-shrink: 0;
     flex-basis: 370px; /* NEW: Fixed width for the sticky column, matching max-width of the card */
-    /* REMOVED: width: 30%; */
     padding-right: 0; /* REMOVED: No internal padding right, gap is handled by parent */
     box-sizing: border-box;
     position: sticky;
@@ -269,9 +267,11 @@ html::before {
     max-width: 370px;
     height: auto;
     box-sizing: border-box;
-    opacity: 0; /* Remains opaque to be revealed by JS */
-    transform: translateY(40px); /* Remains transformed to be revealed by JS */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Uses reveal-item transition */
+    /* MODIFIED: Make it visible on load, no initial animation for the card itself */
+    opacity: 1; 
+    transform: translateY(0);
+    transition: none; /* No transition for its default state */
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -280,10 +280,13 @@ html::before {
     overflow: hidden;
     background-color: var(--bg-profile-card);
 }
-.about-left-content.revealed { /* Class added by JS to show the card */
+/* The .revealed class is no longer applied to .about-left-content by JS if it's always visible by default */
+/* However, it's good practice to keep the class definition if it *could* be applied in other contexts */
+.about-left-content.revealed {
     opacity: 1;
     transform: translateY(0);
 }
+
 
 /* New: Profile Image Container */
 .profile-image-container {
@@ -452,7 +455,6 @@ html::before {
 /* Right Column (Scrolling) */
 .right-column-scroll {
     flex-grow: 1;
-    /* REMOVED: width: 65%; */
     padding-left: 0; /* REMOVED: Gap handled by parent's 'gap' property */
     padding-right: 80px; /* Keep this for padding on the right edge of the content */
     padding-bottom: 100px;
@@ -857,8 +859,6 @@ footer h2 {
     }
     .left-column-sticky {
         flex-basis: 320px; /* Adjusted fixed width */
-        /* REMOVED: width: 100%; */
-        /* REMOVED: max-width: 450px; */
     }
     .about-left-content {
         max-width: 320px; /* Maintain consistent max-width */

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --------------------------
-    // Intersection Observer for General Reveal (UNCHANGED)
+    // Intersection Observer for General Reveal (MODIFIED for About section)
     // --------------------------
     const sectionObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
@@ -35,39 +35,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     // Observe all main sections with the general section observer
-    // Note: The 'about' section handling is separate below
+    // NOTE: The #about section's main card (.about-left-content) is now always visible by CSS
+    // The stagger animation for its *children* is handled separately below.
     document.querySelectorAll('#hero-right, #tools, #services, #contact').forEach(el => {
         if (el) sectionObserver.observe(el);
     });
 
 
     // --------------------------
-    // About Section Stagger Reveal (DesignCube-like) AND About Card Reveal
+    // About Section Stagger Reveal (DesignCube-like)
     // --------------------------
     const aboutSection = document.getElementById('about');
-    // Get the main about card, which has the initial opacity:0
-    const aboutLeftContent = aboutSection ? aboutSection.querySelector('.about-left-content') : null;
+    // aboutLeftContent is defined but no longer directly observed for initial reveal by JS,
+    // as it's set to be visible by default in CSS.
+    const aboutLeftContent = aboutSection ? aboutSection.querySelector('.about-left-content') : null; 
 
-    // Check for the specific 'reveal-parent' for staggered children
-    const revealStaggerParent = aboutSection ? aboutSection.querySelector('.profile-card-wrapper.reveal-parent') : null; 
+    // This is the parent of the elements that *will* stagger reveal.
+    // Ensure your HTML structure has an element with `profile-card-wrapper` and `reveal-parent` classes
+    // that contains the `.reveal-child` elements within your About Me card.
+    const revealStaggerParent = aboutSection ? aboutSection.querySelector('.profile-card-wrapper.reveal-parent') : null;
     const revealStaggerChildren = revealStaggerParent ? revealStaggerParent.querySelectorAll('.reveal-child') : [];
 
     if (revealStaggerParent && revealStaggerChildren.length > 0) {
-        // If a specific stagger parent and children are found, apply the stagger animation
         const staggerObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Ensure the main card itself is revealed first if it's the stagger parent
-                    // or if it's an ancestor of the stagger parent.
-                    // If aboutLeftContent is the staggerParent, it will get 'revealed'
-                    // immediately by this check.
-                    if (aboutLeftContent && aboutLeftContent === entry.target) {
-                        aboutLeftContent.classList.add('revealed');
-                    } else if (aboutLeftContent && aboutLeftContent.contains(entry.target) && !aboutLeftContent.classList.contains('revealed')) {
-                        // If the stagger parent is *inside* aboutLeftContent, reveal aboutLeftContent first
-                        aboutLeftContent.classList.add('revealed');
-                    }
-
+                    // The aboutLeftContent card itself is now visible by default via CSS.
+                    // This block only focuses on staggering its internal .reveal-child elements.
                     revealStaggerChildren.forEach((child, index) => {
                         setTimeout(() => {
                             child.classList.add('revealed');
@@ -78,28 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, { threshold: 0.1 });
 
-        // Observe the stagger parent
+        // Observe the stagger parent to trigger the staggered animation of its children.
         staggerObserver.observe(revealStaggerParent);
-
-        // Additionally, ensure the main card itself is observed if it's not the stagger parent
-        // and it has its own reveal properties (opacity:0, transform)
-        if (aboutLeftContent && aboutLeftContent !== revealStaggerParent) {
-            sectionObserver.observe(aboutLeftContent);
-        }
-
     } else {
-        // If no specific stagger setup, ensure the main about card is revealed directly
-        if (aboutLeftContent) {
-            sectionObserver.observe(aboutLeftContent); // Observe the card directly
-        } else if (aboutSection) {
-            // Fallback: if even the card isn't found, observe the whole section
-            sectionObserver.observe(aboutSection);
-        }
+        // Fallback: If no specific stagger parent/children are found,
+        // and if you want any other part of the 'about' section to reveal,
+        // you would observe 'aboutSection' itself here.
+        // For this current setup, since the card is visible by default, this 'else' is less critical.
+        // If (aboutSection) sectionObserver.observe(aboutSection); // Re-enable if needed for other reveals
     }
 
 
     // --------------------------
-    // Services Section GSAP 3D Cube Animation
+    // Services Section GSAP 3D Cube Animation (UNCHANGED logic from previous fix)
     // --------------------------
     // Ensure GSAP and ScrollTrigger are loaded
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
@@ -141,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set initial transforms for each service item (face)
         // This is crucial because GSAP animates *from* these set values.
         serviceItems.forEach((item, i) => {
-            // Corrected transform string usage as per your diagnosis.
             gsap.set(item, {
                 transform: `rotateX(${i * 90}deg) translateZ(${faceOffset}px)`,
                 opacity: 1 // All faces are initially visible for a scrubbing effect
@@ -150,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set the counter-translate for the wrapper to bring the whole cube forward
         // so its 'front' face (rotateX:0) aligns with the viewer's plane.
-        // Corrected transform string usage.
         gsap.set(servicesContentWrapper, { transform: `translateZ(${-faceOffset}px)` });
     }
 
