@@ -619,6 +619,17 @@ html::before { /* Re-using html::before to cover the whole page */
     top: 0;
     z-index: 2; /* Above the cube */
     padding-bottom: 20px;
+    /* Fix: prevent unwanted line breaks on large screens */
+    white-space: nowrap;
+    word-break: normal;
+}
+
+/* Responsive: allow wrapping on smaller screens */
+@media (max-width: 900px) {
+    .services-heading {
+        white-space: normal;
+        word-break: break-word;
+    }
 }
 
 /* Service Title - Reverted to orange, no italics */
@@ -1300,4 +1311,29 @@ footer h2 {
       linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
       linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
   }
+}
+
+/* ===== CSS for the luxury mosaic background only ===== */
+#lux-mosaic-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.6;                /* overall transparency (≈60%) */
+  background: #0e0e10;         /* deep matte base behind the lines */
+}
+
+#lux-mosaic-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* optional: tiny vignette to match the moody reference */
+#lux-mosaic-bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(0,0,0,.35) 100%);
+  pointer-events: none;
 }

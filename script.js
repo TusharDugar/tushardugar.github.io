@@ -543,3 +543,234 @@ document.addEventListener('DOMContentLoaded', () => {
     settings: SETTINGS
   };
 })();
+
+/* ===== JS for the mosaic background only ===== */
+(() => {
+  const cfg = {
+    cell: 24,                 // grid size in px (tweak 22–28 to match taste)
+    baseAlpha: 0.035,         // faint base grid line alpha
+    brightAlphaMin: 0.18,     // min alpha of highlighted segments
+    brightAlphaMax: 0.35,     // max alpha of highlighted segments
+    hueBase: 220,             // cool steel-blue
+    hueJitter: 12,            // subtle per-segment hue variance
+    lineWidth: 1,             // 1px crisp lines
+    walkers: 380,             // how many “step” paths to carve
+    minSteps: 6,              // min steps per walker
+    maxSteps: 28,             // max steps per walker
+    turnProb: 0.33,           // chance to turn left/right
+    shadowBlur: 1.5,          // soft halo for highlighted lines
+    gradientOpacity: 0.5,     // ~50% overlay only on brightest segments
+    gradientSpeed: 0.035      // speed of the subtle color drift
+  };
+
+  const wrapper = document.getElementById('lux-mosaic-bg');
+  const canvas  = document.getElementById('lux-mosaic-canvas');
+  if (!wrapper || !canvas) return;
+  const ctx     = canvas.getContext('2d');
+
+  // Offscreen canvases: mask = bright segments; overlay = moving gradient
+  const maskCanvas = document.createElement('canvas');
+  const maskCtx    = maskCanvas.getContext('2d');
+  const overlay    = document.createElement('canvas');
+  const octx       = overlay.getContext('2d');
+
+  // Edge stores
+  let cols=0, rows=0, W=0, H=0, dpr=1;
+  const V = new Map();  // vertical edges: key "v_i_j" -> brightness 0..1
+  const HZ = new Map(); // horizontal edges: key "h_i_j" -> brightness 0..1
+
+  // RNG (deterministic-ish but not fixed)
+  const rand = (() => {
+    let s = (Date.now() % 2147483647);
+    return () => (s = (s*48271)%2147483647)/2147483647;
+  })();
+
+  function keyV(i,j){ return `v_${i}_${j}`; }   // column i, segment j
+  function keyH(i,j){ return `h_${i}_${j}`; }   // row j, segment i
+
+  function resize(){
+    dpr = Math.max(1, window.devicePixelRatio || 1);
+    W = wrapper.clientWidth;
+    H = wrapper.clientHeight;
+
+    [canvas, maskCanvas, overlay].forEach(c=>{
+      c.width = Math.floor(W*dpr);
+      c.height= Math.floor(H*dpr);
+      c.style.width = W+'px';
+      c.style.height= H+'px';
+    });
+
+    [ctx, maskCtx, octx].forEach(c=>{
+      c.setTransform(dpr,0,0,dpr,0,0);
+      c.imageSmoothingEnabled = false;
+    });
+
+    cols = Math.ceil(W / cfg.cell);
+    rows = Math.ceil(H / cfg.cell);
+
+    buildPattern();
+    render(0);
+  }
+
+  function buildPattern(){
+    V.clear(); HZ.clear();
+
+    // Carve “stepped” polylines on grid using random walkers
+    const walkers = cfg.walkers;
+    for(let w=0; w<walkers; w++){
+      let x = Math.floor(rand()*cols);
+      let y = Math.floor(rand()*rows);
+      let dir = (rand()*4)|0; // 0:R,1:D,2:L,3:U
+      const steps = cfg.minSteps + ((cfg.maxSteps-cfg.minSteps)*rand()|0);
+      let brightness = cfg.brightAlphaMin + (cfg.brightAlphaMax-cfg.brightAlphaMin)*rand();
+
+      for(let s=0; s<steps; s++){
+        // clamp bounds
+        x = Math.max(0, Math.min(cols-1, x));
+        y = Math.max(0, Math.min(rows-1, y));
+
+        // register edge by direction (edge sits between cell and neighbor)
+        if(dir===0){   // right
+          const k = keyV(x+1, y);
+          V.set(k, Math.max(V.get(k)||0, brightness));
+          x++;
+        }else if(dir===1){ // down
+          const k = keyH(x, y+1);
+          HZ.set(k, Math.max(HZ.get(k)||0, brightness));
+          y++;
+        }else if(dir===2){ // left
+          const k = keyV(x, y);
+          V.set(k, Math.max(V.get(k)||0, brightness));
+          x--;
+        }else{            // up
+          const k = keyH(x, y);
+          HZ.set(k, Math.max(HZ.get(k)||0, brightness));
+          y--;
+        }
+
+        // random turn to create right-angle “steps”
+        if(rand() < cfg.turnProb){
+          dir = (dir + (rand()<0.5 ? 1 : 3)) & 3; // left or right turn
+        }
+      }
+    }
+
+    drawStatic();
+    drawMask(); // white mask of bright segments for gradient overlay
+  }
+
+  function drawStatic(){
+    // clear
+    ctx.clearRect(0,0,W,H);
+
+    // 1) base faint full grid
+    ctx.save();
+    ctx.lineWidth = cfg.lineWidth;
+    ctx.strokeStyle = `rgba(255,255,255,${cfg.baseAlpha})`;
+    ctx.beginPath();
+
+    // pixel-aligned lines: 0.5 offset for crisp 1px strokes
+    const offset = 0.5;
+    for(let i=0;i<=cols;i++){
+      const x = Math.round(i*cfg.cell)+offset;
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+    }
+    for(let j=0;j<=rows;j++){
+      const y = Math.round(j*cfg.cell)+offset;
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // 2) highlighted segments (cool steel with tiny hue jitter)
+    ctx.save();
+    ctx.lineCap = 'square';
+    ctx.lineWidth = cfg.lineWidth;
+    ctx.shadowBlur = cfg.shadowBlur;
+    for(const [k,a] of V){
+      const [, i, j] = k.split('_').map(Number);
+      const x = Math.round(i*cfg.cell) + 0.5;
+      const y1= Math.round(j*cfg.cell) + 0.5;
+      const y2= Math.round((j+1)*cfg.cell) + 0.5;
+      const hue = cfg.hueBase + (rand()*2-1)*cfg.hueJitter;
+      ctx.shadowColor = `hsla(${hue},20%,70%,${a*0.9})`;
+      ctx.strokeStyle  = `hsla(${hue},12%,80%,${a})`;
+      ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y2); ctx.stroke();
+    }
+    for(const [k,a] of HZ){
+      const [, i, j] = k.split('_').map(Number);
+      const y = Math.round(j*cfg.cell) + 0.5;
+      const x1= Math.round(i*cfg.cell) + 0.5;
+      const x2= Math.round((i+1)*cfg.cell) + 0.5;
+      const hue = cfg.hueBase + (rand()*2-1)*cfg.hueJitter;
+      ctx.shadowColor = `hsla(${hue},20%,70%,${a*0.9})`;
+      ctx.strokeStyle  = `hsla(${hue},12%,80%,${a})`;
+      ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawMask(){
+    // white mask where bright segments exist (used to clip gradient overlay)
+    maskCtx.clearRect(0,0,W,H);
+    maskCtx.save();
+    maskCtx.lineWidth = cfg.lineWidth;
+    maskCtx.strokeStyle = 'rgba(255,255,255,1)';
+    maskCtx.lineCap = 'square';
+
+    for(const k of V.keys()){
+      const [, i, j] = k.split('_').map(Number);
+      const x = Math.round(i*cfg.cell) + 0.5;
+      const y1= Math.round(j*cfg.cell) + 0.5;
+      const y2= Math.round((j+1)*cfg.cell) + 0.5;
+      maskCtx.beginPath(); maskCtx.moveTo(x,y1); maskCtx.lineTo(x,y2); maskCtx.stroke();
+    }
+    for(const k of HZ.keys()){
+      const [, i, j] = k.split('_').map(Number);
+      const y = Math.round(j*cfg.cell) + 0.5;
+      const x1= Math.round(i*cfg.cell) + 0.5;
+      const x2= Math.round((i+1)*cfg.cell) + 0.5;
+      maskCtx.beginPath(); maskCtx.moveTo(x1,y); maskCtx.lineTo(x2,y); maskCtx.stroke();
+    }
+    maskCtx.restore();
+  }
+
+  function render(t){
+    // redraw static grid (already drawn once) + animated subtle gradient only on bright segments
+    // repaint static every few frames to keep halos sharp on high-dpi
+    // (cheap; everything is vector)
+    drawStatic();
+
+    // build a moving soft gradient
+    octx.clearRect(0,0,W,H);
+    const phase = (t*cfg.gradientSpeed)%1;
+    const xoff = (phase-0.5)*W*0.8;         // slow drift
+    const g = octx.createLinearGradient(xoff, 0, W+xoff, H);
+    g.addColorStop(0.00, 'rgba(238,119,82,0.30)');   // #ee7752
+    g.addColorStop(0.25, 'rgba(231,60,126,0.28)');   // #e73c7e
+    g.addColorStop(0.50, 'rgba(35,166,213,0.30)');   // #23a6d5
+    g.addColorStop(0.75, 'rgba(35,213,171,0.28)');   // #23d5ab
+    g.addColorStop(1.00, 'rgba(224,248,130,0.26)');  // #E0F882
+    octx.fillStyle = g;
+    octx.globalAlpha = cfg.gradientOpacity; // ~50%
+    octx.fillRect(0,0,W,H);
+
+    // keep gradient only where mask (bright segments) exists
+    octx.globalCompositeOperation = 'destination-in';
+    octx.drawImage(maskCanvas, 0, 0);
+    octx.globalCompositeOperation = 'source-over';
+
+    // blend onto main canvas with additive light
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.drawImage(overlay, 0, 0);
+    ctx.restore();
+
+    requestAnimationFrame(render);
+  }
+
+  window.addEventListener('resize', resize, {passive:true});
+  resize();
+})();
