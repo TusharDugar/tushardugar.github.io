@@ -468,121 +468,20 @@ html::before { /* Re-using html::before to cover the whole page */
 }
 
 
-/* === SERVICES CUBE ANIMATION (REPLACED) === */
+/* --- SERVICES SECTION CUBE ANIMATION --- */
 .services-section {
-  position: relative;
-  /* Perspective on services-section allows its children to have 3D perspective relative to it */
-  perspective: 1200px; /* Given in prompt */
-  padding-top: 80px; /* Standard section padding */
-  padding-bottom: 100px; /* Standard section padding */
-  text-align: left; /* Ensure heading aligns left */
-  z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertical center */
+    align-items: center;     /* Horizontal center */
+    position: relative;
+    perspective: 1200px;
+    padding: 0;
+    text-align: center;
+    z-index: 1;
 }
 
-.services-content-wrapper {
-  position: sticky;
-  top: var(--services-sticky-top-wrapper); /* Set dynamically by JS */
-  will-change: top;
-  height: 350px; /* Original fixed height for the cube area */
-  overflow: hidden; /* CRITICAL: Clips rotating items to maintain cube illusion */
-  transform-style: preserve-3d; /* CRITICAL: Allows children to participate in 3D space */
-  display: flex; /* For centering the inner container */
-  justify-content: center; /* Horizontally center */
-  align-items: center; /* Vertically center content inside fixed height wrapper */
-}
-
-.services-items-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  /* No transform-style: preserve-3d here, it's on the wrapper */
-  /* This container does not rotate, it just holds the faces */
-}
-
-.service-item {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
-  opacity: 0; /* Default hidden state for all items */
-  /* transform-origin set to center center for consistent rotation */
-  transform-origin: center center;
-  /* Using specific cubic-bezier for ease-in-out and 0.8s duration as per new prompt's provided CSS */
-  transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out; /* Adjusted to original DesignCube-like easing. Opacity is fast. */
-  z-index: 0; /* Default low z-index */
-  display: flex; /* For content within the item */
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  box-sizing: border-box; /* Include padding in width/height */
-}
-
-/* State Classes controlled by JavaScript */
-.service-item.front {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1;
-  z-index: 2; /* Active item on top */
-}
-
-.service-item.above {
-  transform: rotateX(90deg) translateZ(var(--faceZ));
-  opacity: 0;
-  z-index: 0; /* Hidden above */
-}
-
-.service-item.below {
-  transform: rotateX(-90deg) translateZ(var(--faceZ));
-  opacity: 0;
-  z-index: 0; /* Hidden below */
-}
-
-/* Animation Classes controlled by JavaScript - these override parked states during transition */
-/* When current item exits to top (scrolling down) */
-.service-item.exit-to-top {
-  transform: rotateX(90deg) translateZ(var(--faceZ));
-  opacity: 0; /* Should fade out rapidly */
-  z-index: 2; /* Stays on top during exit */
-}
-
-/* When current item exits to bottom (scrolling up) */
-.service-item.exit-to-bottom {
-  transform: rotateX(-90deg) translateZ(var(--faceZ));
-  opacity: 0; /* Should fade out rapidly */
-  z-index: 2; /* Stays on top during exit */
-}
-
-/* When next item enters from bottom (scrolling down) */
-.service-item.enter-from-bottom {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1; /* Should fade in rapidly */
-  z-index: 1; /* Appears just below exiting item */
-}
-
-/* When previous item enters from top (scrolling up) */
-.service-item.enter-from-top {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1; /* Should fade in rapidly */
-  z-index: 1; /* Appears just below exiting item */
-}
-
-
-.service-bg-number {
-  position: absolute;
-  top: 50%;
-  /* Shift further right to avoid overlap with text */
-  right: 5vw; /* Use viewport width for better responsiveness */
-  transform: translateY(-50%);
-  font-size: 15em;
-  font-weight: 800;
-  color: var(--services-bg-number-color);
-  z-index: 0; /* Lower than text, so it's always behind */
-  pointer-events: none;
-  line-height: 1;
-  user-select: none;
-}
-
-/* Standard Heading for Services Section */
 .services-heading {
     font-family: 'Poppins', sans-serif;
     font-size: 5em;
@@ -590,35 +489,152 @@ html::before { /* Re-using html::before to cover the whole page */
     font-weight: 800;
     margin-bottom: 30px;
     text-transform: uppercase;
-    text-align: left;
-    position: sticky; /* Keep heading sticky */
-    top: 0;
-    z-index: 2; /* Above the cube */
+    text-align: center;
+    width: 100%;
+    position: static; /* Remove sticky for true centering */
+    z-index: 2;
     padding-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Service Title - Reverted to orange, no italics */
-.service-title {
-    font-size: 2em; 
-    font-weight: 700;
-    color: var(--accent-primary-sawad); 
-    margin-bottom: 10px; 
-    font-style: normal; 
+.services-content-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+    overflow: visible;
+    margin: 0 auto;
+    transform-style: preserve-3d;
 }
 
-/* Service Description - Reverted to normal (no italics) */
-.service-description {
-    font-size: 1.2em; 
-    color: var(--services-description-color); 
-    max-width: 650px; 
-    line-height: 1.6; 
-    font-style: normal; 
+.services-items-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
 }
 
-/* Scroll spacer to provide scrollable height for the animation */
-.services-section-scroll-spacer {
-    display: block; 
-    /* Height is set by JS */
+.service-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    backface-visibility: hidden;
+    opacity: 0;
+    transform-origin: center center;
+    transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center text horizontally */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Cube face states */
+.service-item.front {
+    transform: rotateX(0deg) translateZ(var(--faceZ));
+    opacity: 1;
+    z-index: 2;
+}
+.service-item.above {
+    transform: rotateX(90deg) translateZ(var(--faceZ));
+    opacity: 0;
+    z-index: 0;
+}
+.service-item.below {
+    transform: rotateX(-90deg) translateZ(var(--faceZ));
+    opacity: 0;
+    z-index: 0;
+}
+.service-item.exit-to-top {
+    transform: rotateX(90deg) translateZ(var(--faceZ));
+    opacity: 0;
+    z-index: 2;
+}
+.service-item.exit-to-bottom {
+    transform: rotateX(-90deg) translateZ(var(--faceZ));
+    opacity: 0;
+    z-index: 2;
+}
+.service-item.enter-from-bottom {
+    transform: rotateX(0deg) translateZ(var(--faceZ));
+    opacity: 1;
+    z-index: 1;
+}
+.service-item.enter-from-top {
+    transform: rotateX(0deg) translateZ(var(--faceZ));
+    opacity: 1;
+    z-index: 1;
+}
+
+/* --- BACKGROUND NUMBER --- */
+.service-bg-number {
+    position: absolute;
+    top: 50%;
+    right: 2vw;
+    transform: translateY(-50%);
+    font-size: 15em;
+    font-weight: 800;
+    color: var(--services-bg-number-color);
+    z-index: 0;
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+    text-align: right;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 1200px) {
+    .services-section {
+        min-height: 100vh;
+        padding: 0;
+    }
+    .services-content-wrapper {
+        max-width: 500px;
+        height: 300px;
+    }
+    .service-bg-number {
+        font-size: 12em;
+        right: 1vw;
+    }
+}
+@media (max-width: 768px) {
+    .services-section {
+        min-height: 100vh;
+        padding: 0;
+    }
+    .services-content-wrapper {
+        max-width: 350px;
+        height: 220px;
+    }
+    .service-bg-number {
+        font-size: 8em;
+        right: 1vw;
+    }
+}
+@media (max-width: 480px) {
+    .services-section {
+        min-height: 100vh;
+        padding: 0;
+    }
+    .services-content-wrapper {
+        max-width: 95vw;
+        height: 140px;
+    }
+    .service-bg-number {
+        font-size: 5em;
+        right: 1vw;
+    }
 }
 
 
@@ -1171,194 +1187,6 @@ footer h2 {
     }
     .tool-name {
         font-size: 0.95em;
-    }
-    .tool-category {
-        font-size: 0.75em;
-    }
-
-    /* Footer - Full width black background on mobile */
-    footer {
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-layout-container {
-        padding: 0 15px;
-    }
-    .section h2 {
-        font-size: 2.8em;
-        letter-spacing: 0.5px;
-        margin-bottom: 30px;
-    }
-    .contact-tagline {
-        font-size: 1em;
-        margin-bottom: 25px;
-    }
-    .contact-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        max-width: 320px;
-        margin: 0 auto;
-    }
-    .contact-button {
-        width: 100%;
-        height: 80px;
-        font-size: 0.95em;
-    }
-    .contact-button i {
-        font-size: 1.6em;
-    }
-    .contact-button .button-value {
-        font-size: 0.75em;
-    }
-    .contact-button .copied-text {
-        font-size: 0.95em;
-    }
-
-    /* Specific adjustments for profile card */
-    /* ISSUE 4: Profile image section longer by reducing width */
-    .about-left-content {
-        max-width: 320px;
-        padding: 25px 20px;
-    }
-    .profile-image-container {
-        width: calc(100% + 30px);
-        max-width: 350px;
-        height: 180px;
-        margin-bottom: 25px;
-        border-radius: 12px;
-    }
-    .about-left-content h3 {
-        font-size: 2.5em;
-        margin-bottom: 20px;
-    }
-    .fire-icon-with-line {
-        height: 40px;
-        margin-bottom: 25px;
-    }
-    .fire-icon {
-        padding: 8px;
-        font-size: 1.1em;
-    }
-    .fire-icon-with-line::before,
-    .fire-icon-with-line::after {
-        width: calc(50% - 25px);
-    }
-    .about-short-desc {
-        font-size: 0.9em;
-        margin-bottom: 25px;
-        padding: 0 5px;
-    }
-    .contact-info-list {
-        margin: 20px 0 30px;
-    }
-    .contact-info-list li {
-        font-size: 0.9em;
-        margin-bottom: 15px;
-    }
-    .contact-info-list li i {
-        margin-right: 15px;
-        font-size: 1.2em;
-        width: 20px;
-    }
-    .contact-info-list li span {
-        margin-right: 8px;
-    }
-    .about-social-icons {
-        gap: 15px;
-        padding-top: 10px;
-    }
-    .about-social-icons a {
-        font-size: 1.4em;
-    }
-
-    .dashed-decoration {
-        border-width: 1.5px;
-    }
-    .top-left-curve, .bottom-right-curve {
-        width: 140px;
-        height: 140px;
-        top: -45px;
-        left: -45px;
-        bottom: -45px;
-        right: -45px;
-    }
-
-    /* Adjustments for hero content */
-    .right-column-scroll {
-        padding: 30px 15px;
-        padding-top: 40px;
-    }
-    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
-    .hero-heading {
-        font-size: 3em;
-        margin-bottom: 15px;
-    }
-    .hero-description {
-        font-size: 0.95em;
-        line-height: 1.5;
-        margin-bottom: 30px;
-    }
-
-    /* Services Section - mobile specific overrides */
-    .services-section {
-        padding-top: 30px;
-        padding-bottom: 50px;
-    }
-    .services-content-wrapper {
-        height: 230px;
-        perspective: 700px; /* Adjusted for this breakpoint */
-        align-items: center; /* Center content vertically within its fixed height */
-    }
-    .services-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
-    }
-    .service-item {
-        padding: 12px;
-    }
-    .service-bg-number {
-        font-size: 6em;
-        right: 2vw;
-        z-index: 0;
-    }
-    .service-title {
-        font-size: 1.4em;
-    }
-    .service-description {
-        font-size: 0.8em;
-    }
-
-    /* Adjustments for tools section */
-    .tools-section {
-        padding-top: 30px;
-        padding-bottom: 50px;
-    }
-    .tools-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
-    }
-    .tools-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 15px;
-        max-width: 100%;
-    }
-    .tool-card {
-        padding: 12px;
-        gap: 8px;
-    }
-    .tool-icon-wrapper {
-        width: 35px;
-        height: 35px;
-        border-radius: 6px;
-    }
-    .tool-name {
-        font-size: 0.9em;
     }
     .tool-category {
         font-size: 0.75em;
