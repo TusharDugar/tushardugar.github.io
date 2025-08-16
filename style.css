@@ -490,12 +490,7 @@ body::after {
 }
 
 .services-section-header .services-divider {
-  width: 56px;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--accent-secondary-sawad) 0%, var(--accent-primary-sawad) 100%); /* Green to Orange gradient */
-  margin: 0 auto; /* Center the divider */
-  opacity: 0.85;
+  display: none !important;
 }
 
 
