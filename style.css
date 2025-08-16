@@ -518,11 +518,11 @@ body::after {
 }
 
 
-/* === SERVICES CUBE ANIMATION (REPLACED) === */
+/* --- Remove cube animation and backgrounds from services section --- */
 .services-section {
   position: relative;
   /* Perspective on services-section as the 3D stage */
-  perspective: 1200px; /* Given in prompt */
+  perspective: none !important;
   padding-top: 80px; /* Standard section padding */
   padding-bottom: 100px; /* Standard section padding */
   text-align: left; /* Ensure heading aligns left */
@@ -530,155 +530,70 @@ body::after {
   /* Remove background from services-section and tools-section */
   background: none !important;
   background-color: transparent !important;
+  overflow: visible !important;
 }
 
 .services-content-wrapper {
-  position: sticky;
-  top: var(--services-sticky-top-wrapper); /* Set dynamically by JS */
-  will-change: top;
-  height: 350px; /* Fixed height for the viewport of the cube */
-  overflow: hidden; /* CRITICAL: Clips rotating items to maintain cube illusion */
-  transform-style: preserve-3d; /* CRITICAL: Allows children to participate in 3D space */
-  display: flex; /* For centering the inner container */
-  justify-content: center; /* Horizontally center */
-  align-items: center; /* Vertically center content inside fixed height wrapper */
-  /* Ensures that the element itself acts as the 3D space's pivot. */
-  /* This transform will move the entire cube group forward so it's visible relative to the perspective */
-  transform: translateZ(calc(var(--faceZ) * -1)); /* Counter-translate to bring content to front */
+  position: static !important;
+  top: auto !important;
+  will-change: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  transform-style: flat !important;
+  display: block !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  transform: none !important;
 }
 
 .services-items-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  /* No transform-style: preserve-3d here, it's on the wrapper */
-  /* This container does not rotate, it just holds the faces */
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
 }
 
 .service-item {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  /* ADDED: Solid background color to prevent content bleed-through */
-  background-color: var(--bg-main); /* Use main background color for solid faces */
-  backface-visibility: hidden; /* CRITICAL: Hides the back of the face when rotated */
-  opacity: 0; /* Default hidden state for all items */
-  transform-origin: center center; /* Rotation occurs around the center */
-  /* Adjusted transition as per requirement: 0.8s for transform, 0.05s for opacity */
-  transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.05s ease-out;
-  z-index: 0; /* Default low z-index */
-  display: flex; /* For content within the item */
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start; /* Aligns content to the left of the item */
-  box-sizing: border-box; /* Include padding in width/height */
-  will-change: transform, opacity; /* Performance hint */
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  padding: 0 0 32px 0 !important;
+  background: none !important;
+  background-color: transparent !important;
+  backface-visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  z-index: auto !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  will-change: auto !important;
+  /* Remove flex and alignment */
+  flex-direction: unset !important;
+  justify-content: unset !important;
+  align-items: unset !important;
 }
 
-/* State Classes controlled by JavaScript */
-/* --faceZ variable defined in JS is negative (e.g., -150px) */
-/* This means translateZ(var(--faceZ)) will push the element 'back' into 3D space from the cube's origin */
-
-.service-item.front {
-  transform: rotateX(0deg) translateZ(var(--faceZ)); /* Positioned at the 'front' of the cube */
-  opacity: 1; /* Fully visible */
-  z-index: 2; /* Active item on top */
-}
-
-.service-item.above {
-  transform: rotateX(90deg) translateZ(var(--faceZ)); /* Rotated 90deg 'up' from front */
-  opacity: 0; /* Hidden */
-  z-index: 0; /* Below active items */
-}
-
-.service-item.below {
-  transform: rotateX(-90deg) translateZ(var(--faceZ)); /* Rotated 90deg 'down' from front */
-  opacity: 0; /* Hidden */
-  z-index: 0; /* Below active items */
-}
-
-/* Animation Classes controlled by JavaScript - these override parked states during transition */
-/* These classes are applied TEMPORARILY. The final state is set by layoutFaces(). */
-
-/* When current item exits to top (scrolling down), moves from front to above position */
-.service-item.exit-to-top {
-  transform: rotateX(90deg) translateZ(var(--faceZ));
-  opacity: 0; /* Must fade out rapidly */
-  z-index: 2; /* Stays on top during exit */
-}
-
-/* When current item exits to bottom (scrolling up), moves from front to below position */
-.service-item.exit-to-bottom {
-  transform: rotateX(-90deg) translateZ(var(--faceZ));
-  opacity: 0; /* Must fade out rapidly */
-  z-index: 2; /* Stays on top during exit */
-}
-
-/* When next item enters from bottom (scrolling down), moves from below to front position */
-.service-item.enter-from-bottom {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1; /* Must fade in rapidly */
-  z-index: 1; /* Appears just below exiting item */
-}
-
-/* When previous item enters from top (scrolling up), moves from above to front position */
+/* Remove cube state/animation classes */
+.service-item.front,
+.service-item.above,
+.service-item.below,
+.service-item.exit-to-top,
+.service-item.exit-to-bottom,
+.service-item.enter-from-bottom,
 .service-item.enter-from-top {
-  transform: rotateX(0deg) translateZ(var(--faceZ));
-  opacity: 1; /* Must fade in rapidly */
-  z-index: 1; /* Appears just below exiting item */
+  /* Remove all transforms and opacity */
+  transform: none !important;
+  opacity: 1 !important;
+  z-index: auto !important;
 }
-
 
 .service-bg-number {
-  position: absolute; /* Changed from sticky to absolute for consistent positioning */
-  top: 50%; /* Center vertically within the section */
-  right: 50px;
-  transform: translateY(-50%);
-  font-size: 15em; /* Larger as in your previous implementation for aesthetic */
-  font-weight: 800;
-  color: var(--services-bg-number-color);
-  z-index: 1; /* Ensure it's above background elements but behind text */
-  pointer-events: none;
-  line-height: 1; /* Prevent extra space */
-  user-select: none;
-}
-
-/* Standard Heading for Services Section */
-.services-heading {
-    font-family: 'Poppins', sans-serif;
-    font-size: 5em;
-    line-height: 0.9;
-    font-weight: 800;
-    margin-bottom: 30px;
-    text-transform: uppercase;
-    text-align: left;
-}
-
-/* Service Title - Reverted to orange, no italics */
-.service-title {
-    font-size: 2em; 
-    font-weight: 700;
-    color: var(--accent-primary-sawad); 
-    margin-bottom: 10px; 
-    font-style: normal; 
-}
-
-/* Service Description - Reverted to normal (no italics) */
-.service-description {
-    font-size: 1.2em; 
-    color: var(--services-description-color); 
-    max-width: 650px; 
-    line-height: 1.6; 
-    font-style: normal; 
+  display: none !important;
 }
 
 /* Scroll spacer to provide scrollable height for the animation */
 .services-section-scroll-spacer {
-    display: block; 
-    /* Height is set by JS */
+    display: none !important;
 }
 
 
