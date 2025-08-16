@@ -14,18 +14,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Luxury Black Mosaic Background -->
-    <div id="lux-mosaic-bg" aria-hidden="true">
-      <canvas id="lux-mosaic-canvas"></canvas>
-    </div>
-
-    <!-- The background is now purely CSS on the html and body elements -->
+    <!-- NEW: Background div for the animated mosaic grid -->
+    <div id="mosaic-background" aria-hidden="true"></div>
     
-    <div id="gradient-glow" aria-hidden="true"></div>
-<canvas id="mosaic-bg" aria-hidden="true"></canvas>
-<div class="mosaic-vignette" aria-hidden="true"></div>
-<div id="mosaic-background"></div>
-
     <div class="main-layout-container"> <!-- Main container for the two columns -->
         <div class="left-column-sticky">
             <section id="about" class="section about-left-content reveal-item">
@@ -77,7 +68,6 @@
                 </h2>
 
                 <div class="services-content-wrapper">
-                    <!-- !!! IMPORTANT: THIS IS THE MISSING CONTAINER - IT MUST BE HERE !!! -->
                     <div class="services-items-container">
                         <div class="service-item" id="service-0" data-service-index="0">
                             <span class="service-bg-number">01</span>
@@ -120,7 +110,6 @@
                             <p class="service-description">Managing and growing your social media presence effectively to engage with your audience and build your brand.</p>
                         </div>
                     </div>
-                    <!-- !!! END OF MISSING CONTAINER !!! -->
                 </div>
                 <!-- The service-bg-number should be a direct child of #services, outside services-content-wrapper -->
                 <div class="service-bg-number">01</div> 

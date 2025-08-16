@@ -33,9 +33,6 @@
     --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
     --services-description-color: var(--text-light); /* White for descriptions */
     
-    /* NEW: Color for the background pattern lines */
-    --pattern-line-color: #1e3b3e; /* Dark teal/greenish, very subtle */
-
 
     /* CSS Variables for sticky services top offset (set by JS) */
     --services-sticky-top-h2: 0px;
@@ -61,7 +58,7 @@ html {
     position: relative; /* Needed for fixed children positioning in some browsers */
 }
 
-/* Keyframes for the animated colorful gradient (RESTORED) */
+/* Keyframes for the animated colorful gradient */
 @keyframes gradient {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -121,45 +118,39 @@ body::after {
 }
 
 
-/* Layer 3: Geometric Grid Pattern with Animated Gradient (RESTORED) */
-html::before { /* Re-using html::before to cover the whole page */
-    content: '';
-    position: fixed; /* Crucial for making it cover the whole viewport and appear as a "single block" */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Above body pseudo-elements, below content */
-    pointer-events: none; /* Ensure it doesn't block interactions */
-    /* Adjust overall opacity to make pattern more or less visible */
-    opacity: 0.1299375; /* Restored original subtle opacity for animated background */
-    
-    /* RESTORED: Animated colorful gradient as the base background */
-    background-image: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%; /* For the animated gradient */
-    animation: gradient 15s ease infinite; /* For the animated gradient */
+/* Layer 3: Animated Background Grid Pattern */
+#mosaic-background { /* This div is new in HTML */
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* Behind all content but above body glows */
+  pointer-events: none; /* Purely decorative */
+  opacity: 0.9; /* Subtle overlay as per prompt */
 
-    /* NEW MASKING: Only show the background through the "lines" using mask-image */
-    /* Chevron pattern (SVG data URL) - Creates alternating V and ^ pattern */
-    /* Note: SVG stroke color is WHITE (#FFF) for masking to work, as white parts of mask reveal background */
-    mask-image:
-        linear-gradient(to bottom, transparent 99%, white 1%), /* Horizontal Grid Lines (1px white line every 100px) */
-        linear-gradient(to right, transparent 99%, white 1%), /* Vertical Grid Lines (1px white line every 100px) */
-        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C/svg%3E");
-    
-    /* Vendor prefixes for better compatibility of mask-image */
-    -webkit-mask-image:
-        linear-gradient(to bottom, transparent 99%, white 1%),
-        linear-gradient(to right, transparent 99%, white 1%),
-        url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Top-Left V --%3E%3Cpath d='M0 0 L50 100 L100 0' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Top-Right ^ --%3E%3Cpath d='M100 100 L150 0 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Left ^ --%3E%3Cpath d='M0 200 L50 100 L100 200' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C!-- Bottom-Right V --%3E%3Cpath d='M100 100 L150 200 L200 100' stroke='%23FFF' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-color: #0d0d0d; /* deep matte base as per prompt */
+  
+  /* The animated grid lines themselves */
+  background-image: 
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px), /* Vertical Lines */
+    linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px); /* Horizontal Lines */
+  background-size: 40px 40px; /* Grid size */
+  background-repeat: repeat; /* Repeat the grid pattern */
 
-    /* Mask sizes: match grid spacing, chevron is 200x200 tile */
-    mask-size: 100px 100px, 100px 100px, 200px 200px;
-    -webkit-mask-size: 100px 100px, 100px 100px, 200px 200px;
+  /* Animation for the line colors */
+  animation: glowShift 15s ease infinite; /* As per prompt */
+}
 
-    /* Mask layers repeat over the whole area */
-    mask-repeat: repeat;
-    -webkit-mask-repeat: repeat;
+/* Keyframes for the grid line glowing animation */
+@keyframes glowShift {
+  0%, 100% {
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  }
+  50% {
+    background-image:
+      linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
+  }
 }
 
 
@@ -206,54 +197,53 @@ html::before { /* Re-using html::before to cover the whole page */
 /* Main Layout Container (now with left sticky and empty right scrollable area) */
 .main-layout-container {
     display: flex;
-    justify-content: center; /* Center the columns if content is narrower */
-    max-width: 1920px; /* Increased max-width for wider desktop view */
-    margin: 0 auto; /* Center the container */
-    padding: 0 80px; /* Add horizontal padding for the layout */
-    min-height: 100vh; /* Ensure container is tall enough to hold sticky content */
+    justify-content: center;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 80px;
+    min-height: 100vh;
     position: relative;
-    z-index: 1; /* Above any background elements */
-    padding-top: 50px; /* Small space from the very top now that navbar is gone */
+    z-index: 1;
+    padding-top: 50px;
 }
 
 /* Left Column (Sticky) */
 .left-column-sticky {
-    flex-shrink: 0; /* Prevent from shrinking */
-    width: 30%; /* Slightly narrower left column */
-    padding-right: 80px; /* Increased space between columns */
+    flex-shrink: 0;
+    width: 30%;
+    padding-right: 80px;
     box-sizing: border-box;
-    position: sticky; /* Make it sticky */
-    top: 50px; /* Stick from the very top (matching main-layout-container padding) */
-    align-self: flex-start; /* Align to the top of its flex container */
-    height: calc(100vh - 50px); /* Occupy remaining viewport height (50px top + minimal bottom implies scrolling if content is taller) */
+    position: sticky;
+    top: 50px;
+    align-self: flex-start;
+    height: calc(100vh - 50px);
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically within sticky area */
+    justify-content: center;
     align-items: center;
     text-align: center;
 }
 
 /* Updated: About Left Content (White Card) - Based on Aabid Ahmed design */
 .about-left-content {
-    background-color: var(--bg-profile-card); /* White card background */
-    color: var(--text-dark-card); /* Dark text for white card */
-    border-radius: 20px; /* More rectangular corners as in Aabid Ahmed */
-    padding: 30px 25px; /* Adjust padding to match the target image better */
+    background-color: var(--bg-profile-card);
+    color: var(--text-dark-card);
+    border-radius: 20px;
+    padding: 30px 25px;
     box-shadow: 0 10px 30px var(--shadow-color-card-white);
-    width: 100%; /* Take full width of sticky column */
-    /* ISSUE 4: Profile image section longer by reducing width */
-    max-width: 370px; /* Adjusted from 400px - narrower */
-    height: auto; /* Allow height to adjust to content on desktop and mobile */
+    width: 100%;
+    max-width: 370px;
+    height: auto;
     box-sizing: border-box;
-    opacity: 0; /* Initial state for reveal (controlled by reveal-item) */
+    opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    display: flex; /* Use flexbox for main card content alignment */
+    display: flex;
     flex-direction: column;
-    align-items: center; /* Center items horizontally */
-    text-align: center; /* Center text */
-    position: relative; /* For absolute positioning of decorative lines */
-    overflow: hidden; /* Important to clip parts of dashed lines outside the card */
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 .about-left-content.revealed {
     opacity: 1;
@@ -262,60 +252,55 @@ html::before { /* Re-using html::before to cover the whole page */
 
 /* New: Profile Image Container */
 .profile-image-container {
-    width: calc(100% + 50px); /* Slightly wider than the card to mimic the image in the Aabid Ahmed example */
-    /* ISSUE 4: Profile image section longer by reducing width */
-    max-width: 420px; /* Adjusted from 450px - narrower */
-    height: 200px; /* Adjusted from 180px - longer */
-    background-color: var(--accent-primary-sawad); /* Orange background */
-    border-radius: 15px; /* Rounded corners for the image container */
-    overflow: hidden; /* Ensure image doesn't overflow */
-    margin-bottom: 25px; /* Space below image */
-    position: relative; /* For the silhouette filter */
-    transform: translateX(0); /* Ensure it's centered initially */
+    width: calc(100% + 50px);
+    max-width: 420px;
+    height: 200px;
+    background-color: var(--accent-primary-sawad);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    position: relative;
+    transform: translateX(0);
 }
 
 .profile-photo {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top; /* Keep focus on head/shoulders */
-    /* This filter assumes a color image and turns it into a black silhouette */
-    filter: brightness(0.01); /* Makes colors very dark/black while preserving shape */
+    object-position: center top;
+    filter: brightness(0.01);
 }
 
 /* Updated: Main Name */
 .about-left-content h3 {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.8em; /* Larger font size for name as in Aabid Ahmed */
-    font-weight: 700; /* Bolder */
-    color: var(--text-dark-card); /* Black text on white card */
-    margin-bottom: 20px; /* Space below name before fire icon */
-    line-height: 1.1; /* Tighter line height for single-line name */
+    font-size: 2.8em;
+    font-weight: 700;
+    color: var(--text-dark-card);
+    margin-bottom: 20px;
+    line-height: 1.1;
 }
-
-/* The .about-tagline rule has been completely removed */
-
 
 /* New: Fire Icon with connecting dashed lines */
 .fire-icon-with-line {
     position: relative;
     width: 100%;
-    height: 40px; /* Height for the fire icon and its line context */
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 25px; /* Space before short description */
+    margin-bottom: 25px;
 }
 
 .fire-icon {
     background-color: var(--accent-primary-sawad);
     border-radius: 50%;
-    padding: 8px; /* Smaller padding as in Aabid Ahmed */
-    font-size: 1.1em; /* Smaller icon size */
+    padding: 8px;
+    font-size: 1.1em;
     color: var(--text-light);
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    z-index: 2; /* Ensure it's on top of pseudo-elements */
-    position: relative; /* To ensure z-index works */
+    z-index: 2;
+    position: relative;
 }
 
 /* Dashed lines connected to the fire icon - approximate */
@@ -325,96 +310,96 @@ html::before { /* Re-using html::before to cover the whole page */
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    height: 2px; /* Thin line */
+    height: 2px;
     border-top: 2px dashed var(--accent-primary-sawad);
     z-index: 1;
 }
 
-.fire-icon-with-line::before { /* Left line */
+.fire-icon-with-line::before {
     left: 0;
-    width: calc(50% - 25px); /* Half width minus icon size */
+    width: calc(50% - 25px);
 }
 
-.fire-icon-with-line::after { /* Right line */
+.fire-icon-with-line::after {
     right: 0;
-    width: calc(50% - 25px); /* Half width minus icon size */
+    width: calc(50% - 25px);
 }
 
 /* New: Decorative background dashed lines (from original Aabid Ahmed card) */
 .dashed-decoration {
     position: absolute;
     border: 2px dashed var(--accent-primary-sawad);
-    border-radius: 50%; /* Used for creating circular segments */
+    border-radius: 50%;
     box-sizing: border-box;
     pointer-events: none;
-    z-index: 0; /* Behind all content */
+    z-index: 0;
 }
 
 .top-left-curve {
     width: 150px;
     height: 150px;
-    top: -50px; /* Adjusted position to start from top-left of the card */
+    top: -50px;
     left: -50px;
-    border-right-color: transparent; /* Hide parts of the circle border to make it an arc */
+    border-right-color: transparent;
     border-bottom-color: transparent;
-    transform: rotate(-10deg); /* Slight rotation for the angle */
+    transform: rotate(-10deg);
 }
 
 .bottom-right-curve {
     width: 150px;
     height: 150px;
-    bottom: -50px; /* Adjusted position to start from bottom-right of the card */
+    bottom: -50px;
     right: -50px;
     border-left-color: transparent;
     border-top-color: transparent;
-    transform: rotate(10deg); /* Slight rotation for the angle */
+    transform: rotate(10deg);
 }
 
 
 /* Updated: Short Description */
 .about-short-desc {
-    font-size: 0.9em; /* Adjusted font size for readability */
+    font-size: 0.9em;
     line-height: 1.6;
     color: var(--text-medium-card);
-    margin-bottom: 25px; /* Space before social icons */
-    padding: 0 5px; /* Added small horizontal padding to prevent awkward word wraps */
-    max-width: 90%; /* Keep text within reasonable bounds */
+    margin-bottom: 25px;
+    padding: 0 5px;
+    max-width: 90%;
 }
 
 /* NEW: Contact Info List */
 .contact-info-list {
-    list-style: none; /* Remove default list bullets */
+    list-style: none;
     padding: 0;
-    margin: 20px 0 30px; /* Space above and below list */
-    width: 100%; /* Take full width of the card */
-    text-align: left; /* Align list items left */
+    margin: 20px 0 30px;
+    width: 100%;
+    text-align: left;
 }
 
 .contact-info-list li {
-    display: flex; /* Use flexbox for icon and text alignment */
+    display: flex;
     align-items: center;
-    margin-bottom: 15px; /* Space between list items */
+    margin-bottom: 15px;
     font-size: 0.95em;
     color: var(--text-medium-card);
 }
 
 .contact-info-list li:last-child {
-    margin-bottom: 0; /* No margin after the last item */
+    margin-bottom: 0;
 }
 
 .contact-info-list li i {
-    color: var(--accent-primary-sawad); /* Icon color */
-    margin-right: 15px; /* Space between icon and text */
+    color: var(--accent-primary-sawad);
+    margin-right: 15px;
     font-size: 1.2em;
-    width: 20px; /* Fixed width for icons to align text */
+    width: 20px;
     text-align: center;
 }
 
 .contact-info-list li span {
-    font-weight: 600; /* Bold the category text */
-    color: var(--text-dark-card); /* Darker color for category */
-    margin-right: 8px; /* Space between category and value */
-    flex-shrink: 0; /* Prevent category from shrinking */
+    font-weight: 600;
+    color: var(--text-dark-card);
+    margin-right: 8px;
+    flex-shrink: 0;
 }
 
 
@@ -422,64 +407,62 @@ html::before { /* Re-using html::before to cover the whole page */
 .about-social-icons {
     display: flex;
     justify-content: center;
-    gap: 15px; /* Smaller gap between icons as in Aabid Ahmed */
-    margin-top: auto; /* Pushes social icons to the bottom if card has auto height */
-    padding-top: 10px; /* Small padding */
+    gap: 15px;
+    margin-top: auto;
+    padding-top: 10px;
 }
 .about-social-icons a {
-    color: var(--accent-primary-sawad); /* Orange icons as in Aabid Ahmed */
-    font-size: 1.5em; /* Icon size */
+    color: var(--accent-primary-sawad);
+    font-size: 1.5em;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 .about-social-icons a:hover {
-    color: var(--accent-primary-sawad); /* Keep orange on hover */
-    transform: translateY(-2px) scale(1.05); /* Subtle lift */
+    color: var(--accent-primary-sawad);
+    transform: translateY(-2px) scale(1.05);
 }
 
 
 /* Right Column (Scrolling) */
 .right-column-scroll {
-    flex-grow: 1; /* Take up remaining space */
-    width: 65%; /* Adjust width as needed */
-    padding-left: 80px; /* Increased space between columns to match main-layout-container padding */
-    padding-right: 80px; /* Add right padding to prevent content from touching edge */
-    padding-bottom: 100px; /* Ensure content can scroll past sticky element */
+    flex-grow: 1;
+    width: 65%;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-bottom: 100px;
     box-sizing: border-box;
-    min-height: 150vh; /* Example: make it 1.5 times the viewport viewportHeight */
-
-    padding-top: 100px; /* Adjust as needed for spacing from top, for the hero section */
-    text-align: left; /* Always left-align content within this column */
-    /* IMPORTANT: No overflow properties here for sticky to work correctly with viewport scroll */
+    min-height: 150vh;
+    padding-top: 100px;
+    text-align: left;
 }
 
 /* Hero Right Content */
 .hero-heading {
     font-family: 'Poppins', sans-serif;
-    font-size: 7em; /* Very large font size for headings */
+    font-size: 7em;
     line-height: 0.9;
-    font-weight: 800; /* Extra bold */
-    margin-bottom: 30px; /* Space below heading */
-    text-transform: uppercase; /* Ensure all text is uppercase */
-    text-align: left; /* Ensure it's left-aligned */
+    font-weight: 800;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    text-align: left;
 }
 
 .hero-heading .text-white {
-    color: var(--text-light); /* White color for the first part */
-    display: block; /* Force this span onto its own line */
+    color: var(--text-light);
+    display: block;
 }
 
 .hero-heading .text-gray {
-    color: var(--text-medium); /* Gray color for the second part */
-    display: block; /* Force this span onto its own line */
+    color: var(--text-medium);
+    display: block;
 }
 
 .hero-description {
-    font-size: 1.2em; /* Font size for the descriptive paragraph */
-    line-height: 1.8; /* Good line height for readability */
-    color: var(--text-medium); /* Medium gray text color */
-    max-width: 600px; /* Limit width for readability, similar to reference image */
-    margin-bottom: 80px; /* Ample space before the next section (statistics) */
-    text-align: left; /* Ensure it's left-aligned */
+    font-size: 1.2em;
+    line-height: 1.8;
+    color: var(--text-medium);
+    max-width: 600px;
+    margin-bottom: 80px;
+    text-align: left;
 }
 
 
@@ -519,6 +502,8 @@ html::before { /* Re-using html::before to cover the whole page */
 
 .service-item {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   padding: 20px;
@@ -619,17 +604,6 @@ html::before { /* Re-using html::before to cover the whole page */
     top: 0;
     z-index: 2; /* Above the cube */
     padding-bottom: 20px;
-    /* Fix: prevent unwanted line breaks on large screens */
-    white-space: nowrap;
-    word-break: normal;
-}
-
-/* Responsive: allow wrapping on smaller screens */
-@media (max-width: 900px) {
-    .services-heading {
-        white-space: normal;
-        word-break: break-word;
-    }
 }
 
 /* Service Title - Reverted to orange, no italics */
@@ -1208,6 +1182,193 @@ footer h2 {
     .tool-category {
         font-size: 0.75em;
     }
+
+    /* Footer - Full width black background on mobile */
+    footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-layout-container {
+        padding: 0 15px;
+    }
+    .section h2 {
+        font-size: 2.8em;
+        letter-spacing: 0.5px;
+        margin-bottom: 30px;
+    }
+    .contact-tagline {
+        font-size: 1em;
+        margin-bottom: 25px;
+    }
+    .contact-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    .contact-button {
+        width: 100%;
+        height: 80px;
+        font-size: 0.95em;
+    }
+    .contact-button i {
+        font-size: 1.6em;
+    }
+    .contact-button .button-value {
+        font-size: 0.75em;
+    }
+    .contact-button .copied-text {
+        font-size: 0.95em;
+    }
+
+    /* Specific adjustments for profile card */
+    /* ISSUE 4: Profile image section longer by reducing width */
+    .about-left-content {
+        max-width: 320px;
+        padding: 25px 20px;
+    }
+    .profile-image-container {
+        width: calc(100% + 30px);
+        max-width: 350px;
+        height: 180px;
+        margin-bottom: 25px;
+        border-radius: 12px;
+    }
+    .about-left-content h3 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+    .fire-icon-with-line {
+        height: 40px;
+        margin-bottom: 25px;
+    }
+    .fire-icon {
+        padding: 8px;
+        font-size: 1.1em;
+    }
+    .fire-icon-with-line::before,
+    .fire-icon-with-line::after {
+        width: calc(50% - 25px);
+    }
+    .about-short-desc {
+        font-size: 0.9em;
+        margin-bottom: 25px;
+        padding: 0 5px;
+    }
+    .contact-info-list {
+        margin: 20px 0 30px;
+    }
+    .contact-info-list li {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+    }
+    .contact-info-list li i {
+        margin-right: 15px;
+        font-size: 1.2em;
+        width: 20px;
+    }
+    .contact-info-list li span {
+        margin-right: 8px;
+    }
+    .about-social-icons {
+        gap: 15px;
+        padding-top: 10px;
+    }
+    .about-social-icons a {
+        font-size: 1.4em;
+    }
+
+    .dashed-decoration {
+        border-width: 1.5px;
+    }
+    .top-left-curve, .bottom-right-curve {
+        width: 140px;
+        height: 140px;
+        top: -45px;
+        left: -45px;
+        bottom: -45px;
+        right: -45px;
+    }
+
+    /* Adjustments for hero content */
+    .right-column-scroll {
+        padding: 30px 15px;
+        padding-top: 40px;
+    }
+    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
+    .hero-heading {
+        font-size: 3em;
+        margin-bottom: 15px;
+    }
+    .hero-description {
+        font-size: 0.95em;
+        line-height: 1.5;
+        margin-bottom: 30px;
+    }
+
+    /* Services Section - mobile specific overrides */
+    .services-section {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    .services-content-wrapper {
+        height: 230px;
+        perspective: 700px; /* Adjusted for this breakpoint */
+        align-items: center; /* Center content vertically within its fixed height */
+    }
+    .services-heading {
+        font-size: 2.8em;
+        margin-bottom: 25px;
+    }
+    .service-item {
+        padding: 12px;
+    }
+    .service-bg-number {
+        font-size: 6em;
+        right: 40px;
+    }
+    .service-title {
+        font-size: 1.4em;
+    }
+    .service-description {
+        font-size: 0.8em;
+    }
+
+    /* Adjustments for tools section */
+    .tools-section {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    .tools-heading {
+        font-size: 2.8em;
+        margin-bottom: 25px;
+    }
+    .tools-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 100%;
+    }
+    .tool-card {
+        padding: 12px;
+        gap: 8px;
+    }
+    .tool-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        border-radius: 6px;
+    }
+    .tool-name {
+        font-size: 0.9em;
+    }
+    .tool-category {
+        font-size: 0.75em;
+    }
 }
 
 /* Accessibility: Reduce motion for users who prefer it */
@@ -1230,110 +1391,4 @@ footer h2 {
     .service-item:not(:first-child) {
         opacity: 0 !important; /* Hide all but the first item if motion is reduced */
     }
-}
-
-/* ===== Mosaic Background (fixed, behind everything) ===== */
-#mosaic-bg {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.5;  /* Lower opacity for less distraction */
-  background: #000;
-  filter: blur(4px); /* More blur for extra softness */
-  transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
-}
-
-/* Optional: very subtle vignette to match “luxury” feel */
-.mosaic-vignette {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background:
-    radial-gradient(120% 80% at 50% 50%,
-      rgba(255,255,255,0.05) 0%,
-      rgba(255,255,255,0.00) 35%,
-      rgba(0,0,0,0.32) 100%);
-  mix-blend-mode: soft-light;
-}
-
-/* Gradient Glow Layer - behind mosaic */
-#gradient-glow {
-  position: fixed;
-  inset: 0;
-  z-index: -3; /* stays behind the mosaic canvas and vignette */
-  background: linear-gradient(-45deg,
-    #ee7752,
-    #e73c7e,
-    #23a6d5,
-    #23d5ab,
-    #ff7f50,
-    #E0F882
-  );
-  background-size: 400% 400%;
-  animation: gradientShift 8s linear infinite;
-  opacity: 0.4;      /* Lower opacity for subtle color */
-  pointer-events: none;
-  filter: blur(12px) saturate(1.1); /* Glow is soft and rich */
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
-
-/* ===== Subtle Glowing Mosaic Background ===== */
-#mosaic-background {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-color: #0d0d0d; /* deep matte base */
-  background-image: 
-    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: glowShift 15s ease infinite;
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-@keyframes glowShift {
-  0%, 100% {
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-  }
-  50% {
-    background-image:
-      linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
-  }
-}
-
-/* ===== CSS for the luxury mosaic background only ===== */
-#lux-mosaic-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.6;                /* overall transparency (≈60%) */
-  background: #0e0e10;         /* deep matte base behind the lines */
-}
-
-#lux-mosaic-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* optional: tiny vignette to match the moody reference */
-#lux-mosaic-bg::after {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(0,0,0,.35) 100%);
-  pointer-events: none;
 }
