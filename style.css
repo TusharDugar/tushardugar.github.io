@@ -510,82 +510,106 @@ body::after {
 }
 
 
-/* --- Remove cube animation and backgrounds from services section --- */
+/* === SERVICES SECTION (STATIC, VISIBLE CARDS, NO ANIMATION) === */
 .services-section {
   position: relative;
-  /* Perspective on services-section as the 3D stage */
-  perspective: none !important;
-  padding-top: 80px; /* Standard section padding */
-  padding-bottom: 100px; /* Standard section padding */
-  text-align: left; /* Ensure heading aligns left */
+  padding-top: 80px;
+  padding-bottom: 100px;
+  text-align: left;
   z-index: 1;
-  /* Remove background from services-section and tools-section */
   background: none !important;
   background-color: transparent !important;
-  overflow: visible !important;
 }
 
 .services-content-wrapper {
-  position: static !important;
-  top: auto !important;
-  will-change: auto !important;
-  height: auto !important;
-  overflow: visible !important;
-  transform-style: flat !important;
-  display: block !important;
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
-  transform: none !important;
+  position: relative;
+  top: auto;
+  height: auto;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .services-items-container {
-  position: static !important;
-  width: 100% !important;
-  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  height: auto;
+  position: relative;
 }
 
 .service-item {
-  position: static !important;
-  width: 100% !important;
-  height: auto !important;
-  padding: 0 0 32px 0 !important;
-  background: none !important;
-  background-color: transparent !important;
-  backface-visibility: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding: 20px 24px;
+  margin: 0;
+  background: var(--bg-tool-card);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.18);
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
   z-index: auto !important;
-  display: block !important;
-  box-sizing: border-box !important;
-  will-change: auto !important;
-  /* Remove flex and alignment */
-  flex-direction: unset !important;
-  justify-content: unset !important;
-  align-items: unset !important;
+  /* Remove any animation/3D classes effect */
 }
-
-/* Remove cube state/animation classes */
 .service-item.front,
 .service-item.above,
 .service-item.below,
 .service-item.exit-to-top,
 .service-item.exit-to-bottom,
 .service-item.enter-from-bottom,
-.service-item.enter-from-top {
-  /* Remove all transforms and opacity */
+.service-item.enter-from-top,
+.service-item.active-content {
+  /* No effect in static mode */
   transform: none !important;
   opacity: 1 !important;
   z-index: auto !important;
 }
 
-.service-bg-number {
-  display: none !important;
+/* Service Title and Description: match Premium Tools style */
+.service-title {
+  font-size: 1.1em !important;
+  font-weight: 600 !important;
+  color: var(--tool-name-color) !important;
+  margin: 0 0 5px 0 !important;
+  line-height: 1.2 !important;
+  font-style: normal !important;
+  text-transform: none !important;
+}
+.service-description {
+  font-size: 0.85em !important;
+  color: var(--tool-category-color) !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+  font-style: normal !important;
 }
 
-/* Scroll spacer to provide scrollable height for the animation */
+/* Large background number: visible and static */
+.service-bg-number {
+  position: absolute;
+  top: 150px;
+  right: 50px;
+  font-size: 15em;
+  font-weight: 800;
+  color: var(--services-bg-number-color);
+  z-index: 0;
+  pointer-events: none;
+  line-height: 1;
+  user-select: none;
+  display: block !important;
+}
+
+/* Remove scroll spacer if present */
 .services-section-scroll-spacer {
-    display: none !important;
+  display: none !important;
 }
 
 
