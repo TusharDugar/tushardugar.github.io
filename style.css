@@ -32,6 +32,12 @@
     --services-bg-number-color: rgba(51, 51, 51, 0.8); /* Dark gray, more visible */
     --services-title-active-color: #00FFC2; /* Green for active titles */ /* Using accent-secondary-sawad */
     --services-description-color: var(--text-light); /* White for descriptions */
+    
+
+    /* CSS Variables for sticky services top offset (set by JS) */
+    --services-sticky-top-h2: 0px;
+    --services-sticky-top-wrapper: 0px;
+    --faceZ: 0px; /* Default, will be set by JS */
 }
 
 /* Global utility text colors */
@@ -114,7 +120,7 @@ body::after {
 
 /* Layer 3: Animated Background Grid Pattern */
 #mosaic-background { /* This div is new in HTML */
-  display: none !important;
+  display: none !important; /* Hide this div as it's not being used */
 }
 
 
@@ -159,6 +165,7 @@ body::after {
 
 
 /* --- DesignCube-style staggered reveal for About section --- */
+/* These use .reveal-child classes which are set in HTML for About section */
 .reveal-child {
   opacity: 0;
   transform: translateY(40px) scale(0.95);
@@ -176,7 +183,7 @@ body::after {
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Accessibility: Reduce motion */
+/* Accessibility: Reduce motion for reveal-child elements */
 @media (prefers-reduced-motion: reduce) {
   .reveal-child {
     transition: none !important;
@@ -457,9 +464,7 @@ body::after {
   padding-bottom: 100px;
   text-align: left;
   z-index: 1;
-  /* Removed perspective, as it's not a 3D stage anymore */
-  /* Remove any background color from the section itself if it was there for 3D */
-  background: none;
+  background: none; /* Ensure no section background */
 }
 
 /* Header for Services section (MY SERVICES title) */
@@ -473,14 +478,14 @@ body::after {
 
 .services-section-header .services-heading {
   font-family: 'Poppins', sans-serif;
-  font-size: 5em;
+  font-size: 5em; /* Changed back to 5em as in Hero/Tools for consistency */
   line-height: 0.9;
   font-weight: 800;
   margin-bottom: 0.25em;
   text-transform: uppercase;
   text-align: left;
   letter-spacing: 0.04em;
-  color: inherit;
+  color: inherit; /* Inherit color, then let spans override */
   position: static;
   padding-bottom: 0;
   z-index: auto;
@@ -488,6 +493,7 @@ body::after {
   display: block;
 }
 
+/* Span colors for MY SERVICES heading */
 .services-section-header .services-heading .text-white {
   color: var(--text-light);
   display: block;
@@ -499,84 +505,106 @@ body::after {
 }
 
 .services-section-header .services-divider {
-  display: none !important;
+  display: none !important; /* Hide the divider */
 }
 
 
-/* --- Cube Flip Animation for Services Section (with translateZ for real 3D cube effect) --- */
 .services-content-wrapper {
-  perspective: 1000px;
-  overflow: hidden;
   position: relative;
-  height: 260px; /* Adjust as needed for your design */
+  top: auto;
+  height: auto;
+  overflow: visible;
+  transform-style: flat;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .services-items-container {
-  transform-style: preserve-3d;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* Space between service items */
 }
 
+/* Remove card background from service items, make them transparent */
 .service-item {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  opacity: 0;
-  /* Default transform is set by JS: rotateX(90deg) translateZ(faceOffset) */
-  transition:
-    transform 1.2s cubic-bezier(0.77,0,0.175,1),
-    opacity 1.2s ease-in-out;
-  z-index: 1;
+  background-color: transparent; /* Make background transparent */
+  background: transparent; /* Fallback/reset for background */
+  box-shadow: none; /* Remove any box shadows */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
-  padding: 20px 24px;
-  background: none;
-  box-shadow: none;
+  justify-content: flex-start;
+  position: relative; /* Ensure normal flow */
+  width: 100%;
+  height: auto;
+  min-height: 1px;
+  padding: 20px 24px; /* Standard padding for content inside item */
+  margin: 0;
+  opacity: 1; /* Ensure visible */
+  transform: none; /* Remove any transforms */
+  transition: none; /* Remove any transitions */
+  backface-visibility: visible; /* Reset to default */
+  z-index: auto; /* Reset z-index */
+  will-change: auto; /* Reset performance hint */
 }
 
-/* The active face */
-.service-item.active {
-  opacity: 1;
-  /* transform is set by JS: rotateX(0deg) translateZ(faceOffset) */
-  z-index: 2;
+/* Remove all animation/state classes if they were set by JS (they won't be applied now) */
+.service-item.active,
+.service-item.front,
+.service-item.above,
+.service-item.below,
+.service-item.exit-to-top,
+.service-item.exit-to-bottom,
+.service-item.enter-from-bottom,
+.service-item.enter-from-top {
+    /* These classes should effectively have no visual effect in this static setup */
 }
 
-/* Outgoing/incoming faces for animation (JS will add/remove these) */
-.service-item.cube-out { z-index: 3; }
-.service-item.cube-in { z-index: 3; }
-
-/* Fade timing for cube faces (out by 40%, in from 60%) */
-@keyframes cubeFadeOut {
-  0% { opacity: 1; }
-  40% { opacity: 0; }
-  100% { opacity: 0; }
-}
-@keyframes cubeFadeIn {
-  0% { opacity: 0; }
-  60% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-/* Background number styling */
+/* Large background number: visible and static */
 .service-bg-number {
-  position: absolute;
-  top: 50%;
-  right: 40px;
-  transform: translateY(-50%);
-  font-size: 8em;
+  position: absolute; /* Keep absolute relative to #services */
+  top: 50%; /* Center vertically within the section */
+  right: 50px;
+  transform: translateY(-50%); /* Center it properly */
+  font-size: 15em;
   font-weight: 800;
   color: var(--services-bg-number-color);
-  z-index: 0;
+  z-index: 0; /* Behind items, but still visible */
   pointer-events: none;
   line-height: 1;
   user-select: none;
   display: block;
-  transition: opacity 0.5s;
+}
+
+/* Remove scroll spacer if present (ensure it's hidden) */
+.services-section-scroll-spacer {
+  display: none !important;
+}
+
+/* Make service titles orange */
+.service-title {
+  color: var(--accent-primary-sawad); /* Orange color for titles */
+  font-size: 1.5em; /* Adjusted size for prominence, consistent with card titles if they existed */
+  font-weight: 700; /* Bolder */
+  margin: 0 0 8px 0; /* Adjust margin for more separation from description */
+  line-height: 1.2;
+  font-style: normal;
+  text-transform: none;
+}
+
+/* Services description can reuse a text-color if desired */
+.service-description {
+  font-size: 1em; /* Adjusted size for readability */
+  color: var(--text-medium); /* A medium gray for descriptions */
+  margin: 0;
+  line-height: 1.6; /* More comfortable line height */
+  font-style: normal;
 }
 
 
@@ -585,8 +613,7 @@ body::after {
     padding-top: 80px;
     padding-bottom: 80px;
     text-align: left;
-    /* Ensure it has no background color from previous general changes */
-    background: none;
+    background: none; /* Ensure no section background */
 }
 
 .tools-heading {
@@ -901,11 +928,7 @@ footer h2 {
         padding-bottom: 80px;
     }
     .services-section-header .services-heading {
-        font-size: 2.2em;
-    }
-    .services-section-header .services-divider {
-        width: 36px;
-        height: 3px;
+        font-size: 4.5em; /* Adjusted for consistency */
     }
     .services-content-wrapper {
         height: auto; /* Allow height to adjust */
@@ -1058,7 +1081,7 @@ footer h2 {
         padding-bottom: 60px;
     }
     .services-section-header .services-heading {
-        font-size: 2.8em;
+        font-size: 3.5em; /* Adjusted for consistency */
     }
     .services-content-wrapper {
         height: auto; /* Allow height to adjust */
@@ -1095,6 +1118,11 @@ footer h2 {
     }
     .tool-category {
         font-size: 0.75em;
+    }
+
+    footer {
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
@@ -1220,6 +1248,9 @@ footer h2 {
         padding-top: 30px;
         padding-bottom: 50px;
     }
+    .services-section-header .services-heading {
+        font-size: 2.5em; /* Adjusted for consistency */
+    }
     .services-content-wrapper {
         height: auto; /* Allow height to adjust */
     }
@@ -1285,18 +1316,18 @@ footer h2 {
 /* Specific styling for the Services section titles and descriptions */
 .service-title {
     color: var(--accent-primary-sawad); /* Orange color for titles */
-    font-size: 1.1em;
-    font-weight: 600;
-    margin: 0 0 5px 0;
+    font-size: 1.5em; /* Adjusted size for prominence, consistent with card titles if they existed */
+    font-weight: 700; /* Bolder */
+    margin: 0 0 8px 0; /* Adjust margin for more separation from description */
     line-height: 1.2;
     font-style: normal;
     text-transform: none;
 }
 
 .service-description {
-    font-size: 0.85em;
+    font-size: 1em; /* Adjusted size for readability */
     color: var(--text-medium); /* Use a medium gray for descriptions for subtlety */
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.6; /* More comfortable line height */
     font-style: normal;
 }
