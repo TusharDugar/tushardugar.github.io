@@ -145,6 +145,7 @@ html::before {
         linear-gradient(to right, transparent 99%, white 1%),
         linear-gradient(to bottom, transparent 99%, white 1%),
         linear-gradient(45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%),
+        linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%),
         linear-gradient(-45deg, transparent 75%, white 75.5%, white 76.5%, transparent 77%);
 
     /* Mask sizes */
@@ -232,18 +233,20 @@ html::before {
     justify-content: center;
     max-width: 1920px;
     margin: 0 auto;
-    padding: 0 80px;
+    padding: 0 80px; /* Overall padding for the container */
     min-height: 100vh;
     position: relative;
     z-index: 1;
     padding-top: 50px;
+    gap: 80px; /* NEW: Defines the gap between the flex items (columns) */
 }
 
 /* Left Column (Sticky) */
 .left-column-sticky {
     flex-shrink: 0;
-    width: 30%;
-    padding-right: 80px;
+    flex-basis: 370px; /* NEW: Fixed width for the sticky column, matching max-width of the card */
+    /* REMOVED: width: 30%; */
+    padding-right: 0; /* REMOVED: No internal padding right, gap is handled by parent */
     box-sizing: border-box;
     position: sticky;
     top: 50px;
@@ -266,9 +269,9 @@ html::before {
     max-width: 370px;
     height: auto;
     box-sizing: border-box;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    opacity: 0; /* Remains opaque to be revealed by JS */
+    transform: translateY(40px); /* Remains transformed to be revealed by JS */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Uses reveal-item transition */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -277,7 +280,7 @@ html::before {
     overflow: hidden;
     background-color: var(--bg-profile-card);
 }
-.about-left-content.revealed {
+.about-left-content.revealed { /* Class added by JS to show the card */
     opacity: 1;
     transform: translateY(0);
 }
@@ -449,9 +452,9 @@ html::before {
 /* Right Column (Scrolling) */
 .right-column-scroll {
     flex-grow: 1;
-    width: 65%;
-    padding-left: 80px;
-    padding-right: 80px;
+    /* REMOVED: width: 65%; */
+    padding-left: 0; /* REMOVED: Gap handled by parent's 'gap' property */
+    padding-right: 80px; /* Keep this for padding on the right edge of the content */
     padding-bottom: 100px;
     box-sizing: border-box;
     min-height: 150vh;
@@ -498,7 +501,7 @@ html::before {
   padding-top: 80px;
   padding-bottom: 100px;
   text-align: left;
-  z-index: 1;
+  z-index: 2; /* NEW: Ensure services section stays on top when pinned */
   background: none; /* Ensure no section background */
 }
 
@@ -609,6 +612,7 @@ html::before {
     padding-bottom: 80px;
     text-align: left;
     background: none; /* Ensure no section background */
+    z-index: 1; /* Ensure tools section is below the pinned services section */
 }
 
 .tools-heading {
@@ -849,14 +853,15 @@ footer h2 {
 @media (max-width: 1200px) {
     .main-layout-container {
         padding: 0 40px;
+        gap: 60px; /* Adjusted gap */
     }
     .left-column-sticky {
-        width: 100%;
-        padding-right: 0;
-        max-width: 450px;
+        flex-basis: 320px; /* Adjusted fixed width */
+        /* REMOVED: width: 100%; */
+        /* REMOVED: max-width: 450px; */
     }
     .about-left-content {
-        max-width: 320px;
+        max-width: 320px; /* Maintain consistent max-width */
         padding: 25px 20px;
     }
     .profile-image-container {
@@ -908,6 +913,9 @@ footer h2 {
         right: -45px;
     }
 
+    .right-column-scroll {
+        padding-right: 40px; /* Adjusted padding */
+    }
     .hero-heading {
         font-size: 5.5em;
         margin-bottom: 25px;
@@ -921,6 +929,7 @@ footer h2 {
     .services-section {
         padding-top: 60px;
         padding-bottom: 80px;
+        z-index: 2; /* Maintain z-index */
     }
     .services-heading {
         font-size: 4.5em; /* Adjusted for consistency */
@@ -935,6 +944,7 @@ footer h2 {
     .tools-section {
         padding-top: 60px;
         padding-bottom: 80px;
+        z-index: 1; /* Maintain z-index */
     }
     .tools-heading {
         font-size: 4.5em;
@@ -969,9 +979,10 @@ footer h2 {
         flex-direction: column;
         padding: 0 20px;
         padding-top: 20px;
+        gap: 0; /* NEW: No gap in column layout, use padding on sections */
     }
     .left-column-sticky {
-        width: 100%;
+        width: 100%; /* Take full width in column mode */
         position: relative;
         top: 0;
         padding-right: 0;
@@ -982,6 +993,7 @@ footer h2 {
         align-items: center;
         flex-direction: column;
         padding-top: 0;
+        flex-basis: auto; /* NEW: Allow it to take natural height when stacking */
     }
     .about-left-content {
         max-width: 350px;
@@ -1074,6 +1086,7 @@ footer h2 {
     .services-section {
         padding-top: 40px;
         padding-bottom: 60px;
+        z-index: 2; /* Maintain z-index */
     }
     .services-heading {
         font-size: 3.5em; /* Adjusted for consistency */
@@ -1088,6 +1101,7 @@ footer h2 {
     .tools-section {
         padding-top: 40px;
         padding-bottom: 60px;
+        z-index: 1; /* Maintain z-index */
     }
     .tools-heading {
         font-size: 3.5em;
@@ -1242,6 +1256,7 @@ footer h2 {
     .services-section {
         padding-top: 30px;
         padding-bottom: 50px;
+        z-index: 2; /* Maintain z-index */
     }
     .services-heading {
         font-size: 2.5em; /* Adjusted for consistency */
@@ -1256,6 +1271,7 @@ footer h2 {
     .tools-section {
         padding-top: 30px;
         padding-bottom: 50px;
+        z-index: 1; /* Maintain z-index */
     }
     .tools-heading {
         font-size: 2.8em;
