@@ -1416,21 +1416,23 @@ footer h2 {
   height: 100vh;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.6;  /* 60% so gradient subtly shows */
+  opacity: 0.5;  /* Lower opacity for less distraction */
   background: #000;
+  filter: blur(4px); /* More blur for extra softness */
+  transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
 }
 
 /* Optional: very subtle vignette to match “luxury” feel */
 .mosaic-vignette {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   background:
     radial-gradient(120% 80% at 50% 50%,
-      rgba(255,255,255,0.03) 0%,
+      rgba(255,255,255,0.05) 0%,
       rgba(255,255,255,0.00) 35%,
-      rgba(0,0,0,0.25) 100%);
+      rgba(0,0,0,0.32) 100%);
   mix-blend-mode: soft-light;
 }
 
@@ -1438,7 +1440,7 @@ footer h2 {
 #gradient-glow {
   position: fixed;
   inset: 0;
-  z-index: -2; /* stays behind the mosaic canvas */
+  z-index: -3; /* stays behind the mosaic canvas and vignette */
   background: linear-gradient(-45deg,
     #ee7752,
     #e73c7e,
@@ -1448,9 +1450,10 @@ footer h2 {
     #E0F882
   );
   background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-  opacity: 0.5;
+  animation: gradientShift 8s linear infinite;
+  opacity: 0.4;      /* Lower opacity for subtle color */
   pointer-events: none;
+  filter: blur(12px) saturate(1.1); /* Glow is soft and rich */
 }
 
 @keyframes gradientShift {
