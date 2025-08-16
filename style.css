@@ -466,6 +466,51 @@ body::after {
 }
 
 
+/* --- Services Section Header (DesignCube About style) --- */
+.services-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.services-section-header .services-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.2em;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25em;
+  line-height: 1.1;
+  color: var(--text-light);
+  position: static;
+  padding-bottom: 0;
+  z-index: 1;
+  /* Remove sticky and left-align for this section */
+}
+
+.services-section-header .services-divider {
+  width: 56px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #00FFC2 0%, #FF6B00 100%);
+  margin: 0 auto 0.5em auto;
+  opacity: 0.85;
+}
+
+/* Responsive adjustments for the header */
+@media (max-width: 900px) {
+  .services-section-header .services-heading {
+    font-size: 2.2em;
+  }
+  .services-section-header .services-divider {
+    width: 36px;
+    height: 3px;
+  }
+}
+
+
 /* === SERVICES CUBE ANIMATION (REPLACED) === */
 .services-section {
   position: relative;
@@ -600,10 +645,6 @@ body::after {
     margin-bottom: 30px;
     text-transform: uppercase;
     text-align: left;
-    position: sticky; /* Keep heading sticky */
-    top: 0;
-    z-index: 2; /* Above the cube */
-    padding-bottom: 20px;
 }
 
 /* Service Title - Reverted to orange, no italics */
