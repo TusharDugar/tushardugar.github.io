@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --------------------------
-    // Services Section GSAP 3D Cube Animation (UNCHANGED logic from previous fix)
+    // Services Section GSAP 3D Cube Animation (MODIFIED cubeWidth)
     // --------------------------
     // Ensure GSAP and ScrollTrigger are loaded
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let cubeWidth = 0; // Local variable for calculated width
         const width = window.innerWidth;
         if (width >= 1024) cubeWidth = 900;
-        else if (width >= 768) cubeWidth = 640;
-        else cubeWidth = 300;
+        else if (width >= 768) cubeWidth = 700; // MODIFIED: Increased for tablets
+        else cubeWidth = 400; // MODIFIED: Increased for mobiles
 
         // Apply width to the servicesItemsContainer (the cube itself)
         gsap.set(servicesItemsContainer, { width: cubeWidth });

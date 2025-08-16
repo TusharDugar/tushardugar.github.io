@@ -254,6 +254,7 @@ html::before {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    z-index: 2; /* Ensures left column is always above the right content */
 }
 
 /* Updated: About Left Content (White Card) - Based on Aabid Ahmed design */
@@ -486,10 +487,12 @@ html::before {
     margin-bottom: 30px;
     text-transform: uppercase;
     text-align: left;
-    position: sticky; /* Keep heading sticky */
-    top: 0;
-    z-index: 2; /* Above the cube (if cube is z-index 1 within this section) */
+    /* FIX: Removed position: sticky as its parent (services-section) is pinned by GSAP */
+    position: relative; /* Default position, will scroll with its pinned parent */
+    z-index: 4; /* Higher than cube wrapper to ensure it's on top of cube faces */
     padding-bottom: 20px;
+    /* Add background to heading itself if the section is transparent or if it should stand out more */
+    /* background-color: var(--bg-main); */ /* Only if you want individual background for heading */
 }
 /* Span colors for MY SERVICES heading */
 .services-heading .text-white {
@@ -513,7 +516,7 @@ html::before {
   display: flex; /* For centering the inner container */
   justify-content: center; /* Horizontally center */
   align-items: center; /* Vertically center content inside fixed height wrapper */
-  z-index: 3; /* NEW: Explicitly give the cube a higher z-index than sibling content */
+  z-index: 3; /* Lower than heading, higher than default content */
   /* transform is handled by GSAP.set for initial position and then GSAP.to for rotation */
 }
 
@@ -563,6 +566,7 @@ html::before {
     margin: 0;
     line-height: 1.6;
     font-style: normal;
+    word-break: break-word; /* NEW: Helps break long words to fit better */
 }
 .service-item .service-bg-number {
   position: absolute; /* Absolute relative to .service-item */
