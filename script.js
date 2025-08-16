@@ -117,6 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.style.zIndex = i === 0 ? '2' : '1';
                 item.style.transition = '';
             });
+            // Ensure .active class is present on the first face
+            if (serviceItems[0] && !serviceItems[0].classList.contains('active')) {
+                serviceItems[0].classList.add('active');
+            }
             if (bgNumber) bgNumber.textContent = '01';
             currentIndex = 0;
             isAnimating = false;
