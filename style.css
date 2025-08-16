@@ -601,7 +601,7 @@ body::after {
 /* Services description can reuse a text-color if desired */
 .service-description {
   font-size: 1em; /* Adjusted size for readability */
-  color: var(--text-medium); /* A medium gray for descriptions */
+  color: var(--text-medium); /* Use a medium gray for descriptions */
   margin: 0;
   line-height: 1.6; /* More comfortable line height */
   font-style: normal;
@@ -849,7 +849,7 @@ footer h2 {
 }
 
 
-/* Responsive Design (UNCHANGED, except Services section adjustments) */
+/* Responsive Design */
 
 @media (max-width: 1200px) {
     .main-layout-container {
