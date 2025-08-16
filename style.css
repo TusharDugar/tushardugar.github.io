@@ -1197,193 +1197,6 @@ footer h2 {
     .tool-category {
         font-size: 0.75em;
     }
-
-    /* Footer - Full width black background on mobile */
-    footer {
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-layout-container {
-        padding: 0 15px;
-    }
-    .section h2 {
-        font-size: 2.8em;
-        letter-spacing: 0.5px;
-        margin-bottom: 30px;
-    }
-    .contact-tagline {
-        font-size: 1em;
-        margin-bottom: 25px;
-    }
-    .contact-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-        max-width: 320px;
-        margin: 0 auto;
-    }
-    .contact-button {
-        width: 100%;
-        height: 80px;
-        font-size: 0.95em;
-    }
-    .contact-button i {
-        font-size: 1.6em;
-    }
-    .contact-button .button-value {
-        font-size: 0.75em;
-    }
-    .contact-button .copied-text {
-        font-size: 0.95em;
-    }
-
-    /* Specific adjustments for profile card */
-    /* ISSUE 4: Profile image section longer by reducing width */
-    .about-left-content {
-        max-width: 320px;
-        padding: 25px 20px;
-    }
-    .profile-image-container {
-        width: calc(100% + 30px);
-        max-width: 350px;
-        height: 180px;
-        margin-bottom: 25px;
-        border-radius: 12px;
-    }
-    .about-left-content h3 {
-        font-size: 2.5em;
-        margin-bottom: 20px;
-    }
-    .fire-icon-with-line {
-        height: 40px;
-        margin-bottom: 25px;
-    }
-    .fire-icon {
-        padding: 8px;
-        font-size: 1.1em;
-    }
-    .fire-icon-with-line::before,
-    .fire-icon-with-line::after {
-        width: calc(50% - 25px);
-    }
-    .about-short-desc {
-        font-size: 0.9em;
-        margin-bottom: 25px;
-        padding: 0 5px;
-    }
-    .contact-info-list {
-        margin: 20px 0 30px;
-    }
-    .contact-info-list li {
-        font-size: 0.9em;
-        margin-bottom: 15px;
-    }
-    .contact-info-list li i {
-        margin-right: 15px;
-        font-size: 1.2em;
-        width: 20px;
-    }
-    .contact-info-list li span {
-        margin-right: 8px;
-    }
-    .about-social-icons {
-        gap: 15px;
-        padding-top: 10px;
-    }
-    .about-social-icons a {
-        font-size: 1.4em;
-    }
-
-    .dashed-decoration {
-        border-width: 1.5px;
-    }
-    .top-left-curve, .bottom-right-curve {
-        width: 140px;
-        height: 140px;
-        top: -45px;
-        left: -45px;
-        bottom: -45px;
-        right: -45px;
-    }
-
-    /* Adjustments for hero content */
-    .right-column-scroll {
-        padding: 30px 15px;
-        padding-top: 40px;
-    }
-    /* ISSUE 3: Reduce text size of "Crafting Digital Experiences" by .5 */
-    .hero-heading {
-        font-size: 3em;
-        margin-bottom: 15px;
-    }
-    .hero-description {
-        font-size: 0.95em;
-        line-height: 1.5;
-        margin-bottom: 30px;
-    }
-
-    /* Services Section - mobile specific overrides */
-    .services-section {
-        padding-top: 30px;
-        padding-bottom: 50px;
-    }
-    .services-content-wrapper {
-        height: 230px;
-        perspective: 700px; /* Adjusted for this breakpoint */
-        align-items: center; /* Center content vertically within its fixed height */
-    }
-    .services-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
-    }
-    .service-item {
-        padding: 12px;
-    }
-    .service-bg-number {
-        font-size: 6em;
-        right: 40px;
-    }
-    .service-title {
-        font-size: 1.4em;
-    }
-    .service-description {
-        font-size: 0.8em;
-    }
-
-    /* Adjustments for tools section */
-    .tools-section {
-        padding-top: 30px;
-        padding-bottom: 50px;
-    }
-    .tools-heading {
-        font-size: 2.8em;
-        margin-bottom: 25px;
-    }
-    .tools-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 15px;
-        max-width: 100%;
-    }
-    .tool-card {
-        padding: 12px;
-        gap: 8px;
-    }
-    .tool-icon-wrapper {
-        width: 35px;
-        height: 35px;
-        border-radius: 6px;
-    }
-    .tool-name {
-        font-size: 0.9em;
-    }
-    .tool-category {
-        font-size: 0.75em;
-    }
 }
 
 /* Accessibility: Reduce motion for users who prefer it */
@@ -1459,4 +1272,32 @@ footer h2 {
 @keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
+}
+
+/* ===== Subtle Glowing Mosaic Background ===== */
+#mosaic-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #0d0d0d; /* deep matte base */
+  background-image: 
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: glowShift 15s ease infinite;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+@keyframes glowShift {
+  0%, 100% {
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  }
+  50% {
+    background-image:
+      linear-gradient(90deg, rgba(180,200,255,0.2) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(180,200,255,0.2) 1px, transparent 1px);
+  }
 }
